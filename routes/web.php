@@ -1,0 +1,147 @@
+<?php
+
+use App\Http\Controllers\Admin\AdminAttendanceController;
+use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AdminInternController;
+use App\Http\Controllers\Admin\AdminMentorController;
+use App\Http\Controllers\Admin\AdminMonitoringController;
+use App\Http\Controllers\Admin\AdminReportController;
+use App\Http\Controllers\Admin\AdminLogbookController;
+use App\Http\Controllers\Api\InstitutionController;
+use App\Http\Controllers\Intern\MicroSkillController as InternMicroSkillController;
+use App\Http\Controllers\Mentor\MicroSkillController as MentorMicroSkillController;
+use App\Http\Controllers\Admin\AdminMicroSkillController;
+use App\Http\Controllers\Admin\AdminMicroSkillLeaderboardController;
+use App\Http\Controllers\Mentor\DashboardController as MentorDashboardController;
+use App\Http\Controllers\Mentor\InternController as MentorInternController;
+use App\Http\Controllers\Mentor\AttendanceController as MentorAttendanceController;
+use App\Http\Controllers\Mentor\LogbookController as MentorLogbookController;
+use App\Http\Controllers\Mentor\ReportController as MentorReportController;
+use App\Http\Controllers\Mentor\MicroSkillLeaderboardController as MentorMicroSkillLeaderboardController;
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Intern\AttendanceController;
+use App\Http\Controllers\Intern\DashboardController;
+use App\Http\Controllers\Intern\LogbookController;
+use App\Http\Controllers\Intern\ReportController;
+use App\Http\Controllers\Intern\MicroSkillLeaderboardController as InternMicroSkillLeaderboardController;
+use App\Http\Controllers\Intern\ProfileController;
+use Illuminate\Support\Facades\Route;
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
+|
+*/
+
+Route::get('/', function () {
+    return redirect()->route('login');
+});
+
+// API Routes for Institution Search
+Route::get('/api/institutions/search', [InstitutionController::class, 'searchUniversities'])->name('api.institutions.search');
+Route::get('/api/institutions/all', [InstitutionController::class, 'getAllUniversities'])->name('api.institutions.all');
+
+// Authentication Routes
+Route::middleware('guest')->group(function () {
+    Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [AuthController::class, 'login']);
+});
+
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
+
+// Intern Routes
+Route::middleware(['auth', 'intern'])->prefix('intern')->name('intern.')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    
+    // Attendance Routes
+    Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
+    Route::get('/attendance/create', [AttendanceController::class, 'create'])->name('attendance.create');
+    Route::post('/attendance', [AttendanceController::class, 'store'])->name('attendance.store');
+    Route::post('/attendance/checkout', [AttendanceController::class, 'checkOut'])->name('attendance.checkout');
+    
+    // Logbook Routes
+    Route::get('/logbook', [LogbookController::class, 'index'])->name('logbook.index');
+    Route::get('/logbook/create', [LogbookController::class, 'create'])->name('logbook.create');
+    Route::post('/logbook', [LogbookController::class, 'store'])->name('logbook.store');
+    Route::get('/logbook/{logbook}/edit', [LogbookController::class, 'edit'])->name('logbook.edit');
+    Route::put('/logbook/{logbook}', [LogbookController::class, 'update'])->name('logbook.update');
+    Route::delete('/logbook/{logbook}', [LogbookController::class, 'destroy'])->name('logbook.destroy');
+
+    // Micro Skill Routes
+    Route::get('/microskill', [InternMicroSkillController::class, 'index'])->name('microskill.index');
+    Route::get('/microskill/create', [InternMicroSkillController::class, 'create'])->name('microskill.create');
+    Route::post('/microskill', [InternMicroSkillController::class, 'store'])->name('microskill.store');
+    Route::get('/microskill/leaderboard', [InternMicroSkillLeaderboardController::class, 'index'])->name('microskill.leaderboard');
+    
+    // Final Report Routes
+    Route::get('/report', [ReportController::class, 'index'])->name('report.index');
+    Route::post('/report', [ReportController::class, 'store'])->name('report.store');
+    Route::put('/report/{report}', [ReportController::class, 'update'])->name('report.update');
+    
+    // Profile Routes
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+});
+
+// Admin Routes
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+    
+    // Mentor Management Routes
+    Route::get('/mentor', [AdminMentorController::class, 'index'])->name('mentor.index');
+    Route::get('/mentor/create', [AdminMentorController::class, 'create'])->name('mentor.create');
+    Route::post('/mentor', [AdminMentorController::class, 'store'])->name('mentor.store');
+    Route::get('/mentor/{mentor}/edit', [AdminMentorController::class, 'edit'])->name('mentor.edit');
+    Route::put('/mentor/{mentor}', [AdminMentorController::class, 'update'])->name('mentor.update');
+    Route::delete('/mentor/{mentor}', [AdminMentorController::class, 'destroy'])->name('mentor.destroy');
+
+    // Intern Management Routes
+    Route::get('/intern', [AdminInternController::class, 'index'])->name('intern.index');
+    Route::get('/intern/create', [AdminInternController::class, 'create'])->name('intern.create');
+    Route::post('/intern', [AdminInternController::class, 'store'])->name('intern.store');
+    Route::get('/intern/{intern}', [AdminInternController::class, 'show'])->name('intern.show');
+    Route::get('/intern/{intern}/edit', [AdminInternController::class, 'edit'])->name('intern.edit');
+    Route::put('/intern/{intern}', [AdminInternController::class, 'update'])->name('intern.update');
+    Route::delete('/intern/{intern}', [AdminInternController::class, 'destroy'])->name('intern.destroy');
+    
+    // Attendance Monitoring Routes
+    Route::get('/attendance', [AdminAttendanceController::class, 'index'])->name('attendance.index');
+    Route::get('/attendance/{attendance}', [AdminAttendanceController::class, 'show'])->name('attendance.show');
+    Route::put('/attendance/{attendance}/document-status', [AdminAttendanceController::class, 'updateDocumentStatus'])->name('attendance.update-document-status');
+    
+    // Logbook Monitoring Routes
+    Route::get('/logbook', [AdminLogbookController::class, 'index'])->name('logbook.index');
+    
+    // Report Monitoring Routes
+    Route::get('/report', [AdminReportController::class, 'index'])->name('report.index');
+    Route::get('/report/{report}', [AdminReportController::class, 'show'])->name('report.show');
+    Route::put('/report/{report}/status', [AdminReportController::class, 'updateStatus'])->name('report.update-status');
+    // Micro Skill Routes
+    Route::get('/microskill', [AdminMicroSkillController::class, 'index'])->name('microskill.index');
+    Route::get('/microskill/leaderboard', [AdminMicroSkillLeaderboardController::class, 'index'])->name('microskill.leaderboard');
+    
+    // Monitoring Routes
+    Route::get('/monitoring', [AdminMonitoringController::class, 'index'])->name('monitoring.index');
+});
+
+// Mentor Routes
+Route::middleware(['auth', 'mentor'])->prefix('mentor')->name('mentor.')->group(function () {
+    Route::get('/dashboard', [MentorDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/interns', [MentorInternController::class, 'index'])->name('intern.index');
+    Route::get('/interns/{intern}', [MentorInternController::class, 'show'])->name('intern.show');
+    Route::get('/attendance', [MentorAttendanceController::class, 'index'])->name('attendance.index');
+    Route::get('/logbook', [MentorLogbookController::class, 'index'])->name('logbook.index');
+    Route::get('/logbook/{logbook}', [MentorLogbookController::class, 'show'])->name('logbook.show');
+    Route::get('/report', [MentorReportController::class, 'index'])->name('report.index');
+    Route::get('/report/{report}', [MentorReportController::class, 'show'])->name('report.show');
+    Route::put('/report/{report}/grade', [MentorReportController::class, 'grade'])->name('report.grade');
+    Route::get('/microskill', [MentorMicroSkillController::class, 'index'])->name('microskill.index');
+    Route::get('/microskill/leaderboard', [MentorMicroSkillLeaderboardController::class, 'index'])->name('microskill.leaderboard');
+});

@@ -1,0 +1,115 @@
+<?php
+
+namespace App\Http\Controllers\Intern;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
+
+class ProfileController extends Controller
+{
+    public function edit()
+    {
+        $user = Auth::user();
+        $intern = $user->intern;
+
+        if (!$intern) {
+            return redirect()->route('intern.dashboard')->withErrors(['error' => 'Data profil tidak ditemukan.']);
+        }
+
+        return view('intern.profile.edit', compact('intern', 'user'));
+    }
+
+    public function update(Request $request)
+    {
+        $user = Auth::user();
+        $intern = $user->intern;
+
+        if (!$intern) {
+            return redirect()->route('intern.dashboard')->withErrors(['error' => 'Data profil tidak ditemukan.']);
+        }
+
+        $rules = [
+            'photo' => ['nullable', 'image', 'max:2048'],
+        ];
+
+        // Only require password fields if password is being changed
+        if ($request->filled('password')) {
+            $rules['current_password'] = ['required', 'string'];
+            $rules['password'] = ['required', 'confirmed', Password::defaults()];
+        }
+
+        $validated = $request->validate($rules);
+
+        // Update password if provided
+        if ($request->filled('password')) {
+            // Verify current password
+            if (!Hash::check($validated['current_password'], $user->password)) {
+                return back()->withErrors(['current_password' => 'Password lama tidak sesuai.'])->withInput();
+            }
+
+            $user->password = Hash::make($validated['password']);
+            $user->save();
+        }
+
+        // Handle photo upload
+        if ($request->hasFile('photo')) {
+            $photo = $request->file('photo');
+            
+            if ($photo->isValid() && $photo->getError() === UPLOAD_ERR_OK) {
+                try {
+                    // Generate unique filename
+                    $extension = $photo->getClientOriginalExtension();
+                    if (empty($extension)) {
+                        $extension = $photo->guessExtension() ?: 'jpg';
+                    }
+                    $filename = 'photo_' . time() . '_' . uniqid() . '.' . $extension;
+                    
+                    // Use direct move method - most reliable on Windows
+                    $destinationPath = storage_path('app/public/photos');
+                    
+                    // Create directory if not exists
+                    if (!file_exists($destinationPath)) {
+                        if (!mkdir($destinationPath, 0755, true)) {
+                            return back()->withErrors(['photo' => 'Gagal membuat folder storage.'])->withInput();
+                        }
+                    }
+                    
+                    // Delete old photo if exists
+                    if ($intern->photo_path) {
+                        $oldPhotoPath = storage_path('app/public/' . $intern->photo_path);
+                        if (file_exists($oldPhotoPath)) {
+                            @unlink($oldPhotoPath);
+                        }
+                    }
+                    
+                    // Move uploaded file
+                    $fullPath = $destinationPath . DIRECTORY_SEPARATOR . $filename;
+                    if ($photo->move($destinationPath, $filename) && file_exists($fullPath)) {
+                        $intern->photo_path = 'photos/' . $filename;
+                        $intern->save();
+                    } else {
+                        return back()->withErrors(['photo' => 'Gagal memindahkan file foto.'])->withInput();
+                    }
+                } catch (\Exception $e) {
+                    return back()->withErrors(['photo' => 'Terjadi kesalahan saat mengupload foto: ' . $e->getMessage()])->withInput();
+                }
+            } else {
+                return back()->withErrors(['photo' => 'File foto tidak valid.'])->withInput();
+            }
+        }
+
+        $message = 'Profil berhasil diperbarui.';
+        if ($request->filled('password')) {
+            $message .= ' Password telah diubah.';
+        }
+        if ($request->hasFile('photo')) {
+            $message .= ' Foto profil telah diperbarui.';
+        }
+
+        return redirect()->route('intern.profile.edit')->with('success', $message);
+    }
+}
+
