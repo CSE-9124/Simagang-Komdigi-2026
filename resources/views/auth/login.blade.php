@@ -46,12 +46,6 @@
                     Masuk
                 </button>
             </div>
-
-            <div class="text-center">
-                <a href="{{ route('register') }}" class="text-sm text-blue-600 hover:text-blue-500">
-                    Belum punya akun? Daftar di sini
-                </a>
-            </div>
         </form>
     </div>
 </div>

@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analisis Kasus Hukum Digital - UU PDP</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 2.5cm;
+        }
+        
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            line-height: 1.6;
+            color: #000;
+            max-width: 21cm;
+            margin: 0 auto;
+            padding: 2cm;
+            background: white;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #000;
+            padding-bottom: 20px;
+        }
+        
+        .header h1 {
+            font-size: 16pt;
+            font-weight: bold;
+            margin: 10px 0;
+            text-transform: uppercase;
+        }
+        
+        .header h2 {
+            font-size: 14pt;
+            margin: 5px 0;
+        }
+        
+        .student-info {
+            text-align: center;
+            margin: 30px 0;
+            font-size: 12pt;
+        }
+        
+        .content {
+            text-align: justify;
+            font-size: 12pt;
+        }
+        
+        .content h3 {
+            font-size: 13pt;
+            font-weight: bold;
+            margin-top: 25px;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+        
+        .content h4 {
+            font-size: 12pt;
+            font-weight: bold;
+            margin-top: 20px;
+            margin-bottom: 8px;
+            text-align: left;
+        }
+        
+        .content p {
+            margin-bottom: 12px;
+            text-indent: 1cm;
+        }
+        
+        .content ul, .content ol {
+            margin-left: 2cm;
+            margin-bottom: 12px;
+        }
+        
+        .content li {
+            margin-bottom: 8px;
+        }
+        
+        .pasal-box {
+            background-color: #f5f5f5;
+            border-left: 4px solid #2563eb;
+            padding: 15px;
+            margin: 20px 0;
+            font-style: italic;
+        }
+        
+        .table-container {
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+        
+        table th {
+            background-color: #2563eb;
+            color: white;
+            padding: 10px;
+            text-align: left;
+            font-weight: bold;
+        }
+        
+        table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            vertical-align: top;
+        }
+        
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .references {
+            margin-top: 30px;
+            font-size: 11pt;
+        }
+        
+        .references h3 {
+            font-size: 13pt;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .references p {
+            text-indent: -1cm;
+            margin-left: 1cm;
+            margin-bottom: 10px;
+        }
+        
+        @media print {
+            body {
+                padding: 0;
+            }
+            .no-print {
+                display: none;
+            }
+        }
+        
+        .btn-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+        }
+        
+        .btn-print, .btn-download {
+            padding: 12px 24px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        
+        .btn-print:hover, .btn-download:hover {
+            background: #1d4ed8;
+        }
+        
+        .btn-download {
+            background: #059669;
+        }
+        
+        .btn-download:hover {
+            background: #047857;
+        }
+        
+        .highlight {
+            background-color: #fef3c7;
+            padding: 2px 4px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- <div class="btn-container no-print">
+        <button class="btn-print" onclick="handlePrint()">🖨️ Print PDF</button>
+        <button class="btn-download" onclick="handleDownload()">📥 Download PDF</button>
+    </div> -->
+    
+    <div class="header">
+        <h1>Analisis Kasus Hukum Digital</h1>
+        <h2>Berbasis Kasus Nyata</h2>
+        <h2>Kategori: UU PDP – Pelanggaran Privasi & Data</h2>
+    </div>
+    
+    <div class="student-info">
+        <p><strong>Nama:</strong> Rezki Andika</p>
+        <p><strong>NIM:</strong> 42622045</p>
+        <p><strong>Kelas:</strong> 4B TMJ</p>
+    </div>
+    
+    <div class="content">
+        <h3>1. PENDAHULUAN DAN LATAR BELAKANG KASUS</h3>
+        
+        <h4>1.1 Judul Kasus</h4>
+        <p><strong>"Penyalahgunaan Data Pribadi NIK dan Kartu Keluarga untuk Registrasi Kartu SIM Ilegal oleh Sales Telekomunikasi"</strong></p>
+        
+        <h4>1.2 Sumber Berita</h4>
+        <p>Kasus ini telah diberitakan oleh berbagai media kredibel dan dipublikasikan melalui putusan pengadilan resmi:</p>
+        <ul>
+            <li><strong>Hukumonline.com</strong> (6 Januari 2025): "Menelaah 3 Putusan Perkara Pelanggaran PDP, Minimnya Literasi dan Tantangannya"<br>
+            Link: <i>https://www.hukumonline.com/berita/a/menelaah-3-putusan-perkara-pelanggaran-pdp--minimnya-literasi-dan-tantangannya-lt677bd1211839d</i></li>
+            
+            <li><strong>K&K Advocates</strong> (2024): "Kasus-Kasus Awal dari Implementasi Sanksi Pidana dalam UU PDP"<br>
+            Link: <i>https://www.kk-advocates.com/news/read/kasus-awal-implementasi-sanksi-pidana-dalam-uu-pdp</i></li>
+            
+            <li><strong>Putusan Pengadilan Negeri Tangerang</strong>:<br>
+            - Nomor 77/Pid.Sus/2024/PN Tng (Andi Irma Malasari)<br>
+            - Nomor 78/Pid.Sus/2024/PN Tng (Raja Firdaus)<br>
+            Tanggal Putusan: 2 April 2024</li>
+        </ul>
+        
+        <h4>1.3 Kronologi Singkat</h4>
+        
+        <p>Kasus ini bermula dari praktik penyalahgunaan data pribadi yang dilakukan oleh dua orang sales kartu perdana telekomunikasi, yaitu <strong>Andi Irma Malasari</strong> (Supervisor Sales) dan <strong>Raja Firdaus</strong>, yang bekerja untuk salah satu perusahaan telekomunikasi besar di Indonesia.</p>
+        
+        <p><strong>Modus Operandi:</strong></p>
+        
+        <p>Andi Irma Malasari, sebagai supervisor sales, memiliki target penjualan kartu SIM yang sangat tinggi setiap bulannya. Untuk mencapai target tersebut dan mendapatkan bonus serta insentif, ia melakukan praktik curang dengan cara:</p>
+        
+        <ol>
+            <li><strong>Pengumpulan Data NIK Ilegal:</strong> Raja Firdaus, yang berkolusi dengan Andi, mendapatkan Nomor Induk Kependudukan (NIK) dan data Kartu Keluarga (KK) milik orang lain tanpa izin. Data ini diperoleh setiap 3-6 bulan sekali dari "orang dalam" di perusahaan telekomunikasi.</li>
+            
+            <li><strong>Registrasi Kartu SIM Palsu:</strong> Andi menggunakan NIK dan KK curian tersebut untuk meregistrasi kartu perdana yang belum terjual. Registrasi dilakukan dengan mengirimkan data tersebut ke nomor 4444 (layanan registrasi operator), seolah-olah kartu tersebut terjual kepada pelanggan asli.</li>
+            
+            <li><strong>Manipulasi Target Penjualan:</strong> Dengan cara ini, Andi berhasil mencapai target penjualan 1.100 kartu perdana per bulan, sehingga mendapatkan upah sebesar Rp5,7 juta dan insentif Rp840 ribu yang diberikan setiap 2 bulan sekali.</li>
+            
+            <li><strong>Korban Tidak Mengetahui:</strong> Pemilik NIK dan KK yang disalahgunakan sama sekali tidak mengetahui bahwa data mereka telah digunakan untuk registrasi kartu SIM. Mereka baru menyadari ketika menerima tagihan atau notifikasi terkait nomor yang tidak pernah mereka gunakan.</li>
+        </ol>
+        
+        <p><strong>Pengungkapan Kasus:</strong></p>
+        
+        <p>Kasus ini terungkap setelah beberapa korban melaporkan adanya registrasi kartu SIM yang tidak pernah mereka ajukan. Investigasi lebih lanjut oleh pihak kepolisian dan perusahaan telekomunikasi menemukan pola registrasi mencurigakan yang menggunakan data pribadi milik orang lain tanpa persetujuan.</p>
+        
+        <p>Kedua pelaku ditangkap dan diajukan ke Pengadilan Negeri Tangerang. Mereka dinyatakan bersalah melanggar Undang-Undang Nomor 27 Tahun 2022 tentang Perlindungan Data Pribadi (UU PDP), khususnya pasal yang mengatur tentang pengumpulan dan penggunaan data pribadi tanpa persetujuan pemiliknya.</p>
+        
+        <p><strong>Putusan Pengadilan:</strong></p>
+        
+        <p>Pada tanggal 2 April 2024, Pengadilan Negeri Tangerang menjatuhkan vonis kepada kedua terdakwa dengan hukuman <span class="highlight">penjara 1,5 (satu setengah) tahun dan denda sebesar Rp50 juta</span>. Ini merupakan salah satu kasus pertama yang diputus berdasarkan UU PDP sejak undang-undang tersebut disahkan pada tahun 2022.</p>
+        
+        <h3>2. IDENTIFIKASI PIHAK DAN PERAN</h3>
+        
+        <h4>2.1 Pihak yang Terlibat</h4>
+        
+        <div class="table-container">
+            <table>
+                <tr>
+                    <th>Pihak</th>
+                    <th>Nama/Identitas</th>
+                    <th>Peran dalam Kasus</th>
+                </tr>
+                <tr>
+                    <td><strong>Pelaku 1</strong></td>
+                    <td>Andi Irma Malasari</td>
+                    <td>Supervisor Sales perusahaan telekomunikasi yang menggunakan NIK dan KK curian untuk registrasi kartu SIM ilegal demi mencapai target penjualan dan mendapatkan bonus.</td>
+                </tr>
+                <tr>
+                    <td><strong>Pelaku 2</strong></td>
+                    <td>Raja Firdaus</td>
+                    <td>Penyuplai data pribadi (NIK dan KK) curian yang diperoleh dari orang dalam perusahaan telekomunikasi. Berkolusi dengan Andi Irma Malasari dalam skema registrasi ilegal.</td>
+                </tr>
+                <tr>
+                    <td><strong>Korban</strong></td>
+                    <td>Masyarakat umum (pemilik NIK dan KK)</td>
+                    <td>Individu-individu yang data pribadinya (NIK, KK, nomor telepon) disalahgunakan tanpa sepengetahuan dan persetujuan mereka untuk registrasi kartu SIM.</td>
+                </tr>
+                <tr>
+                    <td><strong>Penyelenggara Sistem Elektronik (PSE)</strong></td>
+                    <td>Perusahaan Telekomunikasi (operator seluler)</td>
+                    <td>Sebagai pihak yang mempekerjakan pelaku dan memiliki sistem registrasi kartu SIM. Bertanggung jawab atas keamanan data pelanggan dan proses verifikasi registrasi.</td>
+                </tr>
+                <tr>
+                    <td><strong>Lembaga Penegak Hukum</strong></td>
+                    <td>Kepolisian dan Pengadilan Negeri Tangerang</td>
+                    <td>Melakukan penyelidikan, penangkapan, dan proses peradilan terhadap pelaku. Menjatuhkan vonis berdasarkan UU PDP.</td>
+                </tr>
+                <tr>
+                    <td><strong>Regulator</strong></td>
+                    <td>Kementerian Komunikasi dan Informatika (Kominfo)</td>
+                    <td>Lembaga yang mengawasi implementasi UU PDP dan keamanan data pribadi di sektor telekomunikasi.</td>
+                </tr>
+            </table>
+        </div>
+        
+        <h4>2.2 Peran Teknis yang Seharusnya</h4>
+        
+        <p>Dalam skenario pengelolaan data pribadi yang benar dan sesuai dengan UU PDP, beberapa peran profesional teknis seharusnya berperan aktif untuk mencegah terjadinya penyalahgunaan data:</p>
+        
+        <p><strong>1. Database Administrator (DBA)</strong></p>
+        <p>Database Administrator bertanggung jawab atas pengelolaan dan keamanan database yang menyimpan data pribadi pelanggan. Peran DBA yang seharusnya dilakukan meliputi:</p>
+        <ul>
+            <li><strong>Implementasi Access Control:</strong> Menerapkan sistem kontrol akses berbasis role (Role-Based Access Control/RBAC) sehingga hanya pegawai yang berwenang yang dapat mengakses data NIK dan KK pelanggan.</li>
+            <li><strong>Audit Trail:</strong> Mengaktifkan logging dan monitoring untuk mencatat setiap akses terhadap data pribadi, sehingga dapat dilacak siapa, kapan, dan untuk tujuan apa data tersebut diakses.</li>
+            <li><strong>Enkripsi Data:</strong> Menerapkan enkripsi pada data sensitif (NIK, KK) baik saat disimpan (encryption at rest) maupun saat ditransmisikan (encryption in transit).</li>
+            <li><strong>Backup dan Recovery:</strong> Melakukan backup data secara berkala dengan prosedur keamanan yang ketat untuk mencegah kebocoran data dari backup system.</li>
+        </ul>
+        
+        <p><strong>2. Security Analyst / Information Security Officer</strong></p>
+        <p>Security Analyst bertugas menganalisis dan memastikan keamanan sistem informasi perusahaan. Tanggung jawab yang seharusnya dilakukan:</p>
+        <ul>
+            <li><strong>Vulnerability Assessment:</strong> Melakukan penilaian berkala terhadap kerentanan sistem, termasuk sistem registrasi kartu SIM untuk mengidentifikasi celah keamanan.</li>
+            <li><strong>Security Monitoring:</strong> Memantau aktivitas mencurigakan dalam sistem, seperti registrasi kartu SIM dalam jumlah besar dari satu akun pegawai atau pola registrasi yang tidak wajar.</li>
+            <li><strong>Incident Response:</strong> Membuat dan mengimplementasikan prosedur tanggap insiden untuk menangani dugaan pelanggaran keamanan data secara cepat dan efektif.</li>
+            <li><strong>Security Awareness Training:</strong> Memberikan pelatihan kepada seluruh karyawan, termasuk sales, tentang pentingnya melindungi data pribadi pelanggan dan konsekuensi hukum dari penyalahgunaannya.</li>
+        </ul>
+        
+        <p><strong>3. Data Protection Officer (DPO)</strong></p>
+        <p>Sesuai dengan UU PDP Pasal 56, perusahaan wajib menunjuk Data Protection Officer yang independen untuk mengawasi kepatuhan terhadap peraturan perlindungan data pribadi. Peran DPO meliputi:</p>
+        <ul>
+            <li><strong>Compliance Monitoring:</strong> Memastikan seluruh proses bisnis perusahaan mematuhi UU PDP, termasuk proses pengumpulan, pemrosesan, dan penyimpanan data pribadi.</li>
+            <li><strong>Privacy Impact Assessment (PIA):</strong> Melakukan penilaian dampak privasi untuk setiap sistem atau proses baru yang melibatkan data pribadi.</li>
+            <li><strong>Consent Management:</strong> Memastikan adanya mekanisme persetujuan (consent) yang jelas dari pemilik data sebelum data pribadi mereka dikumpulkan dan digunakan.</li>
+            <li><strong>Handling Data Subject Rights:</strong> Mengelola permintaan dari subjek data terkait hak-hak mereka (hak akses, koreksi, penghapusan data pribadi).</li>
+        </ul>
+        
+        <p><strong>4. System Developer / Application Developer</strong></p>
+        <p>Developer bertanggung jawab membangun sistem registrasi kartu SIM yang aman dan sesuai dengan prinsip privacy by design:</p>
+        <ul>
+            <li><strong>Input Validation:</strong> Mengimplementasikan validasi input yang ketat untuk memastikan data yang dimasukkan adalah data yang sah dan telah diverifikasi.</li>
+            <li><strong>Biometric Verification:</strong> Mengintegrasikan sistem verifikasi biometrik (seperti face recognition atau liveness detection) untuk memastikan bahwa registrasi dilakukan oleh pemilik data yang sebenarnya.</li>
+            <li><strong>Rate Limiting:</strong> Menerapkan pembatasan jumlah registrasi yang dapat dilakukan oleh satu akun dalam periode tertentu untuk mencegah registrasi massal yang mencurigakan.</li>
+            <li><strong>Secure Coding Practices:</strong> Menggunakan praktik pengkodean yang aman untuk mencegah kerentanan seperti SQL injection, cross-site scripting (XSS), dan serangan lainnya.</li>
+        </ul>
+        
+        <p><strong>5. Network Administrator</strong></p>
+        <p>Network Administrator berperan dalam mengamankan infrastruktur jaringan perusahaan:</p>
+        <ul>
+            <li><strong>Network Segmentation:</strong> Memisahkan jaringan yang menyimpan data pribadi dari jaringan umum untuk mengurangi risiko akses tidak sah.</li>
+            <li><strong>Firewall Configuration:</strong> Mengkonfigurasi firewall dan intrusion detection system (IDS) untuk mencegah akses tidak sah ke sistem yang menyimpan data pribadi.</li>
+            <li><strong>VPN dan Secure Connection:</strong> Memastikan semua akses ke sistem data pribadi menggunakan koneksi yang aman (VPN, SSL/TLS).</li>
+        </ul>
+        
+        <p><strong>6. Compliance Manager / Legal Compliance Officer</strong></p>
+        <p>Compliance Manager memastikan perusahaan mematuhi seluruh regulasi terkait perlindungan data:</p>
+        <ul>
+            <li><strong>Policy Development:</strong> Menyusun kebijakan internal perusahaan terkait pengelolaan data pribadi yang selaras dengan UU PDP.</li>
+            <li><strong>Vendor Management:</strong> Memastikan bahwa mitra bisnis (vendor, kontraktor) juga mematuhi standar perlindungan data yang sama.</li>
+            <li><strong>Regular Audit:</strong> Melakukan audit internal secara berkala untuk memastikan kepatuhan terhadap kebijakan dan regulasi.</li>
+        </ul>
+        
+        <p><strong>Analisis Kegagalan Peran Teknis dalam Kasus Ini:</strong></p>
+        
+        <p>Kasus penyalahgunaan data oleh Andi Irma Malasari dan Raja Firdaus menunjukkan kegagalan sistemik dalam implementasi peran-peran teknis di atas:</p>
+        
+        <ul>
+            <li><strong>Tidak ada kontrol akses yang memadai:</strong> Sales dapat dengan mudah mengakses dan menggunakan data NIK dan KK untuk registrasi tanpa verifikasi yang ketat.</li>
+            <li><strong>Monitoring yang lemah:</strong> Tidak ada sistem yang mendeteksi pola registrasi mencurigakan (misalnya, satu akun melakukan ratusan registrasi dalam waktu singkat).</li>
+            <li><strong>Tidak ada verifikasi biometrik:</strong> Sistem registrasi tidak memverifikasi bahwa orang yang mendaftar adalah pemilik NIK yang sebenarnya.</li>
+            <li><strong>Kurangnya awareness keamanan:</strong> Karyawan tidak memahami konsekuensi hukum dari penyalahgunaan data pribadi.</li>
+        </ul>
+        
+        <p>Jika peran-peran teknis di atas dilaksanakan dengan baik, kasus ini seharusnya dapat dicegah atau minimal terdeteksi lebih awal sebelum menyebabkan kerugian yang lebih besar.</p>
+        
+        <h3>3. ANALISIS HUKUM (PASAL YANG DILANGGAR)</h3>
+        
+        <h4>3.1 Pasal Inti yang Dilanggar</h4>
+        
+        <p>Dalam kasus ini, kedua terdakwa (Andi Irma Malasari dan Raja Firdaus) dinyatakan bersalah melanggar <strong>Pasal 67 ayat (1) Undang-Undang Nomor 27 Tahun 2022 tentang Perlindungan Data Pribadi</strong> jo. <strong>Pasal 65 ayat (1) UU PDP</strong>.</p>
+        
+        <div class="pasal-box">
+            <h4>Pasal 67 ayat (1) UU PDP:</h4>
+            <p><strong>"Setiap Orang yang dengan sengaja dan melawan hukum memperoleh atau mengumpulkan Data Pribadi yang bukan miliknya dengan maksud untuk menguntungkan diri sendiri atau orang lain yang berakibat kerugian Subjek Data Pribadi sebagaimana dimaksud dalam Pasal 65 ayat (1) dipidana dengan pidana penjara paling lama 5 (lima) tahun dan/atau pidana denda paling banyak Rp5.000.000.000,00 (lima miliar rupiah)."</strong></p>
+        </div>
+        
+        <div class="pasal-box">
+            <h4>Pasal 65 ayat (1) UU PDP:</h4>
+            <p><strong>"Setiap Orang dilarang secara melawan hukum memperoleh atau mengumpulkan Data Pribadi yang bukan miliknya dengan maksud untuk menguntungkan diri sendiri atau orang lain yang dapat mengakibatkan kerugian Subjek Data Pribadi."</strong></p>
+        </div>
+        
+        <p><strong>Unsur-Unsur Pasal yang Terpenuhi:</strong></p>
+        
+        <ol>
+            <li><strong>Setiap Orang</strong> - Merujuk pada subjek hukum, baik orang perseorangan maupun korporasi. Dalam kasus ini, Andi Irma Malasari dan Raja Firdaus adalah orang perseorangan yang terbukti melakukan perbuatan melawan hukum.</li>
+            
+            <li><strong>Dengan Sengaja</strong> - Perbuatan dilakukan dengan kesadaran penuh dan ada niat untuk melakukannya. Kedua terdakwa secara sadar dan terencana menggunakan data NIK dan KK curian untuk registrasi kartu SIM. Adanya kolusi dan pola berulang setiap 3-6 bulan menunjukkan kesengajaan.</li>
+            
+            <li><strong>Melawan Hukum</strong> - Perbuatan yang dilakukan bertentangan dengan hukum yang berlaku. Penggunaan data pribadi tanpa persetujuan pemiliknya adalah perbuatan melawan hukum sesuai UU PDP.</li>
+            
+            <li><strong>Memperoleh atau Mengumpulkan Data Pribadi yang Bukan Miliknya</strong> - Raja Firdaus memperoleh NIK dan KK dari orang dalam perusahaan telekomunikasi, sedangkan Andi Irma Malasari menerima dan menggunakan data tersebut. Data NIK dan KK tersebut bukan milik mereka dan diperoleh tanpa izin pemiliknya.</li>
+            
+            <li><strong>Dengan Maksud untuk Menguntungkan Diri Sendiri atau Orang Lain</strong> - Terdakwa melakukan perbuatan tersebut untuk mencapai target penjualan dan mendapatkan upah Rp5,7 juta serta insentif Rp840 ribu setiap 2 bulan. Ini jelas menunjukkan maksud menguntungkan diri sendiri secara finansial.</li>
+            
+            <li><strong>Berakibat Kerugian Subjek Data Pribadi</strong> - Para korban (pemilik NIK dan KK) mengalami kerugian berupa:
+                <ul>
+                    <li>Kehilangan kontrol atas data pribadi mereka</li>
+                    <li>Risiko identitas mereka disalahgunakan untuk tindakan ilegal lainnya</li>
+                    <li>Potensi tagihan atau masalah hukum terkait nomor yang didaftarkan atas nama mereka</li>
+                    <li>Kerugian psikologis berupa rasa tidak aman atas privasi mereka</li>
+                </ul>
+            </li>
+        </ol>
+        
+        <p><strong>Pasal Terkait Lainnya:</strong></p>
+        
+        <div class="pasal-box">
+            <h4>Pasal 20 ayat (1) UU PDP:</h4>
+            <p><strong>"Pemrosesan Data Pribadi hanya dapat dilakukan berdasarkan: a. persetujuan yang sah dari Subjek Data Pribadi; atau b. pemenuhan perjanjian Subjek Data Pribadi."</strong></p>
+            <p><em>Analisis:</em> Dalam kasus ini, tidak ada persetujuan sama sekali dari pemilik data (subjek data pribadi). Andi dan Raja menggunakan data tanpa sepengetahuan dan tanpa persetujuan dari subjek data, sehingga jelas melanggar pasal ini.</p>
+        </div>
+        
+        <div class="pasal-box">
+            <h4>Pasal 58 UU PDP (Sanksi Administratif):</h4>
+            <p><strong>"Pengendali Data Pribadi dan/atau Prosesor Data Pribadi yang melakukan pelanggaran ketentuan dalam Undang-Undang ini dikenai sanksi administratif berupa: a. peringatan tertulis; b. penghentian sementara kegiatan Pemrosesan Data Pribadi; c. penghapusan atau pemusnahan Data Pribadi; dan/atau d. denda administratif."</strong></p>
+            <p><em>Analisis:</em> Selain sanksi pidana bagi individu pelaku, perusahaan telekomunikasi sebagai Pengendali Data Pribadi juga dapat dikenai sanksi administratif karena kelalaian dalam melindungi data pribadi pelanggan dan tidak memiliki sistem kontrol yang memadai untuk mencegah penyalahgunaan data oleh karyawannya.</p>
+        </div>
+        
+        <h4>3.2 Justifikasi Pelanggaran</h4>
+        
+        <p>Berdasarkan kronologi kasus dan bunyi pasal yang dilanggar, berikut adalah justifikasi mengapa tindakan Andi Irma Malasari dan Raja Firdaus dikategorikan sebagai pelanggaran terhadap UU PDP:</p>
+        
+        <p><strong>1. Pelanggaran Prinsip Dasar Perlindungan Data Pribadi</strong></p>
+        
+        <p>UU PDP Pasal 2 menetapkan bahwa perlindungan data pribadi berasaskan penghormatan terhadap Data Pribadi sebagai hak privasi. Dalam kasus ini:</p>
+        
+        <ul>
+            <li><strong>Fakta:</strong> Raja Firdaus memperoleh data NIK dan KK dari "orang dalam" perusahaan setiap 3-6 bulan sekali, kemudian memberikannya kepada Andi Irma Malasari.</li>
+            <li><strong>Analisis Pelanggaran:</strong> Tindakan ini menunjukkan sama sekali tidak ada penghormatan terhadap hak privasi pemilik data. Data pribadi yang bersifat sangat sensitif (NIK adalah identitas kependudukan yang unik untuk setiap warga negara) diperlakukan sebagai komoditas untuk mencapai target penjualan.</li>
+            <li><strong>Keterkaitan dengan Pasal 67 ayat (1):</strong> Perolehan data NIK dan KK tanpa sepengetahuan pemiliknya merupakan tindakan "memperoleh atau mengumpulkan Data Pribadi yang bukan miliknya" secara melawan hukum.</li>
+        </ul>
+        
+        <p><strong>2. Tidak Ada Persetujuan (Informed Consent)</strong></p>
+        
+        <p>Pasal 20 ayat (1) UU PDP menegaskan bahwa pemrosesan data pribadi hanya dapat dilakukan berdasarkan persetujuan yang sah dari subjek data pribadi. Dalam kasus ini:</p>
+        
+        <ul>
+            <li><strong>Fakta:</strong> Andi menggunakan NIK dan KK untuk meregistrasi kartu perdana dengan mengirimkannya ke nomor 4444. Pemilik NIK dan KK sama sekali tidak mengetahui dan tidak memberikan persetujuan untuk penggunaan data mereka.</li>
+            <li><strong>Analisis Pelanggaran:</strong> Tidak ada proses informed consent sama sekali. Subjek data pribadi (pemilik NIK dan KK) tidak dimintai persetujuan, tidak diberitahu tentang tujuan penggunaan data mereka, dan tidak memiliki kesempatan untuk menerima atau menolak pemrosesan data mereka.</li>
+            <li><strong>Keterkaitan dengan Pasal 67 ayat (1):</strong> Penggunaan data tanpa persetujuan ini memenuhi unsur "melawan hukum" karena bertentangan dengan ketentuan Pasal 20 ayat (1) UU PDP.</li>
+        </ul>
+        
+        <p><strong>3. Tujuan untuk Keuntungan Pribadi (Mens Rea)</strong></p>
+        
+        <p>Pasal 67 ayat (1) mensyaratkan adanya unsur "dengan maksud untuk menguntungkan diri sendiri atau orang lain". Dalam kasus ini:</p>
+        
+        <ul>
+            <li><strong>Fakta:</strong> Andi melakukan registrasi palsu untuk mencapai target penjualan 1.100 kartu per bulan agar mendapat upah Rp5,7 juta dan insentif Rp840 ribu setiap 2 bulan. Raja Firdaus juga mendapat keuntungan dari skema ini (kemungkinan berupa fee atau imbalan).</li>
+            <li><strong>Analisis Pelanggaran:</strong> Motivasi utama perbuatan adalah keuntungan finansial pribadi. Tanpa menggunakan data curian, Andi tidak akan mampu mencapai target penjualan yang sangat tinggi tersebut. Ini menunjukkan adanya niat jahat (mens rea) untuk mengeksploitasi data pribadi orang lain demi keuntungan sendiri.</li>
+            <li><strong>Keterkaitan dengan Pasal 67 ayat (1):</strong> Unsur "dengan maksud untuk menguntungkan diri sendiri" terpenuhi secara jelas melalui sistem bonus dan insentif yang diperoleh dari registrasi palsu menggunakan data curian.</li>
+        </ul>
+        
+        <p><strong>4. Kerugian yang Dialami Subjek Data Pribadi</strong></p>
+        
+        <p>Pasal 65 ayat (1) dan Pasal 67 ayat (1) mensyaratkan adanya kerugian atau potensi kerugian bagi subjek data pribadi. Dalam kasus ini:</p>
+        
+        <ul>
+            <li><strong>Fakta:</strong> Para korban baru mengetahui penyalahgunaan data mereka ketika menerima tagihan atau notifikasi terkait nomor telepon yang tidak pernah mereka gunakan.</li>
+            <li><strong>Analisis Kerugian:</strong>
+                <ol>
+                    <li><em>Kerugian Materiil:</em> Potensi tagihan atau biaya yang harus dibayar terkait nomor yang didaftarkan atas nama mereka.</li>
+                    <li><em>Kerugian Immaterial:</em> Kehilangan privasi, rasa tidak aman, dan ketakutan bahwa data mereka dapat disalahgunakan untuk tindakan kriminal lainnya.</li>
+                    <li><em>Risiko Identity Theft:</em> NIK yang bocor dapat digunakan untuk kejahatan identitas lain seperti pembuatan rekening bank palsu, pinjaman online ilegal, atau transaksi kriminal lainnya.</li>
+                    <li><em>Kerugian Waktu dan Tenaga:</em> Korban harus meluangkan waktu untuk melaporkan kasus, mengurus administrasi pembatalan nomor, dan memastikan tidak ada penyalahgunaan lebih lanjut.</li>
+                </ol>
+            </li>
+            <li><strong>Keterkaitan dengan Pasal 67 ayat (1):</strong> Unsur "berakibat kerugian Subjek Data Pribadi" terpenuhi baik secara aktual (kerugian yang sudah terjadi) maupun potensial (risiko kerugian di masa depan).</li>
+        </ul>
+        
+        <p><strong>5. Pola Sistematis dan Berkelanjutan</strong></p>
+        
+        <p>Fakta bahwa perbuatan dilakukan secara berulang setiap 3-6 bulan menunjukkan:</p>
+        
+        <ul>
+            <li><strong>Kesengajaan yang Tinggi:</strong> Bukan tindakan spontan atau kekeliruan, melainkan skema terencana dan sistematis.</li>
+            <li><strong>Pelanggaran Masif:</strong> Dengan target 1.100 kartu per bulan, dapat diperkirakan ratusan hingga ribuan orang menjadi korban penyalahgunaan data selama periode perbuatan dilakukan.</li>
+            <li><strong>Organized Crime:</strong> Melibatkan kolusi dengan "orang dalam" perusahaan yang memiliki akses ke database pelanggan, menunjukkan adanya jaringan kejahatan yang terorganisir.</li>
+        </ul>
+        
+        <p><strong>6. Pelanggaran Kewajiban Profesional</strong></p>
+        
+        <p>Sebagai karyawan perusahaan telekomunikasi, Andi Irma Malasari memiliki kewajiban untuk:</p>
+        
+        <ul>
+            <li>Menjaga kerahasiaan data pelanggan yang dipercayakan kepadanya</li>
+            <li>Melakukan penjualan secara jujur dan etis</li>
+            <li>Tidak menyalahgunakan posisi dan akses yang dimilikinya</li>
+        </ul>
+        
+        <p>Pelanggaran terhadap kewajiban profesional ini memperkuat unsur "melawan hukum" dalam Pasal 67 ayat (1), karena tidak hanya melanggar UU PDP tetapi juga melanggar prinsip-prinsip etika profesi dan kepercayaan yang diberikan oleh perusahaan.</p>
+        
+        <p><strong>Kesimpulan Justifikasi:</strong></p>
+        
+        <p>Berdasarkan analisis di atas, tindakan Andi Irma Malasari dan Raja Firdaus memenuhi seluruh unsur dalam Pasal 67 ayat (1) jo. Pasal 65 ayat (1) UU PDP, yaitu:</p>
+        
+        <ol>
+            <li>✓ Setiap Orang (subjek hukum)</li>
+            <li>✓ Dengan sengaja (mens rea terpenuhi melalui pola sistematis)</li>
+            <li>✓ Melawan hukum (melanggar UU PDP dan tidak ada dasar hukum yang sah)</li>
+            <li>✓ Memperoleh/mengumpulkan data pribadi yang bukan miliknya (NIK dan KK curian)</li>
+            <li>✓ Dengan maksud menguntungkan diri sendiri (upah dan insentif)</li>
+            <li>✓ Berakibat kerugian subjek data pribadi (kerugian materiil dan immaterial)</li>
+        </ol>
+        
+        <p>Oleh karena itu, putusan Pengadilan Negeri Tangerang yang menjatuhkan hukuman penjara 1,5 tahun dan denda Rp50 juta kepada kedua terdakwa adalah tepat dan sesuai dengan ketentuan hukum yang berlaku.</p>
+        
+        <h3>4. PENUTUP</h3>
+        
+        <h4>4.1 Pembelajaran dari Kasus</h4>
+        
+        <p>Kasus penyalahgunaan data pribadi NIK dan KK oleh sales telekomunikasi ini memberikan beberapa pelajaran penting:</p>
+        
+        <ol>
+            <li><strong>Data Pribadi adalah Aset Berharga:</strong> NIK, KK, dan data identitas lainnya bukan sekadar angka atau informasi biasa, tetapi merupakan aset pribadi yang sangat berharga dan dapat disalahgunakan untuk berbagai kejahatan.</li>
+            
+            <li><strong>UU PDP Memiliki Gigi Hukum:</strong> Kasus ini membuktikan bahwa UU PDP bukan sekadar regulasi simbolis, tetapi memiliki sanksi pidana yang nyata dan tegas bagi pelanggar.</li>
+            
+            <li><strong>Tanggung Jawab Profesional IT:</strong> Profesional di bidang teknologi informasi, termasuk lulusan Teknik Multimedia dan Jaringan, memiliki tanggung jawab etis dan hukum untuk melindungi data pribadi yang mereka kelola.</li>
+            
+            <li><strong>Keamanan Data adalah Tanggung Jawab Bersama:</strong> Bukan hanya tanggung jawab satu departemen (IT atau security), tetapi seluruh organisasi harus berkomitmen pada perlindungan data pribadi.</li>
+            
+            <li><strong>Kontrol Internal yang Lemah Mengundang Kejahatan:</strong> Kasus ini terjadi karena lemahnya sistem kontrol internal perusahaan, tidak adanya monitoring yang memadai, dan minimnya awareness karyawan tentang perlindungan data.</li>
+        </ol>
+        
+        <h4>4.2 Rekomendasi Etika Profesi untuk Lulusan Teknik Multimedia dan Jaringan</h4>
+        
+        <p>Berdasarkan pembelajaran dari kasus ini, berikut adalah <strong>rekomendasi etika profesi yang harus dipegang teguh oleh lulusan Teknik Multimedia dan Jaringan</strong>:</p>
+        
+        <div class="pasal-box" style="background-color: #fef3c7; border-left: 4px solid #f59e0b;">
+            <h4 style="color: #92400e;">PRINSIP ETIKA: "DATA PRIVACY BY DEFAULT AND BY DESIGN"</h4>
+            
+            <p style="text-indent: 0; font-style: normal;"><strong>1. Hormati Privasi sebagai Hak Fundamental</strong></p>
+            <p style="text-indent: 0;">Setiap data pribadi yang Anda kelola dalam pekerjaan Anda bukan milik perusahaan atau milik Anda, tetapi milik individu yang berhak atas privasi mereka. Perlakukan setiap data pribadi seolah-olah itu adalah data pribadi Anda sendiri atau keluarga Anda.</p>
+            
+            <p style="text-indent: 0;"><strong>2. Terapkan Prinsip "Need to Know" dan "Least Privilege"</strong></p>
+            <p style="text-indent: 0;">Dalam merancang sistem atau mengelola database, pastikan bahwa hanya orang yang benar-benar membutuhkan akses ke data tertentu yang dapat mengaksesnya. Jangan berikan akses lebih dari yang diperlukan, bahkan untuk diri Anda sendiri.</p>
+            
+            <p style="text-indent: 0;"><strong>3. Jangan Pernah Menyalahgunakan Akses untuk Keuntungan Pribadi</strong></p>
+            <p style="text-indent: 0;">Sebagai profesional IT/multimedia, Anda mungkin memiliki akses ke data sensitif perusahaan atau pengguna. Jangan pernah, dalam kondisi apapun, menggunakan akses tersebut untuk keuntungan pribadi, bahkan jika tidak ada yang tahu. Integritaslah yang menjadi fondasi kepercayaan dalam profesi ini.</p>
+            
+            <p style="text-indent: 0;"><strong>4. Implementasikan "Privacy by Design" dalam Setiap Proyek</strong></p>
+            <p style="text-indent: 0;">Ketika mengembangkan aplikasi, website, atau sistem jaringan, pertimbangkan aspek privasi sejak tahap desain awal, bukan sebagai tambahan di akhir. Ini meliputi:
+            <ul style="margin-left: 1cm;">
+                <li>Minimisasi pengumpulan data (hanya kumpulkan data yang benar-benar diperlukan)</li>
+                <li>Enkripsi data sensitif</li>
+                <li>Implementasi mekanisme consent yang jelas</li>
+                <li>Memberikan kontrol kepada pengguna atas data mereka</li>
+                <li>Menerapkan audit trail untuk setiap akses data</li>
+            </ul>
+            </p>
+            
+            <p style="text-indent: 0;"><strong>5. Berani Mengatakan "Tidak" pada Praktik yang Tidak Etis</strong></p>
+            <p style="text-indent: 0;">Jika atasan atau klien meminta Anda melakukan sesuatu yang melanggar privasi pengguna atau UU PDP (misalnya: membuat backdoor untuk mengakses data pengguna, menjual database pelanggan, atau mengumpulkan data tanpa consent), Anda harus berani menolak dan menjelaskan konsekuensi hukumnya. Ingat kasus Andi dan Raja: mereka tidak hanya kehilangan pekerjaan, tetapi juga dipenjara dan memiliki catatan kriminal.</p>
+            
+            <p style="text-indent: 0;"><strong>6. Tingkatkan Literasi Hukum Digital Secara Berkelanjutan</strong></p>
+            <p style="text-indent: 0;">UU PDP, UU ITE, dan regulasi digital lainnya terus berkembang. Sebagai profesional, Anda wajib memperbarui pengetahuan tentang hukum yang mengatur bidang kerja Anda. Ikuti pelatihan, baca update regulasi, dan jika perlu, konsultasikan dengan legal counsel perusahaan sebelum mengimplementasikan fitur yang melibatkan data pribadi.</p>
+            
+            <p style="text-indent: 0;"><strong>7. Dokumentasikan dan Audit Setiap Akses Data</strong></p>
+            <p style="text-indent: 0;">Dalam merancang sistem, selalu implementasikan logging dan audit trail yang mencatat siapa mengakses data apa, kapan, dan untuk tujuan apa. Ini bukan hanya untuk menangkap pelaku jika terjadi pelanggaran, tetapi juga untuk memberikan transparansi dan akuntabilitas.</p>
+            
+            <p style="text-indent: 0;"><strong>8. Prioritaskan Keamanan di Atas Kemudahan</strong></p>
+            <p style="text-indent: 0;">Sering kali ada trade-off antara kemudahan penggunaan (user experience) dengan keamanan. Sebagai profesional, Anda harus memprioritaskan keamanan data pengguna. Lebih baik sistem sedikit lebih rumit tetapi aman, daripada mudah tetapi rentan terhadap penyalahgunaan.</p>
+            
+            <p style="text-indent: 0;"><strong>9. Laporkan Jika Menemukan Celah Keamanan</strong></p>
+            <p style="text-indent: 0;">Jika Anda menemukan kerentanan dalam sistem yang dapat menyebabkan kebocoran data pribadi, segera laporkan ke pihak yang berwenang (security team, management, atau DPO). Jangan diam atau, lebih buruk lagi, memanfaatkan celah tersebut.</p>
+            
+            <p style="text-indent: 0;"><strong>10. Edukasi Pengguna dan Kolega tentang Pentingnya Perlindungan Data</strong></p>
+            <p style="text-indent: 0;">Sebagai lulusan TMJ, Anda memiliki pengetahuan teknis yang mungkin tidak dimiliki orang lain. Gunakan pengetahuan itu untuk mengedukasi rekan kerja, klien, atau pengguna tentang pentingnya melindungi data pribadi dan praktik terbaik dalam keamanan digital.</p>
+        </div>
+        
+        <h4>4.3 Pesan Penutup</h4>
+        
+        <p>Kasus Andi Irma Malasari dan Raja Firdaus adalah pengingat bahwa di era digital, data pribadi adalah aset yang sangat berharga dan harus dilindungi dengan sungguh-sungguh. Sebagai calon profesional di bidang Teknik Multimedia dan Jaringan, Anda akan berada di garis depan dalam mengelola dan melindungi data tersebut.</p>
+        
+        <p>Tanggung jawab ini tidak ringan. Setiap sistem yang Anda bangun, setiap kode yang Anda tulis, dan setiap jaringan yang Anda kelola berpotensi memengaruhi privasi ribuan atau bahkan jutaan orang. Oleh karena itu, integritas, etika profesional, dan komitmen terhadap perlindungan privasi harus menjadi kompas moral dalam setiap keputusan teknis yang Anda ambil.</p>
+        
+        <p>Ingatlah selalu: <strong><em>"With great (technical) power comes great responsibility."</em></strong> Teknologi yang kita kuasai dapat digunakan untuk membangun atau untuk merusak, untuk melindungi atau untuk mengeksploitasi. Pilihannya ada di tangan kita sebagai profesional yang beretika.</p>
+        
+        <p>Mari kita jadikan kasus ini sebagai pembelajaran agar tidak mengulangi kesalahan yang sama, dan mari kita berkomitmen untuk menjadi profesional IT yang tidak hanya kompeten secara teknis, tetapi juga berintegritas dan bertanggung jawab dalam melindungi privasi dan data pribadi masyarakat.</p>
+        
+        <div class="references">
+            <h3>DAFTAR PUSTAKA</h3>
+            
+            <p>Hukumonline.com. (2025, 6 Januari). Menelaah 3 Putusan Perkara Pelanggaran PDP, Minimnya Literasi dan Tantangannya. Diakses dari https://www.hukumonline.com/berita/a/menelaah-3-putusan-perkara-pelanggaran-pdp--minimnya-literasi-dan-tantangannya-lt677bd1211839d</p>
+            
+            <p>K&K Advocates. (2024). Kasus-Kasus Awal dari Implementasi Sanksi Pidana dalam UU PDP. Diakses dari https://www.kk-advocates.com/news/read/kasus-awal-implementasi-sanksi-pidana-dalam-uu-pdp</p>
+            
+            <p>Pengadilan Negeri Tangerang. (2024). Putusan Nomor 77/Pid.Sus/2024/PN Tng atas nama Terdakwa Andi Irma Malasari. Tangerang: Pengadilan Negeri Tangerang. Tanggal Putusan: 2 April 2024.</p>
+            
+            <p>Pengadilan Negeri Tangerang. (2024). Putusan Nomor 78/Pid.Sus/2024/PN Tng atas nama Terdakwa Raja Firdaus. Tangerang: Pengadilan Negeri Tangerang. Tanggal Putusan: 2 April 2024.</p>
+            
+            <p>Republik Indonesia. (2022). Undang-Undang Nomor 27 Tahun 2022 tentang Perlindungan Data Pribadi. Lembaran Negara Republik Indonesia Tahun 2022 Nomor 220. Jakarta: Sekretariat Negara.</p>
+            
+            <p>Republik Indonesia. (2008). Undang-Undang Nomor 11 Tahun 2008 tentang Informasi dan Transaksi Elektronik sebagaimana telah diubah dengan Undang-Undang Nomor 19 Tahun 2016. Jakarta: Sekretariat Negara.</p>
+            
+            <p>Kementerian Komunikasi dan Informatika. (2024). Pedoman Implementasi Undang-Undang Perlindungan Data Pribadi untuk Penyelenggara Sistem Elektronik. Jakarta: Kominfo.</p>
+        </div>
+    </div>
+    
+    <script>
+        function handlePrint() {
+            window.print();
+        }
+        
+        function handleDownload() {
+            alert('Cara Download PDF:\n\n1. Klik OK pada dialog ini\n2. Pilih "Save as PDF" atau "Microsoft Print to PDF" sebagai printer\n3. Klik Save/Simpan\n4. Beri nama file: Analisis_Hukum_Digital_Rezki_Andika.pdf');
+            window.print();
+        }
+    </script>
+</body>
+</html>

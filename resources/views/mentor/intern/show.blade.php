@@ -18,7 +18,7 @@
                         <div><span class="text-gray-500">Institusi:</span> {{ $intern->institution }}</div>
                         <div><span class="text-gray-500">Jenjang:</span> {{ $intern->education_level }}</div>
                         <div><span class="text-gray-500">Jurusan:</span> {{ $intern->major ?? '-' }}</div>
-                        <div><span class="text-gray-500">NIM/NIS:</span> {{ $intern->student_id ?? '-' }}</div>
+                        <div><span class="text-gray-500">Nomor Telepon:</span> {{ $intern->phone ?? '-' }}</div>
                         <div><span class="text-gray-500">Periode:</span> {{ $intern->start_date->format('d M Y') }} - {{ $intern->end_date->format('d M Y') }}</div>
                         <div><span class="text-gray-500">Status:</span> {{ $intern->is_active ? 'Aktif' : 'Tidak aktif' }}</div>
                     </div>

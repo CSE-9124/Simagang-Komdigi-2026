@@ -35,8 +35,9 @@ class UserSeeder extends Seeder
         User::where('role', 'mentor')->delete();
 
         $mentorNames = [
-            'andar', 'aswar', 'bahrawi', 'fadly', 'fajriani', 'farhan',
+            'andar', 'azwar', 'bahrawi', 'fadly', 'fajriani', 'farhan',
             'harbaedy', 'herman', 'olga', 'rudy', 'solehuddin', 'tasmil', 'yayat', 'irfan',
+            'sukma', 'niko', 'nur alam',
         ];
 
         $mentors = collect($mentorNames)->map(function ($name) {
@@ -60,7 +61,7 @@ class UserSeeder extends Seeder
                 'gender' => 'Laki-laki',
                 'education_level' => 'S1/D4',
                 'major' => 'Teknik Informatika',
-                'student_id' => '1234567890',
+                'phone' => '081234567890',
                 'institution' => 'Universitas Contoh',
                 'start_date' => now()->subDays(30),
                 'end_date' => now()->addDays(60),
@@ -72,7 +73,7 @@ class UserSeeder extends Seeder
                 'gender' => 'Perempuan',
                 'education_level' => 'SMA/SMK',
                 'major' => 'Rekayasa Perangkat Lunak',
-                'student_id' => '9876543210',
+                'phone' => '089876543210',
                 'institution' => 'SMK Teknologi',
                 'start_date' => now()->subDays(20),
                 'end_date' => now()->addDays(70),
@@ -84,7 +85,7 @@ class UserSeeder extends Seeder
                 'gender' => 'Laki-laki',
                 'education_level' => 'S1/D4',
                 'major' => 'Sistem Informasi',
-                'student_id' => '1122334455',
+                'phone' => '081122334455',
                 'institution' => 'Universitas Negeri',
                 'start_date' => now()->subDays(10),
                 'end_date' => now()->addDays(80),
@@ -108,7 +109,7 @@ class UserSeeder extends Seeder
                     'gender' => $internData['gender'],
                     'education_level' => $internData['education_level'],
                     'major' => $internData['major'],
-                    'student_id' => $internData['student_id'],
+                    'phone' => $internData['phone'],
                     'institution' => $internData['institution'],
                     'mentor_id' => null,
                     'start_date' => $internData['start_date'],

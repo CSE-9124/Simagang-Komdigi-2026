@@ -113,8 +113,8 @@
                         <p class="text-gray-900">{{ $intern->major ?: '-' }}</p>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-500 mb-1">NIM/NIS</label>
-                        <p class="text-gray-900">{{ $intern->student_id ?: '-' }}</p>
+                        <label class="block text-sm font-medium text-gray-500 mb-1">Nomor Telepon</label>
+                        <p class="text-gray-900">{{ $intern->phone ?: '-' }}</p>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-500 mb-1">Institusi</label>

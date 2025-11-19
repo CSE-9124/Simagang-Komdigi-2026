@@ -51,12 +51,16 @@
                     <p class="text-lg text-gray-900">{{ $intern->major ?? '-' }}</p>
                 </div>
                 <div>
-                    <label class="text-sm font-medium text-gray-500">NIM/NIS</label>
-                    <p class="text-lg text-gray-900">{{ $intern->student_id ?? '-' }}</p>
+                    <label class="text-sm font-medium text-gray-500">Nomor Telepon</label>
+                    <p class="text-lg text-gray-900">{{ $intern->phone ?? '-' }}</p>
                 </div>
                 <div>
                     <label class="text-sm font-medium text-gray-500">Institusi</label>
                     <p class="text-lg text-gray-900">{{ $intern->institution }}</p>
+                </div>
+                <div>
+                    <label class="text-sm font-medium text-gray-500">Keperluan</label>
+                    <p class="text-lg text-gray-900">{{ $intern->purpose ?? '-' }}</p>
                 </div>
                 <div>
                     <label class="text-sm font-medium text-gray-500">Mentor</label>

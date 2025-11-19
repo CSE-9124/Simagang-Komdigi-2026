@@ -13,7 +13,13 @@
         </div>
 
         <!-- Filter Section -->
-        <form method="GET" action="{{ route('admin.intern.index') }}" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <form method="GET" action="{{ route('admin.intern.index') }}" class="grid grid-cols-1 md:grid-cols-5 gap-4">
+            <div>
+                <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Cari Nama</label>
+                <input type="text" name="search" id="search" value="{{ request('search') }}" 
+                    placeholder="Cari nama..." 
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+            </div>
             <div>
                 <label for="team" class="block text-sm font-medium text-gray-700 mb-1">Filter TIM</label>
                 <select name="team" id="team" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
@@ -23,8 +29,10 @@
                     <option value="TIM VSGA" {{ request('team') == 'TIM VSGA' ? 'selected' : '' }}>TIM VSGA</option>
                     <option value="TIM TA" {{ request('team') == 'TIM TA' ? 'selected' : '' }}>TIM TA</option>
                     <option value="TIM Microskill" {{ request('team') == 'TIM Microskill' ? 'selected' : '' }}>TIM Microskill</option>
-                    <option value="TIM Media" {{ request('team') == 'TIM Media' ? 'selected' : '' }}>TIM Media</option>
-                    <option value="TIM Tata Usaha" {{ request('team') == 'TIM Tata Usaha' ? 'selected' : '' }}>TIM Tata Usaha</option>
+                    <option value="TIM Media (DiaPus)" {{ request('team') == 'TIM Media (DiaPus)' ? 'selected' : '' }}>TIM Media (DiaPus)</option>
+                    <option value="TIM Tata Usaha (Umum)" {{ request('team') == 'TIM Tata Usaha (Umum)' ? 'selected' : '' }}>TIM Tata Usaha (Umum)</option>
+                    <option value="FGA" {{ request('team') == 'FGA' ? 'selected' : '' }}>FGA</option>
+                    <option value="Keuangan" {{ request('team') == 'Keuangan' ? 'selected' : '' }}>Keuangan</option>
                 </select>
             </div>
             <div>
@@ -48,7 +56,7 @@
                 <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full">
                     <i class="fas fa-filter mr-2"></i>Filter
                 </button>
-                @if(request()->anyFilled(['team', 'mentor_id', 'is_active']))
+                @if(request()->anyFilled(['search', 'team', 'mentor_id', 'is_active']))
                     <a href="{{ route('admin.intern.index') }}" class="ml-2 bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded">
                         <i class="fas fa-times"></i>
                     </a>
@@ -58,6 +66,7 @@
     </div>
 
     <div class="bg-white shadow rounded-lg overflow-hidden">
+        <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
                 <tr>
@@ -130,6 +139,7 @@
                 @endforelse
             </tbody>
         </table>
+        </div>
     </div>
 
     <div class="mt-4">

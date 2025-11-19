@@ -13,12 +13,18 @@ class InternController extends Controller
     {
         $mentor = Auth::user()->mentor;
 
-        $interns = $mentor
-            ? $mentor->interns()
-                ->withCount(['attendances', 'logbooks', 'microSkills'])
-                ->orderBy('name')
-                ->paginate(15)
-            : collect();
+        $query = $mentor ? $mentor->interns() : Intern::query()->whereRaw('1 = 0');
+        
+        // Search by name
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        $interns = $query
+            ->withCount(['attendances', 'logbooks', 'microSkills'])
+            ->orderBy('name')
+            ->paginate(15)
+            ->withQueryString();
 
         return view('mentor.intern.index', compact('mentor', 'interns'));
     }

@@ -55,10 +55,10 @@
                 </div>
 
                 <div>
-                    <label for="student_id" class="block text-sm font-medium text-gray-700 mb-2">NIM/NIS</label>
-                    <input type="text" name="student_id" id="student_id" value="{{ old('student_id') }}" 
+                    <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">Nomor Telepon</label>
+                    <input type="text" name="phone" id="phone" value="{{ old('phone') }}" 
                         class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                    @error('student_id')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+                    @error('phone')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
                 </div>
 
                 <div>
@@ -67,6 +67,22 @@
                         class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                         placeholder="Masukkan nama institusi/kampus">
                     @error('institution')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+                </div>
+
+                <div>
+                    <label for="purpose" class="block text-sm font-medium text-gray-700 mb-2">Keperluan</label>
+                    <select name="purpose" id="purpose" 
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">Pilih Keperluan (Opsional)</option>
+                        <option value="Magang" {{ old('purpose') == 'Magang' ? 'selected' : '' }}>Magang</option>
+                        <option value="KKN Profesi" {{ old('purpose') == 'KKN Profesi' ? 'selected' : '' }}>KKN Profesi</option>
+                        <option value="PKL" {{ old('purpose') == 'PKL' ? 'selected' : '' }}>PKL</option>
+                        <option value="Praktek Industri" {{ old('purpose') == 'Praktek Industri' ? 'selected' : '' }}>Praktek Industri</option>
+                        <option value="Magang Industri" {{ old('purpose') == 'Magang Industri' ? 'selected' : '' }}>Magang Industri</option>
+                        <option value="Guru Magang Industri" {{ old('purpose') == 'Guru Magang Industri' ? 'selected' : '' }}>Guru Magang Industri</option>
+                        <option value="Job on Training" {{ old('purpose') == 'Job on Training' ? 'selected' : '' }}>Job on Training</option>
+                    </select>
+                    @error('purpose')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
                 </div>
 
                 <div>

@@ -110,7 +110,6 @@
                         </div>
                     @else
                         <a href="{{ route('login') }}" class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium">Login</a>
-                        <a href="{{ route('register') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium">Register</a>
                     @endauth
                 </div>
             </div>
@@ -152,7 +151,6 @@
                 </div>
             @else
                 <a href="{{ route('login') }}" class="block px-3 py-2 rounded-md text-base font-medium text-gray-600 hover:bg-gray-50">Login</a>
-                <a href="{{ route('register') }}" class="block px-3 py-2 rounded-md text-base font-medium text-white bg-blue-600">Register</a>
             @endauth
         </div>
     </div>

@@ -17,6 +17,11 @@ class AdminInternController extends Controller
     {
         $query = Intern::with(['user', 'mentor']);
         
+        // Search by name
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+        
         // Filter by team
         if ($request->filled('team')) {
             $query->where('team', $request->team);
@@ -51,10 +56,11 @@ class AdminInternController extends Controller
             'gender' => ['required', 'in:Laki-laki,Perempuan'],
             'education_level' => ['required', 'in:SMA/SMK,S1/D4'],
             'major' => ['nullable', 'string', 'max:255'],
-            'student_id' => ['nullable', 'string', 'max:255'],
+            'phone' => ['nullable', 'string', 'max:255'],
             'institution' => ['required', 'string', 'max:255'],
+            'purpose' => ['nullable', 'string', 'in:Magang,KKN Profesi,PKL,Praktek Industri,Magang Industri,Guru Magang Industri,Job on Training'],
             'mentor_id' => ['nullable', 'exists:mentors,id'],
-            'team' => ['nullable', 'string', 'in:TIM DEA,TIM GTA,TIM VSGA,TIM TA,TIM Microskill,TIM Media,TIM Tata Usaha'],
+            'team' => ['nullable', 'string', 'in:TIM DEA,TIM GTA,TIM VSGA,TIM TA,TIM Microskill,TIM Media (DiaPus),TIM Tata Usaha (Umum),FGA,Keuangan'],
             'start_date' => ['required', 'date'],
             'end_date' => ['required', 'date', 'after:start_date'],
             'photo' => ['required', 'image', 'max:2048'],
@@ -105,14 +111,15 @@ class AdminInternController extends Controller
             'gender' => $validated['gender'],
             'education_level' => $validated['education_level'],
             'major' => $validated['major'],
-            'student_id' => $validated['student_id'],
+            'phone' => $validated['phone'],
             'institution' => $institution,
+            'purpose' => $validated['purpose'] ?? null,
             'mentor_id' => $validated['mentor_id'] ?? null,
             'team' => $validated['team'] ?? null,
             'start_date' => $validated['start_date'],
             'end_date' => $validated['end_date'],
             'photo_path' => $photoPath,
-            'is_active' => $request->boolean('is_active', true),
+            'is_active' => $request->has('is_active') ? $request->boolean('is_active') : false,
         ]);
 
         return redirect()->route('admin.intern.index')
@@ -151,10 +158,11 @@ class AdminInternController extends Controller
             'gender' => ['required', 'in:Laki-laki,Perempuan'],
             'education_level' => ['required', 'in:SMA/SMK,S1/D4'],
             'major' => ['nullable', 'string', 'max:255'],
-            'student_id' => ['nullable', 'string', 'max:255'],
+            'phone' => ['nullable', 'string', 'max:255'],
             'institution' => ['required', 'string', 'max:255'],
+            'purpose' => ['nullable', 'string', 'in:Magang,KKN Profesi,PKL,Praktek Industri,Magang Industri,Guru Magang Industri,Job on Training'],
             'mentor_id' => ['nullable', 'exists:mentors,id'],
-            'team' => ['nullable', 'string', 'in:TIM DEA,TIM GTA,TIM VSGA,TIM TA,TIM Microskill,TIM Media,TIM Tata Usaha'],
+            'team' => ['nullable', 'string', 'in:TIM DEA,TIM GTA,TIM VSGA,TIM TA,TIM Microskill,TIM Media (DiaPus),TIM Tata Usaha (Umum),FGA,Keuangan'],
             'start_date' => ['required', 'date'],
             'end_date' => ['required', 'date', 'after:start_date'],
             'photo' => ['nullable', 'image', 'max:2048'],
@@ -184,13 +192,14 @@ class AdminInternController extends Controller
             'gender' => $validated['gender'],
             'education_level' => $validated['education_level'],
             'major' => $validated['major'],
-            'student_id' => $validated['student_id'],
+            'phone' => $validated['phone'],
             'institution' => $institution,
+            'purpose' => $validated['purpose'] ?? null,
             'mentor_id' => $validated['mentor_id'] ?? null,
             'team' => $validated['team'] ?? null,
             'start_date' => $validated['start_date'],
             'end_date' => $validated['end_date'],
-            'is_active' => $request->boolean('is_active', true),
+            'is_active' => $request->has('is_active') ? $request->boolean('is_active') : false,
         ];
 
         if ($request->hasFile('photo')) {
