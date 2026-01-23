@@ -29,6 +29,8 @@ class ReportController extends Controller
 
         $validated = $request->validate([
             'file' => ['required', 'file', 'mimes:pdf,doc,docx', 'max:10240'],
+            'project_file' => ['nullable', 'file', 'mimes:zip,rar,7z,tar,gz', 'max:51200'],
+            'project_link' => ['nullable', 'url', 'max:1024'],
         ]);
 
         $file = $request->file('file');
@@ -57,9 +59,25 @@ class ReportController extends Controller
             return back()->withErrors(['file' => 'File tidak valid.'])->withInput();
         }
 
+        $projectFilePath = null;
+        if ($request->hasFile('project_file')) {
+            $pfile = $request->file('project_file');
+            if ($pfile->isValid()) {
+                $pext = $pfile->getClientOriginalExtension() ?: 'zip';
+                $pname = 'project_' . time() . '_' . uniqid() . '.' . $pext;
+                $pdest = storage_path('app/public/projects');
+                if (!file_exists($pdest)) mkdir($pdest, 0755, true);
+                if ($pfile->move($pdest, $pname) && file_exists($pdest . DIRECTORY_SEPARATOR . $pname)) {
+                    $projectFilePath = 'projects/' . $pname;
+                }
+            }
+        }
+
         FinalReport::create([
             'intern_id' => $intern->id,
             'file_path' => $filePath,
+            'project_file' => $projectFilePath,
+            'project_link' => $request->input('project_link'),
             'file_name' => $fileName,
             'status' => 'pending',
             'submitted_at' => now(),
@@ -83,14 +101,41 @@ class ReportController extends Controller
 
         $validated = $request->validate([
             'file' => ['required', 'file', 'mimes:pdf,doc,docx', 'max:10240'],
+            'project_file' => ['nullable', 'file', 'mimes:zip,rar,7z,tar,gz', 'max:51200'],
+            'project_link' => ['nullable', 'url', 'max:1024'],
         ]);
 
-        // Delete old file
+        // Delete old report file
         if ($report->file_path) {
             $oldPath = storage_path('app/public/' . $report->file_path);
             if (file_exists($oldPath)) {
                 @unlink($oldPath);
             }
+        }
+
+        // Handle project file replacement
+        if ($request->hasFile('project_file')) {
+            // delete old project file if exists
+            if ($report->project_file) {
+                $oldP = storage_path('app/public/' . $report->project_file);
+                if (file_exists($oldP)) {
+                    @unlink($oldP);
+                }
+            }
+            $pfile = $request->file('project_file');
+            if ($pfile->isValid()) {
+                $pext = $pfile->getClientOriginalExtension() ?: 'zip';
+                $pname = 'project_' . time() . '_' . uniqid() . '.' . $pext;
+                $pdest = storage_path('app/public/projects');
+                if (!file_exists($pdest)) mkdir($pdest, 0755, true);
+                if ($pfile->move($pdest, $pname) && file_exists($pdest . DIRECTORY_SEPARATOR . $pname)) {
+                    $projectFilePath = 'projects/' . $pname;
+                } else {
+                    $projectFilePath = null;
+                }
+            }
+        } else {
+            $projectFilePath = $report->project_file;
         }
 
         $file = $request->file('file');
@@ -121,6 +166,8 @@ class ReportController extends Controller
 
         $report->update([
             'file_path' => $filePath,
+            'project_file' => $projectFilePath,
+            'project_link' => $request->input('project_link'),
             'file_name' => $fileName,
             'status' => 'pending',
             'needs_revision' => false, // Reset revision flag when resubmitted

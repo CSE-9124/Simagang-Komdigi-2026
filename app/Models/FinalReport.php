@@ -12,6 +12,8 @@ class FinalReport extends Model
     protected $fillable = [
         'intern_id',
         'file_path',
+        'project_file',
+        'project_link',
         'file_name',
         'status',
         'grade',

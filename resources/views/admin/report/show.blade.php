@@ -78,6 +78,31 @@
                 </a>
             </div>
 
+            @if($report->project_file || $report->project_link)
+                <div class="mt-4">
+                    <label class="block text-sm font-medium text-gray-500 mb-1">Proyek</label>
+                    <div class="space-y-3">
+                        @if($report->project_file)
+                            <div>
+                                <p class="text-sm text-gray-700 font-medium">File Proyek: {{ basename($report->project_file) }}</p>
+                                <a href="{{ url('storage/' . $report->project_file) }}" target="_blank" class="inline-block mt-2 bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded">
+                                    <i class="fas fa-file-archive mr-2"></i>Download File Proyek
+                                </a>
+                            </div>
+                        @endif
+
+                        @if($report->project_link)
+                            <div>
+                                <p class="text-sm text-gray-700 font-medium">Link Proyek</p>
+                                <a href="{{ $report->project_link }}" target="_blank" rel="noopener" class="inline-block mt-2 bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded">
+                                    <i class="fas fa-external-link-alt mr-2"></i>Buka Link Proyek
+                                </a>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            @endif
+
             <form method="POST" action="{{ route('admin.report.update-status', $report) }}" class="mt-6">
                 @csrf
                 @method('PUT')
