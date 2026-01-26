@@ -136,6 +136,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/report', [AdminReportController::class, 'index'])->name('report.index');
     Route::get('/report/{report}', [AdminReportController::class, 'show'])->name('report.show');
     Route::put('/report/{report}/status', [AdminReportController::class, 'updateStatus'])->name('report.update-status');
+    
     // Micro Skill Routes
     Route::get('/microskill', [AdminMicroSkillController::class, 'index'])->name('microskill.index');
     Route::delete('/microskill/{submission}', [AdminMicroSkillController::class, 'destroy'])->name('microskill.destroy');
@@ -143,7 +144,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     
     // Monitoring Routes
     Route::get('/monitoring', [AdminMonitoringController::class, 'index'])->name('monitoring.index');
-});
+    Route::get('/monitoring/export', [AdminMonitoringController::class, 'export'])->name('monitoring.export');
+    });
 
 // Mentor Routes
 Route::middleware(['auth', 'mentor'])->prefix('mentor')->name('mentor.')->group(function () {
