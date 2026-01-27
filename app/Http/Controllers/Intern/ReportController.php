@@ -29,8 +29,10 @@ class ReportController extends Controller
 
         $validated = $request->validate([
             'file' => ['required', 'file', 'mimes:pdf,doc,docx', 'max:10240'],
-            'project_file' => ['nullable', 'file', 'mimes:zip,rar,7z,tar,gz', 'max:102400'],
-            'project_link' => ['nullable', 'url', 'max:1024'],
+            'project_files' => ['nullable', 'array', 'max:3'],
+            'project_files.*' => ['file', 'mimes:zip,rar,7z,tar,gz', 'max:102400'],
+            'project_links' => ['nullable', 'array', 'max:3'],
+            'project_links.*' => ['nullable', 'url', 'max:1024'],
             'activities' => ['nullable', 'array'],
             'activities.*.description' => ['nullable', 'string', 'max:2000'],
         ]);
@@ -61,18 +63,28 @@ class ReportController extends Controller
             return back()->withErrors(['file' => 'File tidak valid.'])->withInput();
         }
 
+        $projectFiles = null;
         $projectFilePath = null;
         $projectFileName = null;
-        if ($request->hasFile('project_file')) {
-            $pfile = $request->file('project_file');
-            if ($pfile->isValid()) {
+        if ($request->hasFile('project_files')) {
+            $uploaded = $request->file('project_files');
+            $projectFiles = [];
+            $pdest = storage_path('app/public/projects');
+            if (!file_exists($pdest)) mkdir($pdest, 0755, true);
+            $count = 0;
+            foreach ($uploaded as $pfile) {
+                if (!$pfile->isValid()) continue;
+                if ($count++ >= 3) break;
                 $pext = $pfile->getClientOriginalExtension() ?: 'zip';
                 $pname = 'project_' . time() . '_' . uniqid() . '.' . $pext;
-                $pdest = storage_path('app/public/projects');
-                if (!file_exists($pdest)) mkdir($pdest, 0755, true);
                 if ($pfile->move($pdest, $pname) && file_exists($pdest . DIRECTORY_SEPARATOR . $pname)) {
-                    $projectFilePath = 'projects/' . $pname;
-                    $projectFileName = $pfile->getClientOriginalName();
+                    $path = 'projects/' . $pname;
+                    $projectFiles[] = ['path' => $path, 'name' => $pfile->getClientOriginalName()];
+                    // set first as legacy fields
+                    if (is_null($projectFilePath)) {
+                        $projectFilePath = $path;
+                        $projectFileName = $pfile->getClientOriginalName();
+                    }
                 }
             }
         }
@@ -82,7 +94,9 @@ class ReportController extends Controller
             'file_path' => $filePath,
             'project_file' => $projectFilePath,
             'project_file_name' => $projectFileName,
-            'project_link' => $request->input('project_link'),
+            'project_files' => $projectFiles,
+            'project_link' => null,
+            'project_links' => array_values(array_filter((array) $request->input('project_links', []))),
             'activities' => $request->input('activities'),
             'file_name' => $fileName,
             'status' => 'pending',
@@ -107,8 +121,10 @@ class ReportController extends Controller
 
         $validated = $request->validate([
             'file' => ['nullable', 'file', 'mimes:pdf,doc,docx', 'max:10240'],
-            'project_file' => ['nullable', 'file', 'mimes:zip,rar,7z,tar,gz', 'max:102400'],
-            'project_link' => ['nullable', 'url', 'max:1024'],
+            'project_files' => ['nullable', 'array', 'max:3'],
+            'project_files.*' => ['file', 'mimes:zip,rar,7z,tar,gz', 'max:102400'],
+            'project_links' => ['nullable', 'array', 'max:3'],
+            'project_links.*' => ['nullable', 'url', 'max:1024'],
             'activities' => ['nullable', 'array'],
             'activities.*.description' => ['nullable', 'string', 'max:2000'],
         ]);
@@ -152,39 +168,61 @@ class ReportController extends Controller
             $fileName = $report->file_name;
         }
 
-        // Handle project file replacement
-        if ($request->hasFile('project_file')) {
-            // delete old project file if exists
-            if ($report->project_file) {
-                $oldP = storage_path('app/public/' . $report->project_file);
-                if (file_exists($oldP)) {
-                    @unlink($oldP);
+        // Handle project files replacement (multiple)
+        $projectFiles = is_array($report->project_files) ? $report->project_files : [];
+        $projectFilePath = $report->project_file;
+        $projectFileName = $report->project_file_name;
+
+        // If legacy single project_file exists and no project_files array, include it so we can append new uploads
+        if ($report->project_file && empty($projectFiles)) {
+            $projectFiles[] = ['path' => $report->project_file, 'name' => $report->project_file_name];
+        }
+
+        if ($request->hasFile('project_files')) {
+            // delete old project_files entries (we'll keep legacy single file reference if present as part of array)
+            if (!empty($report->project_files) && is_array($report->project_files)) {
+                foreach ($report->project_files as $pf) {
+                    if (!empty($pf['path'])) {
+                        $oldP = storage_path('app/public/' . $pf['path']);
+                        if (file_exists($oldP)) @unlink($oldP);
+                    }
                 }
+                // reset array; we'll rebuild preserving legacy single-file earlier added
+                $projectFiles = array_values(array_filter($projectFiles));
             }
-            $pfile = $request->file('project_file');
-            if ($pfile->isValid()) {
+
+            $uploaded = $request->file('project_files');
+            $pdest = storage_path('app/public/projects');
+            if (!file_exists($pdest)) mkdir($pdest, 0755, true);
+            $count = count($projectFiles);
+            foreach ($uploaded as $pfile) {
+                if (!$pfile->isValid()) continue;
+                if ($count >= 3) break;
                 $pext = $pfile->getClientOriginalExtension() ?: 'zip';
                 $pname = 'project_' . time() . '_' . uniqid() . '.' . $pext;
-                $pdest = storage_path('app/public/projects');
-                if (!file_exists($pdest)) mkdir($pdest, 0755, true);
                 if ($pfile->move($pdest, $pname) && file_exists($pdest . DIRECTORY_SEPARATOR . $pname)) {
-                    $projectFilePath = 'projects/' . $pname;
-                    $projectFileName = $pfile->getClientOriginalName();
-                } else {
-                    $projectFilePath = null;
-                    $projectFileName = null;
+                    $path = 'projects/' . $pname;
+                    $projectFiles[] = ['path' => $path, 'name' => $pfile->getClientOriginalName()];
+                    $count++;
+                    if (is_null($projectFilePath)) {
+                        $projectFilePath = $path;
+                        $projectFileName = $pfile->getClientOriginalName();
+                    }
                 }
             }
-        } else {
-            $projectFilePath = $report->project_file;
-            $projectFileName = $report->project_file_name;
+            // ensure no more than 3 stored
+            if (count($projectFiles) > 3) {
+                $projectFiles = array_slice($projectFiles, 0, 3);
+            }
         }
 
         $report->update([
             'file_path' => $filePath,
             'project_file' => $projectFilePath,
             'project_file_name' => $projectFileName,
-            'project_link' => $request->input('project_link'),
+            'project_files' => $projectFiles,
+            'project_link' => null,
+            'project_links' => array_values(array_filter((array) $request->input('project_links', []))),
             'activities' => $request->input('activities'),
             'file_name' => $fileName,
             'status' => 'pending',

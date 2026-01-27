@@ -46,7 +46,6 @@
                 <tr>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Laporan</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Proyek</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tanggal Upload</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nilai</th>
@@ -62,27 +61,7 @@
                         <td class="px-6 py-4 text-sm text-gray-900">
                             {{ $report->file_name }}
                         </td>
-                        <td class="px-6 py-4 text-sm text-gray-900">
-                            <div class="flex items-center space-x-2">
-                                @if($report->project_file)
-                                    <a href="{{ url('storage/' . $report->project_file) }}" target="_blank" title="{{ basename($report->project_file) }}" class="inline-flex items-center px-2 py-1 bg-gray-100 text-gray-800 rounded text-sm hover:bg-gray-200">
-                                        <i class="fas fa-file-archive mr-2"></i>
-                                        File
-                                    </a>
-                                @endif
-
-                                @if($report->project_link)
-                                    <a href="{{ $report->project_link }}" target="_blank" rel="noopener" title="{{ $report->project_link }}" class="inline-flex items-center px-2 py-1 bg-indigo-100 text-indigo-800 rounded text-sm hover:bg-indigo-200">
-                                        <i class="fas fa-link mr-2"></i>
-                                        Link
-                                    </a>
-                                @endif
-
-                                @if(!$report->project_file && !$report->project_link)
-                                    <span class="text-gray-400 text-sm">-</span>
-                                @endif
-                            </div>
-                        </td>
+                        
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                             {{ $report->submitted_at->format('d/m/Y H:i') }}
                         </td>

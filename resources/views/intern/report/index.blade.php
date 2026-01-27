@@ -64,41 +64,74 @@
                     </a>
                 </div>
 
-                {{-- File Project --}}
-                @if($report->project_file)
-                <div class="flex items-center justify-between bg-white p-3 rounded border">
-                    <div class="flex items-center space-x-3">
-                        <i class="fas fa-file-archive text-gray-600 text-lg"></i>
-                        <div>
-                            <p class="font-medium">File Proyek</p>
-                            <p class="text-gray-500">{{ $report->project_file_name ?? basename($report->project_file) }}</p>
-                        </div>
+                {{-- File Project (support multiple) --}}
+                @php
+                    $projectFilesDisplay = $report->project_files ?? null;
+                @endphp
+                @if(!empty($projectFilesDisplay) && is_array($projectFilesDisplay))
+                    <div class="space-y-2">
+                        <h4 class="text-sm font-medium text-gray-700">File Proyek</h4>
+                        @foreach($projectFilesDisplay as $pf)
+                            <div class="flex items-center justify-between bg-white p-3 rounded border">
+                                <div class="flex items-center space-x-3">
+                                    <i class="fas fa-file-archive text-gray-600 text-lg"></i>
+                                    <div>
+                                        <p class="font-medium">File Proyek {{ $loop->iteration }}</p>
+                                        <p class="text-gray-500">{{ data_get($pf, 'name') ?? basename(data_get($pf, 'path', '')) }}</p>
+                                    </div>
+                                </div>
+                                <a href="{{ route('download', ['path' => data_get($pf, 'path')]) }}" target="_blank"
+                                    class="text-blue-600 hover:underline font-medium">Download</a>
+                            </div>
+                        @endforeach
                     </div>
-                    <a href="{{ route('download', ['path' => $report->project_file]) }}" target="_blank"
-                        class="text-blue-600 hover:underline font-medium">
-                        Download
-                    </a>
-                </div>
+                @elseif($report->project_file)
+                    <div class="flex items-center justify-between bg-white p-3 rounded border">
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-file-archive text-gray-600 text-lg"></i>
+                            <div>
+                                <p class="font-medium">File Proyek</p>
+                                <p class="text-gray-500">{{ $report->project_file_name ?? basename($report->project_file) }}</p>
+                            </div>
+                        </div>
+                        <a href="{{ route('download', ['path' => $report->project_file]) }}" target="_blank"
+                            class="text-blue-600 hover:underline font-medium">Download</a>
+                    </div>
                 @endif
 
-                {{-- Link Project --}}
-                @if($report->project_link)
-                <div class="flex items-center justify-between bg-white p-3 rounded border">
-                    <div class="flex items-center space-x-3">
-                        <i class="fas fa-link text-indigo-600 text-lg"></i>
-                        <div>
-                            <p class="font-medium">Link Proyek</p>
-                            <a href="{{ $report->project_link }}" target="_blank"
-                                class="text-indigo-600 hover:underline break-all">
-                                {{ $report->project_link }}
-                            </a>
-                        </div>
+                {{-- Link Project (support multiple) --}}
+                @php
+                    $projectLinksDisplay = $report->project_links ?? null;
+                @endphp
+                @if(!empty($projectLinksDisplay) && is_array($projectLinksDisplay))
+                    <div class="space-y-2">
+                        <h4 class="text-sm font-medium text-gray-700">Link Proyek</h4>
+                        @foreach($projectLinksDisplay as $pl)
+                            @if(!empty($pl))
+                            <div class="flex items-center justify-between bg-white p-3 rounded border">
+                                <div class="flex items-center space-x-3">
+                                    <i class="fas fa-link text-indigo-600 text-lg"></i>
+                                    <div>
+                                        <p class="font-medium">Link Proyek {{ $loop->iteration }}</p>
+                                        <a href="{{ $pl }}" target="_blank" class="text-indigo-600 hover:underline break-all">{{ $pl }}</a>
+                                    </div>
+                                </div>
+                                <a href="{{ $pl }}" target="_blank" class="text-indigo-600 hover:underline font-medium">Buka</a>
+                            </div>
+                            @endif
+                        @endforeach
                     </div>
-                    <a href="{{ $report->project_link }}" target="_blank"
-                        class="text-indigo-600 hover:underline font-medium">
-                        Buka
-                    </a>
-                </div>
+                @elseif($report->project_link)
+                    <div class="flex items-center justify-between bg-white p-3 rounded border">
+                        <div class="flex items-center space-x-3">
+                            <i class="fas fa-link text-indigo-600 text-lg"></i>
+                            <div>
+                                <p class="font-medium">Link Proyek</p>
+                                <a href="{{ $report->project_link }}" target="_blank" class="text-indigo-600 hover:underline break-all">{{ $report->project_link }}</a>
+                            </div>
+                        </div>
+                        <a href="{{ $report->project_link }}" target="_blank" class="text-indigo-600 hover:underline font-medium">Buka</a>
+                    </div>
                 @endif
                 
                 {{-- Activities (Kegiatan Magang) --}}
@@ -167,28 +200,40 @@
             </div>
 
             <div class="mb-4">
-                <label class="block text-sm font-medium">Proyek Saat Ini</label>
+                <label class="block text-sm font-medium">Proyek Saat Ini (maks 3 file)</label>
                 <div class="relative">
                     <input type="text" id="projectDisplay" value="{{ $report->project_file ? ($report->project_file_name ?? basename($report->project_file)) : 'Belum ada file proyek' }}" readonly
                         class="w-full border rounded px-3 py-2 bg-gray-100 text-gray-700 cursor-pointer"
                         onclick="document.getElementById('projectInput').click()">
-                    <input type="file" name="project_file" id="projectInput" style="display: none;" onchange="updateProjectDisplay(this)">
+                    <input type="file" name="project_files[]" id="projectInput" style="display: none;" onchange="updateProjectDisplay(this)" multiple accept=".zip,.rar,.7z,.tar,.gz">
                     <button type="button" class="absolute right-2 top-2 text-gray-500 hover:text-gray-700" onclick="clearProject()">×</button>
                 </div>
                 <p class="mt-1 text-sm text-gray-500">
-                    Klik untuk pilih file baru atau biarkan untuk tetap menggunakan file saat ini.
+                    Klik untuk pilih hingga 3 file baru atau biarkan untuk tetap menggunakan file saat ini.
                     @if($report->project_file)
                         <a href="{{ route('download', ['path' => $report->project_file]) }}" target="_blank" class="text-blue-600 hover:underline">Download file saat ini</a>
                     @endif
-                    Format: .zip, .rar, .7z, .tar.gz (Maks: 100MB)
+                    Format: .zip, .rar, .7z, .tar.gz (Maks: 100MB per file)
                 </p>
             </div>
 
             <div class="mb-4">
-                <label class="block text-sm font-medium">Link Proyek (Opsional)</label>
-                <input type="url" name="project_link"
-                    value="{{ old('project_link', $report->project_link) }}"
-                    class="w-full border rounded px-3 py-2">
+                <label class="block text-sm font-medium">Link Proyek (Opsional, maks 3)</label>
+                @php
+                    // Prefer new `project_links` array; fall back to legacy `project_link` string
+                    $existingLinks = [];
+                    if (!empty($report->project_links) && is_array($report->project_links)) {
+                        $existingLinks = $report->project_links;
+                    } elseif (!empty($report->project_link)) {
+                        $existingLinks = [$report->project_link];
+                    }
+                @endphp
+                @for($i = 0; $i < 3; $i++)
+                    <input type="url" name="project_links[]"
+                        value="{{ old('project_links.'.$i, data_get($existingLinks, $i, '')) }}"
+                        class="w-full border rounded px-3 py-2 mb-2">
+                @endfor
+                <p class="mt-1 text-sm text-gray-500">Opsional: masukkan hingga 3 tautan (GitHub, Drive, Pages, dll.).</p>
             </div>
 
             {{-- Activities (Kegiatan Magang) --}}
@@ -229,32 +274,31 @@
 
                 <div class="mb-6 max-w-md mx-auto">
                     <label for="project_file" class="block text-sm font-medium text-gray-700 mb-2">
-                        Upload Proyek Akhir (opsional)
+                        Upload Proyek Akhir (opsional, maks 3 file)
                     </label>
-                    <input type="file" name="project_file" id="project_file"
-                        accept=".zip,.rar,.7z,.tar,.gz"
+                    <input type="file" name="project_files[]" id="project_file"
+                        accept=".zip,.rar,.7z,.tar,.gz" multiple
                         class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm
                         focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                     <p class="mt-1 text-sm text-gray-500">
-                        Format: .zip, .rar, .7z, .tar.gz (Opsional, Maks: 100MB)
+                        Format: .zip, .rar, .7z, .tar.gz (Opsional, Maks: 100MB per file, maksimal 3 file)
                     </p>
                 </div>
 
                 <div class="mb-6 max-w-md mx-auto">
                     <label for="project_link" class="block text-sm font-medium text-gray-700 mb-2">
-                        Link Proyek (opsional)
+                        Link Proyek (opsional, maks 3)
                     </label>
-                    <input type="url" name="project_link" id="project_link"
-                        placeholder="https://example.com/project"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm
-                        focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                        value="{{ old('project_link') }}">
+                    @for($i = 0; $i < 3; $i++)
+                        <input type="url" name="project_links[]" id="project_link_{{ $i }}"
+                            placeholder="https://example.com/project"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm mb-2
+                            focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                            value="{{ old('project_links.'.$i) }}">
+                    @endfor
                     <p class="mt-1 text-sm text-gray-500">
                         Contoh: GitHub, GitHub Pages, Google Drive (Public)
                     </p>
-                    @error('project_link')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
                 </div>
 
                 {{-- Activities (Kegiatan Magang) --}}
@@ -302,8 +346,15 @@
 
             function updateProjectDisplay(input) {
                 const display = document.getElementById('projectDisplay');
-                if (input.files && input.files[0]) {
-                    display.value = input.files[0].name;
+                if (!display) return;
+                if (input.files && input.files.length) {
+                    if (input.files.length > 3) {
+                        alert('Maksimal 3 file proyek. Silakan pilih ulang.');
+                        input.value = '';
+                        return;
+                    }
+                    const names = Array.from(input.files).map(f => f.name).join(', ');
+                    display.value = names;
                     display.classList.remove('text-gray-700', 'text-gray-500');
                     display.classList.add('text-blue-700');
                 }
@@ -311,21 +362,30 @@
 
             function clearProject() {
                 const display = document.getElementById('projectDisplay');
-                const input = document.getElementById('projectInput');
-                display.value = '{{ $report?->project_file ? ($report?->project_file_name ?? basename($report?->project_file)) : 'Belum ada file proyek' }}';
-                input.value = '';
-                display.classList.remove('text-blue-700');
-                display.classList.add('text-gray-700');
+                const inputUpdate = document.getElementById('projectInput');
+                const inputCreate = document.getElementById('project_file');
+                const orig = '{{ $report?->project_file ? ($report?->project_file_name ?? basename($report?->project_file)) : 'Belum ada file proyek' }}';
+                if (display) display.value = orig;
+                if (inputUpdate) inputUpdate.value = '';
+                if (inputCreate) inputCreate.value = '';
+                if (display) {
+                    display.classList.remove('text-blue-700');
+                    display.classList.add('text-gray-700');
+                }
             }
 
             // Attach to global if elements exist
             const fileInput = document.getElementById('fileInput');
             const projectInput = document.getElementById('projectInput');
+            const projectCreateInput = document.getElementById('project_file');
             if (fileInput) {
                 fileInput.addEventListener('change', function() { updateFileDisplay(this); });
             }
             if (projectInput) {
                 projectInput.addEventListener('change', function() { updateProjectDisplay(this); });
+            }
+            if (projectCreateInput) {
+                projectCreateInput.addEventListener('change', function() { updateProjectDisplay(this); });
             }
 
             // Clear buttons

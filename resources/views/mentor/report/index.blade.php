@@ -44,7 +44,6 @@
                         <tr>
                             <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Nama</th>
                             <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">File</th>
-                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Proyek</th>
                             <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Status</th>
                             <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Nilai</th>
                             <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Revisi?</th>
@@ -59,27 +58,7 @@
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <a href="{{ route('download', ['path' => $r->file_path]) }}" target="_blank" class="text-blue-600 hover:underline">{{ $r?->file_name }}</a>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center space-x-2">
-                                    @if($r->project_file)
-                                        <a href="{{ route('download', ['path' => $r->project_file]) }}" target="_blank" title="{{ basename($r->project_file) }}" class="inline-flex items-center px-2 py-1 bg-gray-100 text-gray-800 rounded text-sm hover:bg-gray-200">
-                                            <i class="fas fa-file-archive mr-2"></i>
-                                            File
-                                        </a>
-                                    @endif
-
-                                    @if($r->project_link)
-                                        <a href="{{ $r->project_link }}" target="_blank" rel="noopener" title="{{ $r->project_link }}" class="inline-flex items-center px-2 py-1 bg-indigo-100 text-indigo-800 rounded text-sm hover:bg-indigo-200">
-                                            <i class="fas fa-link mr-2"></i>
-                                            Link
-                                        </a>
-                                    @endif
-
-                                    @if(!$r->project_file && !$r->project_link)
-                                        <span class="text-gray-400 text-sm">-</span>
-                                    @endif
-                                </div>
-                            </td>
+                            
                             <td class="px-6 py-4 whitespace-nowrap capitalize">{{ $r->status }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 @if($r->grade)

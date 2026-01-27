@@ -14,7 +14,9 @@ class FinalReport extends Model
         'file_path',
         'project_file',
         'project_file_name',
+        'project_files',
         'project_link',
+        'project_links',
         'file_name',
         'status',
         'activities',
@@ -29,6 +31,8 @@ class FinalReport extends Model
         'submitted_at' => 'datetime',
         'needs_revision' => 'boolean',
         'activities' => 'array',
+        'project_files' => 'array',
+        'project_links' => 'array',
     ];
 
     public function intern()

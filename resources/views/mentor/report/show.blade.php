@@ -76,11 +76,25 @@
                 </a>
             </div>
 
-            @if($report->project_file || $report->project_link)
+            @php
+                $projectFilesDisplay = $report->project_files ?? null;
+                $projectLinksDisplay = $report->project_links ?? null;
+            @endphp
+
+            @if((!empty($projectFilesDisplay) && is_array($projectFilesDisplay)) || (!empty($projectLinksDisplay) && is_array($projectLinksDisplay)) || $report->project_file || $report->project_link)
                 <div class="mt-4">
                     <label class="block text-sm font-medium text-gray-500 mb-1">Proyek</label>
                     <div class="space-y-3">
-                        @if($report->project_file)
+                        @if(!empty($projectFilesDisplay) && is_array($projectFilesDisplay))
+                            @foreach($projectFilesDisplay as $pf)
+                                <div>
+                                    <p class="text-sm text-gray-700 font-medium">File Proyek {{ $loop->iteration }}: {{ data_get($pf,'name') ?? basename(data_get($pf,'path','')) }}</p>
+                                    <a href="{{ route('download', ['path' => data_get($pf,'path')]) }}" target="_blank" class="inline-block mt-2 bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded">
+                                        <i class="fas fa-file-archive mr-2"></i>Download File Proyek
+                                    </a>
+                                </div>
+                            @endforeach
+                        @elseif($report->project_file)
                             <div>
                                 <p class="text-sm text-gray-700 font-medium">File Proyek: {{ $report?->project_file_name ?? basename($report?->project_file ?? '') }}</p>
                                 <a href="{{ route('download', ['path' => $report->project_file]) }}" target="_blank" class="inline-block mt-2 bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded">
@@ -89,7 +103,18 @@
                             </div>
                         @endif
 
-                        @if($report->project_link)
+                        @if(!empty($projectLinksDisplay) && is_array($projectLinksDisplay))
+                            @foreach($projectLinksDisplay as $pl)
+                                @if(!empty($pl))
+                                <div>
+                                    <p class="text-sm text-gray-700 font-medium">Link Proyek {{ $loop->iteration }}</p>
+                                    <a href="{{ $pl }}" target="_blank" rel="noopener" class="inline-block mt-2 bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded">
+                                        <i class="fas fa-external-link-alt mr-2"></i>Buka Link Proyek
+                                    </a>
+                                </div>
+                                @endif
+                            @endforeach
+                        @elseif($report->project_link)
                             <div>
                                 <p class="text-sm text-gray-700 font-medium">Link Proyek</p>
                                 <a href="{{ $report->project_link }}" target="_blank" rel="noopener" class="inline-block mt-2 bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-4 rounded">
