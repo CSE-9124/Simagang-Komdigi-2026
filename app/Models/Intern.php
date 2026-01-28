@@ -66,4 +66,9 @@ class Intern extends Model
     {
         return $this->hasOne(Certificate::class);
     }
+
+    public function finalReports()
+    {
+        return $this->hasMany(FinalReport::class, 'intern_id');
+    }
 }

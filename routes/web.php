@@ -164,6 +164,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     
     // Monitoring Routes
     Route::get('/monitoring', [AdminMonitoringController::class, 'index'])->name('monitoring.index');
+    Route::post('/monitoring/{intern}/mark-released', [AdminMonitoringController::class, 'markAsReleased'])->name('monitoring.mark-released');
+    Route::post('/monitoring/{intern}/mark-active', [AdminMonitoringController::class, 'markAsActive'])->name('monitoring.mark-active');
     Route::get('/monitoring/export', [AdminMonitoringController::class, 'export'])->name('monitoring.export');
 
     // Certificate Management Routes

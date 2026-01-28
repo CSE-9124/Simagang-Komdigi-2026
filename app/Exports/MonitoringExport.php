@@ -12,10 +12,16 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class MonitoringExport implements FromCollection, WithHeadings, WithMapping, WithTitle, ShouldAutoSize, WithStyles
+class MonitoringExport implements
+    FromCollection,
+    WithHeadings,
+    WithMapping,
+    WithTitle,
+    ShouldAutoSize,
+    WithStyles
 {
-    protected $filters;
-    protected $rowNumber = 0;
+    protected array $filters;
+    protected int $rowNumber = 0;
 
     public function __construct(array $filters)
     {
@@ -23,113 +29,203 @@ class MonitoringExport implements FromCollection, WithHeadings, WithMapping, Wit
     }
 
     /**
-     * @return \Illuminate\Support\Collection
+     * Ambil data SESUAI filter halaman monitoring
      */
     public function collection()
     {
         $query = Intern::with(['mentor', 'user']);
 
-        // Filter by campus/institution (contains, case-insensitive)
-        if (!empty($this->filters['institution'])) {
-            $institution = trim($this->filters['institution']);
-            $query->where('institution', 'like', "%{$institution}%");
+        $startOfMonth = null;
+        $endOfMonth = null;
+
+        if (!empty($this->filters['month'])) {
+        $month = Carbon::createFromFormat('Y-m', $this->filters['month']);
+
+        $startOfMonth = $month->copy()->startOfMonth();
+        $endOfMonth   = $month->copy()->endOfMonth();
         }
 
-        // Filter by mentor
+        /*
+        |--------------------------------------------------------------------------
+        | FILTER BULAN (OVERLAP LOGIC)
+        |--------------------------------------------------------------------------
+        */
+        if ($startOfMonth && $endOfMonth) {
+            $query->where('start_date', '<=', $endOfMonth)
+                ->where(function ($q) use ($startOfMonth) {
+                    $q->whereNull('end_date')
+                        ->orWhere('end_date', '>=', $startOfMonth);
+                });
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | FILTER STATUS
+        |--------------------------------------------------------------------------
+        */
+        if (!empty($this->filters['status']) && $this->filters['status'] !== 'all') {
+            switch ($this->filters['status']) {
+
+                case 'masuk':
+                    $query->whereBetween('start_date', [
+                        $startOfMonth,
+                        $endOfMonth
+                    ]);
+                    break;
+
+                case 'aktif':
+                    $query->where('is_active', 1)
+                        ->where('start_date', '<=', $endOfMonth)
+                        ->where(function ($q) use ($startOfMonth) {
+                            $q->whereNull('end_date')
+                            ->orWhere('end_date', '>=', $startOfMonth);
+                        });
+                    break;
+
+                case 'akan_pelepasan':
+                    $query->where('is_active', 1)
+                        ->whereBetween('end_date', [
+                            $startOfMonth,
+                            $endOfMonth
+                        ]);
+                    break;
+
+                case 'pelepasan':
+                    $query->where('is_active', 0)
+                        ->whereBetween('end_date', [
+                            $startOfMonth,
+                            $endOfMonth
+                        ]);
+                    break;
+            }
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | FILTER MENTOR
+        |--------------------------------------------------------------------------
+        */
         if (!empty($this->filters['mentor_id'])) {
             $query->where('mentor_id', $this->filters['mentor_id']);
         }
 
-        // Filter by date range (overlap logic)
-        $startDate = !empty($this->filters['start_date']) ? Carbon::parse($this->filters['start_date'])->startOfDay() : null;
-        $endDate = !empty($this->filters['end_date']) ? Carbon::parse($this->filters['end_date'])->endOfDay() : null;
-        if ($startDate && $endDate) {
-            // Include interns whose period overlaps [startDate, endDate]
-            $query->where('start_date', '<=', $endDate)
-                  ->where(function ($q) use ($startDate) {
-                      $q->whereNull('end_date')
-                        ->orWhere('end_date', '>=', $startDate);
-                  });
-        } elseif ($startDate) {
-            $query->where(function ($q) use ($startDate) {
-                $q->whereNull('end_date')
-                  ->orWhere('end_date', '>=', $startDate);
-            });
-        } elseif ($endDate) {
-            $query->where('start_date', '<=', $endDate);
+        /*
+        |--------------------------------------------------------------------------
+        | FILTER KAMPUS
+        |--------------------------------------------------------------------------
+        */
+        if (!empty($this->filters['institution'])) {
+            $query->where('institution', $this->filters['institution']);
         }
 
-        // Filter only active interns by default
-        if (!isset($this->filters['is_active']) || $this->filters['is_active'] === '1') {
-            $query->where('is_active', true);
-        } elseif ($this->filters['is_active'] === '0') {
-            $query->where('is_active', false);
-        }
-
-        return $query->orderBy('institution')
-                     ->orderBy('name')
-                     ->get();
+        /*
+        |--------------------------------------------------------------------------
+        | URUTAN DATA (SAMA SEPERTI INDEX)
+        |--------------------------------------------------------------------------
+        */
+        return $query
+            ->orderByRaw("
+                CASE
+                    WHEN is_active = 1
+                        AND end_date BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 30 DAY)
+                    THEN 0
+                    WHEN is_active = 1 THEN 1
+                    ELSE 2
+                END
+            ")
+            ->orderBy('end_date')
+            ->orderBy('name')
+            ->get();
     }
 
-    /**
-     * @return array
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | HEADER EXCEL
+    |--------------------------------------------------------------------------
+    */
     public function headings(): array
     {
         return [
             'No',
             'Nama Anak Magang',
-            'Nama Kampus',
+            'Kampus',
             'Jurusan',
             'Mentor',
             'Tim',
             'Tanggal Mulai',
-            'Tanggal Selesai',
+            'Tanggal Rencana Pelepasan',
             'Status',
             'Email',
-            'No. HP',
+            'No HP',
             'Jenjang Pendidikan',
             'Tujuan Magang',
+            'final Projek'
         ];
     }
 
-    /**
-     * @param mixed $intern
-     * @return array
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | MAPPING DATA PER BARIS
+    |--------------------------------------------------------------------------
+    */
     public function map($intern): array
     {
         $this->rowNumber++;
-        
+
+        // Status text (sinkron UI)
+        if ($intern->is_active) {
+            if ($intern->end_date &&
+                $intern->end_date->between(now(), now()->addDays(30))) {
+                $status = 'Akan Pelepasan';
+            } else {
+                $status = 'Aktif';
+            }
+        } else {
+            $status = 'Pelepasan';
+        }
+
+        $finalProject = $intern->finalReports->isNotEmpty()
+            ? $intern->finalReports
+                ->map(function ($report) {
+                    return asset('storage/' . $report->file_path);
+                })
+                ->implode("\n")
+            : '-';
+
         return [
             $this->rowNumber,
             $intern->name,
-            $intern->institution,
-            $intern->major,
-            $intern->mentor ? $intern->mentor->name : '-',
-            $intern->team ?: '-',
-            $intern->start_date ? $intern->start_date->format('d/m/Y') : '-',
-            $intern->end_date ? $intern->end_date->format('d/m/Y') : '-',
-            $intern->is_active ? 'Aktif' : 'Selesai',
-            $intern->user ? $intern->user->email : '-',
-            $intern->phone ?: '-',
-            $intern->education_level ?: '-',
-            $intern->purpose ?: '-',
+            $intern->institution ?? '-',
+            $intern->major ?? '-',
+            $intern->mentor?->name ?? '-',
+            $intern->team ?? '-',
+            $intern->start_date?->format('d/m/Y') ?? '-',
+            $intern->end_date?->format('d/m/Y') ?? '-',
+            $status,
+            $intern->user?->email ?? '-',
+            $intern->phone ?? '-',
+            $intern->education_level ?? '-',
+            $intern->purpose ?? '-',
+            $finalProject,
         ];
     }
 
-    /**
-     * @return string
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | NAMA SHEET
+    |--------------------------------------------------------------------------
+    */
     public function title(): string
     {
-        return 'Laporan Monitoring';
+        return 'Monitoring Magang';
     }
 
-    /**
-     * @param Worksheet $sheet
-     * @return array
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | STYLE EXCEL
+    |--------------------------------------------------------------------------
+    */
     public function styles(Worksheet $sheet)
     {
         return [
