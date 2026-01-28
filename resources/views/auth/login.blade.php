@@ -101,15 +101,16 @@
     <div class="login-container">
 
         <!-- HEADER LOGO -->
-     <div class="text-center mb-3 space-y-3">
-        <div class="logo mx-auto flex items-center justify-center w-40 h-40">
-            <img
-                src="{{ asset('storage/vendor/simagi.png') }}"
-                alt="Logo Vendor"
-                class="w-40 h-40 object-contain">
+        <div class="text-center mb-3 space-y-3">
+            <!-- Logo & Brand -->
+            <div class="flex flex-col items-center p-4">
+                <img src="{{ url('storage/vendor/logo_komdigi.png') }}" alt="Logo" class="object-contain" style="width: 80px; height: 80px"/>
+                <h1 class="text-3xl font-extrabold font-etna">
+                    <span style="color: #9d272a">SI</span><span style="color: #086bb0">MA</span><span style="color: #2dabe2">GA</span><span style="color: #efc400">NG</span>
+                </h1>
+                <p class="font-etna" style="color: #626161; font-size:10px">Sistem Manajemen Magang</p>
+            </div>
         </div>
-    </div>
-
 
         <!-- FORM -->
         <form action="{{ route('login') }}" method="POST" class="space-y-5">

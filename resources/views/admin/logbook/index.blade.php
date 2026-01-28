@@ -1,65 +1,118 @@
 @extends('layouts.app')
 
+@section('title', 'Pantau Logbook - Sistem Magang')
+
 @section('content')
-<div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-    <h1 class="text-2xl font-bold mb-4">Pantau Logbook Anak Magang</h1>
+<div class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-blue-100 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Header -->
+        <div class="mb-8">
+            <h1 class="text-4xl font-bold leading-tight bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-3 pb-2">
+                Pantau Logbook Anak Magang
+            </h1>
+            <p class="text-gray-600">Monitoring aktivitas harian anak magang</p>
+        </div>
 
-    <form method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
-        <div>
-            <label class="block text-sm text-gray-600 mb-1">Cari (nama/institusi)</label>
-            <input type="text" name="q" value="{{ request('q') }}" class="w-full px-3 py-2 border rounded" placeholder="Ketik untuk mencari..." />
+        <!-- Filter Form -->
+        <div class="bg-white rounded-2xl shadow-lg p-6 mb-8">
+            <form method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-600 mb-2">Cari (nama/institusi)</label>
+                    <input type="text" name="q" value="{{ request('q') }}" 
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" 
+                           placeholder="Ketik untuk mencari..." />
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-600 mb-2">Dari Tanggal</label>
+                    <input type="date" name="date_from" value="{{ request('date_from') }}" 
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" />
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-600 mb-2">Hingga Tanggal</label>
+                    <input type="date" name="date_to" value="{{ request('date_to') }}" 
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" />
+                </div>
+                <div class="flex items-end gap-2">
+                    <button class="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center" 
+                            type="submit">
+                        <i class="fas fa-filter mr-2"></i>
+                        Filter
+                    </button>
+                    <a href="{{ route('admin.logbook.index') }}" 
+                       class="flex-1 h-[42px] bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center">
+                        <i class="fas fa-undo mr-1"></i> Reset
+                    </a>
+                </div>
+            </form>
         </div>
-        <div>
-            <label class="block text-sm text-gray-600 mb-1">Dari Tanggal</label>
-            <input type="date" name="date_from" value="{{ request('date_from') }}" class="w-full px-3 py-2 border rounded" />
-        </div>
-        <div>
-            <label class="block text-sm text-gray-600 mb-1">Hingga Tanggal</label>
-            <input type="date" name="date_to" value="{{ request('date_to') }}" class="w-full px-3 py-2 border rounded" />
-        </div>
-        <div class="flex items-end">
-            <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">Filter</button>
-        </div>
-    </form>
 
-    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-        <div class="p-6 bg-white border-b border-gray-200">
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Institusi</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tanggal</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aktivitas</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Foto</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        @forelse($logbooks as $l)
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ $l->intern->name }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ $l->intern->institution }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">{{ \Carbon\Carbon::parse($l->date)->format('d M Y') }}</td>
-                            <td class="px-6 py-4">{{ $l->activity }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                @if($l->photo_path)
-                                    <img src="{{ url('storage/'.$l->photo_path) }}" class="w-12 h-12 object-cover rounded border cursor-pointer" onclick="window.open('{{ url('storage/'.$l->photo_path) }}','_blank')">
-                                @else - @endif
-                            </td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="5" class="px-6 py-4 text-center text-gray-500">Tidak ada data.</td>
-                        </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+        <!-- Logbook Table -->
+        <div class="bg-white rounded-2xl shadow-md border border-blue-100 overflow-hidden">
+            <div class="bg-blue-600 px-6 py-4">
+                <h2 class="text-xl font-bold text-white flex items-center">
+                    <i class="fas fa-book mr-3"></i>
+                    Data Logbook
+                </h2>
             </div>
-            <div class="mt-4">{{ $logbooks->links() }}</div>
+            <div class="p-6">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead>
+                            <tr class="bg-blue-50">
+                                <th class="px-6 py-4 text-left text-xs font-bold text-blue-900 uppercase tracking-wider rounded-tl-lg">Nama</th>
+                                <th class="px-6 py-4 text-left text-xs font-bold text-blue-900 uppercase tracking-wider">Institusi</th>
+                                <th class="px-6 py-4 text-left text-xs font-bold text-blue-900 uppercase tracking-wider">Tanggal</th>
+                                <th class="px-6 py-4 text-left text-xs font-bold text-blue-900 uppercase tracking-wider">Aktivitas</th>
+                                <th class="px-6 py-4 text-left text-xs font-bold text-blue-900 uppercase tracking-wider rounded-tr-lg">Foto</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-100">
+                            @forelse($logbooks as $l)
+                                <tr class="hover:bg-blue-50 transition-colors duration-150">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm font-medium text-gray-900">{{ $l->intern->name }}</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-600">{{ $l->intern->institution }}</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-600">{{ \Carbon\Carbon::parse($l->date)->format('d M Y') }}</div>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="text-sm text-gray-900">{{ $l->activity }}</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        @if($l->photo_path)
+                                            <img src="{{ url('storage/'.$l->photo_path) }}" 
+                                                 alt="Logbook" 
+                                                 class="w-12 h-12 object-cover rounded-lg border-2 border-blue-200 cursor-pointer hover:border-blue-400 transition-all" 
+                                                 onclick="window.open('{{ url('storage/'.$l->photo_path) }}', '_blank')" 
+                                                 title="Klik untuk melihat full size">
+                                        @else
+                                            <span class="text-gray-400">-</span>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="px-6 py-8 text-center">
+                                        <div class="flex flex-col items-center justify-center text-gray-500">
+                                            <i class="fas fa-inbox text-4xl mb-3 text-gray-300"></i>
+                                            <p class="text-sm">Tidak ada data logbook.</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+                <div class="mt-6">
+                    {{ $logbooks->links() }}
+                </div>
+            </div>
         </div>
+
     </div>
 </div>
 @endsection
-
-
