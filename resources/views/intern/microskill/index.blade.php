@@ -24,13 +24,13 @@
         <div class="mb-8">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
                 <div>
-                    <h1 class="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2">
+                    <h1 class="text-4xl font-bold bg-blue-600 bg-clip-text text-transparent mb-2">
                         Mikro Skill Saya
                     </h1>
                     <p class="text-gray-600">Kelola pengumpulan mikro skill Anda</p>
                 </div>
                 <a href="{{ route('intern.microskill.create') }}" 
-                   class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
+                   class="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
                     <i class="fas fa-upload mr-2"></i>Upload Bukti
                 </a>
             </div>
@@ -38,7 +38,7 @@
 
         <!-- Microskill Table -->
         <div class="bg-white rounded-2xl shadow-lg border border-blue-100 overflow-hidden">
-            <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-4">
+            <div class="bg-blue-600 px-6 py-4">
                 <h2 class="text-xl font-bold text-white flex items-center">
                     <i class="fas fa-star mr-3"></i>
                     Data Mikro Skill
@@ -49,22 +49,22 @@
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead>
                             <tr class="bg-blue-50">
-                                <th class="px-6 py-4 text-left text-xs font-bold text-blue-900 uppercase tracking-wider rounded-tl-lg">Judul</th>
-                                <th class="px-6 py-4 text-left text-xs font-bold text-blue-900 uppercase tracking-wider">Status</th>
-                                <th class="px-6 py-4 text-left text-xs font-bold text-blue-900 uppercase tracking-wider">Dikirim</th>
-                                <th class="px-6 py-4 text-left text-xs font-bold text-blue-900 uppercase tracking-wider">Bukti</th>
-                                <th class="px-6 py-4 text-left text-xs font-bold text-blue-900 uppercase tracking-wider rounded-tr-lg">Aksi</th>
+                                <th class="px-6 py-4 text-center text-xs font-bold text-blue-900 uppercase tracking-wider rounded-tl-lg">Judul</th>
+                                <th class="px-6 py-4 text-center text-xs font-bold text-blue-900 uppercase tracking-wider">Status</th>
+                                <th class="px-6 py-4 text-center text-xs font-bold text-blue-900 uppercase tracking-wider">Dikirim</th>
+                                <th class="px-6 py-4 text-center text-xs font-bold text-blue-900 uppercase tracking-wider">Bukti</th>
+                                <th class="px-6 py-4 text-center text-xs font-bold text-blue-900 uppercase tracking-wider rounded-tr-lg">Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-100">
                             @forelse($submissions as $s)
                                 <tr class="hover:bg-blue-50 transition-colors duration-150">
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="flex items-center">
+                                    <td class="px-6 py-4 whitespace-nowrap text-center">
+                                        <div class="flex items-center justify-center">
                                             <span class="text-sm font-medium text-gray-900">{{ $s->title }}</span>
                                         </div>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
+                                    <td class="px-6 py-4 whitespace-nowrap text-center">
                                         <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full
                                             @if($s->status == 'approved') bg-green-100 text-green-800
                                             @elseif($s->status == 'pending') bg-yellow-100 text-yellow-800
@@ -78,28 +78,28 @@
                                             {{ ucfirst($s->status) }}
                                         </span>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 text-center">
                                         @if($s->submitted_at)
-                                            <div class="flex items-center">
+                                            <div class="flex items-center justify-center">
                                                 {{ \Carbon\Carbon::parse($s->submitted_at)->setTimezone('Asia/Makassar')->format('d/m/Y') }}
                                             </div>
                                         @else
                                             <span class="text-gray-400">-</span>
                                         @endif
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
+                                    <td class="px-6 py-4 whitespace-nowrap text-center">
                                         @if($s->photo_path)
                                             <img src="{{ asset('storage/'.$s->photo_path) }}" 
                                                  alt="Bukti" 
-                                                 class="w-12 h-12 object-cover rounded-lg border-2 border-blue-200 cursor-pointer hover:border-blue-400 transition-all shadow-sm" 
+                                                 class="w-12 h-12 object-cover rounded-lg border-2 border-blue-200 cursor-pointer hover:border-blue-400 transition-all shadow-sm mx-auto" 
                                                  onclick="window.open('{{ asset('storage/'.$s->photo_path) }}', '_blank')"
                                                  title="Klik untuk melihat full size">
                                         @else
                                             <span class="text-gray-400">-</span>
                                         @endif
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        <div class="flex space-x-2">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-center">
+                                        <div class="flex space-x-2 justify-center">
                                             <a href="{{ route('intern.microskill.edit', $s->id) }}" 
                                                class="inline-flex items-center justify-center px-3 py-2 bg-blue-100 hover:bg-blue-200 text-blue-600 rounded-lg transition-all duration-200"
                                                title="Edit">

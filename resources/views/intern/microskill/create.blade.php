@@ -20,7 +20,7 @@
 
         <!-- Form Card -->
         <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-lg border border-blue-100 overflow-hidden">
-            <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-4">
+            <div class="bg-blue-600 px-6 py-4">
                 <h2 class="text-xl font-bold text-white flex items-center">
                     <i class="fas fa-upload mr-3"></i>
                     Form Pengumpulan
@@ -101,7 +101,7 @@
                         <i class="fas fa-arrow-left mr-2"></i>Kembali ke Daftar
                     </a>
                     <button type="submit" 
-                            class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
+                            class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
                         <i class="fas fa-check mr-2"></i>Kirim
                     </button>
                 </div>
