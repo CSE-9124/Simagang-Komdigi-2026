@@ -7,9 +7,82 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
             <div class="mb-8">
-            <h1 class="text-4xl font-bold text-blue-600 mb-3">Laporan Akhir Anak Bimbingan
+                <h1 class="text-4xl font-bold text-blue-600 mb-3">Laporan Akhir Anak Bimbingan
                 </h1>
                 <p class="text-gray-600">Kelola dan nilai laporan akhir serta sertifikat anak magang</p>
+            </div>
+
+            <div class="mb-6 grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
+                    <div class="p-4">
+                        <div class="flex items-center justify-between gap-3">
+                            <div class="flex-1 min-w-0">
+                                <p class="text-xs font-medium text-gray-600 mb-1">Approved</p>
+                                <h3 class="text-2xl font-bold text-gray-900">
+                                    {{ $reports->where('status', 'approved')->count() }}</h3>
+                            </div>
+                            <div
+                                class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center flex-shrink-0 transform group-hover:scale-110 transition-transform duration-300">
+                                <i class="fas fa-check-circle text-white text-lg"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="h-1 bg-gradient-to-r from-green-500 to-green-600"></div>
+                </div>
+
+                <div
+                    class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
+                    <div class="p-4">
+                        <div class="flex items-center justify-between gap-3">
+                            <div class="flex-1 min-w-0">
+                                <p class="text-xs font-medium text-gray-600 mb-1">Pending</p>
+                                <h3 class="text-2xl font-bold text-gray-900">
+                                    {{ $reports->where('status', 'pending')->count() }}</h3>
+                            </div>
+                            <div
+                                class="w-12 h-12 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl flex items-center justify-center flex-shrink-0 transform group-hover:scale-110 transition-transform duration-300">
+                                <i class="fas fa-clock text-white text-lg"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="h-1 bg-gradient-to-r from-yellow-500 to-yellow-600"></div>
+                </div>
+
+                <div
+                    class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
+                    <div class="p-4">
+                        <div class="flex items-center justify-between gap-3">
+                            <div class="flex-1 min-w-0">
+                                <p class="text-xs font-medium text-gray-600 mb-1">Rejected</p>
+                                <h3 class="text-2xl font-bold text-gray-900">
+                                    {{ $reports->where('status', 'rejected')->count() }}</h3>
+                            </div>
+                            <div
+                                class="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center flex-shrink-0 transform group-hover:scale-110 transition-transform duration-300">
+                                <i class="fas fa-times-circle text-white text-lg"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="h-1 bg-gradient-to-r from-red-500 to-red-600"></div>
+                </div>
+
+                <div
+                    class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
+                    <div class="p-4">
+                        <div class="flex items-center justify-between gap-3">
+                            <div class="flex-1 min-w-0">
+                                <p class="text-xs font-medium text-gray-600 mb-1">Perlu Revisi</p>
+                                <h3 class="text-2xl font-bold text-gray-900">
+                                    {{ $reports->where('needs_revision', true)->count() }}</h3>
+                            </div>
+                            <div
+                                class="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center flex-shrink-0 transform group-hover:scale-110 transition-transform duration-300">
+                                <i class="fas fa-exclamation-triangle text-white text-lg"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="h-1 bg-gradient-to-r from-orange-500 to-orange-600"></div>
+                </div>
             </div>
 
             <div class="bg-white rounded-2xl shadow-lg border border-blue-100 overflow-hidden mb-6">
@@ -66,14 +139,16 @@
 
                             <div class="flex items-end space-x-2">
                                 <button type="submit"
-                                    class="flex-1 inline-flex items-center justify-center px-4 py-2.5 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 shadow-md hover:shadow-lg transition-all duration-300">
+                                    class="flex-1 inline-flex items-center justify-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 shadow-md hover:shadow-lg transition-all duration-300">
                                     <i class="fas fa-search mr-2"></i>
                                     Filter
                                 </button>
-                                <a href="{{ route('mentor.report.index') }}"
-                                    class="inline-flex items-center justify-center px-4 py-2.5 bg-gray-500 text-white font-semibold rounded-lg hover:bg-gray-600 shadow-md hover:shadow-lg transition-all duration-300">
-                                    <i class="fas fa-redo"></i>
-                                </a>
+                                @if (request()->anyFilled(['intern_id', 'status', 'needs_revision']))
+                                    <a href="{{ route('mentor.report.index') }}"
+                                        class="inline-flex items-center justify-center bg-blue-100 hover:bg-blue-200 text-blue-700 font-bold py-3 px-6 rounded-xl transition duration-200">
+                                        <i class="fas fa-times"></i>
+                                    </a>
+                                @endif
                             </div>
                         </div>
                     </form>
@@ -227,64 +302,6 @@
 
                     <div class="mt-6">
                         {{ $reports->links() }}
-                    </div>
-                </div>
-            </div>
-
-            <div class="mt-6 grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div class="bg-white rounded-xl shadow-md border border-green-100 p-6">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm font-medium text-gray-600 mb-1">Approved</p>
-                            <h3 class="text-2xl font-bold text-gray-900">
-                                {{ $reports->where('status', 'approved')->count() }}</h3>
-                        </div>
-                        <div
-                            class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center">
-                            <i class="fas fa-check-circle text-white text-xl"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-xl shadow-md border border-yellow-100 p-6">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm font-medium text-gray-600 mb-1">Pending</p>
-                            <h3 class="text-2xl font-bold text-gray-900">
-                                {{ $reports->where('status', 'pending')->count() }}</h3>
-                        </div>
-                        <div
-                            class="w-12 h-12 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl flex items-center justify-center">
-                            <i class="fas fa-clock text-white text-xl"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-xl shadow-md border border-red-100 p-6">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm font-medium text-gray-600 mb-1">Rejected</p>
-                            <h3 class="text-2xl font-bold text-gray-900">
-                                {{ $reports->where('status', 'rejected')->count() }}</h3>
-                        </div>
-                        <div
-                            class="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center">
-                            <i class="fas fa-times-circle text-white text-xl"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-xl shadow-md border border-orange-100 p-6">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-sm font-medium text-gray-600 mb-1">Perlu Revisi</p>
-                            <h3 class="text-2xl font-bold text-gray-900">
-                                {{ $reports->where('needs_revision', true)->count() }}</h3>
-                        </div>
-                        <div
-                            class="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center">
-                            <i class="fas fa-exclamation-triangle text-white text-xl"></i>
-                        </div>
                     </div>
                 </div>
             </div>

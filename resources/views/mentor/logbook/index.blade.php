@@ -7,7 +7,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
             <div class="mb-8">
-                
+
                 <h1 class="text-4xl font-bold text-blue-600 mb-3">
                     Logbook Anak Bimbingan
                 </h1>
@@ -60,14 +60,16 @@
 
                             <div class="flex items-end space-x-2">
                                 <button type="submit"
-                                    class="flex-1 inline-flex items-center justify-center px-4 py-2.5 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 shadow-md hover:shadow-lg transition-all duration-300">
+                                    class="flex-1 inline-flex items-center justify-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 shadow-md hover:shadow-lg transition-all duration-300">
                                     <i class="fas fa-search mr-2"></i>
                                     Filter
                                 </button>
-                                <a href="{{ route('mentor.logbook.index') }}"
-                                    class="inline-flex items-center justify-center px-4 py-2.5 bg-gray-500 text-white font-semibold rounded-lg hover:bg-gray-600 shadow-md hover:shadow-lg transition-all duration-300">
-                                    <i class="fas fa-redo"></i>
-                                </a>
+                                @if (request()->anyFilled(['intern_id', 'date_from', 'date_to']))
+                                    <a href="{{ route('mentor.logbook.index') }}"
+                                        class="inline-flex items-center justify-center bg-blue-100 hover:bg-blue-200 text-blue-700 font-bold py-3 px-6 rounded-xl transition duration-200">
+                                        <i class="fas fa-times"></i>
+                                    </a>
+                                @endif
                             </div>
                         </div>
                     </form>

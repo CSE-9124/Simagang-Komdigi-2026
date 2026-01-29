@@ -17,7 +17,7 @@
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-8">
-                
+
                 <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
                     <div class="p-4">
                         <div class="flex items-center justify-between gap-3">
@@ -269,17 +269,17 @@
                 <div class="bg-blue-600 px-6 py-4">
                     <h2 class="text-xl font-bold text-white flex items-center">
                         <i class="fas fa-trophy mr-3"></i>
-                        Leaderboard Mikro Skill (Top 10 Bimbingan)
+                        Leaderboard Mikro Skill (Top 3 Bimbingan)
                     </h2>
                 </div>
                 <div class="p-6">
                     @if (isset($topMicroSkills) && count($topMicroSkills))
                         <div class="space-y-3">
-                            @foreach ($topMicroSkills as $index => $row)
+                            @foreach ($topMicroSkills->take(3) as $index => $row)
                                 <div
                                     class="flex items-center justify-between p-3 bg-blue-50 rounded-lg hover:shadow-md transition-all duration-300 border border-blue-100">
                                     <div class="flex items-center">
-                                        
+
                                         <div class="relative">
                                             <span
                                                 class="w-10 h-10 rounded-full bg-gradient-to-br 
