@@ -8,8 +8,7 @@
         
         <!-- Header -->
         <div class="mb-8">
-            <h1 class="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2">
-                Anak Magang Bimbingan
+            <h1 class="text-4xl font-bold text-blue-600 mb-3">    Anak Magang Bimbingan
             </h1>
             <p class="text-gray-600">Kelola dan pantau perkembangan anak magang Anda</p>
         </div>
