@@ -3,14 +3,14 @@
 @section('title', 'Upload Bukti Mikro Skill - Sistem Magang')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-blue-100 py-8">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen bg-blue-50 py-8">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <!-- Header -->
         <div class="mb-8">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
                 <div>
-                    <h1 class="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2">
+                    <h1 class="text-4xl font-bold leading-tight text-blue-600 mb-2 pb-2">
                         Upload Bukti Mikro Skill
                     </h1>
                     <p class="text-gray-600">Unggah bukti pengumpulan mikro skill Anda</p>

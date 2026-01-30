@@ -3,21 +3,18 @@
 @section('title', 'Absensi Baru - Sistem Magang')
 
 @section('content')
-    <div class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-blue-100 py-8">
+    <div class="min-h-screen bg-blue-50 py-8">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
 
             <!-- Header -->
             <div class="mb-8">
-                <h1
-                    class="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2">
-                    Absensi Baru
-                </h1>
+                <h1 class="text-4xl font-bold text-blue-600 mb-2">Absensi Baru</h1>
                 <p class="text-gray-600">Catat kehadiran Anda hari ini</p>
             </div>
 
             <!-- Form Card -->
-            <div class="bg-white rounded-2xl shadow-lg border border-blue-100 overflow-hidden">
-                <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-4">
+                <div class="bg-white rounded-2xl shadow-lg border border-blue-100 overflow-hidden">
+                <div class="bg-blue-600 px-6 py-4">
                     <h2 class="text-xl font-bold text-white flex items-center">
                         <i class="fas fa-clipboard-check mr-3"></i>
                         Form Absensi
@@ -68,15 +65,15 @@
                                 <!-- Camera Controls -->
                                 <div class="flex flex-wrap gap-3 mb-4">
                                     <button type="button" id="startCamera"
-                                        class="inline-flex items-center px-5 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
+                                        class="inline-flex items-center px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
                                         <i class="fas fa-camera mr-2"></i>Buka Kamera
                                     </button>
                                     <button type="button" id="capturePhoto"
-                                        class="hidden inline-flex items-center px-5 py-2.5 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
+                                        class="hidden inline-flex items-center px-5 py-2.5 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
                                         <i class="fas fa-camera-retro mr-2"></i>Ambil Foto
                                     </button>
                                     <button type="button" id="stopCamera"
-                                        class="hidden inline-flex items-center px-5 py-2.5 bg-gradient-to-r from-red-600 to-rose-600 hover:from-red-700 hover:to-rose-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
+                                        class="hidden inline-flex items-center px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
                                         <i class="fas fa-stop mr-2"></i>Stop Kamera
                                     </button>
                                 </div>
@@ -152,7 +149,7 @@
                                 <i class="fas fa-arrow-left mr-2"></i>Kembali ke Daftar
                             </a>
                             <button type="submit"
-                                class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
+                                class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
                                 <i class="fas fa-save mr-2"></i>Simpan Absensi
                             </button>
                         </div>

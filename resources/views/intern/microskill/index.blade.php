@@ -3,7 +3,7 @@
 @section('title', 'Mikro Skill - Sistem Magang')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-blue-100 py-8">
+<div class="min-h-screen bg-blue-50 py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         @if($errors->any())
@@ -24,9 +24,7 @@
         <div class="mb-8">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
                 <div>
-                    <h1 class="text-4xl font-bold bg-blue-600 bg-clip-text text-transparent mb-2">
-                        Mikro Skill Saya
-                    </h1>
+                    <h1 class="text-4xl font-bold text-blue-600 mb-2">Mikro Skill Saya</h1>
                     <p class="text-gray-600">Kelola pengumpulan mikro skill Anda</p>
                 </div>
                 <a href="{{ route('intern.microskill.create') }}" 
@@ -45,7 +43,7 @@
                 </h2>
             </div>
             <div class="p-6">
-                <div class="overflow-x-auto">
+                <div class="overflow-x-auto overflow-y-auto max-h-[500px] scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-blue-100">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead>
                             <tr class="bg-blue-50">
@@ -59,9 +57,9 @@
                         <tbody class="bg-white divide-y divide-gray-100">
                             @forelse($submissions as $s)
                                 <tr class="hover:bg-blue-50 transition-colors duration-150">
-                                    <td class="px-6 py-4 whitespace-nowrap text-center">
-                                        <div class="flex items-center justify-center">
-                                            <span class="text-sm font-medium text-gray-900">{{ $s->title }}</span>
+                                    <td class="px-6 py-4 whitespace-nowrap text-left">
+                                        <div class="flex items-center justify-start min-w-0">
+                                            <span class="text-sm font-medium text-gray-900 truncate">{{ $s->title }}</span>
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-center">

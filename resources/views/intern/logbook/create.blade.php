@@ -3,20 +3,20 @@
 @section('title', 'Tambah Logbook - Sistem Magang')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-blue-100 py-8">
+<div class="min-h-screen bg-blue-50 py-8">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <!-- Header -->
         <div class="mb-8">
-            <h1 class="text-4xl font-bold leading-tight bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2 pb-2">
+            <h1 class="text-4xl font-bold leading-tight text-blue-600 mb-2 pb-2">
                 Tambah Logbook
             </h1>
             <p class="text-gray-600">Catat aktivitas harian Anda dengan detail</p>
         </div>
 
         <!-- Form Card -->
-        <div class="bg-white rounded-2xl shadow-lg border border-blue-100 overflow-hidden">
-            <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-4">
+            <div class="bg-white rounded-2xl shadow-lg border border-blue-100 overflow-hidden">
+            <div class="bg-blue-600 px-6 py-4">
                 <h2 class="text-xl font-bold text-white flex items-center">
                     <i class="fas fa-edit mr-3"></i>
                     Form Logbook Harian
@@ -76,11 +76,11 @@
                     <!-- Action Buttons -->
                     <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-gray-200">
                         <a href="{{ route('intern.logbook.index') }}" 
-                           class="inline-flex items-center px-6 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-xl transition-all duration-300 w-full sm:w-auto justify-center">
-                            <i class="fas fa-arrow-left mr-2"></i>Kembali
+                            class="inline-flex items-center text-blue-600 hover:text-blue-700 font-semibold transition-colors">
+                                <i class="fas fa-arrow-left mr-2"></i>Kembali 
                         </a>
                         <button type="submit" 
-                                class="inline-flex items-center px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 w-full sm:w-auto justify-center">
+                            class="inline-flex items-center px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 w-full sm:w-auto justify-center">
                             <i class="fas fa-save mr-2"></i>Simpan Logbook
                         </button>
                     </div>

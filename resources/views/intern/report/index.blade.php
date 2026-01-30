@@ -3,12 +3,12 @@
 @section('title', 'Laporan Akhir - Sistem Magang')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-blue-100 py-8">
+<div class="min-h-screen bg-blue-50 py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <!-- Header -->
         <div class="mb-8">
-            <h1 class="text-4xl font-bold leading-tight bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2 pb-2">
+            <h1 class="text-4xl font-bold leading-tight text-blue-600 mb-2 pb-2">
                 Laporan Akhir
             </h1>
             <p class="text-gray-600">Kelola dan submit laporan akhir magang Anda</p>
@@ -17,7 +17,7 @@
         @if($report)
         <!-- Report Card -->
         <div class="bg-white rounded-2xl shadow-lg border border-blue-100 overflow-hidden mb-6">
-            <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-4">
+            <div class="bg-blue-600 px-6 py-4">
                 <h2 class="text-xl font-bold text-white flex items-center">
                     <i class="fas fa-file-alt mr-3"></i>
                     Detail Laporan Akhir
@@ -69,8 +69,7 @@
                 <div class="space-y-3">
 
                     {{-- Laporan --}}
-                    <div class="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0 bg-gradient-to-r from-red-50 to-pink-50 p-4 rounded-xl border-2 border-red-200 hover:border-red-300 transition-all
-">
+                    <div class="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0 bg-red-50 p-4 rounded-xl border-2 border-red-200 hover:border-red-300 transition-all">
                         <div class="flex flex-col sm:flex-row items-center space-x-3">
                             <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
                                 <i class="fas fa-file-pdf text-red-600 text-xl"></i>
@@ -96,7 +95,7 @@
                                 <i class="fas fa-folder text-blue-500 mr-2"></i>File Proyek
                             </h4>
                             @foreach($projectFilesDisplay as $pf)
-                                <div class="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0 bg-gradient-to-r from-gray-50 to-blue-50 p-4 rounded-xl border-2 border-gray-200 hover:border-blue-300 transition-all">
+                                <div class="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0 bg-gray-50 p-4 rounded-xl border-2 border-gray-200 hover:border-blue-300 transition-all">
                                     <div class="flex items-center space-x-3">
                                         <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
                                             <i class="fas fa-file-archive text-gray-600 text-xl"></i>
@@ -114,7 +113,7 @@
                             @endforeach
                         </div>
                     @elseif($report->project_file)
-                        <div class="flex items-center justify-between bg-gradient-to-r from-gray-50 to-blue-50 p-4 rounded-xl border-2 border-gray-200 hover:border-blue-300 transition-all">
+                        <div class="flex items-center justify-between bg-gray-50 p-4 rounded-xl border-2 border-gray-200 hover:border-blue-300 transition-all">
                             <div class="flex items-center space-x-3">
                                 <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
                                     <i class="fas fa-file-archive text-gray-600 text-xl"></i>
@@ -142,7 +141,7 @@
                             </h4>
                             @foreach($projectLinksDisplay as $pl)
                                 @if(!empty($pl))
-                                <div class="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0 bg-gradient-to-r from-indigo-50 to-purple-50 p-4 rounded-xl border-2 border-indigo-200 hover:border-indigo-300 transition-all">
+                                <div class="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0 bg-indigo-50 p-4 rounded-xl border-2 border-indigo-200 hover:border-indigo-300 transition-all">
                                     <div class="flex items-center space-x-3 flex-1 min-w-0">
                                         <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center flex-shrink-0">
                                             <i class="fas fa-link text-indigo-600 text-xl"></i>
@@ -160,7 +159,7 @@
                             @endforeach
                         </div>
                     @elseif($report->project_link)
-                        <div class="flex items-center justify-between bg-gradient-to-r from-indigo-50 to-purple-50 p-4 rounded-xl border-2 border-indigo-200 hover:border-indigo-300 transition-all">
+                        <div class="flex items-center justify-between bg-indigo-50 p-4 rounded-xl border-2 border-indigo-200 hover:border-indigo-300 transition-all">
                             <div class="flex items-center space-x-3 flex-1 min-w-0">
                                 <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center flex-shrink-0">
                                     <i class="fas fa-link text-indigo-600 text-xl"></i>
@@ -177,7 +176,7 @@
                     @endif
                     
                     {{-- Activities (Kegiatan Magang) --}}
-                    <div class="mt-4 p-6 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl border-2 border-green-200">
+                    <div class="mt-4 p-6 bg-green-50 rounded-xl border-2 border-green-200">
                         <h4 class="font-bold text-gray-900 flex items-center mb-3">
                             <i class="fas fa-tasks text-green-600 mr-2"></i>
                             Kegiatan Selama Magang
@@ -198,13 +197,13 @@
 
                 {{-- Catatan Admin --}}
                 @if($report->admin_note)
-                <div class="mt-6 p-6 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border-2 border-blue-200">
+                <div class="mt-6 p-6 bg-blue-50 rounded-xl border-2 border-blue-200">
                     <p class="text-sm font-bold text-blue-900 mb-3 flex items-center">
                         <i class="fas fa-comment-dots mr-2"></i>Catatan Admin
                     </p>
                     <div class="bg-white p-4 rounded-lg border border-blue-200 shadow-sm">
-                        <p class="text-sm text-gray-900 whitespace-pre-wrap">
-                            {{ $report->admin_note }}
+                        <p class="text-sm text-gray-900 whitespace-pre-wrap text-justify">
+                            {{ trim($report->admin_note) }}
                         </p>
                     </div>
                 </div>
@@ -214,7 +213,7 @@
                 <div class="mt-6 flex flex-col sm:flex-row gap-4">
                     @if($report->status !== 'approved' || $report->needs_revision)
                     <button onclick="document.getElementById('uploadForm').classList.toggle('hidden')"
-                        class="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
+                        class="inline-flex items-center justify-center px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
                         <i class="fas fa-upload mr-2"></i>
                         {{ $report->needs_revision ? 'Upload Revisi' : 'Update Laporan' }}
                     </button>
@@ -225,7 +224,7 @@
 
         {{-- FORM UPDATE --}}
         <div id="uploadForm" class="bg-white rounded-2xl shadow-lg border border-blue-100 overflow-hidden hidden">
-            <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-4">
+            <div class="bg-blue-600 px-6 py-4">
                 <h2 class="text-xl font-bold text-white flex items-center">
                     <i class="fas fa-edit mr-3"></i>
                     Update Laporan
@@ -320,7 +319,7 @@
                             <i class="fas fa-times mr-2"></i>Batal
                         </button>
                         <button type="submit"
-                            class="inline-flex items-center px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 w-full sm:w-auto justify-center">
+                            class="inline-flex items-center px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 w-full sm:w-auto justify-center">
                             <i class="fas fa-save mr-2"></i>Update Laporan
                         </button>
                     </div>
@@ -330,8 +329,8 @@
 
         @else
         <!-- Upload Initial Report Card -->
-        <div class="bg-white rounded-2xl shadow-lg border border-blue-100 overflow-hidden">
-            <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-4">
+            <div class="bg-white rounded-2xl shadow-lg border border-blue-100 overflow-hidden">
+            <div class="bg-blue-600 px-6 py-4">
                 <h2 class="text-xl font-bold text-white flex items-center">
                     <i class="fas fa-upload mr-3"></i>
                     Upload Laporan Akhir
@@ -340,7 +339,7 @@
 
             <div class="p-8">
                 <div class="text-center py-8 mb-8">
-                    <div class="w-24 h-24 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <div class="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
                         <i class="fas fa-file-alt text-blue-600 text-5xl"></i>
                     </div>
                     <p class="text-gray-600 text-lg font-medium mb-2">Anda belum mengupload laporan akhir.</p>
@@ -410,9 +409,9 @@
                         </p>
                     </div>
 
-                    <div class="flex justify-center pt-6 border-t border-gray-200">
+                        <div class="flex justify-center pt-6 border-t border-gray-200">
                         <button type="submit"
-                            class="inline-flex items-center px-8 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
+                            class="inline-flex items-center px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
                             <i class="fas fa-upload mr-2"></i>Upload Laporan
                         </button>
                     </div>
