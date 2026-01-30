@@ -16,20 +16,35 @@ class AdminMonitoringController extends Controller
 {
     public function index(Request $request)
     {
-        // Normalize and get filter inputs
-        $selectedMonth = $request->input('month', now()->format('Y-m-d', '01'));
-        // Normalize status: allow both "akan-pelepasan" and "akan_pelepasan"
-        $rawStatus = $request->input('status', 'all');
-        $selectedStatus = str_replace('-', '_', $rawStatus);
-        $selectedMentor = $request->input('mentor_id', null);
-        $selectedYear = Carbon::createFromFormat('Y-m', $selectedMonth)->year;
-        
-        // Parse month
-        $month = Carbon::createFromFormat('Y-m-d', $selectedMonth . '-01');
-        $startOfMonth = $month->copy()->startOfMonth();
-        $endOfMonth = $month->copy()->endOfMonth();
-        $year = $month->year;
-        $mon = $month->month;
+        // ambil input, default ke sekarang hari 01
+$rawMonth = $request->input('month', Carbon::now()->format('Y-m-01'));
+
+// Normalisasi status/mentor seperti sebelumnya
+$rawStatus = $request->input('status', 'all');
+$selectedStatus = str_replace('-', '_', $rawStatus);
+$selectedMentor = $request->input('mentor_id', null);
+
+try {
+    // Carbon::parse menerima: "2026-01", "2026-01-01", "2026-01-01 12:00:00", ISO8601, dsb.
+    // lalu paksa ke awal bulan agar selalu ada day = 01
+    $month = Carbon::parse($rawMonth)->startOfMonth();
+} catch (\Exception $e) {
+    // fallback aman kalau input rusak
+    $month = Carbon::now()->startOfMonth();
+}
+
+$startOfMonth = $month->copy()->startOfMonth();
+$endOfMonth = $month->copy()->endOfMonth();
+$year = $month->year;
+$mon = $month->month;
+
+// jika butuh string dengan day 01
+$selectedMonth = $month->format('Y-m-d'); // ex: "2026-01-01"
+
+// atau kalau kamu butuh hanya "Y-m" untuk createFromFormat('Y-m', ...)
+$selectedMonthYm = $month->format('Y-m');
+$selectedYear = $month->year;
+
 
         // Debug: log selected month
         Log::debug('Monitoring selectedMonth', ['selectedMonth' => $selectedMonth, 'year' => $year, 'month' => $mon]);
@@ -266,6 +281,7 @@ for ($i = 11; $i >= 0; $i--) {
         return view('admin.monitoring.index', compact(
             'selectedMonth',
             'selectedYear',
+            'selectedMonthYm ',
             'selectedStatus',
             'selectedMentor',
             'hasFilter',
