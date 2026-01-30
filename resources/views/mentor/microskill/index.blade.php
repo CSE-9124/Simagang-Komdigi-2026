@@ -7,9 +7,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
             <div class="mb-8">
-                <h1
-                    class="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-3">
-                    Mikro Skill Anak Bimbingan
+                <h1 class="text-3xl sm:text-4xl font-bold text-blue-600 mb-3"> Mikro Skill Anak Bimbingan
                 </h1>
                 <p class="text-sm sm:text-base text-gray-600">Pantau pencapaian dan pengembangan keterampilan anak magang</p>
             </div>
@@ -82,7 +80,6 @@
                                 </select>
                             </div>
 
-                            <!-- Buttons -->
                             <div class="flex items-end gap-2 flex-shrink-0">
                                 <button type="submit"
                                     class="flex-1 sm:flex-none inline-flex items-center justify-center px-4 sm:px-6 py-2 sm:py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold text-sm sm:text-base rounded-xl hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95 transition-all duration-300">

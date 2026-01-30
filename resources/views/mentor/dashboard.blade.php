@@ -146,14 +146,14 @@
                                         <td class="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap">
                                             <span
                                                 class="px-2 sm:px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                                                <i class="fas fa-calendar-alt mr-0.5 sm:mr-1 hidden sm:inline"></i>
+                                                <i class="fas fa-calendar-alt mr-0.5 sm:mr-1"></i>
                                                 {{ $intern->attendances_count }}
                                             </span>
                                         </td>
                                         <td class="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap">
                                             <span
                                                 class="px-2 sm:px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-indigo-100 text-indigo-800">
-                                                <i class="fas fa-book mr-0.5 sm:mr-1 hidden sm:inline"></i>
+                                                <i class="fas fa-book mr-0.5 sm:mr-1"></i>
                                                 {{ $intern->micro_skills_count }}
                                             </span>
                                         </td>
@@ -193,16 +193,16 @@
                                         class="px-3 sm:px-6 py-2 sm:py-4 text-left text-xs font-bold text-blue-900 uppercase tracking-wider">
                                         Status</th>
                                     <th
-                                        class="px-3 sm:px-6 py-2 sm:py-4 text-left text-xs font-bold text-blue-900 uppercase tracking-wider hidden sm:table-cell">
+                                        class="px-3 sm:px-6 py-2 sm:py-4 text-left text-xs font-bold text-blue-900 uppercase tracking-wider">
                                         Check In</th>
                                     <th
                                         class="px-3 sm:px-6 py-2 sm:py-4 text-left text-xs font-bold text-blue-900 uppercase tracking-wider">
                                         Foto</th>
                                     <th
-                                        class="px-3 sm:px-6 py-2 sm:py-4 text-left text-xs font-bold text-blue-900 uppercase tracking-wider hidden md:table-cell">
+                                        class="px-3 sm:px-6 py-2 sm:py-4 text-left text-xs font-bold text-blue-900 uppercase tracking-wider">
                                         Check Out</th>
                                     <th
-                                        class="px-3 sm:px-6 py-2 sm:py-4 text-left text-xs font-bold text-blue-900 uppercase tracking-wider hidden md:table-cell">
+                                        class="px-3 sm:px-6 py-2 sm:py-4 text-left text-xs font-bold text-blue-900 uppercase tracking-wider">
                                         Foto Out</th>
                                 </tr>
                             </thead>
@@ -225,7 +225,7 @@
                                             </span>
                                         </td>
                                         <td
-                                            class="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-600 hidden sm:table-cell">
+                                            class="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-600">
                                             {{ $attendance->check_in ? \Carbon\Carbon::parse($attendance->check_in)->format('H:i') : '-' }}
                                         </td>
                                         <td class="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap">
@@ -239,10 +239,10 @@
                                             @endif
                                         </td>
                                         <td
-                                            class="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-600 hidden md:table-cell">
+                                            class="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-600">
                                             {{ $attendance->check_out ? \Carbon\Carbon::parse($attendance->check_out)->format('H:i') : '-' }}
                                         </td>
-                                        <td class="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap hidden md:table-cell">
+                                        <td class="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap">
                                             @if ($attendance->photo_checkout)
                                                 <img src="{{ url('storage/' . $attendance->photo_checkout) }}"
                                                     alt="Check Out"

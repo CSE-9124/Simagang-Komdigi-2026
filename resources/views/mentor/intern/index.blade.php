@@ -61,14 +61,14 @@
                                         class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-white uppercase tracking-wider hidden sm:table-cell">
                                         Institusi</th>
                                     <th
-                                        class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-white uppercase tracking-wider hidden md:table-cell">
+                                        class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-white uppercase tracking-wider">
                                         Logbook</th>
                                     <th
                                         class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-white uppercase tracking-wider">
                                         Absensi</th>
                                     <th
                                         class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-white uppercase tracking-wider">
-                                        Mikro</th>
+                                        Mikroskill</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-100">
@@ -77,43 +77,48 @@
                                         class="hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-200">
                                         <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                                             @if ($intern->photo_path)
-                                                <img src="{{ url('storage/' . $intern->photo_path) }}"
-                                                    class="w-12 h-12 sm:w-14 sm:h-14 rounded-full object-cover object-center border-3 border-blue-300 shadow-lg ring-2 ring-blue-100 hover:ring-blue-400 transition-all flex-shrink-0 aspect-square"
-                                                    alt="{{ $intern->name }}" />
+                                                <div
+                                                    class="w-12 h-12 sm:w-14 sm:h-14 flex-shrink-0 rounded-full overflow-hidden border-3 border-blue-300 shadow-lg ring-2 ring-blue-100 hover:ring-blue-400 transition-all aspect-square flex items-center justify-center">
+                                                    <img src="{{ url('storage/' . $intern->photo_path) }}"
+                                                        class="w-full h-full object-cover object-center"
+                                                        alt="{{ $intern->name }}" />
+                                                </div>
                                             @else
                                                 <div
                                                     class="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center shadow-lg ring-2 ring-blue-100 hover:ring-blue-400 transition-all flex-shrink-0 aspect-square">
-                                                    <i class="fas fa-user text-white text-lg"></i>
+                                                    <i class="fas fa-user text-white text-lg sm:text-xl"></i>
                                                 </div>
                                             @endif
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <a class="text-blue-600 hover:text-indigo-700 font-bold hover:underline transition-colors text-base"
+                                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
+                                            <a class="text-blue-600 hover:text-indigo-700 font-bold hover:underline transition-colors text-xs sm:text-sm md:text-base"
                                                 href="{{ route('mentor.intern.show', $intern) }}">
                                                 {{ $intern->name }}
                                             </a>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
-                                            <div class="text-sm text-gray-700 flex items-center font-medium">
+                                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap hidden sm:table-cell">
+                                            <div class="text-xs sm:text-sm text-gray-700 flex items-center font-medium">
                                                 {{ $intern->institution }}
                                             </div>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
+                                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                                             <span
-                                                class="px-3 py-2 inline-flex text-sm leading-5 font-bold rounded-full bg-gradient-to-r from-purple-100 to-purple-200 text-purple-800 shadow-sm hover:shadow-md transition-all">
-                                                <i class="fas fa-book mr-2"></i>
+                                                class="px-2.5 sm:px-3 py-1.5 sm:py-2 inline-flex text-xs sm:text-sm leading-5 font-bold rounded-full bg-gradient-to-r from-purple-100 to-purple-200 text-purple-800 shadow-sm hover:shadow-md transition-all">
+                                                <i class="fas fa-book mr-1.5 sm:mr-2"></i>
                                                 {{ $intern->logbooks_count }}
                                             </span>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
+                                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                                             <span
-                                                class="px-3 py-2 inline-flex text-sm leading-5 font-bold rounded-full bg-gradient-to-r from-green-100 to-emerald-200 text-green-800 shadow-sm hover:shadow-md transition-all">
+                                                class="px-2.5 sm:px-3 py-1.5 sm:py-2 inline-flex text-xs sm:text-sm leading-5 font-bold rounded-full bg-gradient-to-r from-green-100 to-emerald-200 text-green-800 shadow-sm hover:shadow-md transition-all">
+                                                <i class="fas fa-check-circle mr-1.5 sm:mr-2"></i>
                                                 {{ $intern->attendances_count }}
                                             </span>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap">
+                                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                                             <span
-                                                class="px-3 py-2 inline-flex text-sm leading-5 font-bold rounded-full bg-gradient-to-r from-indigo-100 to-blue-200 text-indigo-800 shadow-sm hover:shadow-md transition-all">
+                                                class="px-2.5 sm:px-3 py-1.5 sm:py-2 inline-flex text-xs sm:text-sm leading-5 font-bold rounded-full bg-gradient-to-r from-indigo-100 to-blue-200 text-indigo-800 shadow-sm hover:shadow-md transition-all">
+                                                <i class="fas fa-graduation-cap mr-1.5 sm:mr-2"></i>
                                                 {{ $intern->micro_skills_count }}
                                             </span>
                                         </td>

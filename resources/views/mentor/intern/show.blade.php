@@ -137,7 +137,6 @@
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-            <!-- Absensi Terbaru -->
             <div class="bg-white rounded-2xl shadow-md border border-blue-100 overflow-hidden">
                 <div class="bg-blue-600 px-6 py-4">
                     <h2 class="text-xl font-bold text-white flex items-center">

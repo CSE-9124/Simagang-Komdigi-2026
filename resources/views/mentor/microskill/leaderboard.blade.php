@@ -84,7 +84,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Score Badge -->
                                 <div class="flex-shrink-0">
                                     <span
                                         class="px-2 sm:px-3 py-0.5 sm:py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold flex-shrink-0 whitespace-nowrap">
