@@ -281,7 +281,7 @@ for ($i = 11; $i >= 0; $i--) {
         return view('admin.monitoring.index', compact(
             'selectedMonth',
             'selectedYear',
-            'selectedMonthYm ',
+            'selectedMonthYm',
             'selectedStatus',
             'selectedMentor',
             'hasFilter',
