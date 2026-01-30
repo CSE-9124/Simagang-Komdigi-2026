@@ -8,31 +8,23 @@
 
             <div class="mb-8">
                 <h1
-                    class="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-blue-600 to-blue-600 bg-clip-text text-transparent mb-2">
+                    class="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2">
                     Leaderboard Mikro Skill
                 </h1>
                 <p class="text-sm sm:text-base text-gray-600">Peringkat pencapaian keterampilan anak magang bimbingan Anda
                 </p>
             </div>
 
-            <div class="bg-white rounded-2xl shadow-lg border border-blue-100 overflow-hidden">
-                <div class="bg-gradient-to-r from-blue-600 to-blue-600 px-4 sm:px-6 py-4 sm:py-6">
-                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-4">
-                        <div class="flex items-center">
-                            <div
-                                class="w-12 h-12 sm:w-14 sm:h-14 bg-white bg-opacity-20 rounded-xl flex items-center justify-center mr-3 sm:mr-4">
-                                <i class="fas fa-trophy text-yellow-300 text-xl sm:text-2xl"></i>
-                            </div>
-                            <div>
-                                <h2 class="text-xl sm:text-2xl font-bold text-white">Top Performers</h2>
-                                <p class="text-blue-100 text-xs sm:text-sm">Anak magang dengan pencapaian terbaik</p>
-                            </div>
+            <div class="bg-white rounded-2xl shadow-md border border-blue-100 overflow-hidden">
+                <div class="bg-blue-600 px-4 sm:px-6 py-3 sm:py-4">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4">
+                        <div>
+                            <h2 class="text-lg sm:text-xl font-bold text-white">Leaderboard Mikro Skill</h2>
+                            <p class="text-blue-100 text-xs sm:text-sm">Anak magang dengan pencapaian terbaik</p>
                         </div>
-                        <div class="flex items-center">
-                            <div class="text-left sm:text-right">
-                                <p class="text-blue-100 text-xs uppercase tracking-wide">Total Participants</p>
-                                <p class="text-white text-xl sm:text-2xl font-bold">{{ $rows->total() }}</p>
-                            </div>
+                        <div class="text-left sm:text-right">
+                            <p class="text-blue-100 text-xs uppercase tracking-wide">Total Participants</p>
+                            <p class="text-white text-lg sm:text-xl font-bold">{{ $rows->total() }}</p>
                         </div>
                     </div>
                 </div>
@@ -44,7 +36,7 @@
                                 $actualRank = $rows->firstItem() + $index;
                             @endphp
                             <div
-                                class="flex items-center justify-between p-3 sm:p-4 bg-gradient-to-r from-blue-50 to-blue-50 rounded-xl hover:shadow-lg transition-all duration-300 border border-blue-100 group gap-2">
+                                class="flex items-center justify-between p-3 sm:p-4 bg-blue-50 rounded-xl hover:shadow-lg transition-all duration-300 border border-blue-100 group gap-2">
                                 <div class="flex items-center flex-1 min-w-0">
                                     <div class="relative mr-2 sm:mr-3 flex-shrink-0">
                                         <span
@@ -84,22 +76,7 @@
                                         <div class="flex flex-wrap items-center gap-1 mb-0.5 sm:mb-1">
                                             <h3 class="font-bold text-gray-900 text-sm sm:text-lg truncate">
                                                 {{ $row->name }}</h3>
-                                            @if ($actualRank <= 3)
-                                                <span
-                                                    class="px-2 py-0.5 bg-gradient-to-r 
-                                                @if ($actualRank == 1) from-yellow-400 to-yellow-500
-                                                @elseif($actualRank == 2) from-gray-300 to-gray-400
-                                                @else from-orange-400 to-orange-500 @endif
-                                                text-white text-xs font-bold rounded-full whitespace-nowrap">
-                                                    @if ($actualRank == 1)
-                                                        🥇 Champion
-                                                    @elseif($actualRank == 2)
-                                                        🥈 Runner Up
-                                                    @else
-                                                        🥉 3rd Place
-                                                    @endif
-                                                </span>
-                                            @endif
+                                
                                         </div>
                                         <div class="flex items-center text-xs sm:text-sm text-gray-600 truncate">
                                             <span class="truncate">{{ $row->institution }}</span>
@@ -109,17 +86,11 @@
 
                                 <!-- Score Badge -->
                                 <div class="flex-shrink-0">
-                                    <div class="text-center">
-                                        <div
-                                            class="px-3 py-2 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl shadow-md">
-                                            <div class="flex items-center justify-center gap-1">
-                                                <i class="fas fa-star text-yellow-300 text-sm"></i>
-                                                <span
-                                                    class="text-white text-lg sm:text-xl font-bold">{{ $row->total }}</span>
-                                            </div>
-                                            <p class="text-blue-100 text-xs whitespace-nowrap">courses</p>
-                                        </div>
-                                    </div>
+                                    <span
+                                        class="px-2 sm:px-3 py-0.5 sm:py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold flex-shrink-0 whitespace-nowrap">
+                                        <i class="fas fa-star mr-0.5 sm:mr-1"></i>
+                                        {{ $row->total }} course
+                                    </span>
                                 </div>
                             </div>
                         @empty
