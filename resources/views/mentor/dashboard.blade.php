@@ -145,14 +145,14 @@
                                         </td>
                                         <td class="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap">
                                             <span
-                                                class="px-2 sm:px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                                class="px-2 sm:px-3 py-1 inline-flex items-center justify-center text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
                                                 <i class="fas fa-calendar-alt mr-0.5 sm:mr-1"></i>
                                                 {{ $intern->attendances_count }}
                                             </span>
                                         </td>
                                         <td class="px-3 sm:px-6 py-2 sm:py-4 whitespace-nowrap">
                                             <span
-                                                class="px-2 sm:px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-indigo-100 text-indigo-800">
+                                                class="px-2 sm:px-3 py-1 inline-flex items-center justify-center text-xs leading-5 font-semibold rounded-full bg-indigo-100 text-indigo-800">
                                                 <i class="fas fa-book mr-0.5 sm:mr-1"></i>
                                                 {{ $intern->micro_skills_count }}
                                             </span>
