@@ -143,14 +143,14 @@
                     </div>
                 </div>
 
-                <div class="px-8 py-6 bg-gray-50 flex justify-between items-center">
-                    <a href="{{ route('admin.mentor.index') }}" class="text-blue-600 hover:text-blue-800 font-semibold transition inline-flex items-center gap-2">
+                <div class="px-8 py-6 bg-gray-50 flex flex-col-reverse md:flex-row md:items-center md:justify-between gap-4">
+                    <a href="{{ route('admin.mentor.index') }}" class="inline-flex justify-center md:justify-start items-center gap-2 text-blue-600 hover:text-blue-800 font-semibold transition">
                         <i class="fas fa-arrow-left"></i>
                         Kembali
                     </a>
 
                     <button type="submit"
-                            class="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold px-8 py-3 rounded-xl shadow-lg transition transform hover:scale-105">
+                            class="inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold px-8 py-3 rounded-xl shadow-lg transition transform hover:scale-105">
                         <i class="fas fa-save"></i>
                         Simpan Data
                     </button>

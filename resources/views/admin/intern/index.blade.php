@@ -47,31 +47,14 @@
                     </div>
                     <div>
                         <label for="team" class="block text-sm font-medium text-blue-900 mb-1">Filter TIM</label>
-                        <select name="team" id="team"
+                        <select name="team_id" id="team"
                             class="w-full px-3 py-2 border border-blue-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                             <option value="">Semua TIM</option>
-                            <option value="TIM DEA" {{ request('team') == 'TIM DEA' ? 'selected' : '' }}>TIM DEA</option>
-                            <option value="TIM GTA" {{ request('team') == 'TIM GTA' ? 'selected' : '' }}>TIM GTA</option>
-                            <option value="TIM VSGA" {{ request('team') == 'TIM VSGA' ? 'selected' : '' }}>TIM VSGA</option>
-                            <option value="TIM TA" {{ request('team') == 'TIM TA' ? 'selected' : '' }}>TIM TA</option>
-                            <option value="TIM Microskill" {{ request('team') == 'TIM Microskill' ? 'selected' : '' }}>TIM
-                                Microskill</option>
-                            <option value="TIM Media (DiaPus)"
-                                {{ request('team') == 'TIM Media (DiaPus)' ? 'selected' : '' }}>TIM Media (DiaPus)</option>
-                            <option value="TIM Tata Usaha (Umum)"
-                                {{ request('team') == 'TIM Tata Usaha (Umum)' ? 'selected' : '' }}>TIM Tata Usaha (Umum)
-                            </option>
-                            <option value="FGA" {{ request('team') == 'FGA' ? 'selected' : '' }}>FGA</option>
-                            <option value="Keuangan" {{ request('team') == 'Keuangan' ? 'selected' : '' }}>Keuangan
-                            </option>
-                            <option value="Tim PUSDATIN" {{ request('team') == 'Tim PUSDATIN' ? 'selected' : '' }}>Tim
-                                PUSDATIN</option>
-                            <option value="Tim Perencanaan, Anggaran, Dan Kerja Sama"
-                                {{ request('team') == 'Tim Perencanaan, Anggaran, Dan Kerja Sama' ? 'selected' : '' }}>Tim
-                                Perencanaan, Anggaran, Dan Kerja Sama</option>
-                            <option value="Tim Kepegawaian, Persuratan dan Kearsipan"
-                                {{ request('team') == 'Tim Kepegawaian, Persuratan dan Kearsipan' ? 'selected' : '' }}>Tim
-                                Kepegawaian, Persuratan dan Kearsipan</option>
+                            @foreach($teams as $teamOption)
+                                <option value="{{ $teamOption->id }}" {{ request('team_id') == $teamOption->id ? 'selected' : '' }}>
+                                    {{ $teamOption->name }}
+                                </option>
+                            @endforeach
                         </select>
                     </div>
                     <div>
@@ -101,7 +84,7 @@
                             class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-200 flex-1">
                             <i class="fas fa-filter mr-2"></i>Filter
                         </button>
-                        @if (request()->anyFilled(['search', 'team', 'mentor_id', 'is_active']))
+                        @if (request()->anyFilled(['search', 'team_id', 'mentor_id', 'is_active']))
                             <a href="{{ route('admin.intern.index') }}"
                                 class="bg-blue-100 hover:bg-blue-200 text-blue-700 font-bold py-2 px-4 rounded-lg transition duration-200">
                                 <i class="fas fa-times"></i>
@@ -184,7 +167,7 @@
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <span
                                                 class="px-3 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
-                                                {{ $intern->team ?: '-' }}
+                                                {{ $intern->team ? $intern->team->name : '-' }}
                                             </span>
                                         </td>
 

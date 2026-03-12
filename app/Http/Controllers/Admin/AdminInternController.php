@@ -16,16 +16,16 @@ class AdminInternController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Intern::with(['user', 'mentor']);
+        $query = Intern::with(['user', 'mentor', 'team']);
         
         // Search by name
         if ($request->filled('search')) {
             $query->where('name', 'like', '%' . $request->search . '%');
         }
         
-        // Filter by team
-        if ($request->filled('team')) {
-            $query->where('team', $request->team);
+        // Filter by team (use team_id foreign key)
+        if ($request->filled('team_id')) {
+            $query->where('team_id', $request->team_id);
         }
         
         // Filter by mentor
@@ -40,8 +40,9 @@ class AdminInternController extends Controller
         
         $interns = $query->orderByDesc('created_at')->paginate(15)->withQueryString();
         $mentors = \App\Models\Mentor::orderByDesc('created_at')->get();
+        $teams = \App\Models\Team::orderBy('name')->get();
         
-        return view('admin.intern.index', compact('interns', 'mentors'));
+        return view('admin.intern.index', compact('interns', 'mentors', 'teams'));
     }
 
     public function create()
