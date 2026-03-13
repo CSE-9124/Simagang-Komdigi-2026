@@ -229,7 +229,7 @@
                         </div>
                     @endif
 
-                    @if ($report->activities && count($report->activities))
+                    @if ($report->activities && is_array($report->activities) && count($report->activities) > 0)
                         <div class="pt-6 border-t border-gray-200">
                             <div class="flex items-center mb-4">
                                 <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mr-3">
@@ -242,7 +242,7 @@
                                     <div class="p-4 bg-green-50 rounded-xl border border-green-200">
                                         <div class="flex items-start">
                                             <i class="fas fa-check-circle text-green-600 mr-3 mt-1"></i>
-                                            <p class="text-gray-900 flex-1">{{ $activity['description'] }}</p>
+                                            <p class="text-gray-900 flex-1">{{ $activity['description'] ?? '' }}</p>
                                         </div>
                                     </div>
                                 @endforeach

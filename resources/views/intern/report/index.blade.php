@@ -181,7 +181,7 @@
                             <i class="fas fa-tasks text-green-600 mr-2"></i>
                             Kegiatan Selama Magang
                         </h4>
-                        @if($report->activities && count($report->activities))
+                        @if($report->activities && is_array($report->activities) && count($report->activities) > 0)
                             <div class="space-y-2">
                                 @foreach($report->activities as $activity)
                                     <div class="p-4 bg-white rounded-lg border border-green-200 shadow-sm">
