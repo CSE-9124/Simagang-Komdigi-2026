@@ -69,22 +69,13 @@
                             @endforeach
                         </select>
                     </div>
-                    <div>
-                        <label for="is_active" class="block text-sm font-medium text-blue-900 mb-1">Filter Status</label>
-                        <select name="is_active" id="is_active"
-                            class="w-full px-3 py-2 border border-blue-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                            <option value="">Semua Status</option>
-                            <option value="1" {{ request('is_active') === '1' ? 'selected' : '' }}>Aktif</option>
-                            <option value="0" {{ request('is_active') === '0' ? 'selected' : '' }}>Tidak Aktif
-                            </option>
-                        </select>
-                    </div>
+                    <!-- status filter removed; inactive interns shown in separate table below -->
                     <div class="flex items-end gap-2">
                         <button type="submit"
                             class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-200 flex-1">
                             <i class="fas fa-filter mr-2"></i>Filter
                         </button>
-                        @if (request()->anyFilled(['search', 'team_id', 'mentor_id', 'is_active']))
+                        @if (request()->anyFilled(['search', 'team_id', 'mentor_id']))
                             <a href="{{ route('admin.intern.index') }}"
                                 class="bg-blue-100 hover:bg-blue-200 text-blue-700 font-bold py-2 px-4 rounded-lg transition duration-200">
                                 <i class="fas fa-times"></i>
@@ -93,7 +84,6 @@
                     </div>
                 </form>
             </div>
-
             <div class="bg-white rounded-2xl shadow-md border border-blue-100 overflow-hidden mb-8">
                 <div class="bg-blue-600 px-6 py-4">
                     <h2 class="text-xl font-bold text-white flex items-center">
@@ -132,7 +122,7 @@
                             </thead>
 
                             <tbody class="bg-white divide-y divide-gray-100">
-                                @forelse($interns as $intern)
+                                @forelse($activeInterns as $intern)
                                     <tr class="hover:bg-blue-50 transition-colors duration-150">
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="flex items-center">
@@ -223,7 +213,129 @@
             </div>
 
             <div class="mt-6">
-                {{ $interns->links() }}
+                {{ $activeInterns->links() }}
+            </div>
+
+            <!-- Alumni / Inactive interns table -->
+            <div class="bg-white rounded-2xl shadow-md border border-gray-200 overflow-hidden mb-8 mt-8">
+                <div class="bg-gray-100 px-6 py-4">
+                    <h2 class="text-xl font-semibold text-gray-800 flex items-center">
+                        <i class="fas fa-user-graduate mr-3 text-gray-600"></i>
+                        Data Alumni
+                    </h2>
+                </div>
+
+                <div class="p-6">
+                    <div class="max-h-[400px] overflow-x-auto overflow-y-auto pr-2">
+                        <table class="min-w-[1000px] w-full divide-y divide-gray-200">
+                            <thead>
+                                <tr class="bg-gray-50">
+                                    <th
+                                        class="px-6 py-4 text-center text-xs font-bold text-gray-900 uppercase tracking-wider rounded-tl-lg">
+                                        Nama</th>
+                                    <th
+                                        class="px-6 py-4 text-center text-xs font-bold text-gray-900 uppercase tracking-wider">
+                                        Email</th>
+                                    <th
+                                        class="px-6 py-4 text-center text-xs font-bold text-gray-900 uppercase tracking-wider">
+                                        Institusi</th>
+                                    <th
+                                        class="px-6 py-4 text-center text-xs font-bold text-gray-900 uppercase tracking-wider">
+                                        TIM</th>
+                                    <th
+                                        class="px-6 py-4 text-center text-xs font-bold text-gray-900 uppercase tracking-wider">
+                                        Mentor</th>
+                                    <th
+                                        class="px-6 py-4 text-center text-xs font-bold text-gray-900 uppercase tracking-wider rounded-tr-lg">
+                                        Aksi</th>
+                                </tr>
+                            </thead>
+
+                            <tbody class="bg-white divide-y divide-gray-100">
+                                @forelse($alumniInterns as $intern)
+                                    <tr class="hover:bg-gray-50 transition-colors duration-150">
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                @if ($intern->photo_path)
+                                                    <div
+                                                        class="w-10 h-10 rounded-full overflow-hidden border-2 border-gray-200 mr-3 bg-gray-100 flex-shrink-0">
+                                                        <img src="{{ url('storage/' . $intern->photo_path) }}"
+                                                            alt="{{ $intern->name }}"
+                                                            class="w-full h-full object-cover object-center">
+                                                    </div>
+                                                @else
+                                                    <div
+                                                        class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center border-2 border-gray-200 mr-3 flex-shrink-0">
+                                                        <i class="fas fa-user text-gray-500"></i>
+                                                    </div>
+                                                @endif
+
+                                                <span class="text-sm font-medium text-gray-900">
+                                                    {{ $intern->name }}
+                                                </span>
+                                            </div>
+                                        </td>
+
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                            {{ $intern->user->email }}
+                                        </td>
+
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                            {{ $intern->institution }}
+                                        </td>
+
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span
+                                                class="px-3 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">
+                                                {{ $intern->team ? $intern->team->name : '-' }}
+                                            </span>
+                                        </td>
+
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                                            {{ $intern->mentor ? $intern->mentor->name : '-' }}
+                                        </td>
+
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <a href="{{ route('admin.intern.show', $intern) }}"
+                                                class="text-green-600 hover:text-green-800 mr-3 transition" title="Lihat">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+
+                                            <a href="{{ route('admin.intern.edit', $intern) }}"
+                                                class="text-blue-600 hover:text-blue-800 mr-3 transition" title="Edit">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+
+                                            <form action="{{ route('admin.intern.destroy', $intern) }}" method="POST"
+                                                class="inline"
+                                                onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="text-red-600 hover:text-red-800 transition"
+                                                    title="Hapus">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="6" class="px-6 py-8 text-center">
+                                            <div class="flex flex-col items-center text-gray-500">
+                                                <i class="fas fa-inbox text-4xl mb-3 text-gray-300"></i>
+                                                <p class="text-sm">Belum ada data alumni.</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-6">
+                {{ $alumniInterns->links() }}
             </div>
         </div>
     </div>
