@@ -16,33 +16,38 @@ class AdminInternController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Intern::with(['user', 'mentor', 'team']);
-        
-        // Search by name
+        // Build base query and apply common filters (except is_active)
+        $baseQuery = Intern::with(['user', 'mentor', 'team']);
+
         if ($request->filled('search')) {
-            $query->where('name', 'like', '%' . $request->search . '%');
+            $baseQuery->where('name', 'like', '%' . $request->search . '%');
         }
-        
-        // Filter by team (use team_id foreign key)
+
         if ($request->filled('team_id')) {
-            $query->where('team_id', $request->team_id);
+            $baseQuery->where('team_id', $request->team_id);
         }
-        
-        // Filter by mentor
+
         if ($request->filled('mentor_id')) {
-            $query->where('mentor_id', $request->mentor_id);
+            $baseQuery->where('mentor_id', $request->mentor_id);
         }
-        
-        // Filter by active status
-        if ($request->filled('is_active')) {
-            $query->where('is_active', $request->boolean('is_active'));
-        }
-        
-        $interns = $query->orderByDesc('created_at')->paginate(15)->withQueryString();
+
+        // Active interns (is_active = true)
+        $activeInterns = (clone $baseQuery)
+            ->where('is_active', true)
+            ->orderByDesc('created_at')
+            ->paginate(15, ['*'], 'active_page')
+            ->withQueryString();
+
+        // Alumni / inactive interns (is_active = false)
+        $alumniInterns = (clone $baseQuery)
+            ->where('is_active', false)
+            ->orderByDesc('created_at')
+            ->paginate(15, ['*'], 'alumni_page')
+            ->withQueryString();
         $mentors = \App\Models\Mentor::orderByDesc('created_at')->get();
         $teams = \App\Models\Team::orderBy('name')->get();
         
-        return view('admin.intern.index', compact('interns', 'mentors', 'teams'));
+        return view('admin.intern.index', compact('activeInterns', 'alumniInterns', 'mentors', 'teams'));
     }
 
     public function create()
