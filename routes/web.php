@@ -42,8 +42,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return redirect()->route('login');
-});
+    return view('landingpage');
+})->name('landing');
 
 Route::get('/convert-font', function () {
     $fontPath = storage_path('app/fonts/Poppins-Extralight.ttf');
