@@ -10,6 +10,18 @@ use Illuminate\Validation\Rules\Password;
 
 class ProfileController extends Controller
 {
+    public function show()
+    {
+        $user = Auth::user();
+        $intern = $user->intern;
+
+        if (!$intern) {
+            return redirect()->route('intern.dashboard')->withErrors(['error' => 'Data profil tidak ditemukan.']);
+        }
+
+        return view('intern.profile.show', compact('intern', 'user'));
+    }
+
     public function edit()
     {
         $user = Auth::user();
@@ -32,6 +44,9 @@ class ProfileController extends Controller
         }
 
         $rules = [
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'unique:users,email,' . $user->id],
+            'phone' => ['nullable', 'string', 'max:20'],
             'photo' => ['nullable', 'image', 'max:2048'],
         ];
 
@@ -42,6 +57,16 @@ class ProfileController extends Controller
         }
 
         $validated = $request->validate($rules);
+
+        // Update user data
+        $user->name = $validated['name'];
+        $user->email = $validated['email'];
+        $user->save();
+
+        // Update intern data
+        $intern->name = $validated['name'];
+        $intern->phone = $validated['phone'];
+        $intern->save();
 
         // Update password if provided
         if ($request->filled('password')) {
@@ -89,7 +114,6 @@ class ProfileController extends Controller
                     $fullPath = $destinationPath . DIRECTORY_SEPARATOR . $filename;
                     if ($photo->move($destinationPath, $filename) && file_exists($fullPath)) {
                         $intern->photo_path = 'photos/' . $filename;
-                        $intern->save();
                     } else {
                         return back()->withErrors(['photo' => 'Gagal memindahkan file foto.'])->withInput();
                     }
@@ -101,6 +125,8 @@ class ProfileController extends Controller
             }
         }
 
+        $intern->save();
+
         $message = 'Profil berhasil diperbarui.';
         if ($request->filled('password')) {
             $message .= ' Password telah diubah.';
@@ -109,7 +135,7 @@ class ProfileController extends Controller
             $message .= ' Foto profil telah diperbarui.';
         }
 
-        return redirect()->route('intern.profile.edit')->with('success', $message);
+        return redirect()->route('intern.profile.show')->with('success', $message);
     }
 }
 

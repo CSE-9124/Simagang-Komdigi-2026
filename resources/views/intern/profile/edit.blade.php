@@ -81,6 +81,55 @@
                 </div>
             </div>
 
+            <!-- Personal Information Section -->
+            <div class="bg-white rounded-2xl shadow-lg overflow-hidden mb-8">
+                <div class="bg-blue-600 px-6 py-4">
+                    <h2 class="text-xl font-bold text-white flex items-center">
+                        <i class="fas fa-user mr-3"></i>
+                        Informasi Pribadi
+                    </h2>
+                </div>
+                <div class="p-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Nama Lengkap</label>
+                            <input type="text" name="name" id="name" value="{{ old('name', $user->name) }}" 
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                                placeholder="Masukkan nama lengkap">
+                            @error('name')
+                                <p class="mt-1 text-sm text-red-600 flex items-center">
+                                    <i class="fas fa-times-circle mr-2"></i>{{ $message }}
+                                </p>
+                            @enderror
+                        </div>
+
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                            <input type="email" name="email" id="email" value="{{ old('email', $user->email) }}" 
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                                placeholder="Masukkan email">
+                            @error('email')
+                                <p class="mt-1 text-sm text-red-600 flex items-center">
+                                    <i class="fas fa-times-circle mr-2"></i>{{ $message }}
+                                </p>
+                            @enderror
+                        </div>
+
+                        <div>
+                            <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">Nomor Telepon</label>
+                            <input type="text" name="phone" id="phone" value="{{ old('phone', $intern->phone) }}" 
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+                                placeholder="Masukkan nomor telepon">
+                            @error('phone')
+                                <p class="mt-1 text-sm text-red-600 flex items-center">
+                                    <i class="fas fa-times-circle mr-2"></i>{{ $message }}
+                                </p>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Password Change Section -->
             <div class="bg-white rounded-2xl shadow-lg overflow-hidden mb-8">
                 <div class="bg-blue-600 px-6 py-4">
@@ -124,48 +173,6 @@
                             <input type="password" name="password_confirmation" id="password_confirmation" 
                                 class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
                                 placeholder="Konfirmasi password baru">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Profile Info (Read-only) -->
-            <div class="bg-white rounded-2xl shadow-lg overflow-hidden mb-8">
-                <div class="bg-green-600 px-6 py-4">
-                    <h2 class="text-xl font-bold text-white flex items-center">
-                        <i class="fas fa-user-circle mr-3"></i>
-                        Informasi Profil
-                    </h2>
-                </div>
-                <div class="p-6">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div class="p-4 bg-gray-50 rounded-lg">
-                            <label class="block text-xs font-semibold text-gray-600 uppercase mb-2">Nama</label>
-                            <p class="text-gray-900 font-medium">{{ $intern->name }}</p>
-                        </div>
-                        <div class="p-4 bg-gray-50 rounded-lg">
-                            <label class="block text-xs font-semibold text-gray-600 uppercase mb-2">Email</label>
-                            <p class="text-gray-900 font-medium">{{ $user->email }}</p>
-                        </div>
-                        <div class="p-4 bg-gray-50 rounded-lg">
-                            <label class="block text-xs font-semibold text-gray-600 uppercase mb-2">Jenis Kelamin</label>
-                            <p class="text-gray-900 font-medium">{{ $intern->gender }}</p>
-                        </div>
-                        <div class="p-4 bg-gray-50 rounded-lg">
-                            <label class="block text-xs font-semibold text-gray-600 uppercase mb-2">Tingkat Pendidikan</label>
-                            <p class="text-gray-900 font-medium">{{ $intern->education_level }}</p>
-                        </div>
-                        <div class="p-4 bg-gray-50 rounded-lg">
-                            <label class="block text-xs font-semibold text-gray-600 uppercase mb-2">Jurusan</label>
-                            <p class="text-gray-900 font-medium">{{ $intern->major ?: '-' }}</p>
-                        </div>
-                        <div class="p-4 bg-gray-50 rounded-lg">
-                            <label class="block text-xs font-semibold text-gray-600 uppercase mb-2">Nomor Telepon</label>
-                            <p class="text-gray-900 font-medium">{{ $intern->phone ?: '-' }}</p>
-                        </div>
-                        <div class="p-4 bg-gray-50 rounded-lg md:col-span-2">
-                            <label class="block text-xs font-semibold text-gray-600 uppercase mb-2">Institusi</label>
-                            <p class="text-gray-900 font-medium">{{ $intern->institution }}</p>
                         </div>
                     </div>
                 </div>

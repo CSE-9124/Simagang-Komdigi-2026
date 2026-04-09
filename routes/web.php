@@ -25,6 +25,7 @@ use App\Http\Controllers\Intern\LogbookController;
 use App\Http\Controllers\Intern\ReportController;
 use App\Http\Controllers\Intern\MicroSkillLeaderboardController as InternMicroSkillLeaderboardController;
 use App\Http\Controllers\Intern\ProfileController;
+use App\Http\Controllers\Mentor\ProfileController as MentorProfileController;
 use App\Http\Controllers\Mentor\CertificateController;
 use App\Http\Controllers\Admin\AdminCertificateController;
 use App\Http\Controllers\Admin\TeamController;
@@ -119,6 +120,7 @@ Route::middleware(['auth', 'intern'])->prefix('intern')->name('intern.')->group(
     Route::put('/report/{report}', [ReportController::class, 'update'])->name('report.update');
     
     // Profile Routes
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 });
@@ -209,4 +211,9 @@ Route::middleware(['auth', 'mentor'])->prefix('mentor')->name('mentor.')->group(
             'certificates/{certificate}/print',
             [CertificateController::class, 'print']
         )->name('certificates.print');
+    
+    // Profile Routes
+    Route::get('/profile', [MentorProfileController::class, 'show'])->name('profile.show');
+    Route::get('/profile/edit', [MentorProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [MentorProfileController::class, 'update'])->name('profile.update');
 });
