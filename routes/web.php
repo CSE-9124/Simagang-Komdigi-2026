@@ -30,6 +30,7 @@ use App\Http\Controllers\Mentor\CertificateController;
 use App\Http\Controllers\Admin\AdminCertificateController;
 use App\Http\Controllers\Admin\TeamController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,7 +44,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('landingpage');
+    $partnerFiles = Storage::disk('public')->files('partners');
+    $partners = collect($partnerFiles)
+        ->filter(fn ($path) => preg_match('/\.(png|jpe?g|gif|svg|webp)$/i', $path))
+        ->map(fn ($path) => asset('storage/' . str_replace('%2F', '/', rawurlencode($path))))
+        ->values();
+
+    return view('landingpage', compact('partners'));
 })->name('landing');
 
 Route::get('/convert-font', function () {
