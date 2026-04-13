@@ -546,7 +546,7 @@
                 Komdigi membantu mengelola absensi, logbook, dan sertifikat secara real time.
             </p>
             <div class="hero-btns ">
-                <a href="{{ route('register') }}" class="btn-primary">
+                <a href="#daftar" class="btn-primary">
                     <i class="fas fa-rocket" style="font-size:14px"></i>
                     Mulai Daftar Sekarang
                 </a>
@@ -555,22 +555,6 @@
                     <i class="fas fa-arrow-right" style="font-size:13px"></i>
                 </a>
             </div>
-            {{-- <div class="hero-stats">
-                <div>
-                    <div class="hero-stat-num">500+</div>
-                    <div class="hero-stat-label">Peserta Aktif</div>
-                </div>
-                <div style="width:1px; background:rgba(255,255,255,0.12)"></div>
-                <div>
-                    <div class="hero-stat-num">30+</div>
-                    <div class="hero-stat-label">Institusi Bergabung</div>
-                </div>
-                <div style="width:1px; background:rgba(255,255,255,0.12)"></div>
-                <div>
-                    <div class="hero-stat-num">98%</div>
-                    <div class="hero-stat-label">Tingkat Kepuasan</div>
-                </div>
-            </div> --}}
         </div>
 
         <div class="hero-image-wrap">
@@ -617,8 +601,8 @@
     <div class="container">
         <div class="section-header reveal">
             <span class="section-eyebrow">Tutorial</span>
-            <h2 class="section-title">Cara Menggunakan Simagang</h2>
-            <p class="section-desc">Ikuti langkah-langkah berikut untuk memahami alur penggunaan aplikasi secara cepat dan mudah.</p>
+                <h2 class="section-title">Cara Menggunakan <span class="font-etna" style="color:#9d272a">SI</span><span class="font-etna" style="color:#086bb0">MA</span><span class="font-etna" style="color:#2dabe2">GA</span><span class="font-etna" style="color:#efc400">NG</span> </h2>
+                <p class="section-desc">Ikuti langkah-langkah berikut untuk memahami alur penggunaan aplikasi secara cepat dan mudah.</p>
         </div>
 
         <!-- Step 1 -->
@@ -813,8 +797,8 @@
                 </div>
             </div>
             <div class="cta-cards reveal">
-                <a href="#" class="cta-card">
-                    <div class="cta-card-left">
+                <a href="{{ route('institusi.create') }}" class="cta-card">
+                    <div id="daftar" class="cta-card-left">
                         <div class="cta-card-icon" style="background:linear-gradient(135deg,#0ea5e9,#22d3ee)">
                             <i class="fas fa-school"></i>
                         </div>
@@ -825,26 +809,14 @@
                     </div>
                     <i class="fas fa-arrow-right cta-arrow"></i>
                 </a>
-                <a href="#" class="cta-card">
-                    <div class="cta-card-left">
+                <a href="{{ route('institusi.create') }}" class="cta-card">
+                    <div id="daftar" class="cta-card-left">
                         <div class="cta-card-icon" style="background:linear-gradient(135deg,#f59e0b,#fbbf24)">
                             <i class="fas fa-graduation-cap"></i>
                         </div>
                         <div>
                             <div class="cta-card-name">Universitas / Kampus</div>
                             <div class="cta-card-sub">Wajib melalui Departemen terkait</div>
-                        </div>
-                    </div>
-                    <i class="fas fa-arrow-right cta-arrow"></i>
-                </a>
-                <a href="{{ route('register') }}" class="cta-card" style="background:rgba(34,211,238,0.12); border-color:rgba(34,211,238,0.3)">
-                    <div class="cta-card-left">
-                        <div class="cta-card-icon" style="background:linear-gradient(135deg,#22d3ee,#38bdf8)">
-                            <i class="fas fa-user-plus"></i>
-                        </div>
-                        <div>
-                            <div class="cta-card-name">Daftar Sebagai Peserta</div>
-                            <div class="cta-card-sub">Langsung mulai perjalanan magang Anda</div>
                         </div>
                     </div>
                     <i class="fas fa-arrow-right cta-arrow"></i>
