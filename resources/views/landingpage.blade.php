@@ -345,16 +345,29 @@
 
         /* ── TESTIMONIALS ── */
         .section-testimonials { background: white; padding: 6rem 0; }
-        .testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+        .testi-slider {
+            position: relative;
+            overflow: hidden;
+            margin-top: 2rem;
+        }
+        .testi-track {
+            display: flex;
+            gap: 1.5rem;
+            transition: transform 0.55s ease;
+            will-change: transform;
+        }
         .testi-card {
-            background: #f0f7ff;
+            flex: 0 0 100%;
+            max-width: 100%;
+            background: #f8fbff;
             border: 1.5px solid #bfdbfe;
             border-radius: 24px;
             padding: 2rem;
             position: relative;
-            transition: all 0.3s;
+            transition: transform 0.35s, box-shadow 0.35s;
+            min-height: 320px;
         }
-        .testi-card:hover { transform: translateY(-4px); box-shadow: 0 16px 44px rgba(14,99,201,0.1); }
+        .testi-card:hover { transform: translateY(-4px); box-shadow: 0 16px 44px rgba(14,99,201,0.15); }
         .testi-quote-icon {
             font-size: 2.5rem;
             color: #bfdbfe;
@@ -379,6 +392,16 @@
         }
         .testi-name { font-weight: 700; font-size: 14px; color: #0f2d4a; }
         .testi-inst { font-size: 12px; color: #64748b; margin-top: 2px; }
+        .testi-dots { display: flex; justify-content: center; gap: 10px; margin-top: 1.75rem; }
+        .testi-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 9999px;
+            background: #cbd5e1;
+            cursor: pointer;
+            transition: transform 0.25s ease, background 0.25s ease;
+        }
+        .testi-dot.active { background: #1d6fca; transform: scale(1.15); }
 
         /* ── PARTNERS ── */
         .section-partners { background: #f0f7ff; padding: 5rem 0; }
@@ -714,43 +737,46 @@
             <h2 class="section-title">Dipercaya oleh Banyak Institusi</h2>
             <p class="section-desc">Berbagai kampus dan sekolah sudah menggunakan Simagang untuk mengelola program magang mereka.</p>
         </div>
-        <div class="testi-grid">
-            <div class="testi-card reveal">
-                <div class="testi-quote-icon">"</div>
-                <div class="testi-stars">★★★★★</div>
-                <p class="testi-text">Simagang membuat program magang lebih terstruktur dan mudah diawasi. Semua data tersimpan rapih dan mudah diakses kapan saja.</p>
-                <div class="testi-author">
-                    <div class="testi-avatar">MT</div>
-                    <div>
-                        <div class="testi-name">Bapak Ramli S.T</div>
-                        <div class="testi-inst">Mentor — Universitas Hasanuddin</div>
+        <div class="testi-slider reveal">
+            <div class="testi-track">
+                <div class="testi-card">
+                    <div class="testi-quote-icon">"</div>
+                    <div class="testi-stars">★★★★★</div>
+                    <p class="testi-text">Simagang membuat program magang lebih terstruktur dan mudah diawasi. Semua data tersimpan rapih dan mudah diakses kapan saja.</p>
+                    <div class="testi-author">
+                        <div class="testi-avatar">MT</div>
+                        <div>
+                            <div class="testi-name">Bapak Ramli S.T</div>
+                            <div class="testi-inst">Mentor — Universitas Hasanuddin</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testi-card">
+                    <div class="testi-quote-icon">"</div>
+                    <div class="testi-stars">★★★★★</div>
+                    <p class="testi-text">Siswa lebih disiplin karena laporan dan absensi bisa dipantau secara real time. Sangat membantu koordinasi antar pihak.</p>
+                    <div class="testi-author">
+                        <div class="testi-avatar">AR</div>
+                        <div>
+                            <div class="testi-name">Andi Riswan</div>
+                            <div class="testi-inst">Peserta Magang — SMK Telkom Makassar</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testi-card">
+                    <div class="testi-quote-icon">"</div>
+                    <div class="testi-stars">★★★★★</div>
+                    <p class="testi-text">Platform-nya responsif dan tampilannya sangat bersih — cocok untuk program kampus maupun industri. Rekomendasi banget!</p>
+                    <div class="testi-author">
+                        <div class="testi-avatar">SR</div>
+                        <div>
+                            <div class="testi-name">Siti Rahma M.Pd</div>
+                            <div class="testi-inst">Koordinator — Universitas Negeri Makassar</div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="testi-card reveal">
-                <div class="testi-quote-icon">"</div>
-                <div class="testi-stars">★★★★★</div>
-                <p class="testi-text">Siswa lebih disiplin karena laporan dan absensi bisa dipantau secara real time. Sangat membantu koordinasi antar pihak.</p>
-                <div class="testi-author">
-                    <div class="testi-avatar">AR</div>
-                    <div>
-                        <div class="testi-name">Andi Riswan</div>
-                        <div class="testi-inst">Peserta Magang — SMK Telkom Makassar</div>
-                    </div>
-                </div>
-            </div>
-            <div class="testi-card reveal">
-                <div class="testi-quote-icon">"</div>
-                <div class="testi-stars">★★★★★</div>
-                <p class="testi-text">Platform-nya responsif dan tampilannya sangat bersih — cocok untuk program kampus maupun industri. Rekomendasi banget!</p>
-                <div class="testi-author">
-                    <div class="testi-avatar">SR</div>
-                    <div>
-                        <div class="testi-name">Siti Rahma M.Pd</div>
-                        <div class="testi-inst">Koordinator — Universitas Negeri Makassar</div>
-                    </div>
-                </div>
-            </div>
+            <div class="testi-dots"></div>
         </div>
     </div>
 </section>
@@ -875,6 +901,51 @@
         });
     }, { threshold: 0.5 });
     sections.forEach(s => navObserver.observe(s));
+
+    /* Testimonial slider */
+    const testiTrack = document.querySelector('.testi-track');
+    const testiCards = Array.from(document.querySelectorAll('.testi-card'));
+    const testiDots = document.querySelector('.testi-dots');
+    let testiIndex = 0;
+    let testiTimer;
+
+    function createTestiDots() {
+        testiCards.forEach((_, index) => {
+            const dot = document.createElement('button');
+            dot.type = 'button';
+            dot.className = 'testi-dot';
+            dot.addEventListener('click', () => setTestiSlide(index));
+            testiDots.appendChild(dot);
+        });
+    }
+
+    function setTestiSlide(index) {
+        testiIndex = index;
+        testiTrack.style.transform = `translateX(-${testiIndex * 100}%)`;
+        document.querySelectorAll('.testi-dot').forEach((dot, dotIndex) => {
+            dot.classList.toggle('active', dotIndex === testiIndex);
+        });
+    }
+
+    function startTestiRotation() {
+        testiTimer = setInterval(() => {
+            setTestiSlide((testiIndex + 1) % testiCards.length);
+        }, 4500);
+    }
+
+    function stopTestiRotation() {
+        clearInterval(testiTimer);
+    }
+
+    if (testiTrack && testiDots) {
+        createTestiDots();
+        setTestiSlide(0);
+        startTestiRotation();
+        testiTrack.addEventListener('mouseenter', stopTestiRotation);
+        testiTrack.addEventListener('mouseleave', startTestiRotation);
+        testiDots.addEventListener('mouseenter', stopTestiRotation);
+        testiDots.addEventListener('mouseleave', startTestiRotation);
+    }
 </script>
 
 </body>
