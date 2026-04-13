@@ -29,6 +29,7 @@ use App\Http\Controllers\Mentor\ProfileController as MentorProfileController;
 use App\Http\Controllers\Mentor\CertificateController;
 use App\Http\Controllers\Admin\AdminCertificateController;
 use App\Http\Controllers\Admin\TeamController;
+use App\Http\Controllers\Institusi\DaftarInstitusiController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
@@ -66,6 +67,8 @@ Route::get('/convert-font', function () {
     return 'Poppins Extralight berhasil di-convert';
 });
 
+
+
 // API Routes for Institution Search
 Route::get('/api/institutions/search', [InstitutionController::class, 'searchUniversities'])->name('api.institutions.search');
 Route::get('/api/institutions/all', [InstitutionController::class, 'getAllUniversities'])->name('api.institutions.all');
@@ -79,6 +82,9 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
+
+// Daftar Institusi
+Route::resource('institusi', DaftarInstitusiController::class);
 
 // File Download Route
 Route::get('/download/{path}', function ($path) {

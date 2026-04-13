@@ -68,4 +68,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Mentor::class);
     }
+
+    public function institusi()
+    {
+        return $this->hasOne(Institusi::class);
+    }
 }
