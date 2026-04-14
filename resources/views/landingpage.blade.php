@@ -75,6 +75,58 @@
         }
         .btn-login:hover { transform: translateY(-1px); box-shadow: 0 6px 22px rgba(14,99,201,0.4); }
 
+        .nav-toggle {
+            display: none;
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            border: 1.5px solid rgba(14,99,201,0.18);
+            background: white;
+            color: #1d6fca;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .nav-toggle:hover { background: #eff6ff; }
+
+        .mobile-menu {
+            position: absolute;
+            top: 70px;
+            right: 1rem;
+            width: min(280px, calc(100% - 2rem));
+            background: white;
+            border: 1px solid #dbeafe;
+            border-radius: 18px;
+            box-shadow: 0 18px 40px rgba(14,99,201,0.12);
+            display: none;
+            flex-direction: column;
+            gap: 0.65rem;
+            padding: 0.85rem 0.9rem 1rem;
+            z-index: 55;
+        }
+        .mobile-menu.open { display: flex; }
+        .mobile-menu a {
+            display: block;
+            text-decoration: none;
+            color: #0f2d4a;
+            font-weight: 600;
+            padding: 12px 16px;
+            border-radius: 14px;
+            transition: background 0.2s, color 0.2s;
+        }
+        .mobile-menu a:hover { background: #eff6ff; }
+        .mobile-menu .login-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #1d6fca;
+            color: white;
+            border-radius: 14px;
+            padding: 12px 16px;
+        }
+        .mobile-menu .login-link:hover { background: #0ea5e9; }
+
         /* ── HERO ── */
         .hero {
             position: relative;
@@ -509,6 +561,8 @@
             .partners-grid { grid-template-columns: repeat(2, 1fr); }
             .cta-inner { grid-template-columns: 1fr; }
             .nav-links { display: none; }
+            .nav-toggle { display: inline-flex; }
+            .btn-login { display: none; }
         }
         @media (max-width: 640px) {
             .hero-inner { padding: 2.5rem 1rem; gap: 1.5rem; }
@@ -540,6 +594,22 @@
             <a href="#testimonials">Testimoni</a>
             <a href="#partners">Partner</a>
         </nav>
+
+        <button type="button" class="nav-toggle" aria-label="Buka menu" aria-expanded="false">
+            <i class="fas fa-bars" style="font-size:18px"></i>
+        </button>
+
+        <div class="mobile-menu" aria-hidden="true">
+            <a href="#hero">Beranda</a>
+            <a href="#process">Proses</a>
+            <a href="#usage">Fitur</a>
+            <a href="#testimonials">Testimoni</a>
+            <a href="#partners">Partner</a>
+            <a href="{{ route('login') }}" class="login-link">
+                <i class="fas fa-sign-in-alt" style="font-size:13px; margin-right:8px"></i>
+                Login
+            </a>
+        </div>
 
         <a href="{{ route('login') }}" class="btn-login">
             <i class="fas fa-sign-in-alt" style="font-size:13px"></i>
@@ -759,8 +829,6 @@
                 <div class="testi-stars">★★★★★</div>
                 <p class="testi-text">Simagang memudahkan saya mencatat absensi, mengirim logbook, dan melihat progres magang dalam satu platform. Semua tugas dan feedback mentor jadi lebih terorganisir.</p>
                 <div class="testi-author">
-
-                    <div class="testi-author">
                     <div class="testi-avatar">
                         <img src="{{ asset('storage/profiles/user2.jpg') }}" alt="Foto Ramli">
                     </div>
@@ -770,23 +838,18 @@
                     </div>
                 </div>
             </div>
-
-            </div>
             <div class="testi-card reveal">
                 <div class="testi-quote-icon">"</div>
                 <div class="testi-stars">★★★★★</div>
                 <p class="testi-text">Tampilan Simagang bersih dan intuitif, jadi saya bisa bekerja lebih fokus. Sistem ini sangat membantu menyelesaikan laporan dan persiapan sertifikat magang.</p>
-                    <div class="testi-author">
-                        <div class="testi-author">
-                        <div class="testi-avatar">
-                            <img src="{{ asset('storage/profiles/user3.png') }}" alt="Foto Ramli">
-                        </div>
-                        <div>
-                            <div class="testi-name">An Naura Erwana Dwi</div>
-                            <div class="testi-inst">Mahasiswa — Universitas Hasanuddin</div>
-                        </div>
+                <div class="testi-author">
+                    <div class="testi-avatar">
+                        <img src="{{ asset('storage/profiles/user3.png') }}" alt="Foto An Naura">
                     </div>
-                </div>
+                    <div>
+                        <div class="testi-name">An Naura Erwana Dwi</div>
+                        <div class="testi-inst">Mahasiswa — Universitas Hasanuddin</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -817,7 +880,7 @@
     </div>
 </section>
 
-<!-- ===== CTA / PENDAFTARAN ===== -->
+<!-- ===== PENDAFTARAN ===== -->
 <section class="section-cta">
     <div class="container">
         <div class="cta-inner">
@@ -842,7 +905,7 @@
             </div>
             <div class="cta-cards reveal">
                 <a href="{{ route('institusi.create') }}" class="cta-card">
-                    <div id="daftar" class="cta-card-left">
+                    <div class="cta-card-left">
                         <div class="cta-card-icon" style="background:linear-gradient(135deg,#0ea5e9,#22d3ee)">
                             <i class="fas fa-school"></i>
                         </div>
@@ -854,7 +917,7 @@
                     <i class="fas fa-arrow-right cta-arrow"></i>
                 </a>
                 <a href="{{ route('institusi.create') }}" class="cta-card">
-                    <div id="daftar" class="cta-card-left">
+                    <div class="cta-card-left">
                         <div class="cta-card-icon" style="background:linear-gradient(135deg,#f59e0b,#fbbf24)">
                             <i class="fas fa-graduation-cap"></i>
                         </div>
@@ -913,6 +976,24 @@
         });
     }, { threshold: 0.5 });
     sections.forEach(s => navObserver.observe(s));
+
+    const navToggle = document.querySelector('.nav-toggle');
+    const mobileMenu = document.querySelector('.mobile-menu');
+    if (navToggle && mobileMenu) {
+        navToggle.addEventListener('click', () => {
+            const isOpen = mobileMenu.classList.toggle('open');
+            navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+            mobileMenu.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+        });
+
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('open');
+                navToggle.setAttribute('aria-expanded', 'false');
+                mobileMenu.setAttribute('aria-hidden', 'true');
+            });
+        });
+    }
 </script>
 
 </body>
