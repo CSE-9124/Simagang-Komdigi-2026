@@ -35,12 +35,14 @@ class DaftarInstitusiController extends Controller
         $validated = $request->validate([
             'nama_admin' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'unique:users'],
-            'password' => ['required', 'confirmed'],
+            'password' => ['required'],
 
             'nama_institusi' => ['required', 'string', 'max:255'],
             'jenis_institusi' => ['required', 'in:sekolah,kampus'],
             'nomor_identitas' => ['nullable', 'string'],
             'no_hp' => ['required', 'string'],
+            'fakultas' => ['nullable', 'string'],
+            'departemen' => ['nullable', 'string'],
         ]);
 
         // 1. simpan user
@@ -58,9 +60,11 @@ class DaftarInstitusiController extends Controller
             'jenis_institusi' => $validated['jenis_institusi'],
             'nomor_identitas' => $validated['nomor_identitas'] ?? null,
             'no_hp' => $validated['no_hp'],
+            'fakultas' => $validated['fakultas'] ?? null,
+            'departemen' => $validated['departemen'] ?? null,
         ]);
 
-        return redirect()->route('institusi.index')
+        return redirect()->route('institusi.create')
             ->with('success', 'Data institusi berhasil ditambahkan');
     }
 

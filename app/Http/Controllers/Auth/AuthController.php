@@ -137,6 +137,8 @@ class AuthController extends Controller
                 return redirect()->route('mentor.dashboard');
             } elseif ($user->isIntern()) {
                 return redirect()->route('intern.dashboard');
+            } elseif ($user->isInstitusi()) {
+                return redirect()->route('institusi.dashboard');
             }
 
             // Fallback safe redirect

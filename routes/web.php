@@ -30,6 +30,8 @@ use App\Http\Controllers\Mentor\CertificateController;
 use App\Http\Controllers\Admin\AdminCertificateController;
 use App\Http\Controllers\Admin\TeamController;
 use App\Http\Controllers\Institusi\DaftarInstitusiController;
+use App\Http\Controllers\Institusi\DashboardController as InstitusiDashboardController;
+use App\Http\Controllers\Institusi\PengajuanController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
@@ -84,7 +86,13 @@ Route::middleware('guest')->group(function () {
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 
 // Daftar Institusi
+// Route::get('/institusi/dashboard', [InstitusiDashboardController::class, 'index'])->name('institusi.dashboard');
+Route::middleware('auth', 'institusi')->group(function () {
+    Route::get('/institusi/dashboard', [InstitusiDashboardController::class, 'index'])->name('institusi.dashboard');
+    Route::get('/institusi/pengajuan', [PengajuanController::class, 'index'])->name('institusi.pengajuan.index');
+}); 
 Route::resource('institusi', DaftarInstitusiController::class);
+
 
 // File Download Route
 Route::get('/download/{path}', function ($path) {

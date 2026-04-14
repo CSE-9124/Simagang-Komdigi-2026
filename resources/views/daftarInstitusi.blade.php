@@ -14,6 +14,31 @@
     <div class="bg-gradient-to-br from-blue-50 via-indigo-50 to-blue-100 min-h-screen p-5">
         <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
 
+            @if(session('success'))
+                <div class="mb-4">
+                    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+                        <span class="block sm:inline">{{ session('success') }}</span>
+                    </div>
+                </div>
+            @endif
+
+            @if(session('error') || $errors->any())
+                <div class="mb-4">
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                        @if(session('error'))
+                            <span class="block sm:inline">{{ session('error') }}</span>
+                        @endif
+                        @if($errors->any())
+                            <ul class="mt-2 list-disc list-inside">
+                                @foreach($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        @endif
+                    </div>
+                </div>
+            @endif
+
             <!-- Header -->
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mt-6 mb-6">
                 <div>
@@ -27,7 +52,7 @@
             </div>
 
             <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
-                <form method="POST" action="{{ route('admin.intern.store') }}" enctype="multipart/form-data">
+                <form method="POST" action="{{ route('institusi.store') }}" enctype="multipart/form-data">
                     @csrf
 
                     <div class="p-8 bg-gray-50 border-b">
@@ -37,7 +62,7 @@
                             </div>
                             <div>
                                 <h2 class="text-lg font-bold text-blue-900">Informasi Institusi</h2>
-                                <p class="text-sm text-gray-600">Data institusi </p>
+                                <p class="text-sm text-gray-600">Masukkan informasi lengkap mengenai sekolah atau kampus Anda.</p>
                             </div>
                         </div>
 
@@ -63,14 +88,34 @@
                                 <label class="text-sm font-medium text-blue-900 mb-2">
                                     Jenis Institusi <span class="text-red-500">*</span>
                                 </label>
-                                <select name="jenis_institusi" required
+                                <select id="jenisInstitusi" name="jenis_institusi" required
                                         class="mt-1 w-full px-4 py-3 rounded-xl border border-gray-300
                                             focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                                     <option value="">Pilih</option>
-                                    <option value="Sekolah" {{ old('jenis_institusi')=='Sekolah'?'selected':'' }}>Sekolah</option>
-                                    <option value="Kampus" {{ old('jenis_institusi')=='Kampus'?'selected':'' }}>Kampus</option>
+                                    <option value="sekolah" {{ old('jenis_institusi')=='sekolah'?'selected':'' }}>Sekolah</option>
+                                    <option value="kampus" {{ old('jenis_institusi')=='kampus'?'selected':'' }}>Kampus</option>
                                 </select>
                                 @error('jenis_institusi')<p class="text-sm text-red-500 mt-1">{{ $message }}</p>@enderror
+                            </div>
+
+                            <div id="kampusFields" class="hidden">
+                                <div class="mt-4">
+                                    <label class="text-sm font-medium text-blue-900 mb-2">
+                                        Fakultas
+                                    </label>
+                                    <input type="text" name="fakultas" value="{{ old('fakultas') }}"
+                                        class="mt-1 w-full px-4 py-3 rounded-xl border border-gray-300
+                                            focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                </div>
+
+                                <div class="mt-4">
+                                    <label class="text-sm font-medium text-blue-900 mb-2">
+                                        Departemen
+                                    </label>
+                                    <input type="text" name="departemen" value="{{ old('departemen') }}"
+                                        class="mt-1 w-full px-4 py-3 rounded-xl border border-gray-300
+                                            focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                </div>
                             </div>
 
                         </div>
@@ -82,16 +127,16 @@
                             </div>
                             <div>
                                 <h2 class="text-lg font-bold text-blue-900">Informasi Pribadi Admin</h2>
-                                <p class="text-sm text-gray-600">Data diri dan kontak admin institusi untuk informasi lebih lanjut</p>
+                                <p class="text-sm text-gray-600">Masukkan informasi pribadi admin sebagai penanggung jawab institusi.</p>
                             </div>
                         </div>
 
                         <div class="grid grid-cols-1">
                             <div>
                                 <label class="text-sm font-medium text-blue-900 mb-2">
-                                    Nama Lengkap <span class="text-red-500">*</span>
+                                    Nama <span class="text-red-500">*</span>
                                 </label>
-                                <input type="text" name="name" value="{{ old('nama_admin') }}" required
+                                <input type="text" name="nama_admin" value="{{ old('nama_admin') }}" required
                                         class="mt-1 w-full px-4 py-3 rounded-xl border border-gray-300 shadow-sm
                                             focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                                 @error('nama_admin')<p class="text-sm text-red-500 mt-1">{{ $message }}</p>@enderror
@@ -131,15 +176,32 @@
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="text-sm font-medium text-blue-900 mb-2">
+                        <div class="relative">
+                            <label class="text-sm font-medium text-blue-900 mb-2 block">
                                 Password <span class="text-red-500">*</span>
                             </label>
-                            <input type="password" name="password" required
-                                class="mt-1 w-full px-4 py-3 rounded-xl border border-gray-300
+
+                            <input 
+                                type="password" 
+                                name="password" 
+                                id="password"
+                                required
+                                class="mt-1 w-full px-4 py-3 pr-12 rounded-xl border border-gray-300
                                     focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                            @error('password')<p class="text-sm text-red-500 mt-1">{{ $message }}</p>@enderror
+
+                            <!-- Button show/hide -->
+                            <button 
+                                type="button"
+                                onclick="togglePassword()"
+                                class="absolute right-3 top-[42px] text-gray-500 hover:text-blue-600">
+                                <i id="iconEye" class="fas fa-eye"></i>
+                            </button>
+
+                            @error('password')
+                                <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
+
 
                         <div>
                             <label class="text-sm font-medium text-blue-900 mb-2">
@@ -157,7 +219,6 @@
                 <div class="px-8 py-6 bg-gray-50 flex flex-col-reverse md:flex-row md:items-center md:justify-between gap-4">
                     <a href="{{ route('landing') }}" class="inline-flex justify-center md:justify-start items-center gap-2 text-blue-600 hover:text-blue-800 font-semibold transition">
                         <i class="fas fa-arrow-left"></i>
-                        Kembali
                     </a>
 
                     <button type="submit"
@@ -172,4 +233,40 @@
         </div>
     </div>
 </body>
+
+<script>
+    function togglePassword() {
+        const input = document.getElementById("password");
+        const icon = document.getElementById("iconEye");
+
+        if (input.type === "password") {
+            input.type = "text";
+            icon.classList.remove("fa-eye");
+            icon.classList.add("fa-eye-slash");
+        } else {
+            input.type = "password";
+            icon.classList.remove("fa-eye-slash");
+            icon.classList.add("fa-eye");
+        }
+    }
+
+    const jenisSelect = document.getElementById('jenisInstitusi');
+    const kampusFields = document.getElementById('kampusFields');
+
+    function toggleKampusFields() {
+        if (jenisSelect.value === 'kampus') {
+            kampusFields.classList.remove('hidden');
+        } else {
+            kampusFields.classList.add('hidden');
+        }
+    }
+
+    // jalankan saat halaman load (penting untuk old value)
+    document.addEventListener('DOMContentLoaded', function () {
+        toggleKampusFields();
+    });
+
+    // jalankan saat user ganti pilihan
+    jenisSelect.addEventListener('change', toggleKampusFields);
+</script>
 </html>

@@ -9,7 +9,7 @@ class Institusi extends Model
 {
     use HasFactory;
 
-    protected $table = 'institusi';
+    protected $table = 'institusis';
 
     protected $fillable = [
         'user_id',
@@ -17,6 +17,8 @@ class Institusi extends Model
         'jenis_institusi',
         'nomor_identitas',
         'no_hp',
+        'fakultas',
+        'departemen',
     ];
 
 

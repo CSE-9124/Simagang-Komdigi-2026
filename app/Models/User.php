@@ -64,6 +64,11 @@ class User extends Authenticatable
         return $this->role !== null && $this->role === 'mentor';
     }
 
+    public function isInstitusi()
+    {
+        return $this->role !== null && $this->role === 'institusi';
+    }
+
     public function mentor()
     {
         return $this->hasOne(Mentor::class);
