@@ -27,7 +27,7 @@
             </div>
         @endif --}}
 
-        @if($errors->any())
+        {{-- @if($errors->any())
             <div class="mb-6 bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-xl" role="alert">
                 <div class="flex items-start">
                     <i class="fas fa-exclamation-circle mr-3 mt-1"></i>
@@ -38,7 +38,7 @@
                     </ul>
                 </div>
             </div>
-        @endif
+        @endif --}}
 
         <form id="profile-form" method="POST" action="{{ route('intern.profile.update') }}" enctype="multipart/form-data">
             @csrf
