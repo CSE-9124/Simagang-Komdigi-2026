@@ -24,14 +24,7 @@
                             <div class="text-center md:text-left flex-1">
                                 <h1 class="text-3xl font-bold text-white mb-2">{{ $intern->name }}</h1>
                                 <p class="text-blue-100 mb-1">{{ $intern->institution }}</p>
-                                <p class="text-blue-100 text-sm mb-4">{{ $intern->education_level }} - {{ $intern->major }}
-                                </p>
-                                <div class="flex flex-col md:flex-row gap-3">
-                                    <a href="{{ route('intern.profile.edit') }}"
-                                        class="inline-flex items-center justify-center px-4 py-2 bg-white text-blue-600 font-semibold rounded-lg hover:bg-blue-50 transition-all duration-300 shadow-md">
-                                        <i class="fas fa-edit mr-2"></i>Edit Profile
-                                    </a>
-                                </div>
+                                <p class="text-blue-100 text-sm mb-4">{{ $intern->education_level }} - {{ $intern->major }}</p>
                             </div>
                         </div>
                         @if ($certificate && ($certificate->issue_date->isToday() || $certificate->issue_date->isPast()))

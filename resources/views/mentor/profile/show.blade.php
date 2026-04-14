@@ -7,30 +7,30 @@
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Header -->
         <div class="mb-8">
-            <div class="flex justify-between items-center">
+            <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                     <h1 class="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2">Profile Mentor</h1>
                     <p class="text-gray-600 mt-1">Informasi profil Anda</p>
                 </div>
-                <div class="flex space-x-3">
-                    <a href="{{ route('mentor.profile.edit') }}" class="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all duration-300">
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+                    <a href="{{ route('mentor.profile.edit') }}" class="inline-flex w-full justify-center items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all duration-300 sm:w-auto">
                         <i class="fas fa-edit mr-2"></i>Edit Profile
                     </a>
-                    <a href="{{ route('mentor.dashboard') }}" class="inline-flex items-center px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-semibold rounded-lg transition-all duration-300">
+                    <a href="{{ route('mentor.dashboard') }}" class="inline-flex w-full justify-center items-center px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-semibold rounded-lg transition-all duration-300 sm:w-auto">
                         <i class="fas fa-arrow-left mr-2"></i>Kembali
                     </a>
                 </div>
             </div>
         </div>
 
-        @if(session('success'))
+        {{-- @if(session('success'))
             <div class="mb-6 bg-green-100 border border-green-400 text-green-700 px-6 py-4 rounded-xl" role="alert">
                 <div class="flex items-center">
                     <i class="fas fa-check-circle mr-3"></i>
                     <span class="block sm:inline">{{ session('success') }}</span>
                 </div>
             </div>
-        @endif
+        @endif --}}
 
         <!-- Profile Info -->
         <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
