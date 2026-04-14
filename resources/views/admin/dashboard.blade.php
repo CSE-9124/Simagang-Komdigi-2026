@@ -85,7 +85,7 @@
                 <div class="p-6">
                     <div class="flex items-center justify-between">
                         <div class="flex-1">
-                            <p class="text-sm font-medium text-gray-600 mb-1">Total Alfa</p>
+                            <p class="text-sm font-medium text-gray-600 mb-1">Total Tidak Hadir</p>
                             <h3 class="text-3xl font-bold text-gray-900">{{ $totalAlfa }}</h3>
                         </div>
                         <div class="w-16 h-16 bg-gradient-to-br from-gray-500 to-gray-600 rounded-2xl flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300">

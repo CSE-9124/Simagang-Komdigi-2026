@@ -89,7 +89,7 @@
                     <div class="p-4">
                         <div class="flex items-center justify-between gap-3">
                             <div class="flex-1 min-w-0">
-                                <p class="text-xs font-medium text-gray-600 mb-1">Alfa Hari Ini</p>
+                                <p class="text-xs font-medium text-gray-600 mb-1">Tidak Hadir</p>
                                 <h3 class="text-2xl font-bold text-gray-900">
                                     {{ $todayAttendances->where('status', 'alfa')->count() }}</h3>
                             </div>

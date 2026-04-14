@@ -69,7 +69,7 @@
                                     <option value="hadir" @selected(request('status') === 'hadir')>Hadir</option>
                                     <option value="izin" @selected(request('status') === 'izin')>Izin</option>
                                     <option value="sakit" @selected(request('status') === 'sakit')>Sakit</option>
-                                    <option value="alfa" @selected(request('status') === 'alfa')>Alfa</option>
+                                    <option value="alfa" @selected(request('status') === 'alfa')>Tidak Hadir</option>
                                 </select>
                             </div>
 
