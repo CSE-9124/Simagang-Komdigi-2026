@@ -218,6 +218,18 @@
             border-radius: 50px;
             margin-bottom: 1rem;
         }
+        .section-eyebrow-tutorial {
+            display: inline-block;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: #1d6fca;
+            background: #c7dfff;
+            padding: 5px 14px;
+            border-radius: 50px;
+            margin-bottom: 1rem;
+        }
         .section-title { font-size: clamp(1.75rem, 3vw, 2.5rem); font-weight: 800; color: #0f2d4a; margin: 0 0 1rem; line-height: 1.2; }
         .section-desc { font-size: 1.05rem; color: #4b6580; line-height: 1.7; margin: 0; }
         .container { max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; }
@@ -365,17 +377,24 @@
         .testi-text { font-size: 1rem; color: #4b6580; line-height: 1.7; margin: 0 0 1.5rem; font-style: italic; }
         .testi-author { display: flex; align-items: center; gap: 12px; padding-top: 1.25rem; border-top: 1px solid #bfdbfe; }
         .testi-avatar {
-            width: 44px;
-            height: 44px;
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #1d6fca, #0ea5e9);
-            display: flex;
+            overflow: hidden;
+            flex-shrink: 0;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
+            background: linear-gradient(135deg, #1d6fca, #0ea5e9);
             color: white;
             font-weight: 700;
             font-size: 15px;
-            flex-shrink: 0;
+        }
+        .testi-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
         }
         .testi-name { font-weight: 700; font-size: 14px; color: #0f2d4a; }
         .testi-inst { font-size: 12px; color: #64748b; margin-top: 2px; }
@@ -604,7 +623,7 @@
 <section id="usage" class="section-usage">
     <div class="container">
         <div class="section-header reveal">
-            <span class="section-eyebrow">Tutorial</span>
+            <span class="section-eyebrow-tutorial">Tutorial</span>
                 <h2 class="section-title">Cara Menggunakan <span class="font-etna" style="color:#9d272a">SI</span><span class="font-etna" style="color:#086bb0">MA</span><span class="font-etna" style="color:#2dabe2">GA</span><span class="font-etna" style="color:#efc400">NG</span> </h2>
                 <p class="section-desc">Ikuti langkah-langkah berikut untuk memahami alur penggunaan aplikasi secara cepat dan mudah.</p>
         </div>
@@ -633,11 +652,13 @@
                 <div class="step-badge"><i class="fas fa-flag" style="font-size:10px"></i> Langkah 2</div>
                 <div class="step-icon-wrap"><i class="fas fa-calendar-check"></i></div>
                 <h3 class="step-title">Kelola Absensi</h3>
-                <p class="step-desc">Catat kehadiran harian dan isi logbook aktivitas magang secara rutin agar perkembangan kerja dapat dipantau dengan lebih terstruktur.</p>
+                <p class="step-desc">
+                    Lakukan absensi harian sebagai bukti kehadiran selama kegiatan magang berlangsung secara akurat dan real-time.
+                </p>
                 <ul class="step-list">
-                    <li>Absensi real time dengan verifikasi lokasi</li>
-                    <li>Logbook aktivitas harian yang terstruktur</li>
-                    <li>Notifikasi otomatis ke mentor</li>
+                    <li>Check-in dan check-out harian secara digital</li>
+                    <li>Verifikasi lokasi untuk memastikan kehadiran valid</li>
+                    <li>Riwayat absensi tersimpan otomatis</li>
                 </ul>
             </div>
             <div class="step-image-wrap">
@@ -648,17 +669,19 @@
         <!-- Step 3 -->
         <div class="step-block reveal">
             <div class="step-image-wrap">
-                <img src="{{ asset('storage/tutorial/logbook.png') }}" alt="Upload Laporan" class="step-image">
+                <img src="{{ asset('storage/tutorial/logbook.png') }}" alt="Logbook" class="step-image">
             </div>
             <div>
                 <div class="step-badge"><i class="fas fa-flag" style="font-size:10px"></i> Langkah 3</div>
-                <div class="step-icon-wrap"><i class="fas fa-file-alt"></i></div>
-                <h3 class="step-title">Upload Laporan Akhir</h3>
-                <p class="step-desc">Upload laporan akhir magang dan lihat feedback dari mentor untuk evaluasi hasil kerja secara menyeluruh.</p>
+                <div class="step-icon-wrap"><i class="fas fa-book"></i></div>
+                <h3 class="step-title">Kelola Logbook</h3>
+                <p class="step-desc">
+                    Catat aktivitas pekerjaan harian untuk mendokumentasikan progres dan hasil kerja selama magang.
+                </p>
                 <ul class="step-list">
-                    <li>Upload dokumen dalam berbagai format</li>
-                    <li>Feedback mentor langsung di platform</li>
-                    <li>Sertifikat digital otomatis setelah selesai</li>
+                    <li>Mencatat aktivitas kerja setiap hari</li>
+                    <li>Riwayat kegiatan tersimpan rapi dan terstruktur</li>
+                    <li>Dapat dipantau dan direview oleh mentor</li>
                 </ul>
             </div>
         </div>
@@ -667,18 +690,20 @@
         <!-- Step 4 -->
         <div class="step-block reveal">
             <div class="order-swap">
-                <div class="step-badge"><i class="fas fa-flag" style="font-size:10px"></i> Langkah 2</div>
-                <div class="step-icon-wrap"><i class="fas fa-calendar-check"></i></div>
-                <h3 class="step-title">Upload Laporan Akhir</h3>
-                <p class="step-desc">Upload laporan akhir magang dan lihat feedback dari mentor untuk evaluasi hasil kerja secara menyeluruh.</p>
+                <div class="step-badge"><i class="fas fa-flag" style="font-size:10px"></i> Langkah 4</div>
+                <div class="step-icon-wrap"><i class="fas fa-file-upload"></i></div>
+                <h3 class="step-title">Upload Laporan</h3>
+                <p class="step-desc">
+                    Kirim laporan akhir magang sebagai bentuk hasil evaluasi dan dokumentasi kegiatan yang telah dilakukan.
+                </p>
                 <ul class="step-list">
-                    <li>Upload dokumen dalam berbagai format</li>
-                    <li>Feedback mentor langsung di platform</li>
-                    <li>Sertifikat digital otomatis setelah selesai</li>
+                    <li>Upload laporan dalam berbagai format file</li>
+                    <li>Status laporan dapat dipantau secara langsung</li>
+                    <li>Mendapatkan feedback dan revisi dari mentor</li>
                 </ul>
             </div>
             <div class="step-image-wrap">
-                <img src="{{ asset('storage/tutorial/laporan.png') }}" alt="laporan" class="step-image">
+                <img src="{{ asset('storage/tutorial/laporan.png') }}" alt="Laporan" class="step-image">
             </div>
         </div>
 
@@ -686,16 +711,18 @@
         <!-- Step 5 -->
         <div class="step-block reveal">
             <div class="step-image-wrap flex justify-center">
-                <img src="{{ asset('storage/tutorial/mikroskill.png') }}" alt="Upload Laporan" class="step-image" style="width:50%;">
+                <img src="{{ asset('storage/tutorial/mikroskill.png') }}" alt="Mikroskill" class="step-image" style="width:50%;">
             </div>
             <div>
-                <div class="step-badge"><i class="fas fa-flag" style="font-size:10px"></i> Langkah 3</div>
-                <div class="step-icon-wrap"><i class="fas fa-file-alt"></i></div>
-                <h3 class="step-title">Upload Mikroskill</h3>
-                <p class="step-desc">Upload laporan akhir magang dan lihat feedback dari mentor untuk evaluasi hasil kerja secara menyeluruh.</p>
+                <div class="step-badge"><i class="fas fa-flag" style="font-size:10px"></i> Langkah 5</div>
+                <div class="step-icon-wrap"><i class="fas fa-award"></i></div>
+                <h3 class="step-title">Mikroskill & Sertifikat</h3>
+                <p class="step-desc">
+                    Lengkapi penilaian mikroskill untuk mengukur kompetensi yang diperoleh selama magang dan dapatkan sertifikat resmi.
+                </p>
                 <ul class="step-list">
-                    <li>Upload dokumen dalam berbagai format</li>
-                    <li>Feedback mentor langsung di platform</li>
+                    <li>Penilaian kompetensi berdasarkan aktivitas</li>
+                    <li>Validasi oleh mentor atau pembimbing</li>
                     <li>Sertifikat digital otomatis setelah selesai</li>
                 </ul>
             </div>
@@ -716,37 +743,50 @@
             <div class="testi-card reveal">
                 <div class="testi-quote-icon">"</div>
                 <div class="testi-stars">★★★★★</div>
-                <p class="testi-text">Simagang membuat program magang lebih terstruktur dan mudah diawasi. Semua data tersimpan rapih dan mudah diakses kapan saja.</p>
+                <p class="testi-text">Aplikasi ini membuat koordinasi dengan mentor jadi lebih cepat. Saya bisa melihat nilai, laporan, dan tugas harian tanpa harus bolak-balik chat.</p>
                 <div class="testi-author">
-                    <div class="testi-avatar">MT</div>
+                    <div class="testi-avatar">
+                        <img src="{{ asset('storage/profiles/user1.jpeg') }}" alt="Foto Ramli">
+                    </div>
                     <div>
-                        <div class="testi-name">Bapak Ramli S.T</div>
-                        <div class="testi-inst">Mentor — Universitas Hasanuddin</div>
+                        <div class="testi-name">Diza Sazkia</div>
+                        <div class="testi-inst">Mahasiswa — Universitas Hasanuddin</div>
                     </div>
                 </div>
             </div>
             <div class="testi-card reveal">
                 <div class="testi-quote-icon">"</div>
                 <div class="testi-stars">★★★★★</div>
-                <p class="testi-text">Siswa lebih disiplin karena laporan dan absensi bisa dipantau secara real time. Sangat membantu koordinasi antar pihak.</p>
+                <p class="testi-text">Simagang memudahkan saya mencatat absensi, mengirim logbook, dan melihat progres magang dalam satu platform. Semua tugas dan feedback mentor jadi lebih terorganisir.</p>
                 <div class="testi-author">
-                    <div class="testi-avatar">AR</div>
+
+                    <div class="testi-author">
+                    <div class="testi-avatar">
+                        <img src="{{ asset('storage/profiles/user2.jpg') }}" alt="Foto Ramli">
+                    </div>
                     <div>
-                        <div class="testi-name">Andi Riswan</div>
-                        <div class="testi-inst">Peserta Magang — SMK Telkom Makassar</div>
+                        <div class="testi-name">Nur Fadillah</div>
+                        <div class="testi-inst">Mahasiswa — Universitas Hasanuddin</div>
                     </div>
                 </div>
+            </div>
+
             </div>
             <div class="testi-card reveal">
                 <div class="testi-quote-icon">"</div>
                 <div class="testi-stars">★★★★★</div>
-                <p class="testi-text">Platform-nya responsif dan tampilannya sangat bersih — cocok untuk program kampus maupun industri. Rekomendasi banget!</p>
-                <div class="testi-author">
-                    <div class="testi-avatar">SR</div>
-                    <div>
-                        <div class="testi-name">Siti Rahma M.Pd</div>
-                        <div class="testi-inst">Koordinator — Universitas Negeri Makassar</div>
+                <p class="testi-text">Tampilan Simagang bersih dan intuitif, jadi saya bisa bekerja lebih fokus. Sistem ini sangat membantu menyelesaikan laporan dan persiapan sertifikat magang.</p>
+                    <div class="testi-author">
+                        <div class="testi-author">
+                        <div class="testi-avatar">
+                            <img src="{{ asset('storage/profiles/user3.png') }}" alt="Foto Ramli">
+                        </div>
+                        <div>
+                            <div class="testi-name">An Naura Erwana Dwi</div>
+                            <div class="testi-inst">Mahasiswa — Universitas Hasanuddin</div>
+                        </div>
                     </div>
+                </div>
                 </div>
             </div>
         </div>
@@ -757,7 +797,7 @@
 <section id="partners" class="section-partners">
     <div class="container">
         <div class="section-header reveal">
-            <span class="section-eyebrow">Partner</span>
+            <span class="section-eyebrow-tutorial">Partner</span>
             <h2 class="section-title">Institusi yang Telah Bergabung</h2>
             <p class="section-desc">Bergabunglah bersama institusi terkemuka yang sudah mempercayakan manajemen magang kepada Simagang.</p>
         </div>
