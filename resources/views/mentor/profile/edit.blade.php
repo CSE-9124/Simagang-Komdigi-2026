@@ -18,14 +18,14 @@
             </div>
         </div>
 
-        @if(session('success'))
+        {{-- @if(session('success'))
             <div class="mb-6 bg-green-100 border border-green-400 text-green-700 px-6 py-4 rounded-xl" role="alert">
                 <div class="flex items-center">
                     <i class="fas fa-check-circle mr-3"></i>
                     <span class="block sm:inline">{{ session('success') }}</span>
                 </div>
             </div>
-        @endif
+        @endif --}}
 
         @if($errors->any())
             <div class="mb-6 bg-red-100 border border-red-400 text-red-700 px-6 py-4 rounded-xl" role="alert">
@@ -40,7 +40,7 @@
             </div>
         @endif
 
-        <form method="POST" action="{{ route('mentor.profile.update') }}" enctype="multipart/form-data">
+        <form id="profile-form" method="POST" action="{{ route('mentor.profile.update') }}" enctype="multipart/form-data">
             @csrf
             @method('PUT')
 
@@ -55,16 +55,18 @@
                     <div class="flex items-center space-x-6">
                         <div class="relative">
                             @if($mentor->photo_path)
-                                <img src="{{ asset('storage/' . $mentor->photo_path) }}" alt="Current Photo" class="w-24 h-24 rounded-full object-cover border-4 border-gray-200">
+                                <img src="{{ asset('storage/' . $mentor->photo_path) }}" alt="Current Photo"
+                                    class="w-24 h-24 rounded-full object-cover border-4 border-gray-200" id="photo-preview">
                             @else
-                                <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center border-4 border-gray-200">
+                                <div class="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center border-4 border-gray-200" id="photo-preview-placeholder">
                                     <i class="fas fa-user text-gray-400 text-2xl"></i>
                                 </div>
                             @endif
                         </div>
                         <div class="flex-1">
                             <label for="photo" class="block text-sm font-medium text-gray-700 mb-2">Upload Foto Baru</label>
-                            <input type="file" name="photo" id="photo" accept="image/*" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                            <input type="file" name="photo" id="photo" accept="image/*"
+                                class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
                             <p class="mt-1 text-sm text-gray-500">JPG, PNG, atau GIF. Maksimal 2MB.</p>
                         </div>
                     </div>
@@ -82,7 +84,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Nama Lengkap</label>
-                            <input type="text" name="name" id="name" value="{{ old('name', $user->name) }}" 
+                            <input type="text" name="name" id="name" value="{{ old('name', $user->name) }}"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('name') border-red-500 @enderror"
                                 placeholder="Masukkan nama lengkap">
                             @error('name')
@@ -92,7 +94,7 @@
 
                         <div>
                             <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
-                            <input type="email" name="email" id="email" value="{{ old('email', $user->email) }}" 
+                            <input type="email" name="email" id="email" value="{{ old('email', $user->email) }}"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('email') border-red-500 @enderror"
                                 placeholder="Masukkan email">
                             @error('email')
@@ -102,7 +104,7 @@
 
                         <div>
                             <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">Nomor Telepon</label>
-                            <input type="text" name="phone" id="phone" value="{{ old('phone', $mentor->phone) }}" 
+                            <input type="text" name="phone" id="phone" value="{{ old('phone', $mentor->phone) }}"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('phone') border-red-500 @enderror"
                                 placeholder="Masukkan nomor telepon">
                             @error('phone')
@@ -125,28 +127,28 @@
                         <p class="text-sm text-gray-600">Kosongkan field password jika tidak ingin mengubah password.</p>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Current Password -->
                         <div>
                             <label for="current_password" class="block text-sm font-medium text-gray-700 mb-2">Password Lama</label>
-                            <input type="password" name="current_password" id="current_password" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('current_password') border-red-500 @enderror">
+                            <input type="password" name="current_password" id="current_password"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('current_password') border-red-500 @enderror">
                             @error('current_password')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
 
-                        <!-- New Password -->
                         <div>
                             <label for="password" class="block text-sm font-medium text-gray-700 mb-2">Password Baru</label>
-                            <input type="password" name="password" id="password" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('password') border-red-500 @enderror">
+                            <input type="password" name="password" id="password"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent @error('password') border-red-500 @enderror">
                             @error('password')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
 
-                        <!-- Confirm New Password -->
                         <div class="md:col-span-2">
                             <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-2">Konfirmasi Password Baru</label>
-                            <input type="password" name="password_confirmation" id="password_confirmation" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <input type="password" name="password_confirmation" id="password_confirmation"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                         </div>
                     </div>
                 </div>
@@ -154,11 +156,78 @@
 
             <!-- Submit Button -->
             <div class="flex justify-end">
-                <button type="submit" class="inline-flex items-center px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105">
+                <button type="button" id="btn-submit"
+                    class="inline-flex items-center px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105">
                     <i class="fas fa-save mr-2"></i>Simpan Perubahan
                 </button>
             </div>
         </form>
     </div>
 </div>
+
+<!-- Modal Konfirmasi -->
+<div id="confirm-modal" style="display:none; position:fixed; inset:0; z-index:50; background:rgba(0,0,0,0.5); align-items:center; justify-content:center;">
+    <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-sm w-full mx-4 text-center">
+        <div class="flex items-center justify-center w-16 h-16 rounded-full bg-blue-100 mx-auto mb-4">
+            <i class="fas fa-question-circle text-blue-600 text-3xl"></i>
+        </div>
+        <h3 class="text-xl font-bold text-gray-800 mb-2">Simpan Perubahan?</h3>
+        <p class="text-gray-500 text-sm mb-6">Apakah Anda yakin ingin menyimpan perubahan pada profil Anda?</p>
+        <div class="flex gap-3">
+            <button id="btn-cancel" type="button"
+                class="flex-1 px-4 py-2 rounded-lg border border-gray-300 text-gray-700 font-semibold hover:bg-gray-100 transition-all duration-200">
+                <i class="fas fa-times mr-2"></i>Tidak
+            </button>
+            <button id="btn-confirm" type="button"
+                class="flex-1 px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold transition-all duration-200">
+                <i class="fas fa-check mr-2"></i>Ya, Simpan
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Photo preview
+    document.getElementById('photo').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById('photo-preview');
+                const placeholder = document.getElementById('photo-preview-placeholder');
+
+                if (preview) {
+                    preview.src = e.target.result;
+                } else if (placeholder) {
+                    placeholder.innerHTML = '<img src="' + e.target.result + '" class="w-24 h-24 rounded-full object-cover border-4 border-gray-200" id="photo-preview">';
+                    placeholder.removeAttribute('id');
+                    placeholder.classList.remove('bg-gray-100', 'flex', 'items-center', 'justify-center');
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Modal konfirmasi
+    const modal = document.getElementById('confirm-modal');
+    const form  = document.getElementById('profile-form');
+
+    document.getElementById('btn-submit').addEventListener('click', function() {
+        modal.style.display = 'flex';
+    });
+
+    document.getElementById('btn-cancel').addEventListener('click', function() {
+        modal.style.display = 'none';
+    });
+
+    document.getElementById('btn-confirm').addEventListener('click', function() {
+        modal.style.display = 'none';
+        form.submit();
+    });
+
+    // Tutup modal jika klik di luar kotak
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) modal.style.display = 'none';
+    });
+</script>
 @endsection
