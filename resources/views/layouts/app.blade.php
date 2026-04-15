@@ -209,6 +209,16 @@
                                 <p class="text-sm font-medium text-gray-700 truncate">{{ auth()->user()->name }}</p>
                             </div>
                         </div>
+                    @elseif(auth()->user()->isInstitusi())
+                        <a href="{{ route('institusi.profile.show') }}" class="flex items-center space-x-3 mb-3 hover:bg-gray-50 rounded-lg p-2 transition-colors duration-200">
+                            <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-user text-blue-600"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-medium text-gray-700 truncate">{{ auth()->user()->name }}</p>
+                                <p class="text-xs text-gray-500">Institusi</p>
+                            </div>
+                        </a>
                     @else
                         <a href="{{ auth()->user()->isMentor() ? route('mentor.profile.show') : route('intern.profile.show') }}" class="flex items-center space-x-3 mb-3 hover:bg-gray-50 rounded-lg p-2 transition-colors duration-200">
                             <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
@@ -358,7 +368,7 @@
 
                     <div class="border-t p-4">
                         @auth
-                            @if(auth()->user()->isAdmin() || auth()->user()->isInstitusi())
+                            @if(auth()->user()->isAdmin())
                                 <div class="flex items-center space-x-3 mb-3">
                                     <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
                                         <i class="fas fa-user text-blue-600"></i>
@@ -367,6 +377,16 @@
                                         <p class="text-sm font-medium text-gray-700 truncate">{{ auth()->user()->name }}</p>
                                     </div>
                                 </div>
+                            @elseif(auth()->user()->isInstitusi())
+                                <a href="{{ route('institusi.profile.show') }}" class="flex items-center space-x-3 mb-3 hover:bg-gray-50 rounded-lg p-2 transition-colors duration-200">
+                                    <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-user text-blue-600"></i>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm font-medium text-gray-700 truncate">{{ auth()->user()->name }}</p>
+                                        <p class="text-xs text-gray-500">Institusi</p>
+                                    </div>
+                                </a>
                             @else
                                 <a href="{{ auth()->user()->isMentor() ? route('mentor.profile.show') : route('intern.profile.show') }}"
                                     class="flex items-center space-x-3 mb-3 hover:bg-gray-50 rounded-lg p-2 transition-colors duration-200">

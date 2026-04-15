@@ -32,6 +32,7 @@ use App\Http\Controllers\Admin\TeamController;
 use App\Http\Controllers\Institusi\DaftarInstitusiController;
 use App\Http\Controllers\Institusi\DashboardController as InstitusiDashboardController;
 use App\Http\Controllers\Institusi\PengajuanController;
+use App\Http\Controllers\Institusi\ProfileController as InstitusiProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
@@ -90,6 +91,10 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->n
 Route::middleware('auth', 'institusi')->group(function () {
     Route::get('/institusi/dashboard', [InstitusiDashboardController::class, 'index'])->name('institusi.dashboard');
     Route::get('/institusi/pengajuan', [PengajuanController::class, 'index'])->name('institusi.pengajuan.index');
+    // Profile routes for institusi
+    Route::get('/institusi/profile', [InstitusiProfileController::class, 'show'])->name('institusi.profile.show');
+    Route::get('/institusi/profile/edit', [InstitusiProfileController::class, 'edit'])->name('institusi.profile.edit');
+    Route::put('/institusi/profile', [InstitusiProfileController::class, 'update'])->name('institusi.profile.update');
 }); 
 Route::resource('institusi', DaftarInstitusiController::class);
 
