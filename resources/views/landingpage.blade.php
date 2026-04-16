@@ -898,7 +898,7 @@
 
 <!-- ===== PENDAFTARAN ===== -->
 <section class="section-cta">
-    <div class="container">
+    <div id="daftar" class="container">
         <div class="cta-inner">
             <div class="reveal">
                 <div class="cta-tag">Pendaftaran Institusi</div>
