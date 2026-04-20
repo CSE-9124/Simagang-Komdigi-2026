@@ -26,4 +26,9 @@ class Institusi extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function pengajuans()
+    {
+        return $this->hasMany(Pengajuan::class);
+    }
 } 

@@ -29,9 +29,9 @@
             @php
                 $stats = [
                     ['label' => 'Total Pengajuan', 'value' => $totalPengajuan, 'color' => 'blue',   'icon' => 'fa-calendar-check'],
-                    ['label' => 'Disetujui',        'value' => $pengajuanApproved, 'color' => 'green', 'icon' => 'fa-calendar-times'],
-                    ['label' => 'Menunggu Approval','value' => $pengajuanPending,  'color' => 'yellow',    'icon' => 'fa-calendar-minus'],
-                    ['label' => 'Ditolak',          'value' => $pengajuanRejected,  'color' => 'red',  'icon' => 'fa-file-alt'],
+                    ['label' => 'Disetujui',        'value' => $totalDiterima, 'color' => 'green', 'icon' => 'fa-calendar-times'],
+                    ['label' => 'Menunggu Approval','value' => $totalMenunggu,  'color' => 'yellow',    'icon' => 'fa-calendar-minus'],
+                    ['label' => 'Ditolak',          'value' => $totalDitolak,  'color' => 'red',  'icon' => 'fa-file-alt'],
                 ];
             @endphp
 
@@ -65,21 +65,38 @@
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead>
                             <tr class="bg-blue-50">
-                                <th class="px-6 py-4 text-center text-xs font-bold text-blue-900 uppercase tracking-wider rounded-tl-lg">Pengajuan</th>
+                                <th class="px-6 py-4 text-center text-xs font-bold text-blue-900 uppercase tracking-wider rounded-tl-lg">No</th>
+                                <th class="px-6 py-4 text-center text-xs font-bold text-blue-900 uppercase tracking-wider rounded-tl-lg">Institusi</th>
+                                <th class="px-6 py-4 text-center text-xs font-bold text-blue-900 uppercase tracking-wider rounded-tl-lg">Fakultas</th>
+                                <th class="px-6 py-4 text-center text-xs font-bold text-blue-900 uppercase tracking-wider rounded-tl-lg">Departemen</th>
                                 <th class="px-6 py-4 text-center text-xs font-bold text-blue-900 uppercase tracking-wider">Status</th>
                                 <th class="px-6 py-4 text-center text-xs font-bold text-blue-900 uppercase tracking-wider rounded-tr-lg">Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-100">
-                            @forelse($pengajuans as $pengajuan)
+                            @forelse($pengajuanTabel as $pengajuan)
                                 <tr class="hover:bg-blue-50 transition-colors duration-150">
+                                    <td class="px-6 py-4 whitespace-nowrap">{{ $loop->iteration }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div>
                                             <p class="text-sm font-medium text-gray-900">
-                                                Pengajuan 
-                                                <span class="text-sm font-medium text-red-900">
-                                                    {{$pengajuan->id}}
-                                                </span>
+                                                {{$pengajuan->institusi->nama_institusi}}
+                                             </p>
+                                            
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div>
+                                            <p class="text-sm font-medium text-gray-900">
+                                                {{$pengajuan->institusi->fakultas}}
+                                             </p>
+                                            
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div>
+                                            <p class="text-sm font-medium text-gray-900">
+                                                {{$pengajuan->institusi->departemen}}
                                              </p>
                                             
                                         </div>
@@ -102,18 +119,11 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-center">
                                         <div class="flex gap-2 justify-center">
-                                            <a href="{{ route('institusi.pengajuan.show', $pengajuan->id) }}"
+                                            <a href="{{ route('admin.pengajuan.show', $pengajuan->id) }}"
                                                 class="inline-flex items-center justify-center w-10 h-10 bg-green-100 hover:bg-green-600 rounded-lg transition-all duration-200 group" title="Lihat">
                                                 <i class="fas fa-eye"></i>
                                             </a>
-                                            <a href="#" 
-                                               class="inline-flex items-center justify-center w-10 h-10 bg-blue-100 hover:bg-blue-200 rounded-lg transition-all duration-200 group"
-                                               title="Edit">
-                                                <svg class="w-5 h-5 text-blue-600 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
-                                                    <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
-                                                </svg>
-                                            </a>
-                                            <form action="{{ route('institusi.pengajuan.destroy', $pengajuan->id) }}" method="POST" class="inline" 
+                                            <form action="{{ route('admin.pengajuan.destroy', $pengajuan->id) }}" method="POST" class="inline" 
                                                 onsubmit="return confirm('Apakah Anda yakin ingin menghapus pengajuan ini?');">
                                                 @csrf
                                                 @method('DELETE')
@@ -135,7 +145,7 @@
                                             <i class="fas fa-book text-5xl mb-3 text-gray-300"></i>
                                             <p class="text-lg font-medium">Belum ada Pengajuan.</p>
                                             <p class="text-sm mt-2">Mulai dengan membuat pengajuan pertama Anda.</p>
-                                            <a href="{{ route('institusi.pengajuan.create') }}" 
+                                            <a href="#" 
                                                 class="mt-4 inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all duration-300">
                                                 <i class="fas fa-plus mr-2"></i>Tambah Pengajuan
                                             </a>

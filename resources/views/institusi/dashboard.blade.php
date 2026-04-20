@@ -20,9 +20,6 @@
                     <div class="text-center md:text-left">
                         <h1 class="text-2xl font-semibold text-white mb-2">{{$institusi->user->name}}</h1>
                         <p class="text-blue-100 font-semibold text-lg mb-1">{{ $institusi->nama_institusi }}</p>
-                        <p class="text-blue-100 text-sm mb-1">{{ $institusi->nomor_identitas }}</p>
-                        <p class="text-blue-100 text-sm mb-1">{{ $institusi->no_hp }}</p>
-
                         @if ($institusi->jenis_institusi === 'kampus')
                             <p class="text-blue-100 text-sm mb-4">
                                 {{ $institusi->fakultas }} - {{ $institusi->departemen }}
@@ -39,14 +36,14 @@
         </div>
 
         {{-- Stats Cards --}}
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
 
             @php
                 $stats = [
-                    ['label' => 'Total Pengajuan', 'value' => 20, 'color' => 'blue',   'icon' => 'fa-calendar-check'],
-                    ['label' => 'Disetujui',        'value' => 12, 'color' => 'yellow', 'icon' => 'fa-calendar-times'],
-                    ['label' => 'Menunggu Approval','value' => 8,  'color' => 'red',    'icon' => 'fa-calendar-minus'],
-                    ['label' => 'Ditolak',          'value' => 0,  'color' => 'green',  'icon' => 'fa-file-alt'],
+                    ['label' => 'Total Pengajuan', 'value' => $totalPengajuan, 'color' => 'blue',   'icon' => 'fa-calendar-check'],
+                    ['label' => 'Disetujui',        'value' => $pengajuanApproved, 'color' => 'green', 'icon' => 'fa-calendar-times'],
+                    ['label' => 'Menunggu Approval','value' => $pengajuanPending,  'color' => 'yellow',    'icon' => 'fa-calendar-minus'],
+                    ['label' => 'Ditolak',          'value' => $pengajuanRejected,  'color' => 'red',  'icon' => 'fa-file-alt'],
                 ];
             @endphp
 

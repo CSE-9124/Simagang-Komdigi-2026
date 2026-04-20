@@ -12,6 +12,9 @@ class Pengajuan extends Model
         'institusi_id',
         'surat_path',
         'status',
+        'start_date',
+        'end_date',
+        'keperluan',
     ];
 
     public function details()
