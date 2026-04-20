@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Intern;
 
 use App\Http\Controllers\Controller;
 use App\Models\FinalReport;
+use App\Models\Testimonial;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -14,8 +15,9 @@ class ReportController extends Controller
     {
         $intern = Auth::user()->intern;
         $report = $intern->finalReport;
+        $testimonial = $report?->testimonial;
 
-        return view('intern.report.index', compact('report'));
+        return view('intern.report.index', compact('report', 'testimonial'));
     }
 
     public function store(Request $request)
@@ -232,5 +234,38 @@ class ReportController extends Controller
 
         return redirect()->route('intern.report.index')
             ->with('success', 'Laporan akhir berhasil diperbarui.');
+    }
+
+    public function storeTestimonial(Request $request, FinalReport $report)
+    {
+        // Ensure the report belongs to the authenticated intern
+        if ($report->intern_id !== Auth::user()->intern->id) {
+            abort(403);
+        }
+
+        // Check if report is submitted
+        if (!$report->submitted_at) {
+            return back()->withErrors(['error' => 'Laporan harus disubmit terlebih dahulu.']);
+        }
+
+        $validated = $request->validate([
+            'testimony' => ['required', 'string', 'min:20', 'max:1000'],
+        ]);
+
+        $testimonial = Testimonial::where('final_report_id', $report->id)->first();
+
+        if ($testimonial) {
+            $testimonial->update(['testimony' => $validated['testimony']]);
+            $message = 'Testimoni berhasil diperbarui.';
+        } else {
+            Testimonial::create([
+                'final_report_id' => $report->id,
+                'intern_id' => $report->intern_id,
+                'testimony' => $validated['testimony'],
+            ]);
+            $message = 'Testimoni berhasil disimpan.';
+        }
+
+        return back()->with('success_testimony', $message);
     }
 }

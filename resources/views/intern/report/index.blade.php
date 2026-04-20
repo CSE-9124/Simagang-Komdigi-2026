@@ -222,6 +222,86 @@
             </div>
         </div>
 
+        {{-- TESTIMONI SECTION --}}
+        @if($report && $report->submitted_at)
+        <div class="bg-white rounded-2xl shadow-lg border border-purple-100 overflow-hidden mb-6">
+            <div class="bg-purple-600 px-6 py-4">
+                <h2 class="text-xl font-bold text-white flex items-center">
+                    <i class="fas fa-quote-left mr-3"></i>
+                    Berikan Testimoni Anda
+                </h2>
+            </div>
+
+            <div class="p-8">
+                @if($testimonial)
+                    {{-- Display Existing Testimonial --}}
+                    <div class="mb-6">
+                        <div class="bg-purple-50 border-2 border-purple-200 rounded-xl p-6">
+                            <p class="text-sm text-purple-900 font-semibold flex items-center mb-3">
+                                <i class="fas fa-check-circle text-green-500 mr-2"></i>Testimoni Anda
+                            </p>
+                            <p class="text-gray-800 text-base leading-relaxed mb-3">{{ $testimonial->testimony }}</p>
+                            <p class="text-sm text-gray-500 flex items-center">
+                                <i class="fas fa-clock mr-1"></i>Dikirim: {{ $testimonial->created_at->format('d F Y H:i') }}
+                            </p>
+                            <button onclick="document.getElementById('testimoniForm').classList.toggle('hidden')"
+                                class="mt-4 inline-flex items-center px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white font-semibold rounded-lg transition-all">
+                                <i class="fas fa-edit mr-2"></i>Edit Testimoni
+                            </button>
+                        </div>
+                    </div>
+                @endif
+
+                {{-- Testimonial Form --}}
+                <div id="testimoniForm" class="@if($testimonial) hidden @endif">
+                    <form method="POST" action="{{ route('intern.report.storeTestimonial', $report) }}">
+                        @csrf
+                        <div class="mb-4">
+                            <label for="testimony" class="block text-sm font-semibold text-gray-700 mb-2">
+                                <i class="fas fa-pen-fancy text-purple-500 mr-2"></i>Testimoni Anda (20-1000 karakter)
+                            </label>
+                            <textarea name="testimony" id="testimony" rows="5"
+                                class="w-full px-4 py-3 border-2 border-purple-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all" 
+                                placeholder="Bagikan pengalaman Anda selama magang di Komdigi. Apa yang Anda pelajari? Bagaimana pengalaman menggunakan aplikasi Simagang?"
+                                required minlength="20" maxlength="1000">{{ old('testimony', $testimonial?->testimony ?? '') }}</textarea>
+                            <div class="flex justify-between items-center mt-2">
+                                <p class="text-xs text-gray-500">
+                                    <i class="fas fa-info-circle mr-1"></i>Mininal 20 karakter, maksimal 1000 karakter
+                                </p>
+                                <span id="charCount" class="text-sm font-semibold text-purple-600">0/1000</span>
+                            </div>
+                            @error('testimony')
+                                <p class="mt-2 text-sm text-red-600 flex items-center">
+                                    <i class="fas fa-times-circle mr-1"></i>{{ $message }}
+                                </p>
+                            @enderror
+                        </div>
+
+                        @if($errors->has('success_testimony'))
+                            <div class="mb-4 p-4 bg-green-50 border-l-4 border-green-500 rounded-lg flex items-start">
+                                <i class="fas fa-check-circle text-green-600 mr-3 mt-0.5"></i>
+                                <p class="text-sm text-green-800">{{ session('success_testimony') }}</p>
+                            </div>
+                        @endif
+
+                        <div class="flex gap-3 pt-4">
+                            @if($testimonial)
+                                <button type="button" onclick="document.getElementById('testimoniForm').classList.add('hidden')"
+                                    class="inline-flex items-center px-6 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-lg transition-all">
+                                    <i class="fas fa-times mr-2"></i>Batal
+                                </button>
+                            @endif
+                            <button type="submit"
+                                class="inline-flex items-center px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all">
+                                <i class="fas fa-paper-plane mr-2"></i>{{ $testimonial ? 'Update Testimoni' : 'Kirim Testimoni' }}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        @endif
+
         {{-- FORM UPDATE --}}
         <div id="uploadForm" class="bg-white rounded-2xl shadow-lg border border-blue-100 overflow-hidden hidden">
             <div class="bg-blue-600 px-6 py-4">
@@ -490,6 +570,27 @@
             const clearProjectBtn = document.querySelector('button[onclick="clearProject()"]');
             if (clearFileBtn) clearFileBtn.addEventListener('click', clearFile);
             if (clearProjectBtn) clearProjectBtn.addEventListener('click', clearProject);
+
+            // Character counter for testimony
+            const testimonyInput = document.getElementById('testimony');
+            const charCount = document.getElementById('charCount');
+            if (testimonyInput) {
+                function updateCharCount() {
+                    const count = testimonyInput.value.length;
+                    charCount.textContent = count + '/1000';
+                    charCount.classList.remove('text-green-600', 'text-yellow-600', 'text-red-600');
+                    if (count < 20) {
+                        charCount.classList.add('text-red-600');
+                    } else if (count < 500) {
+                        charCount.classList.add('text-green-600');
+                    } else {
+                        charCount.classList.add('text-yellow-600');
+                    }
+                }
+                testimonyInput.addEventListener('input', updateCharCount);
+                testimonyInput.addEventListener('change', updateCharCount);
+                updateCharCount(); // Initial call
+            }
         });
         </script>
         @endpush

@@ -426,7 +426,7 @@
             margin-bottom: 1rem;
         }
         .testi-stars { color: #f59e0b; font-size: 13px; margin-bottom: 0.75rem; letter-spacing: 2px; }
-        .testi-text { font-size: 1rem; color: #4b6580; line-height: 1.7; margin: 0 0 1.5rem; font-style: italic; }
+        .testi-text { font-size: 1rem; color: #4b6580; line-height: 1.7; margin: 0 0 1.5rem; font-style: italic; word-wrap: break-word; overflow-wrap: break-word; word-break: break-word; white-space: normal; }
         .testi-author { display: flex; align-items: center; gap: 12px; padding-top: 1.25rem; border-top: 1px solid #bfdbfe; }
         .testi-avatar {
             width: 48px;
@@ -826,48 +826,26 @@
             <p class="section-desc">Berbagai kampus dan sekolah sudah menggunakan Simagang untuk mengelola program magang mereka.</p>
         </div>
         <div class="testi-grid">
-            <div class="testi-card reveal">
-                <div class="testi-quote-icon">"</div>
-                <div class="testi-stars">★★★★★</div>
-                <p class="testi-text">Aplikasi ini membuat koordinasi dengan mentor jadi lebih cepat. Saya bisa melihat nilai, laporan, dan tugas harian tanpa harus bolak-balik chat.</p>
-                <div class="testi-author">
-                    <div class="testi-avatar">
-                        <img src="{{ asset('storage/profiles/user1.jpeg') }}" alt="Foto Ramli">
-                    </div>
-                    <div>
-                        <div class="testi-name">Diza Sazkia</div>
-                        <div class="testi-inst">Mahasiswa — Universitas Hasanuddin</div>
-                    </div>
-                </div>
-            </div>
-            <div class="testi-card reveal">
-                <div class="testi-quote-icon">"</div>
-                <div class="testi-stars">★★★★★</div>
-                <p class="testi-text">Simagang memudahkan saya mencatat absensi, mengirim logbook, dan melihat progres magang dalam satu platform. Semua tugas dan feedback mentor jadi lebih terorganisir.</p>
-                <div class="testi-author">
-                    <div class="testi-avatar">
-                        <img src="{{ asset('storage/profiles/user2.jpg') }}" alt="Foto Ramli">
-                    </div>
-                    <div>
-                        <div class="testi-name">Nur Fadillah</div>
-                        <div class="testi-inst">Mahasiswa — Universitas Hasanuddin</div>
+            @php $testimonials = $testimonials ?? []; @endphp
+            @forelse($testimonials as $testimony)
+                <div class="testi-card reveal">
+                    <div class="testi-quote-icon">"</div>
+                    <p class="testi-text">{{ Str::limit($testimony->testimony, 150) }}</p>
+                    <div class="testi-author">
+                        <div class="testi-avatar">
+                            <img src="{{ asset('storage/' . ($testimony->intern->photo_path ?? 'profiles/default.jpg')) }}" alt="Foto {{ $testimony->intern->name }}">
+                        </div>
+                        <div>
+                            <div class="testi-name">{{ $testimony->intern->name }}</div>
+                            <div class="testi-inst">Mahasiswa — {{ $testimony->intern->institution ?? 'Institusi' }}</div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="testi-card reveal">
-                <div class="testi-quote-icon">"</div>
-                <div class="testi-stars">★★★★★</div>
-                <p class="testi-text">Tampilan Simagang bersih dan intuitif, jadi saya bisa bekerja lebih fokus. Sistem ini sangat membantu menyelesaikan laporan dan persiapan sertifikat magang.</p>
-                <div class="testi-author">
-                    <div class="testi-avatar">
-                        <img src="{{ asset('storage/profiles/user3.png') }}" alt="Foto An Naura">
-                    </div>
-                    <div>
-                        <div class="testi-name">An Naura Erwana Dwi</div>
-                        <div class="testi-inst">Mahasiswa — Universitas Hasanuddin</div>
-                    </div>
+            @empty
+                <div style="grid-column: 1 / -1; text-align: center; padding: 2rem;">
+                    <p style="color: #4b6580; font-size: 1.05rem; margin: 0;">Belum ada testimoni. Jadilah yang pertama berbagi pengalaman Anda!</p>
                 </div>
-            </div>
+            @endforelse
         </div>
     </div>
 </section>

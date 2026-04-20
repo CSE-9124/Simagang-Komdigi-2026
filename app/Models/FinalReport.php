@@ -39,4 +39,14 @@ class FinalReport extends Model
     {
         return $this->belongsTo(Intern::class);
     }
+
+    public function testimonial()
+    {
+        return $this->hasOne(Testimonial::class);
+    }
+
+    public function testimonials()
+    {
+        return $this->hasMany(Testimonial::class);
+    }
 }

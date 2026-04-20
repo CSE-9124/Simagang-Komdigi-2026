@@ -34,6 +34,7 @@ use App\Http\Controllers\Institusi\DaftarInstitusiController;
 use App\Http\Controllers\Institusi\DashboardController as InstitusiDashboardController;
 use App\Http\Controllers\Institusi\PengajuanController;
 use App\Http\Controllers\Institusi\ProfileController as InstitusiProfileController;
+use App\Models\Testimonial;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 
@@ -55,7 +56,9 @@ Route::get('/', function () {
         ->map(fn ($path) => asset('storage/' . str_replace('%2F', '/', rawurlencode($path))))
         ->values();
 
-    return view('landingpage', compact('partners'));
+    $testimonials = Testimonial::with(['intern', 'finalReport'])->orderBy('created_at', 'desc')->limit(3)->get();
+
+    return view('landingpage', compact('partners', 'testimonials'));
 })->name('landing');
 
 Route::get('/convert-font', function () {
@@ -148,6 +151,7 @@ Route::middleware(['auth', 'intern'])->prefix('intern')->name('intern.')->group(
     Route::get('/report', [ReportController::class, 'index'])->name('report.index');
     Route::post('/report', [ReportController::class, 'store'])->name('report.store');
     Route::put('/report/{report}', [ReportController::class, 'update'])->name('report.update');
+    Route::post('/report/{report}/testimonial', [ReportController::class, 'storeTestimonial'])->name('report.storeTestimonial');
     
     // Profile Routes
     Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
