@@ -12,6 +12,9 @@ class PengajuanDetail extends Model
         'pengajuan_id',
         'nama',
         'jurusan',
+        'email',
+        'no_telp',
+        'jenis_kelamin',
     ];
 
     public function pengajuan()

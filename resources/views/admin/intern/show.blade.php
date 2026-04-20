@@ -45,8 +45,6 @@
                         <i class="fas fa-user text-5xl text-blue-500"></i>
                     </div>
                 @endif
-
-
                     <span class="mt-4 px-4 py-1.5 rounded-full text-xs font-semibold
                         {{ $intern->is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
                         {{ $intern->is_active ? 'Aktif' : 'Tidak Aktif' }}

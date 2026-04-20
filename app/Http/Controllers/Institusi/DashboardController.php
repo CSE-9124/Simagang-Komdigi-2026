@@ -3,9 +3,7 @@
 namespace App\Http\Controllers\Institusi;
 
 use App\Http\Controllers\Controller;
-use App\Models\Attendance;
 use App\Models\Institusi;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -16,6 +14,12 @@ class DashboardController extends Controller
         $user = Auth::user();
         $institusi = $user->institusi;
 
+        $totalPengajuan = $institusi->pengajuans()->count();
+        $pengajuanPending = $institusi->pengajuans()->where('status', 'pending')->count();
+        $pengajuanApproved = $institusi->pengajuans()->where('status', 'approved')->count();
+        $pengajuanRejected = $institusi->pengajuans()->where('status', 'rejected')->count();
+
+
         if (!$institusi) {
             // If user doesn't have institusi record, logout and redirect to register
             Auth::logout();
@@ -23,7 +27,11 @@ class DashboardController extends Controller
         }
 
         return view('institusi.dashboard', compact(
-            'institusi'
+            'institusi',
+            'totalPengajuan',
+            'pengajuanPending',
+            'pengajuanApproved',
+            'pengajuanRejected',
         ));
     }
 }

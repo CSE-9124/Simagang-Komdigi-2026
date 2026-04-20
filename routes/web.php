@@ -33,6 +33,7 @@ use App\Http\Controllers\Admin\TeamController;
 use App\Http\Controllers\Institusi\DaftarInstitusiController;
 use App\Http\Controllers\Institusi\DashboardController as InstitusiDashboardController;
 use App\Http\Controllers\Institusi\PengajuanController;
+use App\Http\Controllers\Admin\AdminPengajuanMagang;
 use App\Http\Controllers\Institusi\ProfileController as InstitusiProfileController;
 use App\Models\Testimonial;
 use Illuminate\Support\Facades\Route;
@@ -98,13 +99,16 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->n
 Route::middleware('auth', 'institusi')->group(function () {
     Route::get('/institusi/dashboard', [InstitusiDashboardController::class, 'index'])->name('institusi.dashboard');
     Route::get('/institusi/pengajuan', [PengajuanController::class, 'index'])->name('institusi.pengajuan.index');
+    Route::get('/institusi/pengajuan/create', [PengajuanController::class, 'create'])->name('institusi.pengajuan.create');
+    Route::post('/institusi/pengajuan', [PengajuanController::class, 'store'])->name('institusi.pengajuan.store');
+    Route::get('/institusi/pengajuan/{id}', [PengajuanController::class, 'show'])->name('institusi.pengajuan.show');
+    Route::delete('/institusi/pengajuan/{id}', [PengajuanController::class, 'destroy'])->name('institusi.pengajuan.destroy');
     // Profile routes for institusi
     Route::get('/institusi/profile', [InstitusiProfileController::class, 'show'])->name('institusi.profile.show');
     Route::get('/institusi/profile/edit', [InstitusiProfileController::class, 'edit'])->name('institusi.profile.edit');
     Route::put('/institusi/profile', [InstitusiProfileController::class, 'update'])->name('institusi.profile.update');
 }); 
 Route::resource('institusi', DaftarInstitusiController::class);
-
 
 // File Download Route
 Route::get('/download/{path}', function ($path) {
@@ -213,19 +217,24 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
             'certificates/{certificate}/print',
             [AdminCertificateController::class, 'print']
         )->name('certificates.print');
-    });
+
+    // Pengajuan Management Routes
+    Route::get('/pengajuan', [AdminPengajuanMagang::class, 'index'])->name('pengajuan.index');
+    Route::get('/pengajuan/{id}', [AdminPengajuanMagang::class, 'show'])->name('pengajuan.show');
+    Route::put('/pengajuan/{pengajuan}/update-status', [AdminPengajuanMagang::class, 'updateStatus'])
+    ->name('pengajuan.update-status');
+    Route::delete('/pengajuan/{id}', [AdminPengajuanMagang::class, 'destroy'])->name('pengajuan.destroy');
 
     // Manafe Tim Routes
-    Route::get('/admin/team', [TeamController::class, 'index'])->name('admin.team.index');
-    Route::get('/admin/team/create', [TeamController::class, 'create'])->name('admin.team.create');
-    Route::post('/admin/team', [TeamController::class, 'store'])->name('admin.team.store');
-    Route::get('/admin/team/{team}/edit', [TeamController::class, 'edit'])->name('admin.team.edit');
-    Route::put('/admin/team/{team}', [TeamController::class, 'update'])->name('admin.team.update');
-    Route::delete('/admin/team/{team}', [TeamController::class, 'destroy'])->name('admin.team.destroy');   
+    Route::get('/team', [TeamController::class, 'index'])->name('team.index');
+    Route::get('/team/create', [TeamController::class, 'create'])->name('team.create');
+    Route::post('/team', [TeamController::class, 'store'])->name('team.store');
+    Route::get('/team/{team}/edit', [TeamController::class, 'edit'])->name('team.edit');
+    Route::put('/team/{team}', [TeamController::class, 'update'])->name('team.update');
+    Route::delete('/team/{team}', [TeamController::class, 'destroy'])->name('team.destroy');   
+});
+
     
-
-
-
 // Mentor Routes
 Route::middleware(['auth', 'mentor'])->prefix('mentor')->name('mentor.')->group(function () {
     Route::get('/dashboard', [MentorDashboardController::class, 'index'])->name('dashboard');
