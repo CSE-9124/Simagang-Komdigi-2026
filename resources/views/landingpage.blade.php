@@ -304,6 +304,72 @@
         /* ── PROCESS SECTION ── */
         .section-process { background: white; padding: 6rem 0; }
         .process-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+        .process-carousel {
+            display: none;
+            overflow: hidden;
+            position: relative;
+        }
+        .process-carousel.active {
+            display: none;
+        }
+        .process-carousel-wrapper {
+            display: flex;
+            transition: transform 0.4s ease-out;
+            width: 100%; 
+            padding-bottom: 2rem;
+        }
+        .process-carousel-item {
+            flex: 0 0 100%;
+            min-width: 100%;
+        }
+        .process-carousel-nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        .process-carousel-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #eff6ff;
+            border: 1.5px solid #bfdbfe;
+            color: #1d6fca;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        .process-carousel-btn:hover {
+            background: #1d6fca;
+            color: white;
+            border-color: #1d6fca;
+        }
+        .process-carousel-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .process-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .process-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #dbeafe;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .process-dot.active {
+            background: #1d6fca;
+            width: 24px;
+            border-radius: 4px;
+        }
         .process-card {
             background: #f0f7ff;
             border: 1.5px solid #bfdbfe;
@@ -579,6 +645,8 @@
             .hero-image-wrap { max-width: 520px; margin: 0 auto; order: -1; justify-content: center; }
             .card-top, .card-bottom { display: none; }
             .process-grid { grid-template-columns: 1fr; }
+            .process-carousel { display: none !important; }
+            .process-carousel.active { display: none !important; }
             .step-block { grid-template-columns: 1fr; gap: 2rem; }
             .step-block .order-swap { order: 0; }
             .step-block .step-image-wrap { order: -1; }
@@ -590,19 +658,20 @@
             .btn-login { display: none; }
         }
         @media (max-width: 640px) {
-            @media (max-width: 640px) {
-                .section-usage {
-                    padding: 3rem 1rem;
-                }
+            .section-usage {
+                padding: 3rem 1rem;
+            }
 
-                .step-block {
-                    padding: 1.5rem 0.75rem;
-                }
+            .step-block {
+                padding: 1.5rem 0.75rem;
             }
             .hero-inner { padding: 2.5rem 1rem; gap: 1.5rem; }
             .partners-grid { grid-template-columns: 1fr 1fr; }
             .hero-title { font-size: 1.8rem; }
             .hero-image-wrap { max-width: 100%; }
+            .process-grid { display: none; }
+            .process-carousel { display: block !important; }
+            .process-carousel.active { display: block !important; }
         }
     </style>
 </head>
@@ -702,6 +771,8 @@
             <h2 class="section-title">Langkah Sederhana untuk Setiap Pengguna</h2>
             <p class="section-desc">Mulai dari pendaftaran hingga sertifikat, semua proses dipandu dengan tampilan yang mudah dipahami.</p>
         </div>
+        
+        <!-- Desktop/Tablet Grid -->
         <div class="process-grid">
             <div class="process-card reveal">
                 <div class="process-num">01</div>
@@ -720,6 +791,49 @@
                 <div class="process-icon"><i class="fas fa-award"></i></div>
                 <h3 class="process-title">Laporan & Sertifikat</h3>
                 <p class="process-desc">Upload laporan akhir, terima feedback mentor, dan dapatkan sertifikat digital resmi secara otomatis.</p>
+            </div>
+        </div>
+
+        <!-- Mobile Carousel -->
+        <div class="process-carousel active" id="process-carousel">
+            <div class="process-carousel-wrapper" id="process-carousel-wrapper">
+                <div class="process-carousel-item">
+                    <div class="process-card">
+                        <div class="process-num">01</div>
+                        <div class="process-icon"><i class="fas fa-user-plus"></i></div>
+                        <h3 class="process-title">Daftar & Profil</h3>
+                        <p class="process-desc">Isi data peserta dan pilih institusi asal dengan cepat. Sistem akan memandu proses onboarding secara otomatis.</p>
+                    </div>
+                </div>
+                <div class="process-carousel-item">
+                    <div class="process-card">
+                        <div class="process-num">02</div>
+                        <div class="process-icon"><i class="fas fa-calendar-check"></i></div>
+                        <h3 class="process-title">Absensi & Logbook</h3>
+                        <p class="process-desc">Catat kehadiran dan aktivitas magang setiap hari secara digital. Mentor dapat memantau perkembangan secara real time.</p>
+                    </div>
+                </div>
+                <div class="process-carousel-item">
+                    <div class="process-card">
+                        <div class="process-num">03</div>
+                        <div class="process-icon"><i class="fas fa-award"></i></div>
+                        <h3 class="process-title">Laporan & Sertifikat</h3>
+                        <p class="process-desc">Upload laporan akhir, terima feedback mentor, dan dapatkan sertifikat digital resmi secara otomatis.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="process-carousel-nav">
+                <button class="process-carousel-btn" id="process-prev" aria-label="Proses sebelumnya">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <div class="process-dots" id="process-dots">
+                    <div class="process-dot active" data-index="0"></div>
+                    <div class="process-dot" data-index="1"></div>
+                    <div class="process-dot" data-index="2"></div>
+                </div>
+                <button class="process-carousel-btn" id="process-next" aria-label="Proses berikutnya">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
             </div>
         </div>
     </div>
@@ -1007,6 +1121,135 @@
                 mobileMenu.setAttribute('aria-hidden', 'true');
             });
         });
+    }
+
+    /* ===== PROCESS CAROUSEL ===== */
+    const processCarousel = document.getElementById('process-carousel');
+    const processWrapper = document.getElementById('process-carousel-wrapper');
+    const processPrevBtn = document.getElementById('process-prev');
+    const processNextBtn = document.getElementById('process-next');
+    const processDots = document.querySelectorAll('.process-dot');
+    
+    let processCurrentIndex = 0;
+    let processTouchStartX = 0;
+    let processTouchEndX = 0;
+    let processAutoPlayInterval;
+
+    function updateProcessCarousel() {
+        if (processWrapper) {
+            const offset = -processCurrentIndex * 100;
+            processWrapper.style.transform = `translateX(${offset}%)`;
+            
+            processDots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === processCurrentIndex);
+            });
+
+            if (processPrevBtn) processPrevBtn.disabled = processCurrentIndex === 0;
+            if (processNextBtn) processNextBtn.disabled = processCurrentIndex === processDots.length - 1;
+        }
+    }
+
+    function processNextSlide() {
+        if (processCurrentIndex < processDots.length - 1) {
+            processCurrentIndex++;
+        } else {
+            processCurrentIndex = 0;
+        }
+        updateProcessCarousel();
+    }
+
+    function processPrevSlide() {
+        if (processCurrentIndex > 0) {
+            processCurrentIndex--;
+        } else {
+            processCurrentIndex = processDots.length - 1;
+        }
+        updateProcessCarousel();
+    }
+
+    function startProcessAutoPlay() {
+        processAutoPlayInterval = setInterval(() => {
+            processCurrentIndex = (processCurrentIndex + 1) % processDots.length;
+            updateProcessCarousel();
+        }, 5000);
+    }
+
+    function stopProcessAutoPlay() {
+        if (processAutoPlayInterval) {
+            clearInterval(processAutoPlayInterval);
+        }
+    }
+
+    function resetProcessAutoPlay() {
+        stopProcessAutoPlay();
+        startProcessAutoPlay();
+    }
+
+    function processGoToSlide(index) {
+        processCurrentIndex = index;
+        updateProcessCarousel();
+    }
+
+    // Event listeners untuk buttons
+    if (processNextBtn) {
+        processNextBtn.addEventListener('click', () => {
+            processNextSlide();
+            resetProcessAutoPlay();
+        });
+    }
+    if (processPrevBtn) {
+        processPrevBtn.addEventListener('click', () => {
+            processPrevSlide();
+            resetProcessAutoPlay();
+        });
+    }
+
+    // Event listeners untuk dots
+    processDots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            processGoToSlide(index);
+            resetProcessAutoPlay();
+        });
+    });
+
+    // Touch/Swipe events
+    if (processCarousel) {
+        processCarousel.addEventListener('touchstart', (e) => {
+            processTouchStartX = e.changedTouches[0].screenX;
+        }, false);
+
+        processCarousel.addEventListener('touchend', (e) => {
+            processTouchEndX = e.changedTouches[0].screenX;
+            handleProcessSwipe();
+        }, false);
+
+        processCarousel.addEventListener('mousedown', (e) => {
+            processTouchStartX = e.clientX;
+        }, false);
+
+        processCarousel.addEventListener('mouseup', (e) => {
+            processTouchEndX = e.clientX;
+            handleProcessSwipe();
+        }, false);
+    }
+
+    function handleProcessSwipe() {
+        const swipeThreshold = 50;
+        const diff = processTouchStartX - processTouchEndX;
+
+        if (Math.abs(diff) > swipeThreshold) {
+            if (diff > 0) {
+                processNextSlide();
+            } else {
+                processPrevSlide();
+            }
+        }
+    }
+
+    // Initialize carousel on page load
+    if (processCarousel) {
+        updateProcessCarousel();
+        startProcessAutoPlay();
     }
 </script>
 
