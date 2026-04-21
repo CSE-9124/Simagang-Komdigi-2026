@@ -38,9 +38,31 @@
                             <label class="text-sm font-medium text-blue-900 mb-2">
                                 Nama Lengkap <span class="text-red-500">*</span>
                             </label>
-                            <input type="text" name="name" value="{{ old('name') }}" required
-                                    class="mt-1 w-full px-4 py-3 rounded-xl border border-gray-300 shadow-sm
+                            <select id="calonSelect" name="name" class="mt-1 w-full px-4 py-3 rounded-xl border border-gray-300 shadow-sm
                                         focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                <option value="">Pilih Calon Anak Magang</option>
+
+                                @foreach($calonMagang as $c)
+                                    <option value="{{ $c->id }}"
+                                        data-name="{{ $c->nama }}"
+                                        data-email="{{ $c->email }}"
+                                        data-gender="{{ $c->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}"
+                                        data-phone="{{ $c->no_telp }}"
+                                        @if ($c->pengajuan->institusi->jenis_institusi == 'sekolah')
+                                            data-education="SMA/SMK"
+                                        @elseif ($c->pengajuan->institusi->jenis_institusi == 'kampus')
+                                            data-education="S1/D4"
+                                        @endif
+                                        data-major="{{ $c->jurusan }}"
+                                        data-institution="{{ $c->pengajuan->institusi->nama_institusi }}"
+                                        data-purpose="{{ $c->pengajuan->keperluan }}"
+                                        data-startdate="{{ $c->pengajuan->start_date }}"
+                                        data-enddate="{{ $c->pengajuan->end_date }}"
+                                    >
+                                        {{ $c->nama }}
+                                    </option>
+                                @endforeach
+                            </select>
                             @error('name')<p class="text-sm text-red-500 mt-1">{{ $message }}</p>@enderror
                         </div>
 
@@ -48,7 +70,7 @@
                             <label class="text-sm font-medium text-blue-900 mb-2">
                                 Email <span class="text-red-500">*</span>
                             </label>
-                            <input type="email" name="email" value="{{ old('email') }}" required
+                            <input type="email" id="emailInput" name="email" value="{{ old('email') }}" required
                                     class="mt-1 w-full px-4 py-3 rounded-xl border border-gray-300
                                         focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                             @error('email')<p class="text-sm text-red-500 mt-1">{{ $message }}</p>@enderror
@@ -58,7 +80,7 @@
                             <label class="text-sm font-medium text-blue-900 mb-2">
                                 Jenis Kelamin <span class="text-red-500">*</span>
                             </label>
-                            <select name="gender" required
+                            <select name="gender" required id="genderInput"
                                     class="mt-1 w-full px-4 py-3 rounded-xl border border-gray-300
                                         focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                                 <option value="">Pilih</option>
@@ -72,7 +94,7 @@
                             <label class="text-sm font-medium text-blue-900 mb-2">
                                 Nomor Telepon
                             </label>
-                            <input type="text" name="phone" value="{{ old('phone') }}"
+                            <input type="text" id="phoneInput" name="phone" value="{{ old('phone') }}"
                                     class="mt-1 w-full px-4 py-3 rounded-xl border border-gray-300
                                         focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                             @error('phone')<p class="text-sm text-red-500 mt-1">{{ $message }}</p>@enderror
@@ -96,7 +118,7 @@
                             <label class="text-sm font-medium text-blue-900 mb-2">
                                 Jenjang Pendidikan <span class="text-red-500">*</span>
                             </label>
-                            <select name="education_level" required
+                            <select name="education_level" required id="educationInput"
                                     class="mt-1 w-full px-4 py-3 rounded-xl border border-gray-300
                                         focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                                 <option value="">Pilih</option>
@@ -108,7 +130,7 @@
 
                         <div>
                             <label class="text-sm font-medium text-blue-900 mb-2">Jurusan</label>
-                            <input type="text" name="major" value="{{ old('major') }}"
+                            <input type="text" name="major" value="{{ old('major') }}" id="majorInput"
                                     class="mt-1 w-full px-4 py-3 rounded-xl border border-gray-300
                                         focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                             @error('major')<p class="text-sm text-red-500 mt-1">{{ $message }}</p>@enderror
@@ -118,7 +140,7 @@
                             <label class="text-sm font-medium text-blue-900 mb-2">
                                 Institusi <span class="text-red-500">*</span>
                             </label>
-                            <input type="text" name="institution" value="{{ old('institution') }}" required
+                            <input type="text" name="institution" value="{{ old('institution') }}" id="institutionInput" required
                                     class="mt-1 w-full px-4 py-3 rounded-xl border border-gray-300
                                         focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                             @error('institution')<p class="text-sm text-red-500 mt-1">{{ $message }}</p>@enderror
@@ -126,7 +148,7 @@
 
                         <div class="md:col-span-2">
                             <label class="text-sm font-medium text-blue-900 mb-2">Keperluan</label>
-                            <select name="purpose"
+                            <select name="purpose" id="purposeInput"
                                     class="mt-1 w-full px-4 py-3 rounded-xl border border-gray-300
                                         focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                                 <option value="">Pilih</option>
@@ -225,7 +247,7 @@
                             <label class="text-sm font-medium text-blue-900 mb-2">
                                 Tanggal Masuk <span class="text-red-500">*</span>
                             </label>
-                            <input type="date" name="start_date" value="{{ old('start_date') }}" required
+                            <input type="date" name="start_date" value="{{ old('start_date') }}" required id="startDateInput"
                                 class="mt-1 w-full px-4 py-3 rounded-xl border border-gray-300
                                     focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                             @error('start_date')<p class="text-sm text-red-500 mt-1">{{ $message }}</p>@enderror
@@ -233,7 +255,7 @@
 
                         <div>
                             <label class="text-sm font-medium text-blue-900 mb-2">Tanggal Keluar <span class="text-red-500">*</span></label>
-                            <input type="date" name="end_date" value="{{ old('end_date') }}" required
+                            <input type="date" name="end_date" value="{{ old('end_date') }}" required id="endDateInput"
                                 class="mt-1 w-full px-4 py-3 rounded-xl border border-gray-300
                                     focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                             @error('end_date')<p class="text-sm text-red-500 mt-1">{{ $message }}</p>@enderror
@@ -320,6 +342,34 @@
 
         // Jalankan saat halaman load (untuk old value)
         document.addEventListener('DOMContentLoaded', updateTeamDisplay);
+
+
+        const calonSelect = document.getElementById('calonSelect');
+
+        calonSelect.addEventListener('change', function () {
+            const selected = this.options[this.selectedIndex];
+
+            if (this.value === "") return;
+
+            document.getElementById('emailInput').value = selected.dataset.email || '';
+            document.getElementById('phoneInput').value = selected.dataset.phone || '';
+            document.getElementById('majorInput').value = selected.dataset.major || '';
+            document.getElementById('institutionInput').value = selected.dataset.institution || '';
+
+            // select dropdown
+            const genderSelect = document.getElementById('genderInput');
+            const gender = (selected.dataset.gender || '').trim();
+
+            [...genderSelect.options].forEach(option => {
+                option.selected = option.value === gender;
+            });
+            document.getElementById('purposeInput').value = selected.dataset.purpose || '';
+            document.getElementById('educationInput').value = selected.dataset.education || '';
+
+            document.getElementById('startDateInput').value = selected.dataset.startdate || '';
+            document.getElementById('endDateInput').value = selected.dataset.enddate || '';
+        });
+
     </script>
 @endpush
 @endsection

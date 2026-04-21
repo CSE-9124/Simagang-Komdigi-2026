@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Intern;
 use App\Models\Mentor;
 use App\Models\User;
+use App\Models\Institusi;
+use App\Models\PengajuanDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -49,30 +51,39 @@ class AdminInternController extends Controller
 
     public function create()
     {
+        
+        $calonMagang = \App\Models\PengajuanDetail::with([
+                'pengajuan.institusi'
+            ])
+            ->whereHas('pengajuan', function ($q) {
+                $q->where('status', 'approved');
+            })
+            ->get();
+
         $mentors = \App\Models\Mentor::with('team')
             ->where('is_active', true)
             ->orderBy('name')
             ->get();
 
-        return view('admin.intern.create', compact('mentors'));
+        return view('admin.intern.create', compact('mentors', 'calonMagang'));
     }
 
     public function store(Request $request)
     {
-        $validTeams = [
-            'TIM DEA',
-            'TIM GTA',
-            'TIM VSGA',
-            'TIM TA',
-            'TIM Microskill',
-            'TIM Media (DiaPus)',
-            'TIM Tata Usaha (Umum)',
-            'FGA',
-            'Keuangan',
-            'Tim PUSDATIN',
-            'Tim Perencanaan, Anggaran, Dan Kerja Sama',
-            'Tim Kepegawaian, Persuratan dan Kearsipan'
-        ];
+        // $validTeams = [
+        //     'TIM DEA',
+        //     'TIM GTA',
+        //     'TIM VSGA',
+        //     'TIM TA',
+        //     'TIM Microskill',
+        //     'TIM Media (DiaPus)',
+        //     'TIM Tata Usaha (Umum)',
+        //     'FGA',
+        //     'Keuangan',
+        //     'Tim PUSDATIN',
+        //     'Tim Perencanaan, Anggaran, Dan Kerja Sama',
+        //     'Tim Kepegawaian, Persuratan dan Kearsipan'
+        // ];
 
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
