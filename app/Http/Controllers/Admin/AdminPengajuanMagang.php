@@ -18,13 +18,15 @@ class AdminPengajuanMagang extends Controller
         $totalDiterima = $pengajuanTabel->where('status', 'approved')->count();
         $totalDitolak = $pengajuanTabel->where('status', 'rejected')->count();
         $totalMenunggu = $pengajuanTabel->where('status', 'pending')->count();
+        $totalRevisi = $pengajuanTabel->where('status', 'revised')->count();
 
         return view('admin.pengajuan.index', compact(
             'pengajuanTabel',
             'totalPengajuan',
             'totalDiterima',
             'totalDitolak',
-            'totalMenunggu'
+            'totalMenunggu',
+            'totalRevisi'
         ));
     }
 
@@ -60,17 +62,28 @@ class AdminPengajuanMagang extends Controller
 
     public function updateStatus(Request $request, Pengajuan $pengajuan)
     {
+        // Prevent any status change if already approved
+        if ($pengajuan->status === 'approved') {
+            return redirect()
+                ->back()
+                ->with('error', 'Status sudah disetujui dan tidak dapat diubah.');
+        }
+
         $validated = $request->validate([
-            'status' => ['required', 'in:approved,rejected,pending'],
+            'status' => ['required', 'in:approved,rejected,pending,revised'],
+            'admin_note' => ['nullable', 'string', 'max:2000'],
         ]);
 
+        // Only keep admin_note when status is revised, otherwise clear it
         $pengajuan->update([
-            'status' => $validated['status']
+            'status' => $validated['status'],
+            'admin_note' => $validated['status'] === 'revised' ? ($validated['admin_note'] ?? null) : null,
         ]);
 
         $message = match($validated['status']) {
             'approved' => 'Laporan telah disetujui.',
             'rejected' => 'Status laporan ditolak.',
+            'revised' => 'Pengajuan ditandai perlu revisi.',
             'pending' => 'Status dikembalikan ke pending.',
             default => 'Status berhasil diperbarui.',
         };

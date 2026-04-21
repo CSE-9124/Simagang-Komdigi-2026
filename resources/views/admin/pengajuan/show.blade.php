@@ -137,7 +137,7 @@
                 </div>
 
                 <div class="p-8 bg-gray-50 rounded-b-2xl border border-blue-100">
-                    <form method="POST" action="{{ route('admin.pengajuan.update-status', $pengajuan) }}">
+                    <form id="update-status-form" method="POST" action="{{ route('admin.pengajuan.update-status', $pengajuan) }}">
                         @csrf
                         @method('PUT')
 
@@ -146,16 +146,17 @@
                                 Status Pengajuan Calon Anak Magang
                             </label>
                             <select name="status" id="status" required 
-                                class="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                                {{ $pengajuan->status == 'approved' ? 'disabled' : '' }}>
                                 {{-- <option value="pending" {{ $pengajuan->status == 'pending' ? 'selected' : '' }}>
                                     Pending
                                 </option> --}}
                                 <option value="approved" {{ $pengajuan->status == 'approved' ? 'selected' : '' }}>
                                     Approved
                                 </option>
-                                {{-- <option value="revised" {{ $pengajuan->needs_revision ? 'selected' : '' }}>
-                                    Perlu Revisi
-                                </option> --}}
+                                <option value="revised" {{ $pengajuan->status == 'revised' ? 'selected' : '' }}>
+                                    Revisi
+                                </option>
                                 <option value="rejected" {{ $pengajuan->status == 'rejected' ? 'selected' : '' }}>
                                     Rejected
                                 </option>
@@ -166,11 +167,131 @@
                             </p>
                         </div>
 
+                        <div class="mb-6" id="admin-note-block" style="display: {{ $pengajuan->status == 'revised' ? 'block' : 'none' }};">
+                            <label for="admin_note" class="block text-sm font-semibold text-gray-700 mb-2">
+                                Catatan Revisi (opsional)
+                            </label>
+                            <textarea name="admin_note" id="admin_note" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">{{ old('admin_note', $pengajuan->admin_note) }}</textarea>
+                            <p class="mt-2 text-sm text-gray-500">
+                                Tuliskan apa saja yang perlu direvisi oleh institusi/anak magang.
+                            </p>
+                        </div>
+
+                        <script>
+                            (function(){
+                                const statusEl = document.getElementById('status');
+                                const noteBlock = document.getElementById('admin-note-block');
+                                statusEl.addEventListener('change', function(e){
+                                    if (e.target.value === 'revised') {
+                                        noteBlock.style.display = 'block';
+                                    } else {
+                                        noteBlock.style.display = 'none';
+                                    }
+                                });
+                            })();
+                        </script>
+
+                        <!-- Modal Konfirmasi (tersimpan di DOM, ditampilkan via JS) -->
+                        <div id="confirm-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center px-4">
+                            <div class="absolute inset-0 bg-black bg-opacity-40"></div>
+                            <div class="relative max-w-md w-full bg-white rounded-xl shadow-lg overflow-hidden">
+                                <div class="p-6 text-center">
+                                    <div class="mx-auto w-14 h-14 rounded-full bg-blue-50 flex items-center justify-center mb-3">
+                                        <span class="text-blue-600 text-xl">?</span>
+                                    </div>
+                                    <h3 class="text-lg font-bold text-gray-800 modal-title">Simpan Perubahan?</h3>
+                                    <p class="mt-2 text-sm text-gray-500 modal-message">Apakah Anda yakin ingin menyimpan perubahan?</p>
+                                </div>
+                                <div class="px-4 pb-4 pt-2 bg-gray-50 flex gap-3 justify-center">
+                                    <button id="confirm-cancel" type="button" class="px-4 py-2 bg-white border border-gray-200 rounded-lg text-gray-700 font-semibold hover:bg-gray-100">
+                                        Tidak
+                                    </button>
+                                    <button id="confirm-accept" type="button" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold">
+                                        Ya, Simpan
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <script>
+                            (function(){
+                                const form = document.getElementById('update-status-form');
+                                const statusEl = document.getElementById('status');
+                                const modal = document.getElementById('confirm-modal');
+                                const modalTitle = modal.querySelector('.modal-title');
+                                const modalMessage = modal.querySelector('.modal-message');
+                                const btnCancel = document.getElementById('confirm-cancel');
+                                const btnConfirm = document.getElementById('confirm-accept');
+
+                                let confirmed = false;
+
+                                function getMessage(status) {
+                                    if (status === 'approved') {
+                                        return {
+                                            title: 'Simpan Status?',
+                                            message: 'Apakah Anda yakin ingin menyimpan status? tindakan ini akan menyetujui pengajuan magang dan tidak dapat diubah kembali.'
+                                        };
+                                    }
+                                    if (status === 'rejected') {
+                                        return {
+                                            title: 'Simpan Status?',
+                                            message: 'Apakah Anda yakin ingin menyimpan status? tindakan ini akan menolak pengajuan magang dan tidak dapat diubah kembali.'
+                                        };
+                                    }
+                                    return {
+                                        title: 'Simpan Perubahan?',
+                                        message: 'Konfirmasi: lanjutkan perubahan status?'
+                                    };
+                                }
+
+                                form.addEventListener('submit', function(e){
+                                    const status = statusEl.value;
+
+                                    // langsung submit jika pilih 'revised'
+                                    if (status === 'revised') {
+                                        return true;
+                                    }
+
+                                    // jika sudah dikonfirmasi melalui modal, biarkan submit berjalan
+                                    if (confirmed) {
+                                        return true;
+                                    }
+
+                                    e.preventDefault();
+
+                                    const info = getMessage(status);
+                                    modalTitle.textContent = info.title;
+                                    modalMessage.textContent = info.message;
+                                    modal.classList.remove('hidden');
+                                    // fokus ke tombol batal agar aksesibilitas lebih baik
+                                    btnCancel.focus();
+                                });
+
+                                btnCancel.addEventListener('click', function(){
+                                    modal.classList.add('hidden');
+                                });
+
+                                btnConfirm.addEventListener('click', function(){
+                                    confirmed = true;
+                                    modal.classList.add('hidden');
+                                    // kirim form setelah menutup modal
+                                    form.submit();
+                                });
+                            })();
+                        </script>
+
                         <div class="flex items-center justify-end pt-4 border-gray-200">
-                            <button type="submit" 
-                                class="w-full inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white justify-center font-bold rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
-                                Simpan Status
-                            </button>
+                            @if($pengajuan->status == 'approved')
+                                <button type="button" disabled
+                                    class="w-full inline-flex items-center px-6 py-3 bg-gray-300 text-gray-700 justify-center font-bold rounded-xl shadow-sm transition-all duration-300">
+                                    Sudah Disetujui — Tidak dapat diubah
+                                </button>
+                            @else
+                                <button type="submit" 
+                                    class="w-full inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white justify-center font-bold rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
+                                    Simpan Status
+                                </button>
+                            @endif
 
                         </div>
                     </form>

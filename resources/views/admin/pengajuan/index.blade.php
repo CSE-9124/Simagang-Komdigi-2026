@@ -24,13 +24,14 @@
         <!-- Statistics Cards (Optional - untuk informasi tambahan) -->
         {{-- @if($pengajuans->count() > 0) --}}
         {{-- Stats Cards --}}
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
 
             @php
                 $stats = [
                     ['label' => 'Total Pengajuan', 'value' => $totalPengajuan, 'color' => 'blue',   'icon' => 'fa-calendar-check'],
                     ['label' => 'Disetujui',        'value' => $totalDiterima, 'color' => 'green', 'icon' => 'fa-calendar-times'],
                     ['label' => 'Menunggu Approval','value' => $totalMenunggu,  'color' => 'yellow',    'icon' => 'fa-calendar-minus'],
+                    ['label' => 'Revisi',            'value' => $totalRevisi,   'color' => 'orange', 'icon' => 'fa-exclamation-circle'],
                     ['label' => 'Ditolak',          'value' => $totalDitolak,  'color' => 'red',  'icon' => 'fa-file-alt'],
                 ];
             @endphp
@@ -106,6 +107,7 @@
                                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
                                                 @if($pengajuan->status == 'approved') bg-green-100 text-green-800 
                                                 @elseif($pengajuan->status == 'rejected') bg-red-100 text-red-800 
+                                                @elseif($pengajuan->status == 'revised') bg-orange-100 text-orange-800 
                                                 @else bg-yellow-100 text-yellow-800 
                                                 @endif">
                                                 {{ ucfirst($pengajuan->status) }}

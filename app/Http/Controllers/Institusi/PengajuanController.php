@@ -17,8 +17,9 @@ class PengajuanController extends Controller
         $pengajuanPending = $pengajuans->where('status', 'pending')->count();
         $pengajuanApproved = $pengajuans->where('status', 'approved')->count();
         $pengajuanRejected = $pengajuans->where('status', 'rejected')->count();
+        $pengajuanRevised = $pengajuans->where('status', 'revised')->count();
 
-        return view('institusi.pengajuan.index', compact('pengajuans', 'totalPengajuan', 'pengajuanPending', 'pengajuanApproved', 'pengajuanRejected'));
+        return view('institusi.pengajuan.index', compact('pengajuans', 'totalPengajuan', 'pengajuanPending', 'pengajuanApproved', 'pengajuanRejected', 'pengajuanRevised'));
     }
     
     public function create()

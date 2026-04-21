@@ -63,6 +63,26 @@
                     </div>
 
                 </div>
+                
+                <div class="mt-6">
+                    <p class="text-sm text-gray-500">Status</p>
+                    <div class="flex items-center mt-2">
+                        <span class="px-3 py-1 rounded-full text-sm font-semibold
+                            @if($pengajuan->status == 'approved') bg-green-100 text-green-800
+                            @elseif($pengajuan->status == 'rejected') bg-red-100 text-red-800
+                            @elseif($pengajuan->status == 'revised') bg-orange-100 text-orange-800
+                            @else bg-yellow-100 text-yellow-800 @endif">
+                            {{ ucfirst($pengajuan->status) }}
+                        </span>
+                    </div>
+
+                    @if($pengajuan->status == 'revised' && $pengajuan->admin_note)
+                        <div class="mt-4 p-4 bg-orange-50 rounded-xl border border-orange-100">
+                            <h4 class="text-sm font-semibold text-orange-800 mb-2">Catatan Revisi</h4>
+                            <p class="text-sm text-gray-700 whitespace-pre-wrap">{{ $pengajuan->admin_note }}</p>
+                        </div>
+                    @endif
+                </div>
             </div>
 
             <!-- PESERTA -->

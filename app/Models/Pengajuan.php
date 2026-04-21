@@ -12,6 +12,7 @@ class Pengajuan extends Model
         'institusi_id',
         'surat_path',
         'status',
+        'admin_note',
         'start_date',
         'end_date',
         'keperluan',
