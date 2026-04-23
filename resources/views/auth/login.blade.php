@@ -72,6 +72,34 @@
             z-index: 1;
         }
 
+        .close-login-btn {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        width: 36px;
+        height: 36px;
+        color: #333333;
+        font-size: 32px;
+        line-height: 1;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        transition: background 0.2s ease, box-shadow 0.2s ease;
+        z-index: 10;
+    }
+
+    .close-login-btn:hover {
+        color: #000000;
+        transform: scale(1.2);
+        text-decoration: none;
+    }
+
+        .close-login-btn:active {
+            transform: scale(0.95);
+        }
+
     </style>
 </head>
 
@@ -79,6 +107,9 @@
 <div class="bg-wrapper">
 
     <div class="login-container">
+        <a href="{{ url('/') }}" class="close-login-btn" title="Tutup">
+            &times;
+        </a>
 
         <div class="text-center mb-3 space-y-3">
             <div class="flex flex-col items-center p-4">

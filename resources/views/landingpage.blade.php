@@ -491,6 +491,72 @@
         /* ── TESTIMONIALS ── */
         .section-testimonials { background: white; padding: 6rem 0; }
         .testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+        .testi-carousel {
+            display: none;
+            overflow: hidden;
+            position: relative;
+        }
+        .testi-carousel.active {
+            display: none;
+        }
+        .testi-carousel-wrapper {
+            display: flex;
+            transition: transform 0.4s ease-out;
+            width: 100%;
+            padding-bottom: 2rem;
+        }
+        .testi-carousel-item {
+            flex: 0 0 100%;
+            min-width: 100%;
+        }
+        .testi-carousel-nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        .testi-carousel-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #eff6ff;
+            border: 1.5px solid #bfdbfe;
+            color: #1d6fca;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        .testi-carousel-btn:hover {
+            background: #1d6fca;
+            color: white;
+            border-color: #1d6fca;
+        }
+        .testi-carousel-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .testi-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .testi-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #dbeafe;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .testi-dot.active {
+            background: #1d6fca;
+            width: 24px;
+            border-radius: 4px;
+        }
         .testi-card {
             background: #f0f7ff;
             border: 1.5px solid #bfdbfe;
@@ -651,6 +717,8 @@
             .step-block .order-swap { order: 0; }
             .step-block .step-image-wrap { order: -1; }
             .testi-grid { grid-template-columns: 1fr; }
+            .testi-carousel { display: none !important; }
+            .testi-carousel.active { display: none !important; }
             .partners-grid { grid-template-columns: repeat(2, 1fr); }
             .cta-inner { grid-template-columns: 1fr; }
             .nav-links { display: none; }
@@ -672,6 +740,9 @@
             .process-grid { display: none; }
             .process-carousel { display: block !important; }
             .process-carousel.active { display: block !important; }
+            .testi-grid { display: none; }
+            .testi-carousel { display: block !important; }
+            .testi-carousel.active { display: block !important; }
         }
     </style>
 </head>
@@ -959,6 +1030,8 @@
             <h2 class="section-title">Dipercaya oleh Banyak Institusi</h2>
             <p class="section-desc">Berbagai kampus dan sekolah sudah menggunakan Simagang untuk mengelola program magang mereka.</p>
         </div>
+        
+        <!-- Desktop Grid -->
         <div class="testi-grid">
             @php $testimonials = $testimonials ?? []; @endphp
             @forelse($testimonials as $testimony)
@@ -981,6 +1054,44 @@
                 </div>
             @endforelse
         </div>
+
+        <!-- Mobile Carousel -->
+        @if(count($testimonials ?? []) > 0)
+            <div class="testi-carousel active" id="testi-carousel">
+                <div class="testi-carousel-wrapper" id="testi-carousel-wrapper">
+                    @foreach($testimonials as $testimony)
+                        <div class="testi-carousel-item">
+                            <div class="testi-card">
+                                <div class="testi-quote-icon">"</div>
+                                <p class="testi-text">{{ Str::limit($testimony->testimony, 150) }}</p>
+                                <div class="testi-author">
+                                    <div class="testi-avatar">
+                                        <img src="{{ asset('storage/' . ($testimony->intern->photo_path ?? 'profiles/default.jpg')) }}" alt="Foto {{ $testimony->intern->name }}">
+                                    </div>
+                                    <div>
+                                        <div class="testi-name">{{ $testimony->intern->name }}</div>
+                                        <div class="testi-inst">Mahasiswa — {{ $testimony->intern->institution ?? 'Institusi' }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+                <div class="testi-carousel-nav">
+                    <button class="testi-carousel-btn" id="testi-prev" aria-label="Testimoni sebelumnya">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <div class="testi-dots" id="testi-dots">
+                        @foreach($testimonials as $index => $testimony)
+                            <div class="testi-dot{{ $index === 0 ? ' active' : '' }}" data-index="{{ $index }}"></div>
+                        @endforeach
+                    </div>
+                    <button class="testi-carousel-btn" id="testi-next" aria-label="Testimoni berikutnya">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        @endif
     </div>
 </section>
 
@@ -1250,6 +1361,136 @@
     if (processCarousel) {
         updateProcessCarousel();
         startProcessAutoPlay();
+    }
+
+    /* ===== TESTIMONIAL CAROUSEL ===== */
+    const testiCarousel = document.getElementById('testi-carousel');
+    const testiWrapper = document.getElementById('testi-carousel-wrapper');
+    const testiPrevBtn = document.getElementById('testi-prev');
+    const testiNextBtn = document.getElementById('testi-next');
+    const testiDots = document.querySelectorAll('.testi-dot');
+    
+    let testiCurrentIndex = 0;
+    let testiTouchStartX = 0;
+    let testiTouchEndX = 0;
+    let testiAutoPlayInterval;
+
+    function updateTestiCarousel() {
+        if (testiWrapper) {
+            const offset = -testiCurrentIndex * 100;
+            testiWrapper.style.transform = `translateX(${offset}%)`;
+            
+            testiDots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === testiCurrentIndex);
+            });
+
+            if (testiPrevBtn) testiPrevBtn.disabled = testiCurrentIndex === 0;
+            if (testiNextBtn) testiNextBtn.disabled = testiCurrentIndex === testiDots.length - 1;
+        }
+    }
+
+    function testiNextSlide() {
+        if (testiCurrentIndex < testiDots.length - 1) {
+            testiCurrentIndex++;
+        } else {
+            testiCurrentIndex = 0;
+        }
+        updateTestiCarousel();
+    }
+
+    function testiPrevSlide() {
+        if (testiCurrentIndex > 0) {
+            testiCurrentIndex--;
+        } else {
+            testiCurrentIndex = testiDots.length - 1;
+        }
+        updateTestiCarousel();
+    }
+
+    function startTestiAutoPlay() {
+        testiAutoPlayInterval = setInterval(() => {
+            testiCurrentIndex = (testiCurrentIndex + 1) % testiDots.length;
+            updateTestiCarousel();
+        }, 5000);
+    }
+
+    function stopTestiAutoPlay() {
+        if (testiAutoPlayInterval) {
+            clearInterval(testiAutoPlayInterval);
+        }
+    }
+
+    function resetTestiAutoPlay() {
+        stopTestiAutoPlay();
+        startTestiAutoPlay();
+    }
+
+    function testiGoToSlide(index) {
+        testiCurrentIndex = index;
+        updateTestiCarousel();
+    }
+
+    // Event listeners untuk buttons
+    if (testiNextBtn) {
+        testiNextBtn.addEventListener('click', () => {
+            testiNextSlide();
+            resetTestiAutoPlay();
+        });
+    }
+    if (testiPrevBtn) {
+        testiPrevBtn.addEventListener('click', () => {
+            testiPrevSlide();
+            resetTestiAutoPlay();
+        });
+    }
+
+    // Event listeners untuk dots
+    testiDots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            testiGoToSlide(index);
+            resetTestiAutoPlay();
+        });
+    });
+
+    // Touch/Swipe events
+    if (testiCarousel) {
+        testiCarousel.addEventListener('touchstart', (e) => {
+            testiTouchStartX = e.changedTouches[0].screenX;
+        }, false);
+
+        testiCarousel.addEventListener('touchend', (e) => {
+            testiTouchEndX = e.changedTouches[0].screenX;
+            handleTestiSwipe();
+        }, false);
+
+        testiCarousel.addEventListener('mousedown', (e) => {
+            testiTouchStartX = e.clientX;
+        }, false);
+
+        testiCarousel.addEventListener('mouseup', (e) => {
+            testiTouchEndX = e.clientX;
+            handleTestiSwipe();
+        }, false);
+    }
+
+    function handleTestiSwipe() {
+        const swipeThreshold = 50;
+        const diff = testiTouchStartX - testiTouchEndX;
+
+        if (Math.abs(diff) > swipeThreshold) {
+            if (diff > 0) {
+                testiNextSlide();
+            } else {
+                testiPrevSlide();
+            }
+            resetTestiAutoPlay();
+        }
+    }
+
+    // Initialize carousel on page load
+    if (testiCarousel && testiDots.length > 0) {
+        updateTestiCarousel();
+        startTestiAutoPlay();
     }
 </script>
 
