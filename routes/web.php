@@ -34,6 +34,10 @@ use App\Http\Controllers\Institusi\DaftarInstitusiController;
 use App\Http\Controllers\Institusi\DashboardController as InstitusiDashboardController;
 use App\Http\Controllers\Institusi\PengajuanController;
 use App\Http\Controllers\Admin\AdminPengajuanMagang;
+use App\Http\Controllers\Institusi\AttendanceController as InstitusiAttendanceController;
+use App\Http\Controllers\Institusi\InternController as InstitusiInternController;
+use App\Http\Controllers\Institusi\LogbookController as InstitusiLogbookController;
+use App\Http\Controllers\Institusi\MicroSkillController as InstitusiMicroSkillController;
 use App\Http\Controllers\Institusi\ProfileController as InstitusiProfileController;
 use App\Models\Testimonial;
 use Illuminate\Support\Facades\Route;
@@ -107,6 +111,16 @@ Route::middleware('auth', 'institusi')->group(function () {
     Route::get('/institusi/profile', [InstitusiProfileController::class, 'show'])->name('institusi.profile.show');
     Route::get('/institusi/profile/edit', [InstitusiProfileController::class, 'edit'])->name('institusi.profile.edit');
     Route::put('/institusi/profile', [InstitusiProfileController::class, 'update'])->name('institusi.profile.update');
+    // Attendance monitoring for institusi
+    Route::get('/institusi/attendance', [InstitusiAttendanceController::class, 'index'])->name('institusi.attendance.index');
+    // Intern management for institusi
+    Route::get('/institusi/intern', [InstitusiInternController::class, 'index'])->name('institusi.intern.index');
+    // Logbook monitoring for institusi
+    Route::get('/institusi/logbook', [InstitusiLogbookController::class, 'index'])->name('institusi.logbook.index');
+    Route::get('/institusi/logbook/{id}', [InstitusiLogbookController::class, 'show'])->name('institusi.logbook.show');
+    // Mikro skill monitoring for institusi
+    Route::get('/institusi/microskill', [InstitusiMicroSkillController::class, 'index'])->name('institusi.microskill.index');
+
 }); 
 Route::resource('institusi', DaftarInstitusiController::class);
 
