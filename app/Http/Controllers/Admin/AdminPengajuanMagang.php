@@ -13,15 +13,35 @@ class AdminPengajuanMagang extends Controller
     public function index()
     {   
         $pengajuanTabel = Pengajuan::with('institusi')->get();
+        $jumlahPeserta = PengajuanDetail::selectRaw('pengajuan_id, COUNT(*) as total_peserta')
+            ->groupBy('pengajuan_id')
+            ->pluck('total_peserta', 'pengajuan_id');
 
+        
+        foreach ($pengajuanTabel as $pengajuan) {
+            $pengajuan->jumlah_peserta = $jumlahPeserta->get($pengajuan->id, 0);
+        }
         $totalPengajuan = $pengajuanTabel->count();
         $totalDiterima = $pengajuanTabel->where('status', 'approved')->count();
         $totalDitolak = $pengajuanTabel->where('status', 'rejected')->count();
         $totalMenunggu = $pengajuanTabel->where('status', 'pending')->count();
         $totalRevisi = $pengajuanTabel->where('status', 'revised')->count();
 
+        $baseQuery = Pengajuan::query();
+            if (request('search')) {
+                $baseQuery->whereHas('institusi', function ($query) {
+                    $query->where('nama_institusi', 'like', '%' . request('search') . '%');
+                });
+            }
+            if (request('status')) {
+                $baseQuery->where('status', request('status'));
+            }
+            
+        $pengajuanTabel = $baseQuery->with('institusi')->get();
+
         return view('admin.pengajuan.index', compact(
             'pengajuanTabel',
+            'jumlahPeserta',
             'totalPengajuan',
             'totalDiterima',
             'totalDitolak',

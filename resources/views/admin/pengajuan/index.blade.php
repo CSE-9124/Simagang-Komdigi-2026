@@ -14,10 +14,6 @@
                     </h1>
                     <p class="text-gray-600">Catat dan kelola pengajuan magang Anda</p>
                 </div>
-                <a href="{{ route('institusi.pengajuan.create') }}" 
-                    class="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
-                    <i class="fas fa-plus mr-2"></i>Tambah Pengajuan
-                </a>
             </div>
         </div>
 
@@ -53,6 +49,45 @@
 
         </div>
 
+        <div class="bg-white shadow-md rounded-lg p-6 mb-6 border-t-4 border-blue-500">
+            <h2 class="text-lg font-semibold text-blue-900 mb-4 flex items-center">
+                    <i class="fas fa-filter mr-2 text-blue-600"></i>Filter & Pencarian
+            </h2>
+            <form method="GET" action="{{ route('admin.pengajuan.index') }}"
+                class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label for="search" class="block text-sm font-medium text-blue-900 mb-1">Cari Nama</label>
+                    <input type="text" name="search" id="search" value="{{ request('search') }}"
+                        placeholder="Cari nama..."
+                        class="w-full px-3 py-2 border border-blue-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                    <label for="status" class="block text-sm font-medium text-blue-900 mb-1">Filter Status</label>
+                    <select name="status" id="status"
+                        class="w-full px-3 py-2 border border-blue-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">Semua Status</option>
+                        <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                        <option value="approved" {{ request('status') == 'approved' ? 'selected' : '' }}>Approved</option>
+                        <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>Rejected</option>
+                        <option value="revised" {{ request('status') == 'revised' ? 'selected' : '' }}>Revised</option>
+                    </select>
+                </div>
+                <!-- status filter removed; inactive interns shown in separate table below -->
+                <div class="flex items-end gap-2">
+                    <button type="submit"
+                        class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-200 flex-1">
+                        <i class="fas fa-filter mr-2"></i>Filter
+                    </button>
+                    @if (request()->anyFilled(['search', 'status']))
+                        <a href="{{ route('admin.pengajuan.index') }}"
+                            class="bg-blue-100 hover:bg-blue-200 text-blue-700 font-bold py-2 px-4 rounded-lg transition duration-200">
+                            <i class="fas fa-times"></i>
+                        </a>
+                    @endif
+                </div>
+            </form>
+        </div>
+
         <!-- Pengajuan Magang Table -->
         <div class="bg-white rounded-2xl shadow-lg border border-blue-100 overflow-hidden">
             <div class="bg-blue-600 px-6 py-4">
@@ -67,9 +102,8 @@
                         <thead>
                             <tr class="bg-blue-50">
                                 <th class="px-6 py-4 text-center text-xs font-bold text-blue-900 uppercase tracking-wider rounded-tl-lg">No</th>
-                                <th class="px-6 py-4 text-center text-xs font-bold text-blue-900 uppercase tracking-wider rounded-tl-lg">Institusi</th>
-                                <th class="px-6 py-4 text-center text-xs font-bold text-blue-900 uppercase tracking-wider rounded-tl-lg">Fakultas</th>
-                                <th class="px-6 py-4 text-center text-xs font-bold text-blue-900 uppercase tracking-wider rounded-tl-lg">Departemen</th>
+                                <th class="px-6 py-4 text-center text-xs font-bold text-blue-900 uppercase tracking-wider">Institusi</th>
+                                <th class="px-6 py-4 text-center text-xs font-bold text-blue-900 uppercase tracking-wider">Jumlah Peserta</th>
                                 <th class="px-6 py-4 text-center text-xs font-bold text-blue-900 uppercase tracking-wider">Status</th>
                                 <th class="px-6 py-4 text-center text-xs font-bold text-blue-900 uppercase tracking-wider rounded-tr-lg">Aksi</th>
                             </tr>
@@ -88,16 +122,8 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div>
-                                            <p class="text-sm font-medium text-gray-900">
-                                                {{$pengajuan->institusi->fakultas}}
-                                             </p>
-                                            
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div>
-                                            <p class="text-sm font-medium text-gray-900">
-                                                {{$pengajuan->institusi->departemen}}
+                                            <p class="text-sm font-medium text-gray-900 text-center">
+                                                {{$jumlahPeserta[$pengajuan->id] ?? 0}} Peserta
                                              </p>
                                             
                                         </div>
@@ -142,15 +168,10 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="4" class="px-6 py-12 text-center">
+                                    <td colspan="5" class="px-6 py-12 text-center">
                                         <div class="flex flex-col items-center justify-center text-gray-500">
                                             <i class="fas fa-book text-5xl mb-3 text-gray-300"></i>
                                             <p class="text-lg font-medium">Belum ada Pengajuan.</p>
-                                            <p class="text-sm mt-2">Mulai dengan membuat pengajuan pertama Anda.</p>
-                                            <a href="#" 
-                                                class="mt-4 inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all duration-300">
-                                                <i class="fas fa-plus mr-2"></i>Tambah Pengajuan
-                                            </a>
                                         </div>
                                     </td>
                                 </tr>
