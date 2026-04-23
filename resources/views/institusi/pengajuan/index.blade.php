@@ -79,7 +79,7 @@
                                             <p class="text-sm font-medium text-gray-900">
                                                 Pengajuan 
                                                 <span class="text-sm font-medium text-red-900">
-                                                    {{$pengajuan->id}}
+                                                   {{$loop->iteration}}
                                                 </span>
                                              </p>
                                             
@@ -132,7 +132,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="4" class="px-6 py-12 text-center">
+                                    <td colspan="3" class="px-6 py-12 text-center">
                                         <div class="flex flex-col items-center justify-center text-gray-500">
                                             <i class="fas fa-book text-5xl mb-3 text-gray-300"></i>
                                             <p class="text-lg font-medium">Belum ada Pengajuan.</p>

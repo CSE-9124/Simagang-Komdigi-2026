@@ -43,7 +43,7 @@
                                 <option value="">Pilih Calon Anak Magang</option>
 
                                 @foreach($calonMagang as $c)
-                                    <option value="{{ $c->id }}"
+                                    <option value="{{ $c->nama }}"
                                         data-name="{{ $c->nama }}"
                                         data-email="{{ $c->email }}"
                                         data-gender="{{ $c->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}"

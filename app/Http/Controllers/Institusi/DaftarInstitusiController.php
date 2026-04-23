@@ -64,7 +64,7 @@ class DaftarInstitusiController extends Controller
             'departemen' => $validated['departemen'] ?? null,
         ]);
 
-        return redirect()->route('institusi.create')
+        return redirect()->route('login')
             ->with('success', 'Data institusi berhasil ditambahkan');
     }
 
