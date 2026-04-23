@@ -25,10 +25,6 @@
                                 {{ $institusi->fakultas }} - {{ $institusi->departemen }}
                             </p>
                         @endif
-
-                        <a href="{{ route('institusi.profile.edit') }}" class="inline-flex items-center px-4 py-2 bg-white text-blue-600 font-semibold rounded-lg hover:bg-blue-50 transition-all duration-300 shadow-md mt-3">
-                            <i class="fas fa-edit mr-2"></i>Edit Profile
-                        </a>
                     </div>
 
                 </div>

@@ -28,15 +28,15 @@
                     @csrf
 
                     <div class="p-8 border-b">
-                        <div class="flex items-center gap-3 mb-6">
-                            <div class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
-                                <i class="fas fa-briefcase text-blue-600"></i>
+                        <div class="flex items-start md:items-center gap-4 mb-6">
+                                <div class="w-14 h-14 md:w-10 md:h-10 p-3 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-briefcase text-blue-600 text-xl md:text-base"></i>
+                                </div>
+                                <div>
+                                    <h2 class="text-base md:text-lg font-bold text-blue-900">Informasi Pengerjaan Magang</h2>
+                                    <p class="text-xs md:text-sm text-gray-600">Isi informasi periode magang, tujuan kegiatan, dan unggah surat pengajuan.</p>
+                                </div>
                             </div>
-                            <div>
-                                <h2 class="text-lg font-bold text-blue-900">Informasi Pengerjaan Magang</h2>
-                                <p class="text-sm text-gray-600">Isi informasi periode magang, tujuan kegiatan, dan unggah surat pengajuan.</p>
-                            </div>
-                        </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <!-- Tanggal Field -->
@@ -89,15 +89,15 @@
 
                     {{-- informasi calon anak magang --}}
                     <div class="p-8 border-b bg-gray-50">
-                        <div class="flex items-center gap-3 mb-6">
-                            <div class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
-                                <i class="fas fa-user text-blue-600"></i>
+                        <div class="flex items-start md:items-center gap-4 mb-6">
+                                <div class="w-14 h-14 md:w-10 md:h-10 p-3 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-user text-blue-600 text-xl md:text-base"></i>
+                                </div>
+                                <div>
+                                    <h2 class="text-base md:text-lg font-bold text-blue-900">Informasi Calon Anak Magang</h2>
+                                    <p class="text-xs md:text-sm text-gray-600">Isi data dan kontak calon anak magang</p>
+                                </div>
                             </div>
-                            <div>
-                                <h2 class="text-lg font-bold text-blue-900">Informasi Calon Anak Magang</h2>
-                                <p class="text-sm text-gray-600">Isi data dan kontak calon anak magang</p>
-                            </div>
-                        </div>
 
                         <div id="intern-container">
 
@@ -180,7 +180,7 @@
                         </a>
                         <button type="submit" 
                             class="inline-flex items-center px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 w-full sm:w-auto justify-center">
-                            <i class="fas fa-save mr-2"></i>Simpan Logbook
+                            <i class="fas fa-save mr-2"></i>Simpan Pengajuan
                         </button>
                     </div>
                 </form>
