@@ -15,12 +15,6 @@
                         Informasi pengajuan dan calon anak magang
                     </p>
                 </div>
-
-                <a href="#"
-                class="inline-flex items-center gap-2 bg-white text-blue-700 font-semibold px-4 py-2 rounded-lg shadow">
-                    <i class="fas fa-edit"></i>
-                    Edit
-                </a>
             </div>
         </div>
 
@@ -167,6 +161,16 @@
                             </p>
                         </div>
 
+                        <div class="mb-6" id="no_surat_block">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                Nomor Surat Balasan
+                            </label>
+                            <input type="text" name="no_surat_balasan"
+                                placeholder="contoh: B-747/BBPSDMP.73/UM.01.01/12/2025"
+                                value="{{ old('no_surat_balasan', $pengajuan->nomor_surat_balasan ?? '') }}"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl">
+                        </div>
+
                         <div class="mb-6" id="admin-note-block" style="display: {{ $pengajuan->status == 'revised' ? 'block' : 'none' }};">
                             <label for="admin_note" class="block text-sm font-semibold text-gray-700 mb-2">
                                 Catatan Revisi (opsional)
@@ -180,16 +184,36 @@
                         <script>
                             (function(){
                                 const statusEl = document.getElementById('status');
+                                const noSuratBlock = document.getElementById('no_surat_block');
                                 const noteBlock = document.getElementById('admin-note-block');
-                                statusEl.addEventListener('change', function(e){
-                                    if (e.target.value === 'revised') {
+
+                                function updateUI(value) {
+
+                                    // NOMOR SURAT
+                                    if (value === 'rejected' || value === 'revised') {
+                                        noSuratBlock.style.display = 'none';
+                                    } else {
+                                        noSuratBlock.style.display = 'block';
+                                    }
+
+                                    // CATATAN REVISI
+                                    if (value === 'revised') {
                                         noteBlock.style.display = 'block';
                                     } else {
                                         noteBlock.style.display = 'none';
                                     }
+                                }
+
+                                // trigger saat change
+                                statusEl.addEventListener('change', function(e){
+                                    updateUI(e.target.value);
                                 });
+
+                                // 🔥 trigger awal (PENTING)
+                                updateUI(statusEl.value);
+
                             })();
-                        </script>
+                            </script>
 
                         <!-- Modal Konfirmasi (tersimpan di DOM, ditampilkan via JS) -->
                         <div id="confirm-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center px-4">

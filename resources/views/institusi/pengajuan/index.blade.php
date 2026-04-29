@@ -66,7 +66,8 @@
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead>
                             <tr class="bg-blue-50">
-                                <th class="px-6 py-4 text-center text-xs font-bold text-blue-900 uppercase tracking-wider rounded-tl-lg">Pengajuan</th>
+                                <th class="px-6 py-4 text-center text-xs font-bold text-blue-900 uppercase tracking-wider rounded-tl-lg">Nomor Surat</th>
+                                <th class="px-6 py-4 text-center text-xs font-bold text-blue-900 uppercase tracking-wider">Tanggal Pengajuan</th>
                                 <th class="px-6 py-4 text-center text-xs font-bold text-blue-900 uppercase tracking-wider">Status</th>
                                 <th class="px-6 py-4 text-center text-xs font-bold text-blue-900 uppercase tracking-wider rounded-tr-lg">Aksi</th>
                             </tr>
@@ -77,14 +78,17 @@
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div>
                                             <p class="text-sm font-medium text-gray-900">
-                                                Pengajuan 
-                                                <span class="text-sm font-medium text-red-900">
-                                                   {{$loop->iteration}}
-                                                </span>
+                                                {{ $pengajuan->no_surat }}
                                              </p>
                                             
                                         </div>
                                     </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div>
+                                            <p class="text-sm text-gray-500 text-center">
+                                                {{ $pengajuan->created_at->format('d M Y') }}
+                                            </p>
+                                        </div>
                                     <td class="px-6 py-4 text-left">
                                         <div class="flex flex-col space-y-1 items-center">
                                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
@@ -132,7 +136,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="3" class="px-6 py-12 text-center">
+                                    <td colspan="4" class="px-6 py-12 text-center">
                                         <div class="flex flex-col items-center justify-center text-gray-500">
                                             <i class="fas fa-book text-5xl mb-3 text-gray-300"></i>
                                             <p class="text-lg font-medium">Belum ada Pengajuan.</p>

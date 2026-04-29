@@ -56,9 +56,9 @@
             <form method="GET" action="{{ route('admin.pengajuan.index') }}"
                 class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                    <label for="search" class="block text-sm font-medium text-blue-900 mb-1">Cari Nama</label>
+                    <label for="search" class="block text-sm font-medium text-blue-900 mb-1">Cari Nomor Surat</label>
                     <input type="text" name="search" id="search" value="{{ request('search') }}"
-                        placeholder="Cari nama..."
+                        placeholder="Cari nomor surat..."
                         class="w-full px-3 py-2 border border-blue-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                 </div>
                 <div>
@@ -101,7 +101,7 @@
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead>
                             <tr class="bg-blue-50">
-                                <th class="px-6 py-4 text-center text-xs font-bold text-blue-900 uppercase tracking-wider rounded-tl-lg">No</th>
+                                <th class="px-6 py-4 text-center text-xs font-bold text-blue-900 uppercase tracking-wider rounded-tl-lg">Nomor Surat</th>
                                 <th class="px-6 py-4 text-center text-xs font-bold text-blue-900 uppercase tracking-wider">Institusi</th>
                                 <th class="px-6 py-4 text-center text-xs font-bold text-blue-900 uppercase tracking-wider">Jumlah Peserta</th>
                                 <th class="px-6 py-4 text-center text-xs font-bold text-blue-900 uppercase tracking-wider">Status</th>
@@ -111,7 +111,9 @@
                         <tbody class="bg-white divide-y divide-gray-100">
                             @forelse($pengajuanTabel as $pengajuan)
                                 <tr class="hover:bg-blue-50 transition-colors duration-150">
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ $loop->iteration }}</td>
+                                    <td class="text-sm font-medium text-gray-900">
+                                        {{ $pengajuan->no_surat }}
+                                    </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div>
                                             <p class="text-sm font-medium text-gray-900">
@@ -123,7 +125,7 @@
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div>
                                             <p class="text-sm font-medium text-gray-900 text-center">
-                                                {{$jumlahPeserta[$pengajuan->id] ?? 0}} Peserta
+                                                {{$jumlahPeserta[$pengajuan->id] ?? 0}}
                                              </p>
                                             
                                         </div>

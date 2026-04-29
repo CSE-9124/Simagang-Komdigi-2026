@@ -64,24 +64,37 @@
 
                 </div>
                 
-                <div class="mt-6">
-                    <p class="text-sm text-gray-500">Status</p>
-                    <div class="flex items-center mt-2">
-                        <span class="px-3 py-1 rounded-full text-sm font-semibold
-                            @if($pengajuan->status == 'approved') bg-green-100 text-green-800
-                            @elseif($pengajuan->status == 'rejected') bg-red-100 text-red-800
-                            @elseif($pengajuan->status == 'revised') bg-orange-100 text-orange-800
-                            @else bg-yellow-100 text-yellow-800 @endif">
-                            {{ ucfirst($pengajuan->status) }}
-                        </span>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-700 mt-6">
+                    <div>
+                        <p class="text-sm text-gray-500">Status</p>
+                        <div class="flex items-center mt-2">
+                            <span class="px-3 py-1 rounded-full text-sm font-semibold
+                                @if($pengajuan->status == 'approved') bg-green-100 text-green-800
+                                @elseif($pengajuan->status == 'rejected') bg-red-100 text-red-800
+                                @elseif($pengajuan->status == 'revised') bg-orange-100 text-orange-800
+                                @else bg-yellow-100 text-yellow-800 @endif">
+                                {{ ucfirst($pengajuan->status) }}
+                            </span>
+                        </div>
+    
+                        @if($pengajuan->status == 'revised' && $pengajuan->admin_note)
+                            <div class="mt-4 p-4 bg-orange-50 rounded-xl border border-orange-100">
+                                <h4 class="text-sm font-semibold text-orange-800 mb-2">Catatan Revisi</h4>
+                                <p class="text-sm text-gray-700 whitespace-pre-wrap">{{ $pengajuan->admin_note }}</p>
+                            </div>
+                        @endif
                     </div>
 
-                    @if($pengajuan->status == 'revised' && $pengajuan->admin_note)
-                        <div class="mt-4 p-4 bg-orange-50 rounded-xl border border-orange-100">
-                            <h4 class="text-sm font-semibold text-orange-800 mb-2">Catatan Revisi</h4>
-                            <p class="text-sm text-gray-700 whitespace-pre-wrap">{{ $pengajuan->admin_note }}</p>
-                        </div>
-                    @endif
+                    <div>
+                        @if ($pengajuan->status == 'approved')
+                            <a href="{{ route('institusi.pengajuan.surat-balasan', $pengajuan) }}" target="_blank"
+                                class="text-blue-600 font-semibold text-right bg-blue-100 px-3 py-1 rounded-lg">
+                                <i class="fas fa-download mr-2"></i>
+                                Download Surat Balasan
+                            </a>
+                            
+                        @endif
+                    </div>
                 </div>
             </div>
 

@@ -7,12 +7,13 @@ use Illuminate\Http\Request;
 use App\Models\Pengajuan;
 use App\Models\PengajuanDetail;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class PengajuanController extends Controller
 {
     public function index()
     {
-        $pengajuans = Pengajuan::where('institusi_id', Auth::user()->institusi->id)->get();
+        $pengajuans = Pengajuan::where('institusi_id', Auth::user()->institusi->id)->get()->sortByDesc('created_at');
         $totalPengajuan = $pengajuans->count();
         $pengajuanPending = $pengajuans->where('status', 'pending')->count();
         $pengajuanApproved = $pengajuans->where('status', 'approved')->count();
@@ -34,6 +35,8 @@ class PengajuanController extends Controller
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
             'keperluan' => 'required|string',
+            'no_surat' => ['required', 'string', Rule::unique('pengajuans', 'no_surat')->where('institusi_id', Auth::user()->institusi->id)],
+            'tujuan_surat' => 'required|string',
 
             // validasi array peserta
             'name.*' => 'required|string',
@@ -41,6 +44,8 @@ class PengajuanController extends Controller
             'jurusan.*' => 'required|string',
             'jenis_kelamin.*' => 'required|in:L,P',
             'no_telp.*' => 'required|string',
+        ], [
+            'no_surat.unique' => 'Nomor surat ini sudah pernah digunakan oleh institusi Anda. Silakan gunakan nomor surat yang berbeda.',
         ]);
 
         // upload file
@@ -54,6 +59,8 @@ class PengajuanController extends Controller
             'start_date' => $request->start_date,
             'end_date' => $request->end_date,
             'keperluan' => $request->keperluan,
+            'no_surat' => $request->no_surat,
+            'tujuan_surat' => $request->tujuan_surat,
         ]);
 
         // simpan banyak peserta
@@ -102,5 +109,66 @@ class PengajuanController extends Controller
         return redirect()
             ->route('institusi.pengajuan.index')
             ->with('success', 'Pengajuan berhasil dihapus.');
+    }
+
+    public function generateSuratBalasan(Pengajuan $pengajuan)
+    {
+        $pengajuan->load('details');
+
+        $pdf = new \setasign\Fpdi\Tcpdf\Fpdi();
+        $pdf->SetAutoPageBreak(true, 10);
+
+        // Load template
+        $templatePath = storage_path('app/public/balasan_surat/template_balasanSurat.pdf');
+        $pdf->setSourceFile($templatePath);
+
+        $pdf->AddPage();
+        $tpl = $pdf->importPage(1);
+        $pdf->useTemplate($tpl, 0, 0, 210);
+
+        $pdf->SetFont('Times', '', 12);
+
+        /**
+         * =========================
+         * ISI DATA DINAMIS
+         * =========================
+         */
+
+        // Nomor surat
+        $pdf->SetXY(40, 30); // sesuaikan posisi
+        // $pdf->Write(0, $pengajuan->nomor);
+
+        //Tanggal
+        $pdf->SetXY(150, 30); // sesuaikan posisi
+        $pdf->Write(0, now()->translatedFormat('d F Y'));
+
+        /**
+         * =========================
+         * LIST NAMA (PENTING 🔥)
+         * =========================
+         */
+
+        $startY = 95; // sesuaikan dengan posisi "atas nama :" di template
+        $pdf->SetXY(40, $startY);
+
+        $no = 1;
+
+        foreach ($pengajuan->details as $detail) {
+            $pdf->MultiCell(
+                120, // lebar area teks
+                6,   // tinggi baris
+                $no++ . ". " . $detail->nama . " - " . $detail->jurusan,
+                0,
+                'L'
+            );
+        }
+
+        /**
+         * =========================
+         * OUTPUT PDF
+         * =========================
+         */
+        return response($pdf->Output('surat_balasan.pdf', 'I'))
+            ->header('Content-Type', 'application/pdf');
     }
 }

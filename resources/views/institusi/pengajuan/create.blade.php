@@ -34,11 +34,34 @@
                                 </div>
                                 <div>
                                     <h2 class="text-base md:text-lg font-bold text-blue-900">Informasi Pengerjaan Magang</h2>
-                                    <p class="text-xs md:text-sm text-gray-600">Isi informasi periode magang, tujuan kegiatan, dan unggah surat pengajuan.</p>
+                                    <p class="text-xs md:text-sm text-gray-600">Isi informasi periode magang, tujuan kegiatan, dan unggah surat pengajuan. </p>
                                 </div>
                             </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                            <div>
+                                <label for="no_surat" class="text-sm font-medium text-blue-900 mb-2">
+                                    Nomor Surat Pengajuan <span class="text-red-500">*</span>
+                                </label>
+                                <input type="text" name="no_surat" id="no_surat" value="{{ old('no_surat') }}"
+                                    placeholder="contoh: 13035/UN4.1.17/HM.01.01/2025"
+                                    required
+                                    class="mt-1 w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                @error('no_surat')<p class="text-sm text-red-500 mt-1">{{ $message }}</p>@enderror  
+                            </div>
+
+                            <div>
+                                <label for="tujuan_surat" class="text-sm font-medium text-blue-900 mb-2">
+                                    Penandatangan Surat <span class="text-red-500">*</span>
+                                </label>
+                                <input type="text" name="tujuan_surat" id="tujuan_surat" value="{{ old('tujuan_surat') }}"
+                                    placeholder="contoh: Wakil Dekan Bidang Akademik dan Kemahasiswaan"
+                                    required
+                                    class="mt-1 w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                @error('tujuan_surat')<p class="text-sm text-red-500 mt-1">{{ $message }}</p>@enderror
+                            </div>
+
                             <!-- Tanggal Field -->
                             <div>
                                 <label class="text-sm font-medium text-blue-900 mb-2">
@@ -57,20 +80,20 @@
                                         focus:outline-none focus:ring-blue-500 focus:border-blue-500">
                                 @error('end_date')<p class="text-sm text-red-500 mt-1">{{ $message }}</p>@enderror
                             </div>
-        
+
                             <div class="md:col-span-2">
-                                    <label class="text-sm font-medium text-blue-900 mb-2">Keperluan</label>
-                                    <select name="keperluan" required
-                                            class="mt-1 w-full px-4 py-3 rounded-xl border border-gray-300
-                                                focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                                        <option value="{{ old('keperluan') }}">{{ old('keperluan') ?: 'Pilih' }}</option>
+                                <label class="text-sm font-medium text-blue-900 mb-2">
+                                    Keperluan <span class="text-red-500">*</span>
+                                </label>
+                                <select name="keperluan" required class="mt-1 w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                                    <option value="{{ old('keperluan') }}">{{ old('keperluan') ?: 'Pilih' }}</option>
                                         @foreach(['Magang','KKN Profesi','PKL','Praktek Industri','Magang Industri','Guru Magang Industri','Job on Training'] as $p)
                                             <option value="{{ $p }}" {{ old('keperluan')==$p?'selected':'' }}>{{ $p }}</option>
                                         @endforeach
-                                    </select>
-                                    @error('keperluan')<p class="text-sm text-red-500 mt-1">{{ $message }}</p>@enderror
-                                </div>
-        
+                                </select>
+                                @error('keperluan')<p class="text-sm text-red-500 mt-1">{{ $message }}</p>@enderror
+                            </div>
+                            
                             <!-- Surat Magang Field -->
                             <div class="mb-6">
                                 <label for="surat_magang" class="block text-sm font-semibold text-gray-700 mb-2">
@@ -103,10 +126,14 @@
 
                             <!-- CARD 1 -->
                             <div class="intern-card mb-6">
-
-                                <h3 class="text-md font-semibold text-blue-700 mb-4 peserta-title">
-                                    Calon Anak Magang 1
-                                </h3>
+                                <div class="flex items-center justify-between mb-4">
+                                    <h3 class="text-md font-semibold text-blue-700 peserta-title">
+                                        Calon Anak Magang 1
+                                    </h3>
+                                    <button type="button" onclick="removeIntern(this)" class="delete-btn text-red-500 hover:text-red-700 font-semibold transition-colors hidden">
+                                        <i class="fas fa-trash mr-1"></i>Hapus
+                                    </button>
+                                </div>
 
                                 <div class="mb-6">
                                     <label class="text-sm font-medium text-blue-900 mb-2">
@@ -197,6 +224,14 @@
         const cards = document.querySelectorAll('.intern-card');
         cards.forEach((card, index) => {
             card.querySelector('.peserta-title').innerText = 'Calon Anak Magang ' + (index + 1);
+            
+            // Tampilkan tombol hapus hanya jika ada lebih dari 1 kartu
+            const deleteBtn = card.querySelector('.delete-btn');
+            if (cards.length > 1) {
+                deleteBtn.classList.remove('hidden');
+            } else {
+                deleteBtn.classList.add('hidden');
+            }
         });
         document.getElementById('count-info').innerText = cards.length + ' calon anak magang ditambahkan';
     }
@@ -214,9 +249,20 @@
         container.appendChild(newCard);
 
         count++;
-        document.getElementById('count-info').innerText = count + ' peserta ditambahkan';
-
         updateTitles();
+    }
+
+    function removeIntern(button) {
+        const card = button.closest('.intern-card');
+        const container = document.getElementById('intern-container');
+        
+        // Pastikan minimal ada 1 kartu
+        if (container.querySelectorAll('.intern-card').length > 1) {
+            card.remove();
+            updateTitles();
+        } else {
+            alert('Minimal harus ada 1 peserta');
+        }
     }
 </script>
 @endsection

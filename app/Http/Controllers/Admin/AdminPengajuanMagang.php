@@ -30,7 +30,7 @@ class AdminPengajuanMagang extends Controller
         $baseQuery = Pengajuan::query();
             if (request('search')) {
                 $baseQuery->whereHas('institusi', function ($query) {
-                    $query->where('nama_institusi', 'like', '%' . request('search') . '%');
+                    $query->where('no_surat', 'like', '%' . request('search') . '%');
                 });
             }
             if (request('status')) {
@@ -89,15 +89,24 @@ class AdminPengajuanMagang extends Controller
                 ->with('error', 'Status sudah disetujui dan tidak dapat diubah.');
         }
 
+        // Check if status is approved from request
+        $statusFromRequest = $request->input('status');
+        
         $validated = $request->validate([
             'status' => ['required', 'in:approved,rejected,pending,revised'],
             'admin_note' => ['nullable', 'string', 'max:2000'],
+            'nomor_surat_balasan' => [
+                $statusFromRequest === 'approved' ? 'required' : 'nullable',
+                'string',
+                'max:100'
+            ],
         ]);
 
         // Only keep admin_note when status is revised, otherwise clear it
         $pengajuan->update([
             'status' => $validated['status'],
             'admin_note' => $validated['status'] === 'revised' ? ($validated['admin_note'] ?? null) : null,
+            'nomor_surat_balasan' => $validated['nomor_surat_balasan'] ?? null,
         ]);
 
         $message = match($validated['status']) {

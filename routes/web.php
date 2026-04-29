@@ -107,6 +107,10 @@ Route::middleware('auth', 'institusi')->group(function () {
     Route::post('/institusi/pengajuan', [PengajuanController::class, 'store'])->name('institusi.pengajuan.store');
     Route::get('/institusi/pengajuan/{id}', [PengajuanController::class, 'show'])->name('institusi.pengajuan.show');
     Route::delete('/institusi/pengajuan/{id}', [PengajuanController::class, 'destroy'])->name('institusi.pengajuan.destroy');
+
+    // surat balasan untuk institusi
+    Route::get('/institusi/surat-balasan/{pengajuan}', [PengajuanController::class, 'generateSuratBalasan'])->name('institusi.pengajuan.surat-balasan');
+    
     // Profile routes for institusi
     Route::get('/institusi/profile', [InstitusiProfileController::class, 'show'])->name('institusi.profile.show');
     Route::get('/institusi/profile/edit', [InstitusiProfileController::class, 'edit'])->name('institusi.profile.edit');
