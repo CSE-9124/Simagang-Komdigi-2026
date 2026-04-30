@@ -13,10 +13,10 @@
                     <p class="text-gray-600 mt-1">Informasi profil institusi Anda</p>
                 </div>
                 <div class="flex flex-row gap-3">
-                    <a href="{{ route('mentor.dashboard') }}" class="inline-flex w-full justify-center items-center px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-semibold rounded-lg transition-all duration-300 sm:w-auto">
+                    <a href="{{ route('institusi.dashboard') }}" class="inline-flex w-full justify-center items-center px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-semibold rounded-lg transition-all duration-300 sm:w-auto">
                         <i class="fas fa-arrow-left mr-2"></i>Kembali
                     </a>
-                    <a href="{{ route('mentor.profile.edit') }}" class="inline-flex w-full justify-center items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all duration-300 sm:w-auto">
+                    <a href="{{ route('institusi.profile.edit') }}" class="inline-flex w-full justify-center items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all duration-300 sm:w-auto">
                         <i class="fas fa-edit mr-2"></i>Edit Profile
                     </a>
                 </div>
