@@ -29,19 +29,26 @@
 
             <!-- INFORMASI MAGANG -->
             <div class="p-8 border-b">
-                <div class="flex items-center gap-3 mb-6">
-                    <div class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
-                        <i class="fas fa-briefcase text-blue-600"></i>
+                <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
+    
+                    <!-- Kiri: Icon + Judul -->
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
+                            <i class="fas fa-briefcase text-blue-600"></i>
+                        </div>
+                        <h2 class="text-lg font-bold text-blue-900">
+                            Informasi Surat Pengajuan Magang
+                        </h2>
                     </div>
-                    <div>
-                        <h2 class="text-lg font-bold text-blue-900">Informasi Surat Pengajuan Magang</h2>
-                    </div>
+
+                    <!-- Kanan: Tombol -->
                     <a href="{{ asset('storage/' . $pengajuan->surat_path) }}" target="_blank"
-                            class="text-blue-600 font-semibold text-right ml-auto bg-blue-100 px-3 py-1 rounded-lg">
-                            <i class="fas fa-download mr-2"></i>
-                            Download Surat Pengajuan
+                        class="sm:ml-auto w-full sm:w-auto text-center text-blue-600 font-semibold bg-blue-100 px-4 py-2 rounded-lg hover:bg-blue-200 transition">
+                        
+                        <i class="fas fa-download mr-2"></i>
+                        Download Surat Pengajuan
                     </a>
-                    
+
                 </div>
 
                 <div class="text-gray-700">
@@ -89,23 +96,28 @@
             </div>
 
             <div class="p-8 border-b">
-                <div class="flex items-center gap-3 mb-6">
-                    <div class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
-                        <i class="fas fa-info-circle text-blue-600"></i>
+                <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
+    
+                    <!-- Kiri: Icon + Judul -->
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
+                            <i class="fas fa-briefcase text-blue-600"></i>
+                        </div>
+                        <h2 class="text-lg font-bold text-blue-900">
+                            Status Pengajuan Magang
+                        </h2>
                     </div>
-                    <div>
-                        <h2 class="text-lg font-bold text-blue-900">Status Pengajuan</h2>
-                    </div>
-                    
+
+                    <!-- Kanan: Tombol -->
                     @if ($pengajuan->status == 'approved')
                         <a href="{{ route('institusi.pengajuan.surat-balasan', $pengajuan) }}" target="_blank"
-                            class="text-green-800 font-semibold text-right ml-auto bg-green-100 px-3 py-1 rounded-lg">
+                            class="sm:ml-auto w-full sm:w-auto text-center text-green-600 font-semibold bg-green-100 px-4 py-2 rounded-lg hover:bg-green-200 transition">
                             <i class="fas fa-download mr-2"></i>
                             Download Surat Balasan
                         </a>
                             
                     @endif
-                    
+
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-700 mt-6">
