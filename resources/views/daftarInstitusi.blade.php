@@ -57,11 +57,11 @@
 
                     <div class="p-8 bg-gray-50 border-b">
                         <div class="flex items-center gap-3 mb-6">
-                            <div class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
-                                <i class="fas fa-building text-blue-600"></i>
-                            </div>
+                            <div class="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-blue-100 flex items-center justify-center min-w-[40px]">
+                                    <i class="fas fa-building text-blue-600 text-lg sm:text-2xl"></i>
+                                </div>
                             <div>
-                                <h2 class="text-lg font-bold text-blue-900">Informasi Institusi</h2>
+                                <h2 class="text-lg sm:text-xl font-bold text-blue-900">Informasi Institusi</h2>
                                 <p class="text-sm text-gray-600">Masukkan informasi lengkap mengenai sekolah atau kampus Anda.</p>
                             </div>
                         </div>
@@ -122,11 +122,11 @@
                     </div>
                     <div class="p-8 border-b">
                         <div class="flex items-center gap-3 mb-6">
-                            <div class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
-                                <i class="fas fa-user text-blue-600"></i>
+                            <div class="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-blue-100 flex items-center justify-center min-w-[40px]">
+                                <i class="fas fa-user text-blue-600 text-lg sm:text-2xl"></i>
                             </div>
                             <div>
-                                <h2 class="text-lg font-bold text-blue-900">Informasi Pribadi Admin</h2>
+                                <h2 class="text-lg sm:text-xl font-bold text-blue-900">Informasi Pribadi Admin</h2>
                                 <p class="text-sm text-gray-600">Masukkan informasi pribadi admin sebagai penanggung jawab institusi.</p>
                             </div>
                         </div>
@@ -166,11 +166,11 @@
 
                     <div class="p-8">
                     <div class="flex items-center gap-3 mb-6">
-                        <div class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
-                            <i class="fas fa-shield-alt text-blue-600"></i>
+                        <div class="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-blue-100 flex items-center justify-center min-w-[40px]">
+                            <i class="fas fa-shield-alt text-blue-600 text-lg sm:text-2xl"></i>
                         </div>
                         <div>
-                            <h2 class="text-lg font-bold text-blue-900">Keamanan & Status</h2>
+                            <h2 class="text-lg sm:text-xl font-bold text-blue-900">Keamanan & Status</h2>
                             <p class="text-sm text-gray-600">Pengaturan password dan status aktif</p>
                         </div>
                     </div>

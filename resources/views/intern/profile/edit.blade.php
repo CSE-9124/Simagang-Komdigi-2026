@@ -12,7 +12,7 @@
                     <h1 class="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2">Edit Profile</h1>
                     <p class="text-gray-600 mt-1">Perbarui informasi profil Anda</p>
                 </div>
-                <a href="{{ route('intern.dashboard') }}" class="inline-flex items-center px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-semibold rounded-lg transition-all duration-300">
+                <a href="{{ route('intern.profile.show') }}" class="inline-flex items-center px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-semibold rounded-lg transition-all duration-300">
                     <i class="fas fa-arrow-left mr-2"></i>Kembali
                 </a>
             </div>

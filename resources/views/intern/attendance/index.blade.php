@@ -21,68 +21,68 @@
         </div>
 <!-- Statistics Cards (Optional - untuk informasi tambahan) -->
         @if($attendances->count() > 0 || $todayVirtualAbsent)
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mt-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-8">
                 <!-- Total Hadir -->
-                <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
-                    <div class="p-6">
-                        <div class="flex items-center justify-between">
-                            <div class="flex-1">
-                                <p class="text-sm font-medium text-gray-600 mb-1">Total Hadir</p>
-                                <h3 class="text-3xl font-bold text-gray-900">{{ $totalHadir }}</h3>
-                            </div>
-                            <div class="w-16 h-16 bg-green-500 rounded-2xl flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300">
-                                <i class="fas fa-calendar-check text-white text-2xl"></i>
+                <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group flex flex-col h-full">
+                    <div class="p-6 flex-1">
+                            <div class="flex flex-col-reverse sm:flex-row items-center sm:items-start justify-between gap-2 sm:gap-0">
+                                <div class="flex-1 text-center sm:text-left">
+                                    <p class="text-sm font-medium text-gray-600 mb-1">Total Hadir</p>
+                                    <h3 class="text-3xl font-bold text-gray-900">{{ $totalHadir }}</h3>
+                                </div>
+                                <div class="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 bg-green-500 rounded-2xl flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300 mx-auto sm:mx-0">
+                                    <i class="fas fa-calendar-check text-white text-2xl"></i>
+                                </div>
                             </div>
                         </div>
-                    </div>
                     <div class="h-1 bg-green-500"></div>
                 </div>
 
                 <!-- Total Izin -->
-                <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
-                    <div class="p-6">
-                        <div class="flex items-center justify-between">
-                            <div class="flex-1">
-                                <p class="text-sm font-medium text-gray-600 mb-1">Total Izin</p>
-                                <h3 class="text-3xl font-bold text-gray-900">{{ $totalIzin }}</h3>
-                            </div>
-                            <div class="w-16 h-16 bg-yellow-500 rounded-2xl flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300">
-                                <i class="fas fa-calendar-times text-white text-2xl"></i>
+                <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group flex flex-col h-full">
+                    <div class="p-6 flex-1">
+                            <div class="flex flex-col-reverse sm:flex-row items-center sm:items-start justify-between gap-2 sm:gap-0">
+                                <div class="flex-1 text-center sm:text-left">
+                                    <p class="text-sm font-medium text-gray-600 mb-1">Total Izin</p>
+                                    <h3 class="text-3xl font-bold text-gray-900">{{ $totalIzin }}</h3>
+                                </div>
+                                <div class="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 bg-yellow-500 rounded-2xl flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300 mx-auto sm:mx-0">
+                                    <i class="fas fa-calendar-times text-white text-2xl"></i>
+                                </div>
                             </div>
                         </div>
-                    </div>
                     <div class="h-1 bg-yellow-500"></div>
                 </div>
 
                 <!-- Total Sakit -->
-                <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
-                    <div class="p-6">
-                        <div class="flex items-center justify-between">
-                            <div class="flex-1">
-                                <p class="text-sm font-medium text-gray-600 mb-1">Total Sakit</p>
-                                <h3 class="text-3xl font-bold text-gray-900">{{ $totalSakit }}</h3>
-                            </div>
-                            <div class="w-16 h-16 bg-red-500 rounded-2xl flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300">
-                                <i class="fas fa-calendar-minus text-white text-2xl"></i>
+                <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group flex flex-col h-full">
+                    <div class="p-6 flex-1">
+                            <div class="flex flex-col-reverse sm:flex-row items-center sm:items-start justify-between gap-2 sm:gap-0">
+                                <div class="flex-1 text-center sm:text-left">
+                                    <p class="text-sm font-medium text-gray-600 mb-1">Total Sakit</p>
+                                    <h3 class="text-3xl font-bold text-gray-900">{{ $totalSakit }}</h3>
+                                </div>
+                                <div class="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 bg-red-500 rounded-2xl flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300 mx-auto sm:mx-0">
+                                    <i class="fas fa-calendar-minus text-white text-2xl"></i>
+                                </div>
                             </div>
                         </div>
-                    </div>
                     <div class="h-1 bg-red-500"></div>
                 </div>
 
                 <!-- Total Tidak Hadir -->
-                <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
-                    <div class="p-6">
-                        <div class="flex items-center justify-between">
-                            <div class="flex-1">
-                                <p class="text-sm font-medium text-gray-600 mb-1">Tidak Hadir</p>
-                                <h3 class="text-3xl font-bold text-gray-900">{{ $totalTidakHadir + ($todayVirtualAbsent ? 1 : 0) }}</h3>
-                            </div>
-                            <div class="w-16 h-16 bg-red-500 rounded-2xl flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300">
-                                <i class="fas fa-user-times text-white text-2xl"></i>
+                <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group flex flex-col h-full">
+                    <div class="p-6 flex-1">
+                            <div class="flex flex-col-reverse sm:flex-row items-center sm:items-start justify-between gap-2 sm:gap-0">
+                                <div class="flex-1 text-center sm:text-left">
+                                    <p class="text-sm font-medium text-gray-600 mb-1">Tidak Hadir</p>
+                                    <h3 class="text-3xl font-bold text-gray-900">{{ $totalTidakHadir + ($todayVirtualAbsent ? 1 : 0) }}</h3>
+                                </div>
+                                <div class="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 bg-red-500 rounded-2xl flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300 mx-auto sm:mx-0">
+                                    <i class="fas fa-user-times text-white text-2xl"></i>
+                                </div>
                             </div>
                         </div>
-                    </div>
                     <div class="h-1 bg-red-500"></div>
                 </div>
 

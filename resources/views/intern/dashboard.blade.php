@@ -40,10 +40,10 @@
             </div>
 
             <!-- Stats Cards -->
-            <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3 sm:gap-4 md:gap-6 mb-8">
+            <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6 mb-8">
                 <!-- Card 1: Hari Hadir -->
-                <div class="bg-white rounded-xl sm:rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
-                    <div class="p-3 sm:p-6">
+                <div class="bg-white rounded-xl sm:rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group flex flex-col h-full">
+                    <div class="p-3 sm:p-6 flex-1">
                         <div class="flex flex-col-reverse sm:flex-row items-center sm:items-start justify-center sm:justify-between gap-2 sm:gap-3">
                             <div class="flex-1 min-w-0 flex flex-col text-center sm:text-left">
                                 <p class="text-xs sm:text-sm font-medium text-gray-700 truncate">Total Hadir</p>
@@ -54,12 +54,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="h-1 bg-blue-500"></div>
+                    <div class="h-1 bg-blue-500 rounded-b-xl"></div>
                 </div>
 
                 <!-- Card 2: Izin -->
-                <div class="bg-white rounded-xl sm:rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
-                    <div class="p-3 sm:p-6">
+                <div class="bg-white rounded-xl sm:rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group flex flex-col h-full">
+                    <div class="p-3 sm:p-6 flex-1">
                         <div class="flex flex-col-reverse sm:flex-row items-center sm:items-start justify-center sm:justify-between gap-2 sm:gap-3">
                             <div class="flex-1 min-w-0 flex flex-col text-center sm:text-left">
                                 <p class="text-xs sm:text-sm font-medium text-gray-700 truncate">Izin</p>
@@ -70,12 +70,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="h-1 bg-yellow-500"></div>
+                    <div class="h-1 bg-yellow-500 rounded-b-xl"></div>
                 </div>
 
                 <!-- Card 3: Sakit -->
-                <div class="bg-white rounded-xl sm:rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
-                    <div class="p-3 sm:p-6">
+                <div class="bg-white rounded-xl sm:rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group flex flex-col h-full">
+                    <div class="p-3 sm:p-6 flex-1">
                         <div class="flex flex-col-reverse sm:flex-row items-center sm:items-start justify-center sm:justify-between gap-2 sm:gap-3">
                             <div class="flex-1 min-w-0 flex flex-col text-center sm:text-left">
                                 <p class="text-xs sm:text-sm font-medium text-gray-700 truncate">Sakit</p>
@@ -86,12 +86,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="h-1 bg-red-500"></div>
+                    <div class="h-1 bg-red-500 rounded-b-xl"></div>
                 </div>
 
                 <!-- Card 4: Tidak Hadir -->
-                <div class="bg-white rounded-xl sm:rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
-                    <div class="p-3 sm:p-6">
+                <div class="bg-white rounded-xl sm:rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group flex flex-col h-full">
+                    <div class="p-3 sm:p-6 flex-1">
                         <div class="flex flex-col-reverse sm:flex-row items-center sm:items-start justify-center sm:justify-between gap-2 sm:gap-3">
                             <div class="flex-1 min-w-0 flex flex-col text-center sm:text-left">
                                 <p class="text-xs sm:text-sm font-medium text-gray-700 truncate">Tidak Hadir</p>
@@ -102,12 +102,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="h-1 bg-orange-500"></div>
+                    <div class="h-1 bg-orange-500 rounded-b-xl"></div>
                 </div>
 
                 <!-- Card 5: Laporan -->
-                <div class="bg-white rounded-xl sm:rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
-                    <div class="p-3 sm:p-6">
+                <div class="bg-white rounded-xl sm:rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group flex flex-col h-full">
+                    <div class="p-3 sm:p-6 flex-1">
                         <div class="flex flex-col-reverse sm:flex-row items-center sm:items-start justify-center sm:justify-between gap-2 sm:gap-3">
                             <div class="flex-1 min-w-0 flex flex-col text-center sm:text-left">
                                 <p class="text-xs sm:text-sm font-medium text-gray-700 truncate">Laporan</p>
@@ -118,12 +118,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="h-1 bg-green-500"></div>
+                    <div class="h-1 bg-green-500 rounded-b-xl"></div>
                 </div>
 
                 <!-- Card 6: Mikro Skill -->
-                <div class="bg-white rounded-xl sm:rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
-                    <div class="p-3 sm:p-6">
+                <div class="bg-white rounded-xl sm:rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group flex flex-col h-full">
+                    <div class="p-3 sm:p-6 flex-1">
                         <div class="flex flex-col-reverse sm:flex-row items-center sm:items-start justify-center sm:justify-between gap-2 sm:gap-3">
                             <div class="flex-1 min-w-0 flex flex-col text-center sm:text-left">
                                 <p class="text-xs sm:text-sm font-medium text-gray-700 truncate">Mikro Skill</p>
@@ -134,7 +134,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="h-1 bg-purple-500"></div>
+                    <div class="h-1 bg-purple-500 rounded-b-xl"></div>
                 </div>
             </div>
 
