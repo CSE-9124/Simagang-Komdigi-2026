@@ -22,15 +22,35 @@
         
         <!-- Header -->
         <div class="mb-8">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
-                    <h1 class="text-4xl font-bold text-blue-600 mb-2">Mikro Skill Saya</h1>
+                    <h1 class="text-3xl md:text-4xl font-bold text-blue-600 mb-1">Mikro Skill Saya</h1>
                     <p class="text-gray-600">Kelola pengumpulan mikro skill Anda</p>
                 </div>
-                <a href="{{ route('intern.microskill.create') }}" 
-                   class="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
-                    <i class="fas fa-upload mr-2"></i>Upload Bukti
-                </a>
+
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
+                    <form method="GET" action="{{ route('intern.microskill.index') }}" class="flex items-center w-full sm:w-auto gap-2">
+                        <label for="q" class="sr-only">Cari mikro skill</label>
+                        <input id="q" name="q" value="{{ request('q') }}" type="text" placeholder="Cari judul..." 
+                               class="flex-1 text-sm px-4 py-3 rounded-full border border-blue-100 bg-white placeholder-gray-400 focus:outline-none" />
+
+                        @if(request('q'))
+                            <a href="{{ route('intern.microskill.index') }}" aria-label="Bersihkan pencarian" class="w-11 h-11 rounded-full bg-white border border-gray-200 text-gray-600 flex items-center justify-center hover:bg-gray-50">
+                                <i class="fas fa-times"></i>
+                            </a>
+                        @else
+                            <button type="submit" aria-label="Cari" class="w-11 h-11 rounded-full bg-blue-600 text-white flex items-center justify-center hover:bg-blue-700">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        @endif
+                    </form>
+
+                    <a href="{{ route('intern.microskill.create') }}" 
+                       class="inline-flex items-center justify-center px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow transition-all duration-200 w-full sm:w-auto">
+                        <i class="fas fa-upload mr-2"></i>
+                        <span>Upload Bukti</span>
+                    </a>
+                </div>
             </div>
         </div>
 
@@ -136,7 +156,7 @@
                 <!-- Pagination -->
                 @if($submissions->count() > 0)
                     <div class="mt-6">
-                        {{ $submissions->links() }}
+                        {{ $submissions->appends(request()->except('page'))->links() }}
                     </div>
                 @endif
             </div>
