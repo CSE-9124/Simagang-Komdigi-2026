@@ -103,7 +103,7 @@
                             <tr class="bg-blue-50">
                                 <th class="px-6 py-4 text-center text-xs font-bold text-blue-900 uppercase tracking-wider rounded-tl-lg">Nomor Surat</th>
                                 <th class="px-6 py-4 text-center text-xs font-bold text-blue-900 uppercase tracking-wider">Institusi</th>
-                                <th class="px-6 py-4 text-center text-xs font-bold text-blue-900 uppercase tracking-wider">Jumlah Peserta</th>
+                                <th class="px-6 py-4 text-center text-xs font-bold text-blue-900 uppercase tracking-wider">Tanggal Pengajuan</th>
                                 <th class="px-6 py-4 text-center text-xs font-bold text-blue-900 uppercase tracking-wider">Status</th>
                                 <th class="px-6 py-4 text-center text-xs font-bold text-blue-900 uppercase tracking-wider rounded-tr-lg">Aksi</th>
                             </tr>
@@ -111,12 +111,14 @@
                         <tbody class="bg-white divide-y divide-gray-100">
                             @forelse($pengajuanTabel as $pengajuan)
                                 <tr class="hover:bg-blue-50 transition-colors duration-150">
-                                    <td class="text-sm font-medium text-gray-900">
-                                        {{ $pengajuan->no_surat }}
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <p class="text-sm text-gray-500 font-medium">
+                                            {{ $pengajuan->no_surat }}
+                                        </p>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div>
-                                            <p class="text-sm font-medium text-gray-900">
+                                            <p class="text-sm text-gray-500 font-medium">
                                                 {{$pengajuan->institusi->nama_institusi}}
                                              </p>
                                             
@@ -124,8 +126,8 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div>
-                                            <p class="text-sm font-medium text-gray-900 text-center">
-                                                {{$jumlahPeserta[$pengajuan->id] ?? 0}}
+                                            <p class="text-sm text-gray-500 font-medium text-center">
+                                                {{$pengajuan->created_at->format('d M Y')}}
                                              </p>
                                             
                                         </div>

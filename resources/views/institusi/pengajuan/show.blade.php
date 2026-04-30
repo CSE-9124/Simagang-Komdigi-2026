@@ -34,36 +34,80 @@
                         <i class="fas fa-briefcase text-blue-600"></i>
                     </div>
                     <div>
-                        <h2 class="text-lg font-bold text-blue-900">Informasi Pengerjaan Magang</h2>
+                        <h2 class="text-lg font-bold text-blue-900">Informasi Surat Pengajuan Magang</h2>
                     </div>
-                    
                     <a href="{{ asset('storage/' . $pengajuan->surat_path) }}" target="_blank"
-                        class="text-blue-600 font-semibold text-right ml-auto bg-blue-100 px-3 py-1 rounded-lg">
-                        <i class="fas fa-download mr-2"></i>
-                        Download Surat
+                            class="text-blue-600 font-semibold text-right ml-auto bg-blue-100 px-3 py-1 rounded-lg">
+                            <i class="fas fa-download mr-2"></i>
+                            Download Surat Pengajuan
                     </a>
                     
                 </div>
 
+                <div class="text-gray-700">
+
+                    <div>
+                        <p class="text-sm text-gray-500">Nomor Surat Pengajuan</p>
+                        <p class="font-semibold">{{ $pengajuan->no_surat }}</p>
+                    </div>
+                    <div class="mt-6">
+                        <p class="text-sm text-gray-500">Penanggung Jawab</p>
+                        <p class="font-semibold">{{ $pengajuan->tujuan_surat }}</p>
+                    </div>
+                    <div class="mt-6">
+                        <p class="text-sm text-gray-500">Tanggal Pengajuan</p>
+                        <p class="font-semibold">{{ $pengajuan->created_at->format('d F Y') }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-8 border-b bg-gray-50">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
+                        <i class="fas fa-clipboard text-blue-600"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-bold text-blue-900">Informasi Pengajuan Magang</h2>
+                    </div>
+                    
+                </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-gray-700">
-
-                    <div>
-                        <p class="text-sm text-gray-500">Tanggal Masuk</p>
-                        <p class="font-semibold">{{ $pengajuan->start_date }}</p>
-                    </div>
-
-                    <div>
-                        <p class="text-sm text-gray-500">Tanggal Keluar</p>
-                        <p class="font-semibold">{{ $pengajuan->end_date }}</p>
-                    </div>
 
                     <div>
                         <p class="text-sm text-gray-500">Keperluan</p>
                         <p class="font-semibold">{{ $pengajuan->keperluan }}</p>
                     </div>
-
+                    <div>
+                        <p class="text-sm text-gray-500">Tanggal Masuk</p>
+                        <p class="font-semibold">{{ $pengajuan->start_date}}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">Tanggal Keluar</p>
+                        <p class="font-semibold">{{ $pengajuan->end_date}}</p>
+                    </div>
                 </div>
-                
+            </div>
+
+            <div class="p-8 border-b">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
+                        <i class="fas fa-info-circle text-blue-600"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-bold text-blue-900">Status Pengajuan</h2>
+                    </div>
+                    
+                    @if ($pengajuan->status == 'approved')
+                        <a href="{{ route('institusi.pengajuan.surat-balasan', $pengajuan) }}" target="_blank"
+                            class="text-green-800 font-semibold text-right ml-auto bg-green-100 px-3 py-1 rounded-lg">
+                            <i class="fas fa-download mr-2"></i>
+                            Download Surat Balasan
+                        </a>
+                            
+                    @endif
+                    
+                </div>
+
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-700 mt-6">
                     <div>
                         <p class="text-sm text-gray-500">Status</p>
@@ -84,18 +128,8 @@
                             </div>
                         @endif
                     </div>
-
-                    <div>
-                        @if ($pengajuan->status == 'approved')
-                            <a href="{{ route('institusi.pengajuan.surat-balasan', $pengajuan) }}" target="_blank"
-                                class="text-blue-600 font-semibold text-right bg-blue-100 px-3 py-1 rounded-lg">
-                                <i class="fas fa-download mr-2"></i>
-                                Download Surat Balasan
-                            </a>
-                            
-                        @endif
-                    </div>
                 </div>
+
             </div>
 
             <!-- PESERTA -->

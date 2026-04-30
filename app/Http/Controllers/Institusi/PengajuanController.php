@@ -93,14 +93,14 @@ class PengajuanController extends Controller
     {
         $pengajuan = Pengajuan::where('institusi_id', Auth::user()->institusi->id)->findOrFail($id);
 
-        // 🔥 Cek status dulu
+        // Cek status
         if ($pengajuan->status !== 'rejected' && $pengajuan->status !== 'pending') {
             return redirect()
                 ->back()
                 ->with('error', 'Pengajuan hanya bisa dihapus jika statusnya rejected atau pending.');
         }
 
-        // Hapus relasi detail dulu
+        // Hapus relasi details
         $pengajuan->details()->delete();
 
         // Hapus pengajuan
@@ -128,46 +128,87 @@ class PengajuanController extends Controller
 
         $pdf->SetFont('Times', '', 12);
 
-        /**
-         * =========================
-         * ISI DATA DINAMIS
-         * =========================
-         */
-
         // Nomor surat
-        $pdf->SetXY(40, 30); // sesuaikan posisi
-        // $pdf->Write(0, $pengajuan->nomor);
+        $pdf->SetXY(43.8, 80.6);
+        $pdf->Write(0, $pengajuan->nomor_surat_balasan ?? '-');
 
         //Tanggal
-        $pdf->SetXY(150, 30); // sesuaikan posisi
-        $pdf->Write(0, now()->translatedFormat('d F Y'));
+        $pdf->SetXY(146, 80.6); 
+        $pdf->Write(0, "Makassar, " . $pengajuan->updated_at->translatedFormat('d F Y'));
 
-        /**
-         * =========================
-         * LIST NAMA (PENTING 🔥)
-         * =========================
-         */
+        // Tujuan surat
+        $pdf->SetXY(18, 108.3); 
+        $pdf->Write(0, $pengajuan->tujuan_surat);
 
-        $startY = 95; // sesuaikan dengan posisi "atas nama :" di template
-        $pdf->SetXY(40, $startY);
-
-        $no = 1;
-
-        foreach ($pengajuan->details as $detail) {
-            $pdf->MultiCell(
-                120, // lebar area teks
-                6,   // tinggi baris
-                $no++ . ". " . $detail->nama . " - " . $detail->jurusan,
-                0,
-                'L'
-            );
+        // Institusi
+        $pdf->SetXY(18, 114); 
+        if ($pengajuan->institusi->jenis_institusi === 'sekolah') {
+            $pdf->Write(0, $pengajuan->institusi->nama_institusi );
+        } else {
+            $pdf->Write(0, "Fakultas ". $pengajuan->institusi->fakultas . " " . $pengajuan->institusi->nama_institusi);
         }
 
-        /**
-         * =========================
-         * OUTPUT PDF
-         * =========================
-         */
+        // nomor surat pengajuan
+        $pdf->SetXY(128.5, 130.7); 
+        $pdf->Write(0, $pengajuan->no_surat);
+
+        // tanggal pengajuan
+        $tanggal = $pengajuan->created_at;
+        $pdf->SetXY(32.8, 136.2); 
+        $pdf->Write(0, 
+            $tanggal->translatedFormat('d') . ' ' . 
+            bulanSingkat($tanggal) . ' ' . 
+            $tanggal->translatedFormat('Y')
+        );
+
+        // ttd
+        $pdf->Image(
+            storage_path('app/public/images/ttd_balasan_surat.jpg'),
+            137.7,
+            242.4,
+            20,
+            20
+        );
+            
+        // halaman 2
+        $pdf->AddPage();
+        $tpl2 = $pdf->importPage(2);
+        $pdf->useTemplate($tpl2, 0, 0, 210);
+
+        // TABEL
+        $pdf->SetFont('Times', '', 12);
+
+        // posisi awal tabel
+        $startY = 35;
+        $pdf->SetXY(22, $startY);
+
+        // lebar kolom 
+        $wNo = 12;
+        $wNama = 86;
+        $wJurusan = 65;
+
+        // ================= HEADER =================
+        $pdf->SetFont('Times', 'B', 12);
+        $pdf->SetX(22); 
+        $pdf->Cell($wNo, 8, 'No', 1, 0, 'C');
+        $pdf->Cell($wNama, 8, 'Nama', 1, 0, 'C');
+        $pdf->Cell($wJurusan, 8, 'Jurusan', 1, 1, 'C');
+
+        // ================= ISI =================
+        $pdf->SetFont('Times', '', 12);
+
+        $no = 1;
+        foreach ($pengajuan->details as $detail) {
+
+            $pdf->SetX(22); 
+
+            $pdf->Cell($wNo, 7, $no++, 1, 0, 'C');
+            $pdf->Cell($wNama, 7, ' ' . $detail->nama, 1);
+            $pdf->Cell($wJurusan, 7, ' ' . $detail->jurusan ?? '-', 1);
+            
+            $pdf->Ln();
+        }
+        
         return response($pdf->Output('surat_balasan.pdf', 'I'))
             ->header('Content-Type', 'application/pdf');
     }

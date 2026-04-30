@@ -242,6 +242,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::put('/pengajuan/{pengajuan}/update-status', [AdminPengajuanMagang::class, 'updateStatus'])
     ->name('pengajuan.update-status');
     Route::delete('/pengajuan/{id}', [AdminPengajuanMagang::class, 'destroy'])->name('pengajuan.destroy');
+    Route::get('/pengajuan/surat-balasan/{pengajuan}', [AdminPengajuanMagang::class, 'generateSuratBalasan'])->name('pengajuan.surat-balasan');
 
     // Manafe Tim Routes
     Route::get('/team', [TeamController::class, 'index'])->name('team.index');

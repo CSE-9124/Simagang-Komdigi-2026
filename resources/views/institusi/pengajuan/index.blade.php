@@ -77,7 +77,7 @@
                                 <tr class="hover:bg-blue-50 transition-colors duration-150">
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div>
-                                            <p class="text-sm font-medium text-gray-900">
+                                            <p class="text-sm text-gray-500 text-center">
                                                 {{ $pengajuan->no_surat }}
                                              </p>
                                             

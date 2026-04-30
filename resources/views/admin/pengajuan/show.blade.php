@@ -22,7 +22,7 @@
         <div class="bg-white rounded-2xl shadow-lg border border-blue-100 overflow-hidden">
 
             <!-- INFORMASI MAGANG -->
-            <div class="p-8 border-b">
+            <div class="p-8 border-b bg-gray-50">
                 <div class="flex items-center gap-3 mb-6">
                     <div class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
                         <i class="fas fa-briefcase text-blue-600"></i>
@@ -34,28 +34,52 @@
                     <a href="{{ asset('storage/' . $pengajuan->surat_path) }}" target="_blank"
                         class="text-blue-600 font-semibold text-right ml-auto bg-blue-100 px-3 py-1 rounded-lg">
                         <i class="fas fa-download mr-2"></i>
-                        Download Surat
+                        Download Surat Pengajuan
                     </a>
                     
                 </div>
 
+                <div class="text-gray-700">
+
+                    <div>
+                        <p class="text-sm text-gray-500">Nomor Surat Pengajuan</p>
+                        <p class="font-semibold">{{ $pengajuan->no_surat }}</p>
+                    </div>
+                    <div class="mt-6">
+                        <p class="text-sm text-gray-500">Penanggung Jawab</p>
+                        <p class="font-semibold">{{ $pengajuan->tujuan_surat }}</p>
+                    </div>
+                    <div class="mt-6">
+                        <p class="text-sm text-gray-500">Tanggal Pengajuan</p>
+                        <p class="font-semibold">{{ $pengajuan->created_at->format('d F Y') }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-8 border-b">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
+                        <i class="fas fa-clipboard text-blue-600"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-lg font-bold text-blue-900">Informasi Pengajuan Magang</h2>
+                    </div>
+                    
+                </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-gray-700">
-
-                    <div>
-                        <p class="text-sm text-gray-500">Tanggal Masuk</p>
-                        <p class="font-semibold">{{ $pengajuan->start_date }}</p>
-                    </div>
-
-                    <div>
-                        <p class="text-sm text-gray-500">Tanggal Keluar</p>
-                        <p class="font-semibold">{{ $pengajuan->end_date }}</p>
-                    </div>
 
                     <div>
                         <p class="text-sm text-gray-500">Keperluan</p>
                         <p class="font-semibold">{{ $pengajuan->keperluan }}</p>
                     </div>
-
+                    <div>
+                        <p class="text-sm text-gray-500">Tanggal Masuk</p>
+                        <p class="font-semibold">{{ $pengajuan->start_date}}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">Tanggal Keluar</p>
+                        <p class="font-semibold">{{ $pengajuan->end_date}}</p>
+                    </div>
                 </div>
             </div>
 
@@ -165,9 +189,9 @@
                             <label class="block text-sm font-semibold text-gray-700 mb-2">
                                 Nomor Surat Balasan
                             </label>
-                            <input type="text" name="no_surat_balasan"
+                            <input type="text" name="nomor_surat_balasan"
                                 placeholder="contoh: B-747/BBPSDMP.73/UM.01.01/12/2025"
-                                value="{{ old('no_surat_balasan', $pengajuan->nomor_surat_balasan ?? '') }}"
+                                value="{{ old('nomor_surat_balasan', $pengajuan->nomor_surat_balasan ?? '') }}"
                                 class="w-full px-4 py-3 border border-gray-300 rounded-xl">
                         </div>
 
@@ -304,12 +328,18 @@
                             })();
                         </script>
 
-                        <div class="flex items-center justify-end pt-4 border-gray-200">
+                        <div class="flex flex-col pt-4 border-gray-200">
                             @if($pengajuan->status == 'approved')
+                                <a href="{{ route('admin.pengajuan.surat-balasan', $pengajuan) }}" target="_blank"
+                                    class="w-full inline-flex items-center px-6 py-3 bg-green-100 hover:bg-green-200 text-green-700 justify-center font-bold rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
+                                    <i class="fas fa-download mr-2"></i>
+                                    Download Surat Balasan
+                                </a>
                                 <button type="button" disabled
-                                    class="w-full inline-flex items-center px-6 py-3 bg-gray-300 text-gray-700 justify-center font-bold rounded-xl shadow-sm transition-all duration-300">
+                                    class="mt-6 w-full inline-flex items-center px-6 py-3 bg-gray-300 text-gray-700 justify-center font-bold rounded-xl shadow-sm transition-all duration-300">
                                     Sudah Disetujui — Tidak dapat diubah
                                 </button>
+
                             @else
                                 <button type="submit" 
                                     class="w-full inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white justify-center font-bold rounded-xl shadow-md hover:shadow-lg transition-all duration-300">
