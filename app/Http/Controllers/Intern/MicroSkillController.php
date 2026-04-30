@@ -11,12 +11,22 @@ use Illuminate\Validation\Rule;
 
 class MicroSkillController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $intern = Auth::user()->intern;
-        $submissions = MicroSkillSubmission::where('intern_id', $intern->id)
-            ->orderByDesc('created_at')
-            ->paginate(15);
+
+        $query = MicroSkillSubmission::where('intern_id', $intern->id);
+
+        if ($request->filled('q')) {
+            $q = $request->q;
+            $query->where(function ($sub) use ($q) {
+                $sub->where('title', 'like', "%{$q}%")
+                    ->orWhere('description', 'like', "%{$q}%");
+            });
+        }
+
+        $submissions = $query->orderByDesc('created_at')->paginate(15);
+
         return view('intern.microskill.index', compact('submissions'));
     }
 
