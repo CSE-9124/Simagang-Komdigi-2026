@@ -8,7 +8,7 @@
 
             <div class="mb-8">
                 <h1 class="text-3xl sm:text-4xl font-bold text-blue-600 mb-3">
-                    MonitoringAnak Magang
+                    Monitoring Anak Magang
                 </h1>
                 <p class="text-sm sm:text-base text-gray-600">Kelola dan pantau perkembangan anak magang Anda</p>
             </div>

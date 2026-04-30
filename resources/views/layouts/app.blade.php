@@ -94,6 +94,7 @@
             transform: rotate(180deg);
         }
     </style>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 <body class="bg-gray-50">
     <div class="flex h-screen overflow-hidden">
@@ -180,9 +181,41 @@
                         <a href="{{ route('institusi.pengajuan.index') }}" class="{{ request()->routeIs('institusi.pengajuan.index') ? 'bg-blue-50 border-r-4 border-blue-500 text-blue-700' : 'text-gray-600' }} flex items-center px-4 py-3 text-sm font-medium">
                             <i class="fas fa-paper-plane w-5 mr-3"></i>Pengajuan Magang
                         </a>
-                        <a href="{{ route('institusi.intern.index') }}" class="{{ request()->routeIs('institusi.intern.index') ? 'bg-blue-50 border-r-4 border-blue-500 text-blue-700' : 'text-gray-600' }} flex items-center px-4 py-3 text-sm font-medium">
-                            <i class="fas fa-users w-5 mr-3"></i>Monitoring
-                        </a>
+                        <div x-data="{ open: {{ request()->routeIs('institusi.intern.*', 'institusi.attendance.*', 'institusi.logbook.*', 'institusi.microskill.*', 'institusi.certificate.*') ? 'true' : 'false' }} }">
+                            
+                            {{-- Header Dropdown --}}
+                            <button @click="open = !open"
+                                class="{{ request()->routeIs('institusi.intern.*', 'institusi.attendance.*', 'institusi.logbook.*', 'institusi.microskill.*', 'institusi.certificate.*') ? 'bg-blue-50 border-r-4 border-blue-500 text-blue-700' : 'text-gray-600 hover:bg-gray-50' }} w-full flex items-center justify-between px-4 py-3 text-sm font-medium">
+                                <span class="flex items-center">
+                                    <i class="fas fa-chart-line w-5 mr-3"></i>Monitoring
+                                </span>
+                                <i class="fas fa-chevron-down text-xs transition-transform duration-200" :class="open ? 'rotate-180' : ''"></i>
+                            </button>
+
+                            {{-- Sub Menu --}}
+                            <div x-show="open" x-transition class="bg-gray-50 border-l-4 border-blue-200 ml-4">
+                                <a href="{{ route('institusi.intern.index') }}"
+                                    class="{{ request()->routeIs('institusi.intern.index') ? 'text-blue-700 bg-blue-50' : 'text-gray-500 hover:bg-gray-100' }} flex items-center px-4 py-2.5 text-sm font-medium">
+                                    <i class="fas fa-users w-4 mr-3 text-xs"></i>Anak Magang
+                                </a>
+                                <a href="{{ route('institusi.attendance.index') }}"
+                                    class="{{ request()->routeIs('institusi.attendance.*') ? 'text-blue-700 bg-blue-50' : 'text-gray-500 hover:bg-gray-100' }} flex items-center px-4 py-2.5 text-sm font-medium">
+                                    <i class="fas fa-clipboard-check w-4 mr-3 text-xs"></i>Absensi
+                                </a>
+                                <a href="{{ route('institusi.logbook.index') }}"
+                                    class="{{ request()->routeIs('institusi.logbook.*') ? 'text-blue-700 bg-blue-50' : 'text-gray-500 hover:bg-gray-100' }} flex items-center px-4 py-2.5 text-sm font-medium">
+                                    <i class="fas fa-book w-4 mr-3 text-xs"></i>Logbook
+                                </a>
+                                <a href="{{ route('institusi.microskill.index') }}"
+                                    class="{{ request()->routeIs('institusi.microskill.*') ? 'text-blue-700 bg-blue-50' : 'text-gray-500 hover:bg-gray-100' }} flex items-center px-4 py-2.5 text-sm font-medium">
+                                    <i class="fas fa-graduation-cap w-4 mr-3 text-xs"></i>Mikroskill
+                                </a>
+                                <a href="{{ route('institusi.certificate.index') }}"
+                                    class="{{ request()->routeIs('institusi.certificate.*') ? 'text-blue-700 bg-blue-50' : 'text-gray-500 hover:bg-gray-100' }} flex items-center px-4 py-2.5 text-sm font-medium">
+                                    <i class="fas fa-certificate w-4 mr-3 text-xs"></i>Nilai
+                                </a>
+                            </div>
+                        </div>
                     @else
                         <a href="{{ route('intern.dashboard') }}" class="{{ request()->routeIs('intern.dashboard') ? 'bg-blue-50 border-r-4 border-blue-500 text-blue-700' : 'text-gray-600 hover:bg-gray-50' }} flex items-center px-4 py-3 text-sm font-medium">
                             <i class="fas fa-home w-5 mr-3"></i>Dashboard
@@ -355,9 +388,41 @@
                                 <a href="{{ route('institusi.pengajuan.index') }}" class="{{ request()->routeIs('institusi.pengajuan.index') ? 'bg-blue-50 border-r-4 border-blue-500 text-blue-700' : 'text-gray-600' }} flex items-center px-4 py-3 text-sm font-medium">
                                     <i class="fas fa-paper-plane w-5 mr-3"></i>Pengajuan Magang
                                 </a>
-                                <a href="{{ route('institusi.intern.index') }}" class="{{ request()->routeIs('institusi.intern.index') ? 'bg-blue-50 border-r-4 border-blue-500 text-blue-700' : 'text-gray-600' }} flex items-center px-4 py-3 text-sm font-medium">
-                                    <i class="fas fa-users w-5 mr-3"></i>Monitoring
-                                </a>
+                                <div x-data="{ open: {{ request()->routeIs('institusi.intern.*', 'institusi.attendance.*', 'institusi.logbook.*', 'institusi.microskill.*', 'institusi.certificate.*') ? 'true' : 'false' }} }">
+                                    
+                                    {{-- Header Dropdown --}}
+                                    <button @click="open = !open"
+                                        class="{{ request()->routeIs('institusi.intern.*', 'institusi.attendance.*', 'institusi.logbook.*', 'institusi.microskill.*', 'institusi.certificate.*') ? 'bg-blue-50 border-r-4 border-blue-500 text-blue-700' : 'text-gray-600 hover:bg-gray-50' }} w-full flex items-center justify-between px-4 py-3 text-sm font-medium">
+                                        <span class="flex items-center">
+                                            <i class="fas fa-chart-line w-5 mr-3"></i>Monitoring
+                                        </span>
+                                        <i class="fas fa-chevron-down text-xs transition-transform duration-200" :class="open ? 'rotate-180' : ''"></i>
+                                    </button>
+
+                                    {{-- Sub Menu --}}
+                                    <div x-show="open" x-transition class="bg-gray-50 border-l-4 border-blue-200 ml-4">
+                                        <a href="{{ route('institusi.intern.index') }}"
+                                            class="{{ request()->routeIs('institusi.intern.index') ? 'text-blue-700 bg-blue-50' : 'text-gray-500 hover:bg-gray-100' }} flex items-center px-4 py-2.5 text-sm font-medium">
+                                            <i class="fas fa-users w-4 mr-3 text-xs"></i>Anak Magang
+                                        </a>
+                                        <a href="{{ route('institusi.attendance.index') }}"
+                                            class="{{ request()->routeIs('institusi.attendance.*') ? 'text-blue-700 bg-blue-50' : 'text-gray-500 hover:bg-gray-100' }} flex items-center px-4 py-2.5 text-sm font-medium">
+                                            <i class="fas fa-clipboard-check w-4 mr-3 text-xs"></i>Absensi
+                                        </a>
+                                        <a href="{{ route('institusi.logbook.index') }}"
+                                            class="{{ request()->routeIs('institusi.logbook.*') ? 'text-blue-700 bg-blue-50' : 'text-gray-500 hover:bg-gray-100' }} flex items-center px-4 py-2.5 text-sm font-medium">
+                                            <i class="fas fa-book w-4 mr-3 text-xs"></i>Logbook
+                                        </a>
+                                        <a href="{{ route('institusi.microskill.index') }}"
+                                            class="{{ request()->routeIs('institusi.microskill.*') ? 'text-blue-700 bg-blue-50' : 'text-gray-500 hover:bg-gray-100' }} flex items-center px-4 py-2.5 text-sm font-medium">
+                                            <i class="fas fa-graduation-cap w-4 mr-3 text-xs"></i>Mikroskill
+                                        </a>
+                                        <a href="{{ route('institusi.certificate.index') }}"
+                                            class="{{ request()->routeIs('institusi.certificate.*') ? 'text-blue-700 bg-blue-50' : 'text-gray-500 hover:bg-gray-100' }} flex items-center px-4 py-2.5 text-sm font-medium">
+                                            <i class="fas fa-certificate w-4 mr-3 text-xs"></i>Nilai
+                                        </a>
+                                    </div>
+                                </div>
                             @else
                                 <a href="{{ route('intern.dashboard') }}" class="{{ request()->routeIs('intern.dashboard') ? 'bg-blue-50 border-r-4 border-blue-500 text-blue-700' : 'text-gray-600' }} flex items-center px-4 py-3 text-sm font-medium">
                                     <i class="fas fa-home w-5 mr-3"></i>Dashboard
