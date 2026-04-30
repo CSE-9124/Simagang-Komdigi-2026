@@ -9,7 +9,7 @@
 
             <div class="mb-4 sm:mb-8">
                 <h1 class="text-4xl font-bold text-blue-600 mb-3">
-                    Absensi Anak Bimbingan
+                    Absensi Anak Magang
                 </h1>
                 <p class="text-sm sm:text-base text-gray-600">Pantau dan kelola data kehadiran anak magang</p>
             </div>

@@ -8,13 +8,70 @@
 
             <div class="mb-8">
                 <h1 class="text-3xl sm:text-4xl font-bold text-blue-600 mb-3">
-                    Anak Magang
+                    MonitoringAnak Magang
                 </h1>
                 <p class="text-sm sm:text-base text-gray-600">Kelola dan pantau perkembangan anak magang Anda</p>
             </div>
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 mt-8">
+    
+    {{-- Absensi --}}
+    <a href="{{ route('institusi.attendance.index') }}"
+        class="group flex flex-col bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-blue-200 hover:border-blue-400 transform hover:scale-105">
+        <div class="p-5 sm:p-6 flex-1">
+            <div class="flex items-center justify-between mb-4">
+                <div class="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-blue-500 to-blue-700 rounded-2xl flex items-center justify-center shadow-lg transform group-hover:rotate-12 transition-transform duration-300">
+                    <i class="fas fa-clipboard-check text-white text-xl sm:text-2xl"></i>
+                </div>
+                <div class="transform group-hover:translate-x-2 transition-transform duration-300">
+                    <i class="fas fa-arrow-right text-blue-600 text-xl sm:text-2xl"></i>
+                </div>
+            </div>
+            <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-2">Absensi</h3>
+            <p class="text-xs sm:text-sm text-gray-600">Lihat dan kelola data kehadiran anak magang</p>
+        </div>
+        <div class="h-2 bg-gradient-to-r from-blue-500 to-blue-700 mt-auto"></div>
+    </a>
+
+    {{-- Logbook --}}
+    <a href="{{ route('institusi.logbook.index') }}"
+        class="group flex flex-col bg-gradient-to-br from-green-50 to-emerald-100 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-green-200 hover:border-green-400 transform hover:scale-105">
+        <div class="p-5 sm:p-6 flex-1">
+            <div class="flex items-center justify-between mb-4">
+                <div class="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-green-500 to-emerald-700 rounded-2xl flex items-center justify-center shadow-lg transform group-hover:rotate-12 transition-transform duration-300">
+                    <i class="fas fa-book text-white text-xl sm:text-2xl"></i>
+                </div>
+                <div class="transform group-hover:translate-x-2 transition-transform duration-300">
+                    <i class="fas fa-arrow-right text-green-600 text-xl sm:text-2xl"></i>
+                </div>
+            </div>
+            <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-2">Logbook</h3>
+            <p class="text-xs sm:text-sm text-gray-600">Pantau catatan harian dan aktivitas</p>
+        </div>
+        <div class="h-2 bg-gradient-to-r from-green-500 to-emerald-700 mt-auto"></div>
+    </a>
+
+    {{-- Nilai --}}
+    <a href="{{ route('institusi.certificate.index') }}"
+        class="group flex flex-col bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-purple-200 hover:border-purple-400 transform hover:scale-105 sm:col-span-2 md:col-span-1">
+        <div class="p-5 sm:p-6 flex-1">
+            <div class="flex items-center justify-between mb-4">
+                <div class="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-purple-500 to-fuchsia-700 rounded-2xl flex items-center justify-center shadow-lg transform group-hover:rotate-12 transition-transform duration-300">
+                    <i class="fas fa-certificate text-white text-xl sm:text-2xl"></i>
+                </div>
+                <div class="transform group-hover:translate-x-2 transition-transform duration-300">
+                    <i class="fas fa-arrow-right text-purple-600 text-xl sm:text-2xl"></i>
+                </div>
+            </div>
+            <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-2">Nilai</h3>
+            <p class="text-xs sm:text-sm text-gray-600">Lihat nilai laporan dan sertifikat anak magang Anda.</p>
+        </div>
+        <div class="h-2 bg-gradient-to-r from-purple-500 to-fuchsia-700 mt-auto"></div>
+    </a>
+
+</div>
 
             <div
-                class="bg-gradient-to-br from-white to-blue-50 rounded-2xl shadow-xl border border-blue-200 overflow-hidden mb-6">
+                class="bg-gradient-to-br from-white to-blue-50 rounded-2xl shadow-xl border border-blue-200 overflow-hidden mb-6 mt-5">
                 <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-4 sm:px-6 py-3 sm:py-5">
                     <h2 class="text-lg sm:text-xl font-bold text-white">
                         Cari Anak Magang
@@ -78,7 +135,7 @@
                                         Status</th>
                                     <th
                                         class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-white uppercase tracking-wider hidden sm:table-cell">
-                                        Institusi</th>
+                                        Prodi</th>
                                     <th
                                         class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-white uppercase tracking-wider">
                                         Logbook</th>
@@ -129,7 +186,7 @@
                                         </td>
                                         <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap hidden sm:table-cell">
                                             <div class="text-xs sm:text-sm text-gray-700 flex items-center font-medium">
-                                                {{ $intern->institution }}
+                                                {{ $intern->major }}
                                             </div>
                                         </td>
                                         <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
@@ -179,62 +236,6 @@
                         </div>
                     @endif
                 </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-                <a href="{{ route('institusi.attendance.index') }}"
-                    class="group bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-blue-200 hover:border-blue-400 transform hover:scale-105">
-                    <div class="p-6">
-                        <div class="flex items-center justify-between mb-4">
-                            <div
-                                class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-700 rounded-2xl flex items-center justify-center shadow-lg transform group-hover:rotate-12 transition-transform duration-300">
-                                <i class="fas fa-clipboard-check text-white text-2xl"></i>
-                            </div>
-                            <div class="transform group-hover:translate-x-2 transition-transform duration-300">
-                                <i class="fas fa-arrow-right text-blue-600 text-2xl"></i>
-                            </div>
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">Absensi</h3>
-                        <p class="text-sm text-gray-600">Lihat dan kelola data kehadiran anak magang</p>
-                    </div>
-                    <div class="h-2 bg-gradient-to-r from-blue-500 to-blue-700"></div>
-                </a>
-
-                <a href="{{ route('institusi.logbook.index') }}"
-                    class="group bg-gradient-to-br from-green-50 to-emerald-100 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-green-200 hover:border-green-400 transform hover:scale-105">
-                    <div class="p-6">
-                        <div class="flex items-center justify-between mb-4">
-                            <div
-                                class="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-700 rounded-2xl flex items-center justify-center shadow-lg transform group-hover:rotate-12 transition-transform duration-300">
-                                <i class="fas fa-book text-white text-2xl"></i>
-                            </div>
-                            <div class="transform group-hover:translate-x-2 transition-transform duration-300">
-                                <i class="fas fa-arrow-right text-green-600 text-2xl"></i>
-                            </div>
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">Logbook</h3>
-                        <p class="text-sm text-gray-600">Pantau catatan harian dan aktivitas</p>
-                    </div>
-                    <div class="h-2 bg-gradient-to-r from-green-500 to-emerald-700"></div>
-                </a>
-
-                {{-- <a href="{{ route('institusi.report.index') }}"
-                    class="group bg-gradient-to-br from-red-50 to-red-100 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-red-200 hover:border-red-400 transform hover:scale-105">
-                    <div class="p-6">
-                        <div class="flex items-center justify-between mb-4">
-                            <div
-                                class="w-16 h-16 bg-gradient-to-br from-red-500 to-red-700 rounded-2xl flex items-center justify-center shadow-lg transform group-hover:rotate-12 transition-transform duration-300">
-                                <i class="fas fa-file-alt text-white text-2xl"></i>
-                            </div>
-                            <div class="transform group-hover:translate-x-2 transition-transform duration-300">
-                                <i class="fas fa-arrow-right text-red-600 text-2xl"></i>
-                            </div>
-                        </div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">Laporan</h3>
-                        <p class="text-sm text-gray-600">Lihat dan nilai laporan akhir</p>
-                    </div>
-                    <div class="h-2 bg-gradient-to-r from-red-500 to-red-700"></div>
-                </a> --}}
             </div>
 
         </div>

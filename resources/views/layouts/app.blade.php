@@ -180,17 +180,8 @@
                         <a href="{{ route('institusi.pengajuan.index') }}" class="{{ request()->routeIs('institusi.pengajuan.index') ? 'bg-blue-50 border-r-4 border-blue-500 text-blue-700' : 'text-gray-600' }} flex items-center px-4 py-3 text-sm font-medium">
                             <i class="fas fa-paper-plane w-5 mr-3"></i>Pengajuan Magang
                         </a>
-                        <a href="{{ route('institusi.attendance.index') }}" class="{{ request()->routeIs('institusi.attendance.index') ? 'bg-blue-50 border-r-4 border-blue-500 text-blue-700' : 'text-gray-600' }} flex items-center px-4 py-3 text-sm font-medium">
-                            <i class="fas fa-calendar-check w-5 mr-3"></i>Absensi
-                        </a>
                         <a href="{{ route('institusi.intern.index') }}" class="{{ request()->routeIs('institusi.intern.index') ? 'bg-blue-50 border-r-4 border-blue-500 text-blue-700' : 'text-gray-600' }} flex items-center px-4 py-3 text-sm font-medium">
-                            <i class="fas fa-users w-5 mr-3"></i>Anak Magang
-                        </a>
-                        <a href="{{ route('institusi.logbook.index') }}" class="{{ request()->routeIs('institusi.logbook.index') ? 'bg-blue-50 border-r-4 border-blue-500 text-blue-700' : 'text-gray-600' }} flex items-center px-4 py-3 text-sm font-medium">
-                            <i class="fas fa-book w-5 mr-3"></i>Logbook
-                        </a>
-                        <a href="{{ route('institusi.microskill.index') }}" class="{{ request()->routeIs('institusi.microskill.index') ? 'bg-blue-50 border-r-4 border-blue-500 text-blue-700' : 'text-gray-600' }} flex items-center px-4 py-3 text-sm font-medium">
-                            <i class="fas fa-star w-5 mr-3"></i>Mikro Skill
+                            <i class="fas fa-users w-5 mr-3"></i>Monitoring
                         </a>
                     @else
                         <a href="{{ route('intern.dashboard') }}" class="{{ request()->routeIs('intern.dashboard') ? 'bg-blue-50 border-r-4 border-blue-500 text-blue-700' : 'text-gray-600 hover:bg-gray-50' }} flex items-center px-4 py-3 text-sm font-medium">
@@ -364,17 +355,8 @@
                                 <a href="{{ route('institusi.pengajuan.index') }}" class="{{ request()->routeIs('institusi.pengajuan.index') ? 'bg-blue-50 border-r-4 border-blue-500 text-blue-700' : 'text-gray-600' }} flex items-center px-4 py-3 text-sm font-medium">
                                     <i class="fas fa-paper-plane w-5 mr-3"></i>Pengajuan Magang
                                 </a>
-                                <a href="{{ route('institusi.attendance.index') }}" class="{{ request()->routeIs('institusi.attendance.index') ? 'bg-blue-50 border-r-4 border-blue-500 text-blue-700' : 'text-gray-600' }} flex items-center px-4 py-3 text-sm font-medium">
-                                    <i class="fas fa-calendar-check w-5 mr-3"></i>Absensi
-                                </a>
                                 <a href="{{ route('institusi.intern.index') }}" class="{{ request()->routeIs('institusi.intern.index') ? 'bg-blue-50 border-r-4 border-blue-500 text-blue-700' : 'text-gray-600' }} flex items-center px-4 py-3 text-sm font-medium">
-                                    <i class="fas fa-users w-5 mr-3"></i>Anak Magang
-                                </a>
-                                <a href="{{ route('institusi.logbook.index') }}" class="{{ request()->routeIs('institusi.logbook.index') ? 'bg-blue-50 border-r-4 border-blue-500 text-blue-700' : 'text-gray-600' }} flex items-center px-4 py-3 text-sm font-medium">
-                                    <i class="fas fa-book w-5 mr-3"></i>Logbook
-                                </a>
-                                <a href="{{ route('institusi.microskill.index') }}" class="{{ request()->routeIs('institusi.microskill.index') ? 'bg-blue-50 border-r-4 border-blue-500 text-blue-700' : 'text-gray-600' }} flex items-center px-4 py-3 text-sm font-medium">
-                                    <i class="fas fa-star w-5 mr-3"></i>Mikro Skill
+                                    <i class="fas fa-users w-5 mr-3"></i>Monitoring
                                 </a>
                             @else
                                 <a href="{{ route('intern.dashboard') }}" class="{{ request()->routeIs('intern.dashboard') ? 'bg-blue-50 border-r-4 border-blue-500 text-blue-700' : 'text-gray-600' }} flex items-center px-4 py-3 text-sm font-medium">

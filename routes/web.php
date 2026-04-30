@@ -39,6 +39,7 @@ use App\Http\Controllers\Institusi\InternController as InstitusiInternController
 use App\Http\Controllers\Institusi\LogbookController as InstitusiLogbookController;
 use App\Http\Controllers\Institusi\MicroSkillController as InstitusiMicroSkillController;
 use App\Http\Controllers\Institusi\ProfileController as InstitusiProfileController;
+use App\Http\Controllers\Institusi\CertificateController as InstitusiCertificateController;
 use App\Models\Testimonial;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
@@ -122,6 +123,9 @@ Route::middleware('auth', 'institusi')->group(function () {
     // Logbook monitoring for institusi
     Route::get('/institusi/logbook', [InstitusiLogbookController::class, 'index'])->name('institusi.logbook.index');
     Route::get('/institusi/logbook/{id}', [InstitusiLogbookController::class, 'show'])->name('institusi.logbook.show');
+    // Certificate management for institusi
+    Route::get('/institusi/sertifikat', [InstitusiCertificateController::class, 'index'])->name('institusi.certificate.index');
+    Route::get('/institusi/sertifikat/{certificate}', [InstitusiCertificateController::class, 'show'])->name('institusi.certificate.show');
     // Mikro skill monitoring for institusi
     Route::get('/institusi/microskill', [InstitusiMicroSkillController::class, 'index'])->name('institusi.microskill.index');
 
