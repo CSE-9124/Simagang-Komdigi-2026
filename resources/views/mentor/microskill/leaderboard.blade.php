@@ -48,9 +48,6 @@
                                         text-white flex items-center justify-center font-bold text-sm sm:text-lg transform group-hover:scale-110 transition-transform duration-300">
                                             {{ $actualRank }}
                                         </span>
-                                        @if ($actualRank <= 3)
-                                            <i class="fas fa-crown absolute -top-1 -right-1 text-yellow-500 text-xs"></i>
-                                        @endif
                                     </div>
 
                                     <div class="mr-2 sm:mr-3 flex-shrink-0">
@@ -113,57 +110,6 @@
                 </div>
             </div>
 
-            <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-                <!-- Top Performer -->
-                @if ($rows->count() > 0 && $rows->currentPage() == 1)
-                    <div class="bg-white rounded-xl shadow-md border border-yellow-200 p-4 sm:p-6">
-                        <div class="flex items-center justify-between gap-3">
-                            <div class="flex-1 min-w-0">
-                                <p class="text-xs sm:text-sm font-medium text-gray-600 mb-1">Top Performer</p>
-                                <h3 class="text-lg sm:text-xl font-bold text-gray-900 truncate">{{ $rows->first()->name }}
-                                </h3>
-                                <p class="text-xs sm:text-sm text-gray-500 mt-1">{{ $rows->first()->total }} courses</p>
-                            </div>
-                            <div
-                                class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-xl flex items-center justify-center flex-shrink-0">
-                                <i class="fas fa-crown text-white text-lg sm:text-xl"></i>
-                            </div>
-                        </div>
-                    </div>
-                @endif
-
-                <div class="bg-white rounded-xl shadow-md border border-blue-100 p-4 sm:p-6">
-                    <div class="flex items-center justify-between gap-3">
-                        <div class="flex-1 min-w-0">
-                            <p class="text-xs sm:text-sm font-medium text-gray-600 mb-1">Rata-rata Course</p>
-                            <h3 class="text-xl sm:text-2xl font-bold text-gray-900">
-                                @if ($rows->count() > 0)
-                                    {{ number_format($rows->avg('total'), 1) }}
-                                @else
-                                    0
-                                @endif
-                            </h3>
-                        </div>
-                        <div
-                            class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center flex-shrink-0">
-                            <i class="fas fa-chart-bar text-white text-lg sm:text-xl"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-xl shadow-md border border-blue-100 p-4 sm:p-6">
-                    <div class="flex items-center justify-between gap-3">
-                        <div class="flex-1 min-w-0">
-                            <p class="text-xs sm:text-sm font-medium text-gray-600 mb-1">Total Course</p>
-                            <h3 class="text-xl sm:text-2xl font-bold text-gray-900">{{ $rows->sum('total') }}</h3>
-                        </div>
-                        <div
-                            class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center flex-shrink-0">
-                            <i class="fas fa-book text-white text-lg sm:text-xl"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             <div class="mt-6">
                 <a href="{{ route('mentor.dashboard') }}"

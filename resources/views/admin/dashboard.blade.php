@@ -135,38 +135,19 @@
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-100">
-                            {{-- Baris virtual: intern belum absen hari ini --}}
-                            @foreach($todayAbsentInterns as $absentIntern)
-                                <tr class="bg-red-50">
-                                    <td class="px-6 py-4 whitespace-nowrap text-center">
-                                        <div class="text-sm font-medium text-gray-900">{{ $absentIntern->name }}</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-center">
-                                        <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                                            Tidak Hadir
-                                        </span>
-                                    </td>
-                                    <td colspan="4" class="px-6 py-4 text-sm text-gray-400 italic text-center">
-                                        Belum melakukan absensi hari ini
-                                    </td>
-                                </tr>
-                            @endforeach
-
-                            @forelse($todayAttendances as $attendance)
-                                <tr class="hover:bg-blue-50 transition-colors duration-150">
+                            {{-- Yang Hadir - Paling Atas --}}
+                            @php
+                                $hadirCount = 0;
+                            @endphp
+                            @forelse($todayAttendances->where('status', 'hadir') as $attendance)
+                                @php $hadirCount++; @endphp
+                                <tr class="hover:bg-green-50 transition-colors duration-150">
                                     <td class="px-6 py-4 whitespace-nowrap text-center">
                                         <div class="text-sm font-medium text-gray-900">{{ $attendance->intern->name }}</div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-center">
-                                        <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full
-                                            @if($attendance->status == 'hadir') bg-green-100 text-green-800
-                                            @elseif($attendance->status == 'izin') bg-yellow-100 text-yellow-800
-                                            @elseif($attendance->status == 'sakit') bg-orange-100 text-orange-800
-                                            @else bg-red-100 text-red-800
-                                            @endif">
-                                            @if($attendance->status == 'alfa') Tidak Hadir
-                                            @else {{ ucfirst($attendance->status) }}
-                                            @endif
+                                        <span class="px-3 py-1 inline-flex items-center text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                            <i class="fas fa-check-circle mr-1"></i> Hadir
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 text-center">
@@ -176,7 +157,7 @@
                                         @if($attendance->photo_path)
                                             <img src="{{ url('storage/' . $attendance->photo_path) }}" 
                                                     alt="Check In" 
-                                                    class="w-12 h-12 object-cover rounded-lg border-2 border-blue-200 cursor-pointer hover:border-blue-400 transition-all" 
+                                                    class="w-12 h-12 object-cover rounded-lg border-2 border-green-200 cursor-pointer hover:border-green-400 transition-all" 
                                                     onclick="window.open('{{ url('storage/' . $attendance->photo_path) }}', '_blank')" 
                                                     title="Klik untuk melihat full size">
                                         @else
@@ -190,7 +171,7 @@
                                         @if($attendance->photo_checkout)
                                             <img src="{{ url('storage/' . $attendance->photo_checkout) }}" 
                                                  alt="Check Out" 
-                                                 class="w-12 h-12 object-cover rounded-lg border-2 border-blue-200 cursor-pointer hover:border-blue-400 transition-all" 
+                                                 class="w-12 h-12 object-cover rounded-lg border-2 border-green-200 cursor-pointer hover:border-green-400 transition-all" 
                                                  onclick="window.open('{{ url('storage/' . $attendance->photo_checkout) }}', '_blank')" 
                                                  title="Klik untuk melihat full size">
                                         @else
@@ -199,14 +180,84 @@
                                     </td>
                                 </tr>
                             @empty
-                                <tr>
-                                    <td colspan="6" class="px-6 py-8 text-center">
-                                        <div class="flex flex-col items-center justify-center text-gray-500">
-                                            <i class="fas fa-inbox text-4xl mb-3 text-gray-300"></i>
-                                            <p class="text-sm">Belum ada absensi hari ini.</p>
-                                        </div>
+                            @endforelse
+
+                            {{-- Yang Izin/Sakit/Alfa --}}
+                            @forelse($todayAttendances->whereIn('status', ['izin', 'sakit', 'alfa']) as $attendance)
+                                <tr class="hover:bg-yellow-50 transition-colors duration-150">
+                                    <td class="px-6 py-4 whitespace-nowrap text-center">
+                                        <div class="text-sm font-medium text-gray-900">{{ $attendance->intern->name }}</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-center">
+                                        <span class="px-3 py-1 inline-flex items-center text-xs leading-5 font-semibold rounded-full
+                                            @if($attendance->status == 'izin') bg-yellow-100 text-yellow-800
+                                            @elseif($attendance->status == 'sakit') bg-orange-100 text-orange-800
+                                            @else bg-red-100 text-red-800
+                                            @endif">
+                                            @if($attendance->status == 'alfa') Tidak Hadir
+                                            @elseif($attendance->status == 'izin') <i class="fas fa-clipboard mr-1"></i> Izin
+                                            @elseif($attendance->status == 'sakit') <i class="fas fa-heartbeat mr-1"></i> Sakit
+                                            @endif
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 text-center">
+                                        {{ $attendance->check_in ? \Carbon\Carbon::parse($attendance->check_in)->format('H:i') : '-' }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap flex justify-center">
+                                        @if($attendance->photo_path)
+                                            <img src="{{ url('storage/' . $attendance->photo_path) }}" 
+                                                    alt="Check In" 
+                                                    class="w-12 h-12 object-cover rounded-lg border-2 border-yellow-200 cursor-pointer hover:border-yellow-400 transition-all" 
+                                                    onclick="window.open('{{ url('storage/' . $attendance->photo_path) }}', '_blank')" 
+                                                    title="Klik untuk melihat full size">
+                                        @else
+                                            <span class="text-gray-400">-</span>
+                                        @endif
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600 text-center">
+                                        {{ $attendance->check_out ? \Carbon\Carbon::parse($attendance->check_out)->format('H:i') : '-' }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap flex justify-center">
+                                        @if($attendance->photo_checkout)
+                                            <img src="{{ url('storage/' . $attendance->photo_checkout) }}" 
+                                                 alt="Check Out" 
+                                                 class="w-12 h-12 object-cover rounded-lg border-2 border-yellow-200 cursor-pointer hover:border-yellow-400 transition-all" 
+                                                 onclick="window.open('{{ url('storage/' . $attendance->photo_checkout) }}', '_blank')" 
+                                                 title="Klik untuk melihat full size">
+                                        @else
+                                            <span class="text-gray-400">-</span>
+                                        @endif
                                     </td>
                                 </tr>
+                            @empty
+                            @endforelse
+
+                            {{-- Belum Absen - Paling Bawah --}}
+                            @forelse($todayAbsentInterns as $absentIntern)
+                                <tr class="bg-red-50">
+                                    <td class="px-6 py-4 whitespace-nowrap text-center">
+                                        <div class="text-sm font-medium text-gray-900">{{ $absentIntern->name }}</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-center">
+                                        <span class="px-3 py-1 inline-flex items-center text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                            <i class="fas fa-exclamation-circle mr-1"></i> Belum Absen
+                                        </span>
+                                    </td>
+                                    <td colspan="4" class="px-6 py-4 text-sm text-gray-400 italic text-center">
+                                        Belum melakukan absensi hari ini
+                                    </td>
+                                </tr>
+                            @empty
+                                @if($hadirCount == 0)
+                                    <tr>
+                                        <td colspan="6" class="px-6 py-8 text-center">
+                                            <div class="flex flex-col items-center justify-center text-gray-500">
+                                                <i class="fas fa-inbox text-4xl mb-3 text-gray-300"></i>
+                                                <p class="text-sm">Belum ada absensi hari ini.</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endif
                             @endforelse
                         </tbody>
                     </table>
