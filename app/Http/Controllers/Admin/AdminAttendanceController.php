@@ -11,6 +11,12 @@ use Illuminate\Http\Request;
 
 class AdminAttendanceController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:view_attendance')->only(['index', 'show']);
+        $this->middleware('permission:manage_attendance')->only(['updateDocumentStatus']);
+    }
+
     public function index(Request $request)
     {
         $nowWita   = TimeService::nowWita();

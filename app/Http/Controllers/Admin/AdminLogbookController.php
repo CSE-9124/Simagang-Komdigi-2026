@@ -8,6 +8,12 @@ use Illuminate\Http\Request;
 
 class AdminLogbookController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:view_logbook')->only(['index']);
+        $this->middleware('permission:manage_logbook')->only(['destroy']);
+    }
+
     public function index(Request $request)
     {
         $query = Logbook::with('intern');
@@ -25,9 +31,16 @@ class AdminLogbookController extends Controller
             $query->whereDate('date', '<=', $request->date('date_to'));
         }
 
-        $logbooks = $query->orderByDesc('date')->paginate(20)->withQueryString();
+        $logbooks = $query->orderByDesc('date')->paginate(20);
 
         return view('admin.logbook.index', compact('logbooks'));
+    }
+
+    public function destroy(Logbook $logbook)
+    {
+        $logbook->delete();
+
+        return back()->with('success', 'Logbook berhasil dihapus.');
     }
 }
 

@@ -9,6 +9,12 @@ use Illuminate\Http\Request;
 
 class AdminReportController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:view_reports')->only(['index', 'show']);
+        $this->middleware('permission:manage_reports')->only(['updateStatus']);
+    }
+
     public function index(Request $request)
     {
         $query = FinalReport::with('intern');

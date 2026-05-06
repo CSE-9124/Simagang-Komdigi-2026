@@ -6,7 +6,9 @@ use App\Models\Intern;
 use App\Models\Mentor;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
@@ -16,39 +18,49 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        /* admin utama*/
+        $this->resetSeedableTables();
+
+        $this->call([
+            RoleAndPermissionSeeder::class,
+        ]);
+
+        /* super admin utama */
+        $superAdmin = User::updateOrCreate(
+            ['email' => 'superadmin@simagang.com'],
+            [
+                'name' => 'Super Administrator',
+                'password' => Hash::make('password123'),
+                'role' => 'super_admin',
+            ]
+        );
+        $superAdmin->syncRoles(['super_admin']);
+
+        $this->command->info('Super admin created');
+        $this->command->info('Email: superadmin@simagang.com');
+        $this->command->info('Password: password123');
+
+        /* admin full access */
         $admin = User::updateOrCreate(
             ['email' => 'admin@simagang.com'],
             [
                 'name' => 'Administrator',
                 'password' => Hash::make('password123'),
-                'role' => 'admin',
+                'role' => 'admin_full',
             ]
         );
+        $admin->syncRoles(['admin_full']);
 
-        $this->command->info('Admin user created');
+        $this->command->info('Admin full access created');
         $this->command->info('Email: admin@simagang.com');
         $this->command->info('Password: password123');
 
-        /* admin kedua*/
-        $admin2 = User::updateOrCreate(
-            ['email' => 'admin2@simagang.com'],
-            [
-                'name' => 'Administrator 2',
-                'password' => Hash::make('password123'),
-                'role' => 'admin',
-            ]
-        );
-
-        $this->command->info('Admin user created');
-        $this->command->info('Email: admin2@simagang.com');
-        $this->command->info('Password: password123');
+        User::where('email', 'admin2@simagang.com')->delete();
 
 
         /* reset data mentor*/
         Intern::query()->update(['mentor_id' => null]);
-        Mentor::query()->delete();
         User::where('role', 'mentor')->delete();
+        Mentor::query()->delete();
 
 
         /* seed mentor dan user */
@@ -92,6 +104,7 @@ class DatabaseSeeder extends Seeder
                 'password' => Hash::make('password123'),
                 'role' => 'mentor',
             ]);
+            $user->syncRoles(['mentor']);
 
             return Mentor::create([
                 'name' => $name,
@@ -154,6 +167,7 @@ class DatabaseSeeder extends Seeder
                     'role' => 'intern',
                 ]
             );
+            $user->syncRoles(['intern']);
 
             $mentor = $mentors->count() > 0
                 ? $mentors[$index % $mentors->count()]
@@ -184,5 +198,42 @@ class DatabaseSeeder extends Seeder
             TeamSeeder::class,
             TestimonialSeeder::class,
         ]);
+    }
+
+    private function resetSeedableTables(): void
+    {
+        $tables = [
+            'model_has_permissions',
+            'model_has_roles',
+            'role_has_permissions',
+            'permissions',
+            'roles',
+            'testimonials',
+            'final_reports',
+            'certificate_scores',
+            'certificates',
+            'pengajuan_details',
+            'pengajuans',
+            'micro_skill_submissions',
+            'logbooks',
+            'attendances',
+            'institusis',
+            'interns',
+            'mentors',
+            'teams',
+            'users',
+        ];
+
+        Schema::disableForeignKeyConstraints();
+
+        try {
+            foreach ($tables as $table) {
+                if (Schema::hasTable($table)) {
+                    DB::table($table)->truncate();
+                }
+            }
+        } finally {
+            Schema::enableForeignKeyConstraints();
+        }
     }
 }

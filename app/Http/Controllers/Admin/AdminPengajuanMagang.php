@@ -7,9 +7,15 @@ use Illuminate\Http\Request;
 use App\Models\Pengajuan;
 use App\Models\PengajuanDetail;
 use Illuminate\Support\Facades\Auth;
+use App\Services\PengajuanWhatsappService;
 
 class AdminPengajuanMagang extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:manage_pengajuan');
+    }
+
     public function index()
     {   
         $pengajuanTabel = Pengajuan::with('institusi')->get();
@@ -50,15 +56,17 @@ class AdminPengajuanMagang extends Controller
         ));
     }
 
-    public function show($id)
+    public function show(int $id, PengajuanWhatsappService $whatsappService)
     {
-        $pengajuan = Pengajuan::with('details', 'institusi')
+        $pengajuan = Pengajuan::with(['details', 'institusi'])
             ->findOrFail($id);
 
-        return view('admin.pengajuan.show', compact('pengajuan'));
+        $whatsapp = $whatsappService->payloadFor($pengajuan);
+
+        return view('admin.pengajuan.show', compact('pengajuan', 'whatsapp'));
     }
 
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $pengajuan = Pengajuan::findOrFail($id);
 
@@ -80,13 +88,13 @@ class AdminPengajuanMagang extends Controller
             ->with('success', 'Pengajuan berhasil dihapus.');
     }
 
-    public function updateStatus(Request $request, Pengajuan $pengajuan)
+    public function updateStatus(Request $request, Pengajuan $pengajuan, PengajuanWhatsappService $whatsappService)
     {
-        // Prevent any status change if already approved
-        if ($pengajuan->status === 'approved') {
+        // Prevent any status change if already final
+        if (in_array($pengajuan->status, ['approved', 'rejected'], true)) {
             return redirect()
                 ->back()
-                ->with('error', 'Status sudah disetujui dan tidak dapat diubah.');
+                ->with('error', 'Status sudah final dan tidak dapat diubah.');
         }
 
         // Check if status is approved from request
@@ -100,6 +108,7 @@ class AdminPengajuanMagang extends Controller
                 'string',
                 'max:100'
             ],
+            'notify_whatsapp' => ['nullable', 'boolean'],
         ]);
 
         // Only keep admin_note when status is revised, otherwise clear it
@@ -117,8 +126,25 @@ class AdminPengajuanMagang extends Controller
             default => 'Status berhasil diperbarui.',
         };
 
+        $whatsapp = $whatsappService->payloadFor($pengajuan->fresh(['institusi']));
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => $message,
+                'status' => $pengajuan->status,
+                'whatsapp' => $whatsapp,
+            ]);
+        }
+
+        if ($request->boolean('notify_whatsapp')) {
+            if (! empty($whatsapp['url'])) {
+                return redirect()->away($whatsapp['url']);
+            }
+        }
+
         return redirect()
-            ->route('admin.pengajuan.index')
+            ->route('admin.pengajuan.show', ['id' => $pengajuan->id])
             ->with('success', $message);
     }
 

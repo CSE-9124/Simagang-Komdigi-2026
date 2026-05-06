@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Closure;
 use Illuminate\Http\Request;
@@ -23,24 +24,24 @@ class RedirectIfAuthenticated
             if (Auth::guard($guard)->check()) {
                 $user = Auth::guard($guard)->user();
                 
-                if (!$user) {
+                if (!$user instanceof User) {
                     Auth::guard($guard)->logout();
                     return $next($request);
                 }
                 
                 // Check if user has valid role
-                if (!$user->role || ($user->role !== 'admin' && $user->role !== 'intern')) {
+                if (!$user->isAdmin() && !$user->isIntern() && !$user->isMentor()) {
                     Auth::guard($guard)->logout();
                     return $next($request);
                 }
                 
                 // Redirect based on role
-                if ($user->role === 'admin') {
+                if ($user->isAdmin()) {
                     return redirect()->route('admin.dashboard');
-                } elseif ($user->role === 'intern') {
-                    return redirect()->route('intern.dashboard');
                 } elseif ($user->role === 'mentor') {
                     return redirect()->route('mentor.dashboard');
+                } elseif ($user->isIntern()) {
+                    return redirect()->route('intern.dashboard');
                 }
             }
         }

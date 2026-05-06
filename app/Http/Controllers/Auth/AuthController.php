@@ -42,6 +42,7 @@ class AuthController extends Controller
             'password' => Hash::make($validated['password']),
             'role' => 'intern',
         ]);
+        $user->assignRole('intern');
 
         // Handle photo upload - use direct move() method to avoid storage adapter issues
         $photoPath = null;
@@ -131,13 +132,13 @@ class AuthController extends Controller
             $request->session()->regenerate();
 
             $user = Auth::user();
-            if ($user->isAdmin()) {
+            if ($user instanceof User && $user->isAdmin()) {
                 return redirect()->route('admin.dashboard');
-            } elseif ($user->isMentor()) {
+            } elseif ($user instanceof User && $user->isMentor()) {
                 return redirect()->route('mentor.dashboard');
-            } elseif ($user->isIntern()) {
+            } elseif ($user instanceof User && $user->isIntern()) {
                 return redirect()->route('intern.dashboard');
-            } elseif ($user->isInstitusi()) {
+            } elseif ($user instanceof User && $user->isInstitusi()) {
                 return redirect()->route('institusi.dashboard');
             }
 

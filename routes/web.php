@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminAttendanceController;
+use App\Http\Controllers\Admin\AdminAccountController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminInternController;
 use App\Http\Controllers\Admin\AdminMentorController;
@@ -80,8 +81,6 @@ Route::get('/convert-font', function () {
     return 'Poppins Extralight berhasil di-convert';
 });
 
-
-
 // API Routes for Institution Search
 Route::get('/api/institutions/search', [InstitutionController::class, 'searchUniversities'])->name('api.institutions.search');
 Route::get('/api/institutions/all', [InstitutionController::class, 'getAllUniversities'])->name('api.institutions.all');
@@ -101,33 +100,31 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->n
 
 // Daftar Institusi
 // Route::get('/institusi/dashboard', [InstitusiDashboardController::class, 'index'])->name('institusi.dashboard');
-Route::middleware('auth', 'institusi')->group(function () {
-    Route::get('/institusi/dashboard', [InstitusiDashboardController::class, 'index'])->name('institusi.dashboard');
-    Route::get('/institusi/pengajuan', [PengajuanController::class, 'index'])->name('institusi.pengajuan.index');
-    Route::get('/institusi/pengajuan/create', [PengajuanController::class, 'create'])->name('institusi.pengajuan.create');
-    Route::post('/institusi/pengajuan', [PengajuanController::class, 'store'])->name('institusi.pengajuan.store');
-    Route::get('/institusi/pengajuan/{id}', [PengajuanController::class, 'show'])->name('institusi.pengajuan.show');
-    Route::delete('/institusi/pengajuan/{id}', [PengajuanController::class, 'destroy'])->name('institusi.pengajuan.destroy');
-
+Route::middleware(['auth', 'institusi'])->prefix('institusi')->name('institusi.')->group(function () {
+    Route::get('/dashboard', [InstitusiDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/pengajuan', [PengajuanController::class, 'index'])->name('pengajuan.index');
+    Route::get('/pengajuan/create', [PengajuanController::class, 'create'])->name('pengajuan.create');
+    Route::post('/pengajuan', [PengajuanController::class, 'store'])->name('pengajuan.store');
+    Route::get('/pengajuan/{id}', [PengajuanController::class, 'show'])->name('pengajuan.show');
+    Route::delete('/pengajuan/{id}', [PengajuanController::class, 'destroy'])->name('pengajuan.destroy');
     // surat balasan untuk institusi
-    Route::get('/institusi/surat-balasan/{pengajuan}', [PengajuanController::class, 'generateSuratBalasan'])->name('institusi.pengajuan.surat-balasan');
-    
+    Route::get('/surat-balasan/{pengajuan}', [PengajuanController::class, 'generateSuratBalasan'])->name('pengajuan.surat-balasan');
     // Profile routes for institusi
-    Route::get('/institusi/profile', [InstitusiProfileController::class, 'show'])->name('institusi.profile.show');
-    Route::get('/institusi/profile/edit', [InstitusiProfileController::class, 'edit'])->name('institusi.profile.edit');
-    Route::put('/institusi/profile', [InstitusiProfileController::class, 'update'])->name('institusi.profile.update');
+    Route::get('/profile', [InstitusiProfileController::class, 'show'])->name('profile.show');
+    Route::get('/profile/edit', [InstitusiProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [InstitusiProfileController::class, 'update'])->name('profile.update');
     // Attendance monitoring for institusi
-    Route::get('/institusi/attendance', [InstitusiAttendanceController::class, 'index'])->name('institusi.attendance.index');
+    Route::get('/attendance', [InstitusiAttendanceController::class, 'index'])->name('attendance.index');
     // Intern management for institusi
-    Route::get('/institusi/intern', [InstitusiInternController::class, 'index'])->name('institusi.intern.index');
+    Route::get('/intern', [InstitusiInternController::class, 'index'])->name('intern.index');
     // Logbook monitoring for institusi
-    Route::get('/institusi/logbook', [InstitusiLogbookController::class, 'index'])->name('institusi.logbook.index');
-    Route::get('/institusi/logbook/{id}', [InstitusiLogbookController::class, 'show'])->name('institusi.logbook.show');
+    Route::get('/logbook', [InstitusiLogbookController::class, 'index'])->name('logbook.index');
+    Route::get('/logbook/{id}', [InstitusiLogbookController::class, 'show'])->name('logbook.show');
     // Certificate management for institusi
-    Route::get('/institusi/sertifikat', [InstitusiCertificateController::class, 'index'])->name('institusi.certificate.index');
-    Route::get('/institusi/sertifikat/{certificate}', [InstitusiCertificateController::class, 'show'])->name('institusi.certificate.show');
+    Route::get('/sertifikat', [InstitusiCertificateController::class, 'index'])->name('certificate.index');
+    Route::get('/sertifikat/{certificate}', [InstitusiCertificateController::class, 'show'])->name('certificate.show');
     // Mikro skill monitoring for institusi
-    Route::get('/institusi/microskill', [InstitusiMicroSkillController::class, 'index'])->name('institusi.microskill.index');
+    Route::get('/microskill', [InstitusiMicroSkillController::class, 'index'])->name('microskill.index');
 
 }); 
 Route::resource('institusi', DaftarInstitusiController::class);
@@ -188,7 +185,25 @@ Route::middleware(['auth', 'intern'])->prefix('intern')->name('intern.')->group(
 // Admin Routes
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
-    
+
+    Route::middleware('permission:view_admins')->group(function () {
+        Route::get('/accounts', [AdminAccountController::class, 'index'])->name('accounts.index');
+    });
+
+    Route::middleware('permission:create_admin')->group(function () {
+        Route::get('/accounts/create', [AdminAccountController::class, 'create'])->name('accounts.create');
+        Route::post('/accounts', [AdminAccountController::class, 'store'])->name('accounts.store');
+    });
+
+    Route::middleware('permission:edit_admin')->group(function () {
+        Route::get('/accounts/{user}/edit', [AdminAccountController::class, 'edit'])->name('accounts.edit');
+        Route::put('/accounts/{user}', [AdminAccountController::class, 'update'])->name('accounts.update');
+    });
+
+    Route::middleware('permission:delete_admin')->group(function () {
+        Route::delete('/accounts/{user}', [AdminAccountController::class, 'destroy'])->name('accounts.destroy');
+    });
+
     // Mentor Management Routes
     Route::get('/mentor', [AdminMentorController::class, 'index'])->name('mentor.index');
     Route::get('/mentor/create', [AdminMentorController::class, 'create'])->name('mentor.create');
@@ -205,26 +220,26 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/intern/{intern}/edit', [AdminInternController::class, 'edit'])->name('intern.edit');
     Route::put('/intern/{intern}', [AdminInternController::class, 'update'])->name('intern.update');
     Route::delete('/intern/{intern}', [AdminInternController::class, 'destroy'])->name('intern.destroy');
-    
+
     // Attendance Monitoring Routes
     Route::get('/attendance', [AdminAttendanceController::class, 'index'])->name('attendance.index');
     Route::get('/attendance/{attendance}', [AdminAttendanceController::class, 'show'])->name('attendance.show');
     Route::put('/attendance/{attendance}/document-status', [AdminAttendanceController::class, 'updateDocumentStatus'])->name('attendance.update-document-status');
-    
+
     // Logbook Monitoring Routes
     Route::get('/logbook', [AdminLogbookController::class, 'index'])->name('logbook.index');
     Route::delete('/logbook/{logbook}', [AdminLogbookController::class, 'destroy'])->name('logbook.destroy');
-    
+
     // Report Monitoring Routes
     Route::get('/report', [AdminReportController::class, 'index'])->name('report.index');
     Route::get('/report/{report}', [AdminReportController::class, 'show'])->name('report.show');
     Route::put('/report/{report}/status', [AdminReportController::class, 'updateStatus'])->name('report.update-status');
-    
+
     // Micro Skill Routes
     Route::get('/microskill', [AdminMicroSkillController::class, 'index'])->name('microskill.index');
     Route::delete('/microskill/{submission}', [AdminMicroSkillController::class, 'destroy'])->name('microskill.destroy');
     Route::get('/microskill/leaderboard', [AdminMicroSkillLeaderboardController::class, 'index'])->name('microskill.leaderboard');
-    
+
     // Monitoring Routes
     Route::get('/monitoring', [AdminMonitoringController::class, 'index'])->name('monitoring.index');
     Route::post('/monitoring/{intern}/mark-released', [AdminMonitoringController::class, 'markAsReleased'])->name('monitoring.mark-released');
@@ -233,12 +248,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     // Certificate Management Routes
     Route::resource('certificates', AdminCertificateController::class)
-            ->only(['index', 'create', 'store', 'show', "update"]);
+            ->only(['index', 'create', 'store', 'show', 'update']);
 
     Route::get(
-            'certificates/{certificate}/print',
-            [AdminCertificateController::class, 'print']
-        )->name('certificates.print');
+        'certificates/{certificate}/print',
+        [AdminCertificateController::class, 'print']
+    )->name('certificates.print');
 
     // Pengajuan Management Routes
     Route::get('/pengajuan', [AdminPengajuanMagang::class, 'index'])->name('pengajuan.index');
@@ -248,16 +263,15 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::delete('/pengajuan/{id}', [AdminPengajuanMagang::class, 'destroy'])->name('pengajuan.destroy');
     Route::get('/pengajuan/surat-balasan/{pengajuan}', [AdminPengajuanMagang::class, 'generateSuratBalasan'])->name('pengajuan.surat-balasan');
 
-    // Manafe Tim Routes
+    // Team Management Routes
     Route::get('/team', [TeamController::class, 'index'])->name('team.index');
     Route::get('/team/create', [TeamController::class, 'create'])->name('team.create');
     Route::post('/team', [TeamController::class, 'store'])->name('team.store');
     Route::get('/team/{team}/edit', [TeamController::class, 'edit'])->name('team.edit');
     Route::put('/team/{team}', [TeamController::class, 'update'])->name('team.update');
-    Route::delete('/team/{team}', [TeamController::class, 'destroy'])->name('team.destroy');   
+    Route::delete('/team/{team}', [TeamController::class, 'destroy'])->name('team.destroy');  
 });
 
-    
 // Mentor Routes
 Route::middleware(['auth', 'mentor'])->prefix('mentor')->name('mentor.')->group(function () {
     Route::get('/dashboard', [MentorDashboardController::class, 'index'])->name('dashboard');

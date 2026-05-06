@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Spatie\Permission\Traits\HasRoles;
+use Spatie\Permission\Traits\HasPermissions;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -10,7 +12,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasRoles, HasPermissions, HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -51,22 +53,47 @@ class User extends Authenticatable
 
     public function isAdmin()
     {
-        return $this->role !== null && $this->role === 'admin';
+        return $this->hasAnyRole([
+            'super_admin',
+            'admin_full',
+            'admin_user_manager',
+            'admin_data_manager',
+        ]) || in_array($this->role, ['admin', 'super_admin', 'admin_full', 'admin_user_manager', 'admin_data_manager'], true);
+    }
+
+    public function isSuperAdmin()
+    {
+        return $this->hasRole('super_admin') || $this->role === 'super_admin';
+    }
+
+    public function isAdminFull()
+    {
+        return $this->hasRole('admin_full') || $this->role === 'admin_full';
+    }
+
+    public function isAdminUserManager()
+    {
+        return $this->hasRole('admin_user_manager') || $this->role === 'admin_user_manager';
+    }
+
+    public function isAdminDataManager()
+    {
+        return $this->hasRole('admin_data_manager') || $this->role === 'admin_data_manager';
     }
 
     public function isIntern()
     {
-        return $this->role !== null && $this->role === 'intern';
+        return $this->hasRole('intern') || $this->role === 'intern';
     }
 
     public function isMentor()
     {
-        return $this->role !== null && $this->role === 'mentor';
+        return $this->hasRole('mentor') || $this->role === 'mentor';
     }
 
     public function isInstitusi()
     {
-        return $this->role !== null && $this->role === 'institusi';
+        return $this->hasRole('institusi') || $this->role === 'institusi';
     }
 
     public function mentor()

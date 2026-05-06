@@ -8,6 +8,11 @@ use Illuminate\Http\Request;
 
 class TeamController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:manage_teams');
+    }
+
     public function index()
     {
         $teams = Team::withCount(['mentors', 'interns'])

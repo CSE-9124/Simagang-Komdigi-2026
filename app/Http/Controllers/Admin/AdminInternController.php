@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Intern;
 use App\Models\Mentor;
 use App\Models\User;
+use App\Models\Team;
 use App\Models\Institusi;
 use App\Models\PengajuanDetail;
 use Illuminate\Http\Request;
@@ -16,8 +17,14 @@ use Illuminate\Validation\Rules\Password;
 
 class AdminInternController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('permission:manage_interns');
+    }
+
     public function index(Request $request)
     {
+        // Build base query and apply common filters (except is_active)
         $baseQuery = Intern::with(['user', 'mentor', 'team']);
 
         if ($request->filled('search')) {
@@ -32,19 +39,21 @@ class AdminInternController extends Controller
             $baseQuery->where('mentor_id', $request->mentor_id);
         }
 
+        // Active interns (is_active = true)
         $activeInterns = (clone $baseQuery)
             ->where('is_active', true)
             ->orderByDesc('created_at')
             ->paginate(15, ['*'], 'active_page')
             ->withQueryString();
 
+        // Alumni / inactive interns (is_active = false)
         $alumniInterns = (clone $baseQuery)
             ->where('is_active', false)
             ->orderByDesc('created_at')
             ->paginate(15, ['*'], 'alumni_page')
             ->withQueryString();
-        $mentors = \App\Models\Mentor::orderByDesc('created_at')->get();
-        $teams = \App\Models\Team::orderBy('name')->get();
+        $mentors = Mentor::orderByDesc('created_at')->get();
+        $teams = Team::orderBy('name')->get();
         
         return view('admin.intern.index', compact('activeInterns', 'alumniInterns', 'mentors', 'teams'));
     }
@@ -52,7 +61,7 @@ class AdminInternController extends Controller
     public function create()
     {
         
-        $calonMagang = \App\Models\PengajuanDetail::with([
+        $calonMagang = PengajuanDetail::with([
                 'pengajuan.institusi'
             ])
             ->whereHas('pengajuan', function ($q) {
@@ -61,7 +70,7 @@ class AdminInternController extends Controller
             ->doesntHave('intern')
             ->get();
 
-        $mentors = \App\Models\Mentor::with('team')
+        $mentors = Mentor::with('team')
             ->where('is_active', true)
             ->orderBy('name')
             ->get();
@@ -110,6 +119,7 @@ class AdminInternController extends Controller
             'password' => Hash::make($validated['password']),
             'role' => 'intern',
         ]);
+        $user->assignRole('intern');
 
         // Handle photo upload
         $photo = $request->file('photo');
@@ -191,7 +201,7 @@ class AdminInternController extends Controller
 
     public function edit(Intern $intern)
     {
-        $mentors = \App\Models\Mentor::with('team')
+        $mentors = Mentor::with('team')
             ->where('is_active', true)
             ->orderBy('name')
             ->get();
