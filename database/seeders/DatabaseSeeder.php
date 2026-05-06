@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $this->resetSeedableTables();
+        // $this->resetSeedableTables();
 
         $this->call([
             RoleAndPermissionSeeder::class,

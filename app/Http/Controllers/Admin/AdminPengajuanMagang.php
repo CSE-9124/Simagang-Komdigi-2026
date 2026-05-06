@@ -153,7 +153,9 @@ class AdminPengajuanMagang extends Controller
         $pengajuan->load('details');
 
         $pdf = new \setasign\Fpdi\Tcpdf\Fpdi();
-        $pdf->SetAutoPageBreak(true, 10);
+
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);
 
         // Load template
         $templatePath = storage_path('app/public/balasan_surat/template_balasanSurat.pdf');
@@ -166,19 +168,19 @@ class AdminPengajuanMagang extends Controller
         $pdf->SetFont('Times', '', 12);
 
         // Nomor surat
-        $pdf->SetXY(43.8, 80.6);
+         $pdf->SetXY(43.8, 57.8);
         $pdf->Write(0, $pengajuan->nomor_surat_balasan ?? '-');
 
         //Tanggal
-        $pdf->SetXY(146, 80.6); 
+        $pdf->SetXY(146, 57.8);
         $pdf->Write(0, "Makassar, " . $pengajuan->updated_at->translatedFormat('d F Y'));
 
         // Tujuan surat
-        $pdf->SetXY(18, 108.3); 
+       $pdf->SetXY(18, 85.7); 
         $pdf->Write(0, $pengajuan->tujuan_surat);
 
         // Institusi
-        $pdf->SetXY(18, 114); 
+         $pdf->SetXY(18, 91.2); 
         if ($pengajuan->institusi->jenis_institusi === 'sekolah') {
             $pdf->Write(0, $pengajuan->institusi->nama_institusi );
         } else {
@@ -186,12 +188,12 @@ class AdminPengajuanMagang extends Controller
         }
 
         // nomor surat pengajuan
-        $pdf->SetXY(128.5, 130.7); 
+       $pdf->SetXY(128.5, 108.1); 
         $pdf->Write(0, $pengajuan->no_surat);
 
         // tanggal pengajuan
         $tanggal = $pengajuan->created_at;
-        $pdf->SetXY(32.8, 136.2); 
+        $pdf->SetXY(32.8, 113.7); 
         $pdf->Write(0, 
             $tanggal->translatedFormat('d') . ' ' . 
             bulanSingkat($tanggal) . ' ' . 
@@ -200,9 +202,9 @@ class AdminPengajuanMagang extends Controller
 
         // ttd
         $pdf->Image(
-            storage_path('app/public/images/ttd_balasan_surat.jpg'),
+            storage_path('app/public/images/ttd_balasan_surat.png'),
             137.7,
-            242.4,
+            208.2,
             20,
             20
         );
@@ -216,7 +218,7 @@ class AdminPengajuanMagang extends Controller
         $pdf->SetFont('Times', '', 12);
 
         // posisi awal tabel
-        $startY = 35;
+        $startY = 72;
         $pdf->SetXY(22, $startY);
 
         // lebar kolom 
