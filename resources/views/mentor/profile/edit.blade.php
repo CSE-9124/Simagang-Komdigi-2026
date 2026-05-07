@@ -426,9 +426,9 @@
                                 <label for="photo" class="file-input-label">
                                     <i class="fas fa-cloud-upload-alt"></i> Pilih Foto
                                 </label>
-                                <input type="file" name="photo" id="photo" accept="image/*">
+                                <input type="file" name="photo" id="photo" accept=".jpg,.jpeg,.png">
                             </div>
-                            <p class="form-help">JPG, PNG, atau GIF. Maksimal 2MB.</p>
+                            <p class="form-help">Hanya JPG/PNG. Maksimal 2MB. SVG diblokir.</p>
                         </div>
                     </div>
                 </div>

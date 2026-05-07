@@ -47,7 +47,14 @@ class ProfileController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'unique:users,email,' . $user->id],
             'phone' => ['nullable', 'string', 'max:20'],
-            'photo' => ['nullable', 'image', 'max:2048'],
+            // Block SVG uploads explicitly and validate actual MIME type
+            'photo' => [
+                'nullable',
+                'image',
+                'mimes:jpeg,png,jpg', // Block SVG by allowing only common raster formats
+                'max:2048',
+                'mimetypes:image/jpeg,image/png'
+            ],
         ];
 
         // Only require password fields if password is being changed
