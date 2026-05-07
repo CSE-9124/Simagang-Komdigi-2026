@@ -232,11 +232,14 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::put('/intern/{intern}', [AdminInternController::class, 'update'])->name('intern.update');
     Route::delete('/intern/{intern}', [AdminInternController::class, 'destroy'])->name('intern.destroy');
 
-    // Attendance Monitoring Routes
+    // Attendance Monitoring Route
+    Route::get('/attendance/photo/{filename}', [AdminAttendanceController::class, 'servePhoto'])
+    ->name('attendance.photo')
+    ->middleware('signed')
+    ->where('filename', '[^/]+');
     Route::get('/attendance', [AdminAttendanceController::class, 'index'])->name('attendance.index');
     Route::get('/attendance/{attendance}', [AdminAttendanceController::class, 'show'])->name('attendance.show');
     Route::put('/attendance/{attendance}/document-status', [AdminAttendanceController::class, 'updateDocumentStatus'])->name('attendance.update-document-status');
-
     // Logbook Monitoring Routes
     Route::get('/logbook', [AdminLogbookController::class, 'index'])->name('logbook.index');
     Route::delete('/logbook/{logbook}', [AdminLogbookController::class, 'destroy'])->name('logbook.destroy');

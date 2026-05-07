@@ -16,7 +16,6 @@
 
         <!-- Stats Cards -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            <!-- Card 1: Anak Magang Aktif -->
             <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
                 <div class="p-6">
                     <div class="flex items-center justify-between">
@@ -32,7 +31,6 @@
                 <div class="h-1 bg-gradient-to-r from-blue-500 to-blue-600"></div>
             </div>
 
-            <!-- Card 2: Total Hadir -->
             <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
                 <div class="p-6">
                     <div class="flex items-center justify-between">
@@ -48,7 +46,6 @@
                 <div class="h-1 bg-gradient-to-r from-green-500 to-emerald-600"></div>
             </div>
 
-            <!-- Card 3: Total Izin -->
             <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
                 <div class="p-6">
                     <div class="flex items-center justify-between">
@@ -64,7 +61,6 @@
                 <div class="h-1 bg-gradient-to-r from-yellow-500 to-orange-500"></div>
             </div>
 
-            <!-- Card 4: Total Sakit -->
             <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
                 <div class="p-6">
                     <div class="flex items-center justify-between">
@@ -80,7 +76,6 @@
                 <div class="h-1 bg-gradient-to-r from-red-500 to-rose-600"></div>
             </div>
 
-            <!-- Card 5: Total Alfa -->
             <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
                 <div class="p-6">
                     <div class="flex items-center justify-between">
@@ -96,7 +91,6 @@
                 <div class="h-1 bg-gradient-to-r from-gray-500 to-gray-600"></div>
             </div>
 
-            <!-- Card 6: Mikro Skill -->
             <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
                 <div class="p-6">
                     <div class="flex items-center justify-between">
@@ -115,7 +109,7 @@
 
         <!-- Absensi Hari Ini -->
         <div class="bg-white rounded-2xl shadow-md border border-blue-100 overflow-hidden mb-8">
-            <div class="bg-blue-600 px-6 py-4 px-6 py-4">
+            <div class="bg-blue-600 px-6 py-4">
                 <h2 class="text-xl font-bold text-white flex items-center">
                     <i class="fas fa-clipboard-check mr-3"></i>
                     Absensi Hari Ini
@@ -135,12 +129,19 @@
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-100">
-                            {{-- Yang Hadir - Paling Atas --}}
-                            @php
-                                $hadirCount = 0;
-                            @endphp
+
+                            {{-- Yang Hadir --}}
+                            @php $hadirCount = 0; @endphp
                             @forelse($todayAttendances->where('status', 'hadir') as $attendance)
-                                @php $hadirCount++; @endphp
+                                @php
+                                    $hadirCount++;
+                                    $photoInUrl = $attendance->photo_path
+                                        ? URL::temporarySignedRoute('admin.attendance.photo', now()->addMinutes(5), ['filename' => basename($attendance->photo_path)])
+                                        : null;
+                                    $photoOutUrl = $attendance->photo_checkout
+                                        ? URL::temporarySignedRoute('admin.attendance.photo', now()->addMinutes(5), ['filename' => basename($attendance->photo_checkout)])
+                                        : null;
+                                @endphp
                                 <tr class="hover:bg-green-50 transition-colors duration-150">
                                     <td class="px-6 py-4 whitespace-nowrap text-center">
                                         <div class="text-sm font-medium text-gray-900">{{ $attendance->intern->name }}</div>
@@ -154,12 +155,12 @@
                                         {{ $attendance->check_in ? \Carbon\Carbon::parse($attendance->check_in)->format('H:i') : '-' }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap flex justify-center">
-                                        @if($attendance->photo_path)
-                                            <img src="{{ url('storage/' . $attendance->photo_path) }}" 
-                                                    alt="Check In" 
-                                                    class="w-12 h-12 object-cover rounded-lg border-2 border-green-200 cursor-pointer hover:border-green-400 transition-all" 
-                                                    onclick="window.open('{{ url('storage/' . $attendance->photo_path) }}', '_blank')" 
-                                                    title="Klik untuk melihat full size">
+                                        @if($photoInUrl)
+                                            <img src="{{ $photoInUrl }}"
+                                                alt="Check In"
+                                                class="w-12 h-12 object-cover rounded-lg border-2 border-green-200 cursor-pointer hover:border-green-400 transition-all"
+                                                onclick="window.open('{{ $photoInUrl }}', '_blank')"
+                                                title="Klik untuk melihat full size">
                                         @else
                                             <span class="text-gray-400">-</span>
                                         @endif
@@ -168,12 +169,12 @@
                                         {{ $attendance->check_out ? \Carbon\Carbon::parse($attendance->check_out)->format('H:i') : '-' }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap flex justify-center">
-                                        @if($attendance->photo_checkout)
-                                            <img src="{{ url('storage/' . $attendance->photo_checkout) }}" 
-                                                 alt="Check Out" 
-                                                 class="w-12 h-12 object-cover rounded-lg border-2 border-green-200 cursor-pointer hover:border-green-400 transition-all" 
-                                                 onclick="window.open('{{ url('storage/' . $attendance->photo_checkout) }}', '_blank')" 
-                                                 title="Klik untuk melihat full size">
+                                        @if($photoOutUrl)
+                                            <img src="{{ $photoOutUrl }}"
+                                                alt="Check Out"
+                                                class="w-12 h-12 object-cover rounded-lg border-2 border-green-200 cursor-pointer hover:border-green-400 transition-all"
+                                                onclick="window.open('{{ $photoOutUrl }}', '_blank')"
+                                                title="Klik untuk melihat full size">
                                         @else
                                             <span class="text-gray-400">-</span>
                                         @endif
@@ -184,6 +185,14 @@
 
                             {{-- Yang Izin/Sakit/Alfa --}}
                             @forelse($todayAttendances->whereIn('status', ['izin', 'sakit', 'alfa']) as $attendance)
+                                @php
+                                    $photoInUrl = $attendance->photo_path
+                                        ? URL::temporarySignedRoute('admin.attendance.photo', now()->addMinutes(5), ['filename' => basename($attendance->photo_path)])
+                                        : null;
+                                    $photoOutUrl = $attendance->photo_checkout
+                                        ? URL::temporarySignedRoute('admin.attendance.photo', now()->addMinutes(5), ['filename' => basename($attendance->photo_checkout)])
+                                        : null;
+                                @endphp
                                 <tr class="hover:bg-yellow-50 transition-colors duration-150">
                                     <td class="px-6 py-4 whitespace-nowrap text-center">
                                         <div class="text-sm font-medium text-gray-900">{{ $attendance->intern->name }}</div>
@@ -204,12 +213,12 @@
                                         {{ $attendance->check_in ? \Carbon\Carbon::parse($attendance->check_in)->format('H:i') : '-' }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap flex justify-center">
-                                        @if($attendance->photo_path)
-                                            <img src="{{ url('storage/' . $attendance->photo_path) }}" 
-                                                    alt="Check In" 
-                                                    class="w-12 h-12 object-cover rounded-lg border-2 border-yellow-200 cursor-pointer hover:border-yellow-400 transition-all" 
-                                                    onclick="window.open('{{ url('storage/' . $attendance->photo_path) }}', '_blank')" 
-                                                    title="Klik untuk melihat full size">
+                                        @if($photoInUrl)
+                                            <img src="{{ $photoInUrl }}"
+                                                alt="Check In"
+                                                class="w-12 h-12 object-cover rounded-lg border-2 border-yellow-200 cursor-pointer hover:border-yellow-400 transition-all"
+                                                onclick="window.open('{{ $photoInUrl }}', '_blank')"
+                                                title="Klik untuk melihat full size">
                                         @else
                                             <span class="text-gray-400">-</span>
                                         @endif
@@ -218,12 +227,12 @@
                                         {{ $attendance->check_out ? \Carbon\Carbon::parse($attendance->check_out)->format('H:i') : '-' }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap flex justify-center">
-                                        @if($attendance->photo_checkout)
-                                            <img src="{{ url('storage/' . $attendance->photo_checkout) }}" 
-                                                 alt="Check Out" 
-                                                 class="w-12 h-12 object-cover rounded-lg border-2 border-yellow-200 cursor-pointer hover:border-yellow-400 transition-all" 
-                                                 onclick="window.open('{{ url('storage/' . $attendance->photo_checkout) }}', '_blank')" 
-                                                 title="Klik untuk melihat full size">
+                                        @if($photoOutUrl)
+                                            <img src="{{ $photoOutUrl }}"
+                                                alt="Check Out"
+                                                class="w-12 h-12 object-cover rounded-lg border-2 border-yellow-200 cursor-pointer hover:border-yellow-400 transition-all"
+                                                onclick="window.open('{{ $photoOutUrl }}', '_blank')"
+                                                title="Klik untuk melihat full size">
                                         @else
                                             <span class="text-gray-400">-</span>
                                         @endif
@@ -232,7 +241,6 @@
                             @empty
                             @endforelse
 
-                            {{-- Belum Absen - Paling Bawah --}}
                             @forelse($todayAbsentInterns as $absentIntern)
                                 <tr class="bg-red-50">
                                     <td class="px-6 py-4 whitespace-nowrap text-center">
@@ -259,6 +267,7 @@
                                     </tr>
                                 @endif
                             @endforelse
+
                         </tbody>
                     </table>
                 </div>
@@ -279,7 +288,6 @@
                         @foreach($topMicroSkills->take(3) as $index => $row)
                             <div class="flex items-center justify-between p-3 bg-blue-50 rounded-lg hover:shadow-md transition-all duration-300 border border-blue-100">
                                 <div class="flex items-center">
-                                    <!-- Rank Badge -->
                                     <div class="relative">
                                         <span class="w-10 h-10 rounded-full bg-gradient-to-br 
                                             @if($index == 0) from-yellow-400 to-yellow-600
@@ -295,17 +303,15 @@
                                         @endif
                                     </div>
                                     
-                                    <!-- Photo -->
                                     @if(!empty($row['photo_path']))
                                         <img src="{{ url('storage/'.$row['photo_path']) }}" 
-                                             class="w-12 h-12 rounded-full object-cover border-2 border-white shadow-md mr-4" />
+                                            class="w-12 h-12 rounded-full object-cover border-2 border-white shadow-md mr-4" />
                                     @else
                                         <div class="w-12 h-12 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center mr-4 shadow-md">
                                             <i class="fas fa-user text-white"></i>
                                         </div>
                                     @endif
                                     
-                                    <!-- Info -->
                                     <div>
                                         <div class="font-bold text-gray-900 text-lg">{{ $row['name'] }}</div>
                                         <div class="text-xs text-gray-600 flex items-center">
@@ -314,7 +320,6 @@
                                     </div>
                                 </div>
                                 
-                                <!-- Score Badge -->
                                 <span class="px-3 py-1 bg-indigo-100 text-center text-indigo-800 rounded-full text-xs font-semibold">
                                     {{ $row['total'] }} course
                                 </span>
@@ -330,7 +335,7 @@
                 
                 <div class="mt-6 text-center">
                     <a href="{{ route('admin.microskill.leaderboard') }}" 
-                       class="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 shadow-lg hover:shadow-xl transition-all duration-300">
+                        class="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 shadow-lg hover:shadow-xl transition-all duration-300">
                         <span>Lihat Selengkapnya</span>
                         <i class="fas fa-arrow-right ml-2"></i>
                     </a>

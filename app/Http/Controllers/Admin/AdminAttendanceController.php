@@ -13,7 +13,7 @@ class AdminAttendanceController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('permission:view_attendance')->only(['index', 'show']);
+        $this->middleware('permission:view_attendance')->only(['index', 'show', 'servePhoto']);
         $this->middleware('permission:manage_attendance')->only(['updateDocumentStatus']);
     }
 
@@ -47,7 +47,6 @@ class AdminAttendanceController extends Controller
 
         $interns = Intern::orderBy('name')->get();
 
-
         $todayAbsentInterns = collect();
         $isWorkday    = !HolidayService::isHoliday($nowWita);
         $noDateFilter = !$request->filled('date_from') && !$request->filled('date_to');
@@ -72,6 +71,34 @@ class AdminAttendanceController extends Controller
         $attendance->load('intern');
         return view('admin.attendance.show', compact('attendance'));
     }
+
+    public function servePhoto(string $filename)
+{
+    $photoPath = 'private/attendance-photos/' . $filename;
+
+    Attendance::where(function ($query) use ($photoPath) {
+            $query->where('photo_path', $photoPath)
+                ->orWhere('photo_checkout', $photoPath);
+        })
+        ->firstOrFail();
+
+    $fullPath = storage_path('app/' . $photoPath);
+
+    if (!file_exists($fullPath)) {
+        abort(404, 'File not found');
+    }
+
+    // Validasi signed URL
+    if (!request()->hasValidSignature()) {
+        abort(403, 'Link foto tidak valid atau sudah expired');
+    }
+
+    return response()->file($fullPath, [
+        'Cache-Control' => 'no-store, no-cache, must-revalidate',
+        'Pragma'        => 'no-cache',
+        'Expires'       => '0',
+    ]);
+}
 
     public function updateDocumentStatus(Request $request, Attendance $attendance)
     {
