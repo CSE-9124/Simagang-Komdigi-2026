@@ -8,8 +8,8 @@
 
             <div class="mb-8">
                 <Detail class="text-3xl sm:text-4xl font-bold text-green-600 mb-3">Detail Logbook
-                </h1>
-                <p class="text-sm sm:text-base text-gray-600">Informasi lengkap catatan harian anak magang</p>
+                    </h1>
+                    <p class="text-sm sm:text-base text-gray-600">Informasi lengkap catatan harian anak magang</p>
             </div>
 
             <div class="bg-white rounded-2xl shadow-lg border border-green-100 overflow-hidden">
@@ -73,10 +73,10 @@
                         </div>
                         @if ($logbook->photo_path)
                             <div class="relative group">
-                                <img src="{{ url('storage/' . $logbook->photo_path) }}"
+                                <img src="{{ route('institusi.logbook.photo', basename($logbook->photo_path)) }}"
                                     class="w-full rounded-xl border-2 border-gray-200 shadow-lg cursor-pointer hover:shadow-2xl transition-all duration-300 max-h-96 object-cover"
                                     alt="Foto Logbook"
-                                    onclick="window.open('{{ url('storage/' . $logbook->photo_path) }}', '_blank')" />
+                                    onclick="window.open('{{ route('institusi.logbook.photo', basename($logbook->photo_path)) }}', '_blank')" />
                                 <div
                                     class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 rounded-xl transition-all duration-300 flex items-center justify-center">
                                     <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300">

@@ -83,4 +83,25 @@ class AttendanceController extends Controller
         ));
     }
 
+    public function servePhoto(string $filename)
+    {
+        $internIds = $this->getInstitusiInternIds();
+        $photoPath = 'private/attendance-photos/' . $filename;
+
+        Attendance::whereIn('intern_id', $internIds)
+            ->where(function ($query) use ($photoPath) {
+                $query->where('photo_path', $photoPath)
+                    ->orWhere('photo_checkout', $photoPath);
+            })
+            ->firstOrFail();
+
+        $fullPath = storage_path('app/' . $photoPath);
+
+        if (!file_exists($fullPath)) {
+            abort(404, 'File not found');
+        }
+
+        return response()->file($fullPath);
+    }
+
 }

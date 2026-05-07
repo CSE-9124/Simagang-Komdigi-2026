@@ -14,13 +14,15 @@
             {{-- ===== STATS CARDS ===== --}}
             <div class="mb-6 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                 {{-- Total Submissions --}}
-                <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-blue-100">
+                <div
+                    class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-blue-100">
                     <div class="p-4 sm:p-6 flex items-center justify-between">
                         <div>
                             <p class="text-xs font-medium text-gray-500 mb-1">Total Submissions</p>
                             <h3 class="text-2xl sm:text-3xl font-bold text-gray-900">{{ $submissions->total() }}</h3>
                         </div>
-                        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
+                        <div
+                            class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
                             <i class="fas fa-layer-group text-blue-600 text-base sm:text-lg"></i>
                         </div>
                     </div>
@@ -28,7 +30,8 @@
                 </div>
 
                 {{-- Unique Interns --}}
-                <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-blue-100">
+                <div
+                    class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-blue-100">
                     <div class="p-4 sm:p-6 flex items-center justify-between">
                         <div>
                             <p class="text-xs font-medium text-gray-500 mb-1">Unique Interns</p>
@@ -36,7 +39,8 @@
                                 {{ $submissions->pluck('intern_id')->unique()->count() }}
                             </h3>
                         </div>
-                        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-indigo-100 flex items-center justify-center flex-shrink-0">
+                        <div
+                            class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-indigo-100 flex items-center justify-center flex-shrink-0">
                             <i class="fas fa-users text-indigo-600 text-base sm:text-lg"></i>
                         </div>
                     </div>
@@ -45,7 +49,8 @@
             </div>
 
             {{-- ===== FILTER ===== --}}
-            <div class="bg-gradient-to-br from-white to-blue-50 rounded-2xl shadow-xl border border-blue-200 overflow-hidden mb-6">
+            <div
+                class="bg-gradient-to-br from-white to-blue-50 rounded-2xl shadow-xl border border-blue-200 overflow-hidden mb-6">
                 <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-4 sm:px-6 py-3 sm:py-5">
                     <h2 class="text-lg sm:text-xl font-bold text-white">Filter Data</h2>
                 </div>
@@ -93,15 +98,24 @@
                         <table class="w-full divide-y divide-gray-200">
                             <thead>
                                 <tr class="bg-gradient-to-r from-blue-600 to-indigo-600">
-                                    <th class="px-3 sm:px-6 py-3 sm:py-5 text-left text-xs font-bold text-white uppercase tracking-widest">Nama</th>
-                                    <th class="px-3 sm:px-6 py-3 sm:py-5 text-left text-xs font-bold text-white uppercase tracking-widest">Judul Course</th>
-                                    <th class="px-3 sm:px-6 py-3 sm:py-5 text-left text-xs font-bold text-white uppercase tracking-widest">Waktu Submit</th>
-                                    <th class="px-3 sm:px-6 py-3 sm:py-5 text-left text-xs font-bold text-white uppercase tracking-widest">Dokumentasi</th>
+                                    <th
+                                        class="px-3 sm:px-6 py-3 sm:py-5 text-left text-xs font-bold text-white uppercase tracking-widest">
+                                        Nama</th>
+                                    <th
+                                        class="px-3 sm:px-6 py-3 sm:py-5 text-left text-xs font-bold text-white uppercase tracking-widest">
+                                        Judul Course</th>
+                                    <th
+                                        class="px-3 sm:px-6 py-3 sm:py-5 text-left text-xs font-bold text-white uppercase tracking-widest">
+                                        Waktu Submit</th>
+                                    <th
+                                        class="px-3 sm:px-6 py-3 sm:py-5 text-left text-xs font-bold text-white uppercase tracking-widest">
+                                        Dokumentasi</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
                                 @forelse($submissions as $s)
-                                    <tr class="hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-300 border-b border-gray-200">
+                                    <tr
+                                        class="hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-300 border-b border-gray-200">
                                         <td class="px-3 sm:px-6 py-3 sm:py-5 whitespace-nowrap">
                                             <div class="flex items-center gap-2 sm:gap-3">
                                                 @if ($s->intern->photo_path)
@@ -109,15 +123,18 @@
                                                         class="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover object-center border-2 border-blue-300 shadow-md ring-2 ring-blue-100 flex-shrink-0 aspect-square"
                                                         alt="{{ $s->intern->name }}" />
                                                 @else
-                                                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center shadow-md ring-2 ring-blue-100 flex-shrink-0 aspect-square">
+                                                    <div
+                                                        class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center shadow-md ring-2 ring-blue-100 flex-shrink-0 aspect-square">
                                                         <i class="fas fa-user text-white text-sm sm:text-base"></i>
                                                     </div>
                                                 @endif
-                                                <span class="text-xs sm:text-sm font-semibold text-gray-900 truncate">{{ $s->intern->name }}</span>
+                                                <span
+                                                    class="text-xs sm:text-sm font-semibold text-gray-900 truncate">{{ $s->intern->name }}</span>
                                             </div>
                                         </td>
                                         <td class="px-3 sm:px-6 py-3 sm:py-5">
-                                            <span class="text-xs sm:text-sm font-medium text-gray-900 truncate">{{ Str::limit($s->title, 40) }}</span>
+                                            <span
+                                                class="text-xs sm:text-sm font-medium text-gray-900 truncate">{{ Str::limit($s->title, 40) }}</span>
                                         </td>
                                         <td class="px-3 sm:px-6 py-3 sm:py-5 whitespace-nowrap">
                                             <div class="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm">
@@ -131,12 +148,14 @@
                                         </td>
                                         <td class="px-3 sm:px-6 py-3 sm:py-5 whitespace-nowrap">
                                             @if ($s->photo_path)
-                                                <img src="{{ url('storage/' . $s->photo_path) }}" alt="Documentation"
+                                                <img src="{{ route('institusi.microskill.photo', basename($s->photo_path)) }}"
+                                                    alt="Documentation"
                                                     class="w-10 h-10 sm:w-12 sm:h-12 object-cover rounded-lg border-2 border-blue-200 cursor-pointer hover:border-blue-400 transition-all shadow-sm hover:shadow-lg transform hover:scale-110 aspect-square"
-                                                    onclick="window.open('{{ url('storage/' . $s->photo_path) }}', '_blank')"
+                                                    onclick="window.open('{{ route('institusi.microskill.photo', basename($s->photo_path)) }}', '_blank')"
                                                     title="Klik untuk melihat full size" />
                                             @else
-                                                <div class="inline-flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-gray-100 rounded-lg border-2 border-gray-200">
+                                                <div
+                                                    class="inline-flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-gray-100 rounded-lg border-2 border-gray-200">
                                                     <i class="fas fa-image text-gray-300 text-sm sm:text-lg"></i>
                                                 </div>
                                             @endif
@@ -146,11 +165,14 @@
                                     <tr>
                                         <td colspan="4" class="px-3 sm:px-6 py-8 sm:py-12 text-center">
                                             <div class="flex flex-col items-center justify-center">
-                                                <div class="w-16 h-16 sm:w-24 sm:h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mb-3 sm:mb-5 shadow-md">
+                                                <div
+                                                    class="w-16 h-16 sm:w-24 sm:h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mb-3 sm:mb-5 shadow-md">
                                                     <i class="fas fa-certificate text-3xl sm:text-5xl text-gray-300"></i>
                                                 </div>
-                                                <p class="text-base sm:text-lg font-bold text-gray-700 mb-1 sm:mb-2">Tidak ada data mikro skill</p>
-                                                <p class="text-xs sm:text-sm text-gray-500">Data akan muncul ketika anak magang mensubmit course</p>
+                                                <p class="text-base sm:text-lg font-bold text-gray-700 mb-1 sm:mb-2">Tidak
+                                                    ada data mikro skill</p>
+                                                <p class="text-xs sm:text-sm text-gray-500">Data akan muncul ketika anak
+                                                    magang mensubmit course</p>
                                             </div>
                                         </td>
                                     </tr>

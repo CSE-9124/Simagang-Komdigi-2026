@@ -51,4 +51,22 @@ class MicroSkillController extends Controller
 
         return view('institusi.microskill.index', compact('institusi', 'submissions', 'interns'));
     }
+
+    public function servePhoto(string $filename)
+    {
+        $internIds = $this->getInstitusiInternIds();
+        $photoPath = 'private/micro-skills/' . $filename;
+
+        MicroSkillSubmission::whereIn('intern_id', $internIds)
+            ->where('photo_path', $photoPath)
+            ->firstOrFail();
+
+        $fullPath = storage_path('app/' . $photoPath);
+
+        if (!file_exists($fullPath)) {
+            abort(404, 'File not found');
+        }
+
+        return response()->file($fullPath);
+    }
 }

@@ -129,36 +129,42 @@
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-100">
                                     {{-- Baris virtual: intern belum absen hari ini --}}
-                                    @foreach($todayAbsentInterns as $absentIntern)
+                                    @foreach ($todayAbsentInterns as $absentIntern)
                                         <tr class="bg-red-50">
                                             <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                                                 <div class="flex items-center text-xs sm:text-sm text-gray-900">
                                                     <i class="fas fa-calendar mr-1 sm:mr-2 text-gray-400 text-xs"></i>
-                                                    <span class="hidden sm:inline">{{ \Carbon\Carbon::parse($todayWita)->format('d M Y') }}</span>
-                                                    <span class="sm:hidden">{{ \Carbon\Carbon::parse($todayWita)->format('d/m/y') }}</span>
+                                                    <span
+                                                        class="hidden sm:inline">{{ \Carbon\Carbon::parse($todayWita)->format('d M Y') }}</span>
+                                                    <span
+                                                        class="sm:hidden">{{ \Carbon\Carbon::parse($todayWita)->format('d/m/y') }}</span>
                                                     <span class="ml-1 text-xs text-gray-400">(Hari ini)</span>
                                                 </div>
                                             </td>
                                             <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                                                 <div class="flex items-center">
-                                                    @if($absentIntern->photo_path)
+                                                    @if ($absentIntern->photo_path)
                                                         <img src="{{ url('storage/' . $absentIntern->photo_path) }}"
                                                             class="w-6 h-6 sm:w-8 sm:h-8 rounded-full object-cover border-2 border-blue-200 mr-2 sm:mr-3 flex-shrink-0"
                                                             alt="{{ $absentIntern->name }}" />
                                                     @else
-                                                        <div class="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center mr-2 sm:mr-3 flex-shrink-0">
+                                                        <div
+                                                            class="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center mr-2 sm:mr-3 flex-shrink-0">
                                                             <i class="fas fa-user text-white text-xs"></i>
                                                         </div>
                                                     @endif
-                                                    <span class="text-xs sm:text-sm font-medium text-gray-900 truncate max-w-[100px] sm:max-w-none">{{ $absentIntern->name }}</span>
+                                                    <span
+                                                        class="text-xs sm:text-sm font-medium text-gray-900 truncate max-w-[100px] sm:max-w-none">{{ $absentIntern->name }}</span>
                                                 </div>
                                             </td>
                                             <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
-                                                <span class="px-2 sm:px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                                <span
+                                                    class="px-2 sm:px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
                                                     Tidak Hadir
                                                 </span>
                                             </td>
-                                            <td colspan="4" class="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-400 italic">
+                                            <td colspan="4"
+                                                class="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-400 italic">
                                                 Belum melakukan absensi hari ini
                                             </td>
                                         </tr>
@@ -192,13 +198,16 @@
                                                 </div>
                                             </td>
                                             <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
-                                                <span class="px-2 sm:px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full
+                                                <span
+                                                    class="px-2 sm:px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full
                                                     @if ($a->status == 'hadir') bg-green-100 text-green-800
                                                     @elseif($a->status == 'izin') bg-yellow-100 text-yellow-800
                                                     @elseif($a->status == 'sakit') bg-orange-100 text-orange-800
                                                     @else bg-red-100 text-red-800 @endif">
-                                                    @if($a->status == 'alfa') Tidak Hadir
-                                                    @else {{ ucfirst($a->status) }}
+                                                    @if ($a->status == 'alfa')
+                                                        Tidak Hadir
+                                                    @else
+                                                        {{ ucfirst($a->status) }}
                                                     @endif
                                                 </span>
                                             </td>
@@ -216,9 +225,10 @@
                                             </td>
                                             <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                                                 @if ($a->photo_path)
-                                                    <img src="{{ url('storage/' . $a->photo_path) }}" alt="Check In"
+                                                    <img src="{{ route('institusi.attendance.photo', basename($a->photo_path)) }}"
+                                                        alt="Check In"
                                                         class="w-10 h-10 sm:w-12 sm:h-12 object-cover rounded-lg border-2 border-blue-200 cursor-pointer hover:border-blue-400 transition-all shadow-sm"
-                                                        onclick="window.open('{{ url('storage/' . $a->photo_path) }}', '_blank')"
+                                                        onclick="window.open('{{ route('institusi.attendance.photo', basename($a->photo_path)) }}', '_blank')"
                                                         title="Klik untuk melihat full size" />
                                                 @else
                                                     <span class="text-gray-400 text-xs sm:text-sm">-</span>
@@ -226,9 +236,10 @@
                                             </td>
                                             <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                                                 @if ($a->photo_checkout)
-                                                    <img src="{{ url('storage/' . $a->photo_checkout) }}" alt="Check Out"
+                                                    <img src="{{ route('institusi.attendance.photo', basename($a->photo_checkout)) }}"
+                                                        alt="Check Out"
                                                         class="w-10 h-10 sm:w-12 sm:h-12 object-cover rounded-lg border-2 border-blue-200 cursor-pointer hover:border-blue-400 transition-all shadow-sm"
-                                                        onclick="window.open('{{ url('storage/' . $a->photo_checkout) }}', '_blank')"
+                                                        onclick="window.open('{{ route('institusi.attendance.photo', basename($a->photo_checkout)) }}', '_blank')"
                                                         title="Klik untuk melihat full size" />
                                                 @else
                                                     <span class="text-gray-400 text-xs sm:text-sm">-</span>

@@ -70,4 +70,22 @@ class LogbookController extends Controller
 
         return view('institusi.logbook.show', compact('logbook'));
     }
+
+    public function servePhoto(string $filename)
+    {
+        $internIds = $this->getInstitusiInternIds();
+        $photoPath = 'private/logbook-photos/' . $filename;
+
+        Logbook::whereIn('intern_id', $internIds)
+            ->where('photo_path', $photoPath)
+            ->firstOrFail();
+
+        $fullPath = storage_path('app/' . $photoPath);
+
+        if (!file_exists($fullPath)) {
+            abort(404, 'File not found');
+        }
+
+        return response()->file($fullPath);
+    }
 }
