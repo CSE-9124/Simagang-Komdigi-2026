@@ -375,7 +375,7 @@
                         @endfor
                         <p class="mt-2 text-sm text-gray-500 flex items-center">
                             <i class="fas fa-info-circle mr-1"></i>
-                            Opsional: masukkan hingga 3 tautan (GitHub, Drive, Pages, dll.).
+                            Format: Link dari GitHub, GitHub Pages, Google Drive, YouTube, Canva, Tableau (Opsional, Maks: 3 link)
                         </p>
                     </div>
 
@@ -471,7 +471,7 @@
                         @endfor
                         <p class="mt-2 text-sm text-gray-500 flex items-center">
                             <i class="fas fa-info-circle mr-1"></i>
-                            Contoh: GitHub, GitHub Pages, Google Drive (Public)
+                            Format: Link dari GitHub, GitHub Pages, Google Drive, YouTube, Canva, Tableau (Opsional, Maks: 3 link)
                         </p>
                     </div>
 

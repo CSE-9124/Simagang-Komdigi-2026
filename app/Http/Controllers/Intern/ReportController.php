@@ -20,6 +20,25 @@ class ReportController extends Controller
         return view('intern.report.index', compact('report', 'testimonial'));
     }
 
+    private function isAllowedDomain($url)
+    {
+        $allowed = [
+            'github.com',
+            'github.io',
+            'drive.google.com',
+            'youtube.com',
+            'youtu.be',
+            'canva.com',
+            'tableau.com',
+        ];
+        foreach ($allowed as $domain) {
+            if (stripos($url, $domain) !== false) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public function store(Request $request)
     {
         $intern = Auth::user()->intern;
@@ -38,6 +57,15 @@ class ReportController extends Controller
             'activities' => ['nullable', 'array'],
             'activities.*.description' => ['nullable', 'string', 'max:2000'],
         ]);
+
+        // izin link dari domain tertentu
+        $links = array_filter((array) $request->input('project_links', []));
+        foreach ($links as $link) {
+            $trimmedLink = trim($link);
+            if (!$this->isAllowedDomain($trimmedLink)) {
+                return back()->withErrors(['project_links' => 'Link project hanya boleh dari Link tertentu.'])->withInput();
+            }
+        }
 
         $file = $request->file('file');
         $fileName = $file->getClientOriginalName();
@@ -130,6 +158,15 @@ class ReportController extends Controller
             'activities' => ['nullable', 'array'],
             'activities.*.description' => ['nullable', 'string', 'max:2000'],
         ]);
+
+        // Hanya izinkan link dari domain tertentu
+        $links = array_filter((array) $request->input('project_links', []));
+        foreach ($links as $link) {
+            $trimmedLink = trim($link);
+            if (!$this->isAllowedDomain($trimmedLink)) {
+                return back()->withErrors(['project_links' => 'Link project hanya boleh dari Link tertentu.'])->withInput();
+            }
+        }
 
         // Handle main report file replacement
         if ($request->hasFile('file')) {
