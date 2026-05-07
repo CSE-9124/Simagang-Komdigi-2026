@@ -298,12 +298,24 @@ Route::middleware(['auth', 'mentor'])->prefix('mentor')->name('mentor.')->group(
     Route::get('/interns', [MentorInternController::class, 'index'])->name('intern.index');
     Route::get('/interns/{intern}', [MentorInternController::class, 'show'])->name('intern.show');
     Route::get('/attendance', [MentorAttendanceController::class, 'index'])->name('attendance.index');
+    Route::get('/attendance/photo/{filename}', [MentorAttendanceController::class, 'servePhoto'])
+        ->name('attendance.photo')
+        ->middleware('signed')
+        ->where('filename', '[^/]+');
     Route::get('/logbook', [MentorLogbookController::class, 'index'])->name('logbook.index');
     Route::get('/logbook/{logbook}', [MentorLogbookController::class, 'show'])->name('logbook.show');
+    Route::get('/logbook/photo/{filename}', [MentorLogbookController::class, 'servePhoto'])
+        ->name('logbook.photo')
+        ->middleware('signed')
+        ->where('filename', '[^/]+');
     Route::get('/report', [MentorReportController::class, 'index'])->name('report.index');
     Route::get('/report/{report}', [MentorReportController::class, 'show'])->name('report.show');
     Route::put('/report/{report}/grade', [MentorReportController::class, 'grade'])->name('report.grade');
     Route::get('/microskill', [MentorMicroSkillController::class, 'index'])->name('microskill.index');
+    Route::get('/microskill/photo/{filename}', [MentorMicroSkillController::class, 'servePhoto'])
+        ->name('microskill.photo')
+        ->middleware('signed')
+        ->where('filename', '[^/]+');
     Route::get('/microskill/leaderboard', [MentorMicroSkillLeaderboardController::class, 'index'])->name('microskill.leaderboard');
     Route::resource('certificates', CertificateController::class)
             ->only(['index', 'create', 'store', 'show', "update"]);

@@ -30,6 +30,39 @@ class MicroSkillController extends Controller
 
         return view('mentor.microskill.index', compact('submissions', 'interns'));
     }
+
+    /**
+     * Serve private microskill photo for mentor's interns
+     */
+    public function servePhoto($filename)
+    {
+        $mentor = Auth::user()->mentor;
+        $filePath = storage_path('app/private/micro-skills/' . $filename);
+
+        if (!str_starts_with(realpath($filePath) ?: '', realpath(storage_path('app/private/micro-skills')) ?: '')) {
+            abort(403, 'Unauthorized');
+        }
+
+        if (!file_exists($filePath)) {
+            abort(404, 'File not found');
+        }
+
+        $internIds = $mentor ? $mentor->interns()->pluck('id')->toArray() : [];
+
+        $submission = MicroSkillSubmission::whereIn('intern_id', $internIds)
+            ->where('photo_path', 'private/micro-skills/' . $filename)
+            ->first();
+
+        if (!$submission) {
+            abort(403, 'Unauthorized');
+        }
+
+        return response()->file($filePath, [
+            'Cache-Control' => 'no-store, no-cache, must-revalidate',
+            'Pragma' => 'no-cache',
+            'Expires' => '0',
+        ]);
+    }
 }
 
 

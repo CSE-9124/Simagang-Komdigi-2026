@@ -421,9 +421,16 @@
                                     </td>
                                     <td>
                                         @if ($s->photo_path)
-                                            <img src="{{ url('storage/' . $s->photo_path) }}" alt="Documentation"
+                                            @php
+                                                $photoUrl = URL::temporarySignedRoute(
+                                                    'mentor.microskill.photo',
+                                                    now()->addMinutes(5),
+                                                    ['filename' => basename($s->photo_path)]
+                                                );
+                                            @endphp
+                                            <img src="{{ $photoUrl }}" alt="Documentation"
                                                 class="photo-thumbnail"
-                                                onclick="window.open('{{ url('storage/' . $s->photo_path) }}', '_blank')"
+                                                onclick="window.open('{{ $photoUrl }}', '_blank')"
                                                 title="Klik untuk melihat full size">
                                         @else
                                             <div class="photo-placeholder">

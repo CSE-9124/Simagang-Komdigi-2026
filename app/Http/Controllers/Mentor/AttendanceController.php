@@ -63,6 +63,42 @@ class AttendanceController extends Controller
             'mentor', 'attendances', 'interns', 'todayAbsentInterns', 'todayWita'
         ));
     }
+
+    /**
+     * Serve private attendance photo for mentor's interns
+     */
+    public function servePhoto($filename)
+    {
+        $mentor = Auth::user()->mentor;
+        $filePath = storage_path('app/private/attendance-photos/' . $filename);
+
+        // Validate file path to prevent directory traversal
+        if (!str_starts_with(realpath($filePath) ?: '', realpath(storage_path('app/private/attendance-photos')) ?: '')) {
+            abort(403, 'Unauthorized');
+        }
+
+        if (!file_exists($filePath)) {
+            abort(404, 'File not found');
+        }
+
+        $internIds = $mentor ? $mentor->interns()->pluck('id')->toArray() : [];
+
+        $attendance = Attendance::whereIn('intern_id', $internIds)
+            ->where(function($query) use ($filename) {
+                $query->where('photo_path', 'private/attendance-photos/' . $filename)
+                      ->orWhere('photo_checkout', 'private/attendance-photos/' . $filename);
+            })->first();
+
+        if (!$attendance) {
+            abort(403, 'Unauthorized');
+        }
+
+        return response()->file($filePath, [
+            'Cache-Control' => 'no-store, no-cache, must-revalidate',
+            'Pragma' => 'no-cache',
+            'Expires' => '0',
+        ]);
+    }
 }
 
 

@@ -785,24 +785,38 @@
                             </td>
                             <td style="padding:12px 18px;">
                                 @if($attendance->photo_path)
-                                    <img src="{{ url('storage/' . $attendance->photo_path) }}" alt="In"
-                                        style="width:40px;height:40px;object-fit:cover;border-radius:10px;border:2px solid #dbeafe;cursor:pointer;transition:all .2s ease;"
-                                        onclick="window.open('{{ url('storage/' . $attendance->photo_path) }}', '_blank')"
-                                        onmouseover="this.style.borderColor='#3b82f6';this.style.transform='scale(1.1)';"
-                                        onmouseout="this.style.borderColor='#dbeafe';this.style.transform='none';"
-                                        title="Klik untuk lihat penuh">
-                                @else
-                                    <span style="color:#d1d5db;font-size:12px;">—</span>
-                                @endif
+                                        @php
+                                            $photoUrl = URL::temporarySignedRoute(
+                                                'mentor.attendance.photo',
+                                                now()->addMinutes(5),
+                                                ['filename' => basename($attendance->photo_path)]
+                                            );
+                                        @endphp
+                                        <img src="{{ $photoUrl }}" alt="In"
+                                            style="width:40px;height:40px;object-fit:cover;border-radius:10px;border:2px solid #dbeafe;cursor:pointer;transition:all .2s ease;"
+                                            onclick="window.open('{{ $photoUrl }}', '_blank')"
+                                            onmouseover="this.style.borderColor='#3b82f6';this.style.transform='scale(1.1)';"
+                                            onmouseout="this.style.borderColor='#dbeafe';this.style.transform='none';"
+                                            title="Klik untuk lihat penuh">
+                                    @else
+                                        <span style="color:#d1d5db;font-size:12px;">—</span>
+                                    @endif
                             </td>
                             <td style="padding:12px 18px;font-size:13px;font-weight:600;color:#374151;font-family:'DM Mono',monospace;">
                                 {{ $attendance->check_out ? \Carbon\Carbon::parse($attendance->check_out)->format('H:i') : '—' }}
                             </td>
                             <td style="padding:12px 18px;">
                                 @if($attendance->photo_checkout)
-                                    <img src="{{ url('storage/' . $attendance->photo_checkout) }}" alt="Out"
+                                    @php
+                                        $photoOutUrl = URL::temporarySignedRoute(
+                                            'mentor.attendance.photo',
+                                            now()->addMinutes(5),
+                                            ['filename' => basename($attendance->photo_checkout)]
+                                        );
+                                    @endphp
+                                    <img src="{{ $photoOutUrl }}" alt="Out"
                                         style="width:40px;height:40px;object-fit:cover;border-radius:10px;border:2px solid #dbeafe;cursor:pointer;transition:all .2s ease;"
-                                        onclick="window.open('{{ url('storage/' . $attendance->photo_checkout) }}', '_blank')"
+                                        onclick="window.open('{{ $photoOutUrl }}', '_blank')"
                                         onmouseover="this.style.borderColor='#3b82f6';this.style.transform='scale(1.1)';"
                                         onmouseout="this.style.borderColor='#dbeafe';this.style.transform='none';"
                                         title="Klik untuk lihat penuh">
@@ -845,9 +859,16 @@
                             </td>
                             <td style="padding:12px 18px;">
                                 @if($attendance->photo_path)
-                                    <img src="{{ url('storage/' . $attendance->photo_path) }}" alt="In"
+                                    @php
+                                        $photoUrl = URL::temporarySignedRoute(
+                                            'mentor.attendance.photo',
+                                            now()->addMinutes(5),
+                                            ['filename' => basename($attendance->photo_path)]
+                                        );
+                                    @endphp
+                                    <img src="{{ $photoUrl }}" alt="In"
                                         style="width:40px;height:40px;object-fit:cover;border-radius:10px;border:2px solid #dbeafe;cursor:pointer;transition:all .2s ease;"
-                                        onclick="window.open('{{ url('storage/' . $attendance->photo_path) }}', '_blank')"
+                                        onclick="window.open('{{ $photoUrl }}', '_blank')"
                                         onmouseover="this.style.borderColor='#3b82f6';this.style.transform='scale(1.1)';"
                                         onmouseout="this.style.borderColor='#dbeafe';this.style.transform='none';"
                                         title="Klik untuk lihat penuh">
@@ -860,9 +881,16 @@
                             </td>
                             <td style="padding:12px 18px;">
                                 @if($attendance->photo_checkout)
-                                    <img src="{{ url('storage/' . $attendance->photo_checkout) }}" alt="Out"
+                                    @php
+                                        $photoOutUrl = URL::temporarySignedRoute(
+                                            'mentor.attendance.photo',
+                                            now()->addMinutes(5),
+                                            ['filename' => basename($attendance->photo_checkout)]
+                                        );
+                                    @endphp
+                                    <img src="{{ $photoOutUrl }}" alt="Out"
                                         style="width:40px;height:40px;object-fit:cover;border-radius:10px;border:2px solid #dbeafe;cursor:pointer;transition:all .2s ease;"
-                                        onclick="window.open('{{ url('storage/' . $attendance->photo_checkout) }}', '_blank')"
+                                        onclick="window.open('{{ $photoOutUrl }}', '_blank')"
                                         onmouseover="this.style.borderColor='#3b82f6';this.style.transform='scale(1.1)';"
                                         onmouseout="this.style.borderColor='#dbeafe';this.style.transform='none';"
                                         title="Klik untuk lihat penuh">

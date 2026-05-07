@@ -52,14 +52,21 @@
 
                                     <div class="mr-2 sm:mr-3 flex-shrink-0">
                                         @if ($row->photo_path)
-                                            <img src="{{ url('storage/' . $row->photo_path) }}"
+                                            @php
+                                                $photoUrl = URL::temporarySignedRoute(
+                                                    'mentor.microskill.photo',
+                                                    now()->addMinutes(5),
+                                                    ['filename' => basename($row->photo_path)]
+                                                );
+                                            @endphp
+                                            <img src="{{ $photoUrl }}"
                                                 class="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover object-center border-2 border-white shadow-lg ring-2 cursor-pointer hover:shadow-xl transition-all duration-300 aspect-square
                                              @if ($actualRank == 1) ring-yellow-400
                                              @elseif($actualRank == 2) ring-gray-400
                                              @elseif($actualRank == 3) ring-orange-400
                                              @else ring-blue-300 @endif"
                                                 alt="{{ $row->name }}"
-                                                onclick="window.open('{{ url('storage/' . $row->photo_path) }}', '_blank')"
+                                                onclick="window.open('{{ $photoUrl }}', '_blank')"
                                                 title="Klik untuk melihat full size" />
                                         @else
                                             <div

@@ -389,9 +389,16 @@
                                     </td>
                                     <td>
                                         @if ($l->photo_path)
-                                            <img src="{{ url('storage/' . $l->photo_path) }}" alt="Logbook Photo"
+                                            @php
+                                                $photoUrl = URL::temporarySignedRoute(
+                                                    'mentor.logbook.photo',
+                                                    now()->addMinutes(5),
+                                                    ['filename' => basename($l->photo_path)]
+                                                );
+                                            @endphp
+                                            <img src="{{ $photoUrl }}" alt="Logbook Photo"
                                                 class="photo-thumbnail"
-                                                onclick="window.open('{{ url('storage/' . $l->photo_path) }}', '_blank')"
+                                                onclick="window.open('{{ $photoUrl }}', '_blank')"
                                                 title="Klik untuk melihat full size">
                                         @else
                                             <span style="color:#d1d5db; font-size:12px;">—</span>

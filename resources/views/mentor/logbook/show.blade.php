@@ -72,11 +72,18 @@
                             <h3 class="text-lg sm:text-xl font-bold text-gray-900">Foto Dokumentasi</h3>
                         </div>
                         @if ($logbook->photo_path)
+                            @php
+                                $photoUrl = URL::temporarySignedRoute(
+                                    'mentor.logbook.photo',
+                                    now()->addMinutes(5),
+                                    ['filename' => basename($logbook->photo_path)]
+                                );
+                            @endphp
                             <div class="relative group">
-                                <img src="{{ url('storage/' . $logbook->photo_path) }}"
+                                <img src="{{ $photoUrl }}"
                                     class="w-full rounded-xl border-2 border-gray-200 shadow-lg cursor-pointer hover:shadow-2xl transition-all duration-300 max-h-96 object-cover"
                                     alt="Foto Logbook"
-                                    onclick="window.open('{{ url('storage/' . $logbook->photo_path) }}', '_blank')" />
+                                    onclick="window.open('{{ $photoUrl }}', '_blank')" />
                                 <div
                                     class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 rounded-xl transition-all duration-300 flex items-center justify-center">
                                     <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300">

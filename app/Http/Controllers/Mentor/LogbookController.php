@@ -45,6 +45,39 @@ class LogbookController extends Controller
         $logbook->load('intern');
         return view('mentor.logbook.show', compact('logbook'));
     }
+
+    /**
+     * Serve private logbook photo for mentor's interns
+     */
+    public function servePhoto($filename)
+    {
+        $mentor = Auth::user()->mentor;
+        $filePath = storage_path('app/private/logbook-photos/' . $filename);
+
+        if (!str_starts_with(realpath($filePath) ?: '', realpath(storage_path('app/private/logbook-photos')) ?: '')) {
+            abort(403, 'Unauthorized');
+        }
+
+        if (!file_exists($filePath)) {
+            abort(404, 'File not found');
+        }
+
+        $internIds = $mentor ? $mentor->interns()->pluck('id')->toArray() : [];
+
+        $logbook = Logbook::whereIn('intern_id', $internIds)
+            ->where('photo_path', 'private/logbook-photos/' . $filename)
+            ->first();
+
+        if (!$logbook) {
+            abort(403, 'Unauthorized');
+        }
+
+        return response()->file($filePath, [
+            'Cache-Control' => 'no-store, no-cache, must-revalidate',
+            'Pragma' => 'no-cache',
+            'Expires' => '0',
+        ]);
+    }
 }
 
 

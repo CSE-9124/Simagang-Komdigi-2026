@@ -496,9 +496,16 @@
                                     </td>
                                     <td>
                                         @if ($a->photo_path)
-                                            <img src="{{ url('storage/' . $a->photo_path) }}" alt="Check In"
+                                            @php
+                                                $photoUrl = URL::temporarySignedRoute(
+                                                    'mentor.attendance.photo',
+                                                    now()->addMinutes(5),
+                                                    ['filename' => basename($a->photo_path)]
+                                                );
+                                            @endphp
+                                            <img src="{{ $photoUrl }}" alt="Check In"
                                                 class="photo-thumbnail"
-                                                onclick="window.open('{{ url('storage/' . $a->photo_path) }}', '_blank')"
+                                                onclick="window.open('{{ $photoUrl }}', '_blank')"
                                                 title="Klik untuk melihat full size">
                                         @else
                                             <span style="color:#d1d5db; font-size:12px;">—</span>
@@ -506,9 +513,16 @@
                                     </td>
                                     <td>
                                         @if ($a->photo_checkout)
-                                            <img src="{{ url('storage/' . $a->photo_checkout) }}" alt="Check Out"
+                                            @php
+                                                $photoOutUrl = URL::temporarySignedRoute(
+                                                    'mentor.attendance.photo',
+                                                    now()->addMinutes(5),
+                                                    ['filename' => basename($a->photo_checkout)]
+                                                );
+                                            @endphp
+                                            <img src="{{ $photoOutUrl }}" alt="Check Out"
                                                 class="photo-thumbnail"
-                                                onclick="window.open('{{ url('storage/' . $a->photo_checkout) }}', '_blank')"
+                                                onclick="window.open('{{ $photoOutUrl }}', '_blank')"
                                                 title="Klik untuk melihat full size">
                                         @else
                                             <span style="color:#d1d5db; font-size:12px;">—</span>
