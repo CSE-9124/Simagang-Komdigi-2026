@@ -150,11 +150,19 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-center flex justify-center">
                                         @if($attendance->photo_path)
-                                            <img src="{{ url('storage/' . $attendance->photo_path) }}" 
-                                                    alt="Check In" 
-                                                    class="w-12 h-12 object-cover rounded-lg border-2 border-blue-200 cursor-pointer hover:border-blue-400 transition-all" 
-                                                    onclick="window.open('{{ url('storage/' . $attendance->photo_path) }}', '_blank')" 
-                                                    title="Klik untuk melihat full size">
+                                            @php
+                                                $photoUrl = URL::temporarySignedRoute(
+                                                    'admin.attendance.photo',
+                                                    now()->addMinutes(5),
+                                                    ['filename' => basename($attendance->photo_path)]
+                                                );
+                                            @endphp
+                                            <img src="{{ $photoUrl }}" 
+                                                alt="Check In" 
+                                                data-secure="true"
+                                                class="w-12 h-12 object-cover rounded-lg border-2 border-blue-200 cursor-pointer hover:border-blue-400 transition-all" 
+                                                onclick="window.open('{{ $photoUrl }}', '_blank')" 
+                                                title="Klik untuk melihat full size">
                                         @else
                                             <span class="text-gray-400">-</span>
                                         @endif
@@ -166,10 +174,18 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-center flex justify-center">
                                         @if($attendance->photo_checkout)
-                                            <img src="{{ url('storage/' . $attendance->photo_checkout) }}" 
+                                            @php
+                                                $photoUrl = URL::temporarySignedRoute(
+                                                    'admin.attendance.photo',
+                                                    now()->addMinutes(5),
+                                                    ['filename' => basename($attendance->photo_checkout)]
+                                                );
+                                            @endphp
+                                            <img src="{{ $photoUrl }}" 
                                                     alt="Check Out" 
+                                                    data-secure="true"
                                                     class="w-12 h-12 object-cover rounded-lg border-2 border-blue-200 cursor-pointer hover:border-blue-400 transition-all" 
-                                                    onclick="window.open('{{ url('storage/' . $attendance->photo_checkout) }}', '_blank')" 
+                                                    onclick="window.open('{{ route('admin.attendance.photo', basename($attendance->photo_checkout)) }}', '_blank')" 
                                                     title="Klik untuk melihat full size">
                                         @else
                                             <span class="text-gray-400">-</span>
@@ -216,4 +232,22 @@
 
     </div>
 </div>
+
+<script>
+    // Foto akan di-blur/hilang setelah 5 menit (sama dengan expiry signed URL)
+    const PHOTO_EXPIRE_MS = 1 * 60 * 100; // 5 menit
+
+    setTimeout(function () {
+        // Hapus semua src foto
+        document.querySelectorAll('img[data-secure]').forEach(function (img) {
+            img.src = '';
+            img.closest('div')?.classList.add('expired-photo');
+        });
+
+        // Tampilkan pesan
+        document.querySelectorAll('.expired-photo').forEach(function (el) {
+            el.innerHTML = '<p class="text-xs text-red-400 italic">Foto expired, refresh halaman</p>';
+        });
+    }, PHOTO_EXPIRE_MS);
+</script>
 @endsection

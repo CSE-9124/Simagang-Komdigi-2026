@@ -75,20 +75,34 @@
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     @if($attendance->photo_path)
+                        @php
+                            $photoUrl = URL::temporarySignedRoute(
+                                'admin.attendance.photo',
+                                now()->addMinutes(5),
+                                ['filename' => basename($attendance->photo_path)]
+                            );
+                        @endphp
                         <div>
                             <p class="text-xs text-gray-500 mb-2">Foto Check In</p>
-                            <img src="{{ url('storage/' . $attendance->photo_path) }}"
+                            <img src="{{ $photoUrl }}"
                                 class="rounded-lg border cursor-pointer"
-                                onclick="window.open('{{ url('storage/' . $attendance->photo_path) }}','_blank')">
+                                onclick="window.open('{{ $photoUrl }}','_blank')">
                         </div>
                     @endif
 
                     @if($attendance->photo_checkout)
+                        @php
+                            $photoCheckoutUrl = URL::temporarySignedRoute(
+                                'admin.attendance.photo',
+                                now()->addMinutes(5),
+                                ['filename' => basename($attendance->photo_checkout)]
+                            );
+                        @endphp
                         <div>
                             <p class="text-xs text-gray-500 mb-2">Foto Check Out</p>
-                            <img src="{{ url('storage/' . $attendance->photo_checkout) }}"
+                            <img src="{{ $photoCheckoutUrl }}"
                                 class="rounded-lg border cursor-pointer"
-                                onclick="window.open('{{ url('storage/' . $attendance->photo_checkout) }}','_blank')">
+                                onclick="window.open('{{ $photoCheckoutUrl }}','_blank')">
                         </div>
                     @endif
                 </div>
