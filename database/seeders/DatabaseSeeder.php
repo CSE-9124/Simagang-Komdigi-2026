@@ -58,9 +58,9 @@ class DatabaseSeeder extends Seeder
 
 
         /* reset data mentor*/
-        Intern::query()->update(['mentor_id' => null]);
-        User::where('role', 'mentor')->delete();
-        Mentor::query()->delete();
+        // Intern::query()->update(['mentor_id' => null]);
+        // User::where('role', 'mentor')->delete();
+        // Mentor::query()->delete();
 
 
         /* seed mentor dan user */
@@ -98,22 +98,26 @@ class DatabaseSeeder extends Seeder
 
             $email = Str::slug($name, '.') . '@komdigi.com';
 
-            $user = User::create([
-                'name' => $name,
-                'email' => $email,
-                'password' => Hash::make('password123'),
-                'role' => 'mentor',
-            ]);
+            $user = User::updateOrCreate(
+                ['email' => $email],
+                [
+                    'name' => $name,
+                    'password' => Hash::make('password123'),
+                    'role' => 'mentor',
+                ]
+            );
             $user->syncRoles(['mentor']);
 
-            return Mentor::create([
-                'name' => $name,
-                'email' => $email,
-                'position' => null,
-                'phone' => null,
-                'is_active' => true,
-                'user_id' => $user->id,
-            ]);
+            return Mentor::updateOrCreate(
+                ['email' => $email],
+                [
+                    'name' => $name,
+                    'position' => null,
+                    'phone' => null,
+                    'is_active' => true,
+                    'user_id' => $user->id,
+                ]
+            );
         });
 
         $this->command->info('Mentor users created: ' . $mentors->count());
