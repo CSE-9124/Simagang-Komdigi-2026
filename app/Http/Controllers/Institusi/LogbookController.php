@@ -60,13 +60,10 @@ class LogbookController extends Controller
     {
         $internIds = $this->getInstitusiInternIds();
 
-        abort_unless(
-            $internIds->contains($logbook->intern_id),
-            403,
-            'Anda tidak memiliki akses ke data logbook ini.'
-        );
-
-        $logbook->load('intern');
+        $logbook = Logbook::with('intern')
+            ->whereKey($logbook->id)
+            ->whereIn('intern_id', $internIds)
+            ->firstOrFail();
 
         return view('institusi.logbook.show', compact('logbook'));
     }

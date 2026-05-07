@@ -127,7 +127,7 @@ Route::middleware(['auth', 'institusi'])->prefix('institusi')->name('institusi.'
     Route::get('/intern', [InstitusiInternController::class, 'index'])->name('intern.index');
     // Logbook monitoring for institusi
     Route::get('/logbook', [InstitusiLogbookController::class, 'index'])->name('logbook.index');
-    Route::get('/logbook/{id}', [InstitusiLogbookController::class, 'show'])->name('logbook.show');
+    Route::get('/logbook/{logbook}', [InstitusiLogbookController::class, 'show'])->name('logbook.show');
     Route::get('/logbook/photo/{filename}', [InstitusiLogbookController::class, 'servePhoto'])->name('logbook.photo');
     // Certificate management for institusi
     Route::get('/sertifikat', [InstitusiCertificateController::class, 'index'])->name('certificate.index');
