@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Attendance;
 use App\Models\Intern;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
@@ -338,10 +339,30 @@ class AttendanceController extends Controller
     /**
      * Serve private attendance photo with permission check
      */
-    public function servePhoto($filename)
+    public function servePhoto(Request $request, $filename)
     {
         $intern = Auth::user()->intern;
         $filePath = storage_path('app/private/attendance-photos/' . $filename);
+
+        if ($filename !== basename($filename)) {
+            abort(404, 'File not found');
+        }
+
+        $token = $request->query('token');
+        if ($token) {
+            $cacheKey = "intern-photo-token:{$token}";
+            $tokenData = Cache::get($cacheKey);
+
+            if (
+                !$tokenData ||
+                ($tokenData['user_id'] ?? null) !== Auth::id() ||
+                ($tokenData['filename'] ?? null) !== $filename
+            ) {
+                abort(404, 'File not found');
+            }
+
+            Cache::forget($cacheKey);
+        }
 
         // Validate the file path to prevent directory traversal
         if (!str_starts_with(realpath($filePath) ?: '', realpath(storage_path('app/private/attendance-photos')) ?: '')) {
@@ -365,7 +386,11 @@ class AttendanceController extends Controller
             abort(403, 'Unauthorized');
         }
 
-        return response()->file($filePath);
+        return response()->file($filePath, [
+            'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0, private',
+            'Pragma' => 'no-cache',
+            'Expires' => '0',
+        ]);
     }
 
     /**

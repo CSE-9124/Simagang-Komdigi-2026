@@ -8,11 +8,37 @@ use App\Models\Intern;
 use App\Models\MicroSkillSubmission;
 use App\Models\Certificate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class DashboardController extends Controller
 {
+    private function makeOneTimeAttendancePhotoUrl(?string $photoPath): ?string
+    {
+        if (!$photoPath) {
+            return null;
+        }
+
+        $filename = basename($photoPath);
+        $token = Str::random(64);
+
+        Cache::put(
+            "intern-photo-token:{$token}",
+            [
+                'user_id' => Auth::id(),
+                'filename' => $filename,
+            ],
+            now()->addMinutes(5)
+        );
+
+        return route('intern.attendance.photo', [
+            'filename' => $filename,
+            'token' => $token,
+        ]);
+    }
+
     public function index()
     {
         $user = Auth::user();
@@ -28,6 +54,11 @@ class DashboardController extends Controller
         $todayAttendance = Attendance::where('intern_id', $intern->id)
             ->whereDate('date', today())
             ->first();
+
+        if ($todayAttendance) {
+            $todayAttendance->check_in_photo_url = $this->makeOneTimeAttendancePhotoUrl($todayAttendance->photo_path);
+            $todayAttendance->check_out_photo_url = $this->makeOneTimeAttendancePhotoUrl($todayAttendance->photo_checkout);
+        }
 
         // Statistics
         $totalHadir = Attendance::where('intern_id', $intern->id)

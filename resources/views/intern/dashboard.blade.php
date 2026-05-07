@@ -206,18 +206,16 @@
                                     @if ($todayAttendance->photo_path)
                                         <div class="mt-3">
                                             <p class="text-sm text-gray-600 mb-2">Foto Check In:</p>
-                                            @php $checkInFilename = basename($todayAttendance->photo_path); @endphp
-                                            <img src="{{ route('intern.attendance.photo', $checkInFilename) }}"
-                                                alt="Check In Photo" class="w-full max-w-xs border rounded-lg">
+                                            <img src="{{ $todayAttendance->check_in_photo_url }}" alt="Check In Photo"
+                                                class="w-full max-w-xs border rounded-lg">
                                         </div>
                                     @endif
 
                                     @if ($todayAttendance->photo_checkout)
                                         <div class="mt-3">
                                             <p class="text-sm text-gray-600 mb-2">Foto Check Out:</p>
-                                            @php $checkOutFilename = basename($todayAttendance->photo_checkout); @endphp
-                                            <img src="{{ route('intern.attendance.photo', $checkOutFilename) }}"
-                                                alt="Check Out Photo" class="w-full max-w-xs border rounded-lg">
+                                            <img src="{{ $todayAttendance->check_out_photo_url }}" alt="Check Out Photo"
+                                                class="w-full max-w-xs border rounded-lg">
                                         </div>
                                     @endif
                                 @endif
