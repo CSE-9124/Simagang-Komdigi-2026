@@ -192,7 +192,7 @@
             margin-bottom: 1.25rem;
         } */
         .hero-title {
-            font-size: clamp(2rem, 4vw, 3.25rem);
+            font-size: clamp(2rem, 4vw, 3rem);
             font-weight: 800;
             line-height: 1.15;
             color: white;
@@ -201,7 +201,7 @@
         .hero-title span { color: #7dd3fc; }
 
         .hero-desc {
-            font-size: 1.05rem;
+            font-size: 1rem;
             line-height: 1.75;
             color: rgba(255,255,255,0.75);
             margin: 0;          /* stats langsung menyusul */
@@ -828,7 +828,7 @@
             <a href="#usage">Fitur</a>
             <a href="#testimonials">Testimoni</a>
             <a href="#partners">Partner</a>
-            <a href="#news" class="text-gray-700 hover:text-blue-600 font-medium transition">Berita</a>
+            <a href="#news" class="text-gray-700 hover:text-blue-600 font-medium transition">Aktivitas</a>
         </nav>
 
         <button type="button" class="nav-toggle" aria-label="Buka menu" aria-expanded="false">
@@ -841,7 +841,7 @@
             <a href="#usage">Fitur</a>
             <a href="#testimonials">Testimoni</a>
             <a href="#partners">Partner</a>
-            <a href="#news" class="text-gray-700 hover:text-blue-600 font-medium transition">Berita</a>
+            <a href="#news" class="text-gray-700 hover:text-blue-600 font-medium transition">Aktivitas</a>
             <a href="{{ route('login') }}" class="login-link">
                 <i class="fas fa-sign-in-alt" style="font-size:13px; margin-right:8px"></i>Login
             </a>
@@ -876,12 +876,12 @@
             </h1>
 
             <p class="hero-desc">
-                Komdigi membantu mengelola absensi, logbook, dan sertifikat secara real time.
+                BBLSDM Komdigi Makassar menghadirkan solusi digital untuk mempermudah pengelolaan peserta magang secara efisien dan real time.
             </p>
 
             <div class="hero-stats">
                 <div>
-                    <div class="hero-stat-num">30+</div>
+                    <div class="hero-stat-num">{{ $totalPesertaAktif }}</div>
                     <div class="hero-stat-label">Peserta Aktif</div>
                 </div>
                 <div class="hero-stat-divider"></div>
@@ -1194,7 +1194,7 @@
     <div class="container mx-auto px-6">
         <div class="flex justify-between items-end mb-12">
             <div>
-                <h2 class="text-3xl font-bold text-[#020b1a]">Berita Terbaru</h2>
+                <h2 class="text-3xl font-bold text-[#020b1a]">Aktivitas Terbaru</h2>
                 <div class="h-1 w-20 bg-[#00f2ff] mt-2"></div>
             </div>
         </div>
@@ -1362,12 +1362,12 @@
         </div>
 
         <div class="copyright-simple">
-            &copy; 2026 <strong>Simagang</strong> — Komdigi RI. All rights reserved.
+            &copy; 2026 <strong>Simagang</strong> — BBLSDM Komdigi Makassar. All rights reserved.
         </div>
 
         <div class="social-links-simple">
             <a href="https://www.instagram.com/bblsdm.komdigi.makassar/" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
-            <a href="https://www.linkedin.com/company/komdigi" target="_blank" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            <a href="https://www.komdigi.go.id/" target="_blank" title="Website"><i class="fas fa-globe"></i></a>
             <a href="https://www.tiktok.com/@balaikomdigimakassar" target="_blank" title="TikTok"><i class="fab fa-tiktok"></i></a>
             <a href="https://www.youtube.com/@bblsdm.komdigi.makassar" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
         </div>

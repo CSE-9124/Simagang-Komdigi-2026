@@ -66,8 +66,9 @@ Route::get('/', function () {
         ->values();
 
     $testimonials = Testimonial::with(['intern', 'finalReport'])->orderBy('created_at', 'desc')->limit(3)->get();
+    $totalPesertaAktif = \App\Models\Intern::where('is_active', 1)->count();
 
-    return view('landingpage', compact('partners', 'testimonials'));
+    return view('landingpage', compact('partners', 'testimonials', 'totalPesertaAktif'));
 })->name('landing');
 
 Route::get('/convert-font', function () {
