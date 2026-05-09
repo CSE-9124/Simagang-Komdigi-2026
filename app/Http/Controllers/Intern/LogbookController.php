@@ -7,6 +7,9 @@ use App\Models\Logbook;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
+use Illuminate\Support\Str;
 
 class LogbookController extends Controller
 {
@@ -26,7 +29,9 @@ class LogbookController extends Controller
             ->where('date', '>=', now()->startOfMonth())
             ->count();
 
-        return view('intern.logbook.index', compact('logbooks', 'totalLogbooks', 'withPhotoCount', 'thisMonthCount'));
+        $cekaktif = $intern && $intern->is_active;
+
+        return view('intern.logbook.index', compact('logbooks', 'totalLogbooks', 'withPhotoCount', 'thisMonthCount', 'cekaktif'));
     }
 
     public function create()
@@ -40,8 +45,15 @@ class LogbookController extends Controller
 
         $validated = $request->validate([
             'date' => ['required', 'date'],
-            'activity' => ['required', 'string'],
-            'photo' => ['nullable', 'image', 'max:2048'],
+            'activity' => ['required', 'string', 'max:1000'],
+            // 'photo' => ['nullable', 'image', 'max:2048'],
+            'photo' => [
+                'nullable',
+                'image',
+                'mimes:jpg,jpeg,png',
+                'mimetypes:image/jpeg,image/png',
+                'max:2048'
+            ],
         ]);
 
         $data = [
@@ -52,22 +64,45 @@ class LogbookController extends Controller
 
         if ($request->hasFile('photo')) {
             $photo = $request->file('photo');
+
+            $allowedMimeTypes = [
+                'image/jpeg',
+                'image/png',
+            ];
+
+            if (!in_array($photo->getMimeType(), $allowedMimeTypes)) {
+                return back()->withErrors([
+                    'photo' => 'Tipe file tidak valid.'
+                ])->withInput();
+            }
+
             if ($photo->isValid() && $photo->getError() === UPLOAD_ERR_OK) {
                 try {
-                    $extension = $photo->getClientOriginalExtension() ?: ($photo->guessExtension() ?: 'jpg');
-                    $filename = 'logbook_' . time() . '_' . uniqid() . '.' . $extension;
+                    // $extension = $photo->guessExtension() ?: 'jpg';
+
+                    $filename = Str::uuid() . '.jpg';
+
                     $destinationPath = storage_path('app/private/logbook-photos');
-                    
+
                     if (!file_exists($destinationPath)) {
                         mkdir($destinationPath, 0755, true);
                     }
-                    
-                    $fullPath = $destinationPath . DIRECTORY_SEPARATOR . $filename;
-                    if ($photo->move($destinationPath, $filename) && file_exists($fullPath)) {
-                        $data['photo_path'] = 'private/logbook-photos/' . $filename;
-                    }
+
+                    $manager = new ImageManager(new Driver());
+
+                    $image = $manager->read($photo)
+                        ->toJpeg(80);
+
+                    Storage::disk('local')->put(
+                        'private/logbook-photos/' . $filename,
+                        (string) $image
+                    );
+
+                    $data['photo_path'] = 'private/logbook-photos/' . $filename;
                 } catch (\Exception $e) {
-                    // Skip photo upload if fails, continue without it
+                    return back()->withErrors([
+                        'photo' => 'Gagal upload foto.'
+                    ])->withInput();
                 }
             }
         }
@@ -97,8 +132,14 @@ class LogbookController extends Controller
 
         $validated = $request->validate([
             'date' => ['required', 'date'],
-            'activity' => ['required', 'string'],
-            'photo' => ['nullable', 'image', 'max:2048'],
+            'activity' => ['required', 'string', 'max:1000'],
+            'photo' => [
+                'nullable',
+                'image',
+                'mimes:jpg,jpeg,png',
+                'mimetypes:image/jpeg,image/png',
+                'max:2048'
+            ],
         ]);
 
         $data = [
@@ -108,30 +149,53 @@ class LogbookController extends Controller
 
         if ($request->hasFile('photo')) {
             $photo = $request->file('photo');
+
+            $allowedMimeTypes = [
+                'image/jpeg',
+                'image/png',
+            ];
+
+            if (!in_array($photo->getMimeType(), $allowedMimeTypes)) {
+                return back()->withErrors([
+                    'photo' => 'Tipe file tidak valid.'
+                ])->withInput();
+            }
+
             if ($photo->isValid() && $photo->getError() === UPLOAD_ERR_OK) {
                 try {
                     // Delete old photo
                     if ($logbook->photo_path) {
                         $oldPath = storage_path('app/private/' . $logbook->photo_path);
                         if (file_exists($oldPath)) {
-                            @unlink($oldPath);
+                            unlink($oldPath);
                         }
                     }
                     
-                    $extension = $photo->getClientOriginalExtension() ?: ($photo->guessExtension() ?: 'jpg');
-                    $filename = 'logbook_' . time() . '_' . uniqid() . '.' . $extension;
+                    // $extension = $photo->guessExtension() ?: 'jpg';
+
+                    $filename = Str::uuid() . '.jpg';
+
                     $destinationPath = storage_path('app/private/logbook-photos');
-                    
+
                     if (!file_exists($destinationPath)) {
                         mkdir($destinationPath, 0755, true);
                     }
-                    
-                    $fullPath = $destinationPath . DIRECTORY_SEPARATOR . $filename;
-                    if ($photo->move($destinationPath, $filename) && file_exists($fullPath)) {
-                        $data['photo_path'] = 'private/logbook-photos/' . $filename;
-                    }
+
+                    $manager = new ImageManager(new Driver());
+
+                    $image = $manager->read($photo)
+                        ->toJpeg(80);
+
+                    Storage::disk('local')->put(
+                        'private/logbook-photos/' . $filename,
+                        (string) $image
+                    );
+
+                    $data['photo_path'] = 'private/logbook-photos/' . $filename;
                 } catch (\Exception $e) {
-                    // Skip photo upload if fails, continue without it
+                    return back()->withErrors([
+                        'photo' => 'Gagal upload foto.'
+                    ])->withInput();
                 }
             }
         }
@@ -152,7 +216,7 @@ class LogbookController extends Controller
         if ($logbook->photo_path) {
             $photoPath = storage_path('app/private/' . $logbook->photo_path);
             if (file_exists($photoPath)) {
-                @unlink($photoPath);
+                unlink($photoPath);
             }
         }
 
@@ -189,6 +253,9 @@ class LogbookController extends Controller
             abort(403, 'Unauthorized');
         }
 
-        return response()->file($filePath);
+        return response()->file($filePath, [
+            'Content-Type' => mime_content_type($filePath),
+            'X-Content-Type-Options' => 'nosniff',
+        ]);
     }
 }

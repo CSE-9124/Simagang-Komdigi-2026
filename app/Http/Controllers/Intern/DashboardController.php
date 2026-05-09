@@ -74,7 +74,7 @@ class DashboardController extends Controller
             ->count();
 
         $totalTidakHadir = Attendance::where('intern_id', $intern->id)
-            ->where('status', 'tidak hadir')
+            ->where('status', 'alfa')
             ->count();
 
         $hasFinalReport = $intern->finalReport !== null;
@@ -90,6 +90,7 @@ class DashboardController extends Controller
         $topMicroSkills = Intern::leftJoin('micro_skill_submissions', 'interns.id', '=', 'micro_skill_submissions.intern_id')
             ->select('interns.id as intern_id', 'interns.name', 'interns.institution', 'interns.photo_path', DB::raw('COUNT(micro_skill_submissions.id) as total'))
             ->groupBy('interns.id', 'interns.name', 'interns.institution', 'interns.photo_path')
+            ->where('interns.is_active', true)
             ->orderByDesc('total')
             ->orderBy('interns.name')
             ->limit(10)
@@ -104,6 +105,8 @@ class DashboardController extends Controller
                 ];
             });
 
+        $cekaktif = $intern && $intern->is_active;
+
         return view('intern.dashboard', compact(
             'intern',
             'todayAttendance',
@@ -115,7 +118,8 @@ class DashboardController extends Controller
             'certificate',
             'microSkillTotal',
             'microSkillApproved',
-            'topMicroSkills'
+            'topMicroSkills',
+            'cekaktif'
         ));
     }
 }

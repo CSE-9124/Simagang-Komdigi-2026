@@ -15,9 +15,12 @@
                     </h1>
                     <p class="text-gray-600">Catat dan kelola aktivitas harian Anda</p>
                 </div>
-                <a href="{{ route('intern.logbook.create') }}" 
-                    class="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
-                    <i class="fas fa-plus mr-2"></i>Tambah Logbook
+                @if($cekaktif)
+                    <a href="{{ route('intern.logbook.create') }}" 
+                        class="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
+                        <i class="fas fa-plus mr-2"></i>Tambah Logbook
+                    </a>
+                @endif
                 </a>
             </div>
         </div>
@@ -100,7 +103,7 @@
                                     <td class="px-6 py-4 whitespace-nowrap text-center">
                                         <div class="flex items-center justify-center">
                                             <span class="text-sm font-medium text-gray-900">
-                                                {{ $logbook->date->format('d F Y') }}
+                                                {{ $logbook->date->format('d/m/Y') }}
                                             </span>
                                         </div>
                                     </td>
@@ -154,10 +157,12 @@
                                             <i class="fas fa-book text-5xl mb-3 text-gray-300"></i>
                                             <p class="text-lg font-medium">Belum ada logbook.</p>
                                             <p class="text-sm mt-2">Mulai dengan membuat logbook pertama Anda.</p>
-                                            <a href="{{ route('intern.logbook.create') }}" 
-                                                class="mt-4 inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all duration-300">
-                                                <i class="fas fa-plus mr-2"></i>Tambah Logbook
-                                            </a>
+                                            @if ($cekaktif)
+                                                <a href="{{ route('intern.logbook.create') }}" 
+                                                    class="mt-4 inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all duration-300">
+                                                    <i class="fas fa-plus mr-2"></i>Tambah Logbook
+                                                </a>
+                                            @endif
                                         </div>
                                     </td>
                                 </tr>

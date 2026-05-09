@@ -224,10 +224,12 @@
                             <div class="text-center py-8">
                                 <i class="fas fa-inbox text-4xl text-gray-300 mb-4"></i>
                                 <p class="text-sm text-gray-500 mb-6">Anda belum melakukan absensi hari ini.</p>
-                                <a href="{{ route('intern.attendance.create') }}"
-                                    class="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-all duration-300">
-                                    <i class="fas fa-calendar-plus mr-2"></i>Absensi Sekarang
-                                </a>
+                                @if ($cekaktif)
+                                    <a href="{{ route('intern.attendance.create') }}"
+                                        class="inline-flex items-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-all duration-300">
+                                        <i class="fas fa-calendar-plus mr-2"></i>Absensi Sekarang
+                                    </a>
+                                @endif
                             </div>
                         @endif
                     </div>

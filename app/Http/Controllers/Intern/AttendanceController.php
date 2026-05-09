@@ -12,6 +12,10 @@ use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
 use App\Services\HolidayService;
 use App\Services\TimeService;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class AttendanceController extends Controller
 {
@@ -40,9 +44,13 @@ class AttendanceController extends Controller
             $todayVirtualAbsent = true;
         }
 
+        $cekaktif = Intern::where('id', $intern->id)
+            ->where('is_active', true)
+            ->exists();
+
         return view('intern.attendance.index', compact(
             'attendances', 'totalHadir', 'totalIzin', 'totalSakit', 'totalTidakHadir',
-            'todayVirtualAbsent', 'todayWita'
+            'todayVirtualAbsent', 'todayWita', 'cekaktif'
         ));
     }
 
@@ -113,10 +121,39 @@ class AttendanceController extends Controller
 
         $validated = $request->validate([
             'status' => ['required', 'in:hadir,izin,sakit'],
-            'photo' => ['required_if:status,hadir', 'nullable', 'image', 'max:2048'],
-            'photo_data' => ['required_if:status,hadir', 'nullable', 'string'],
-            'note' => ['required_if:status,izin', 'required_if:status,sakit', 'nullable', 'string'],
-            'document' => ['required_if:status,izin', 'nullable', 'file', 'mimes:pdf,doc,docx,jpg,jpeg,png', 'max:5120'],
+
+            'photo' => [
+                Rule::requiredIf(fn () =>
+                    $request->status === 'hadir' && !$request->filled('photo_data')
+                ),
+                'nullable',
+                'image',
+                'mimes:jpg,jpeg,png',
+                'max:2048',
+            ],
+
+            'photo_data' => [
+                Rule::requiredIf(fn () =>
+                    $request->status === 'hadir' && !$request->hasFile('photo')
+                ),
+                'nullable',
+                'string',
+            ],
+
+            'note' => [
+                'required_if:status,izin',
+                'required_if:status,sakit',
+                'nullable',
+                'string',
+            ],
+
+            'document' => [
+                Rule::requiredIf(fn () => $request->status === 'izin'),
+                'nullable',
+                'file',
+                'mimes:pdf,doc,docx,jpg,jpeg,png',
+                'max:5120',
+            ],
         ]);
 
         $data = [
@@ -133,64 +170,99 @@ class AttendanceController extends Controller
             if ($currentTime < $checkInStart || $currentTime > $checkInEnd) {
                 return back()->withErrors(['error' => 'Absensi masuk hanya diperbolehkan antara ' . $checkInStart . ' - ' . $checkInEnd . ' WITA.'])->withInput();
             }
+
             $photoPath = null;
             
             if ($request->hasFile('photo')) {
                 $photo = $request->file('photo');
-                if ($photo->isValid() && $photo->getError() === UPLOAD_ERR_OK) {
-                    try {
-                        $extension = $photo->getClientOriginalExtension();
-                        if (empty($extension)) {
-                            $extension = $photo->guessExtension() ?: 'jpg';
-                        }
-                        $filename = 'attendance_' . time() . '_' . uniqid() . '.' . $extension;
-                        $destinationPath = storage_path('app/private/attendance-photos');
-                        
-                        if (!file_exists($destinationPath)) {
-                            mkdir($destinationPath, 0755, true);
-                        }
-                        
-                        $fullPath = $destinationPath . DIRECTORY_SEPARATOR . $filename;
-                        if ($photo->move($destinationPath, $filename) && file_exists($fullPath)) {
-                            $photoPath = 'private/attendance-photos/' . $filename;
-                        } else {
-                            return back()->withErrors(['photo' => 'Gagal menyimpan foto.'])->withInput();
-                        }
-                    } catch (\Exception $e) {
-                        return back()->withErrors(['photo' => 'Terjadi kesalahan: ' . $e->getMessage()])->withInput();
-                    }
-                } else {
-                    return back()->withErrors(['photo' => 'File foto tidak valid.'])->withInput();
+
+                $allowedMimeTypes = [
+                    'image/jpeg',
+                    'image/png',
+                ];
+
+                if (!in_array($photo->getMimeType(), $allowedMimeTypes)) {
+                    return back()->withErrors([
+                        'photo' => 'Tipe file tidak valid.'
+                    ])->withInput();
                 }
-            } elseif ($request->filled('photo_data')) {
-                $imageData = $request->input('photo_data');
-                if (preg_match('/^data:image\/(\w+);base64,/', $imageData, $type)) {
-                    $imageData = substr($imageData, strpos($imageData, ',') + 1);
-                    $type = strtolower($type[1]);
-                    $imageData = base64_decode($imageData);
-                    
-                    if ($imageData === false) {
-                        return back()->withErrors(['photo' => 'Invalid image data.']);
-                    }
-                    
-                    $fileName = 'attendance_' . time() . '_' . uniqid() . '.' . $type;
+
+                if (!$photo->isValid() || $photo->getError() !== UPLOAD_ERR_OK) {
+                    return back()->withErrors([
+                        'photo' => 'File foto tidak valid.'
+                    ])->withInput();
+                }
+
+                try {
+                    $filename = Str::uuid() . '.jpg';
+                    $path = 'private/attendance-photos/' . $filename;
+
                     $destinationPath = storage_path('app/private/attendance-photos');
-                    
+
                     if (!file_exists($destinationPath)) {
                         mkdir($destinationPath, 0755, true);
                     }
-                    
-                    $fullPath = $destinationPath . DIRECTORY_SEPARATOR . $fileName;
-                    if (file_put_contents($fullPath, $imageData) !== false && file_exists($fullPath)) {
-                        $photoPath = 'private/attendance-photos/' . $fileName;
-                    } else {
-                        return back()->withErrors(['photo' => 'Gagal menyimpan foto dari kamera.']);
-                    }
-                } else {
-                    return back()->withErrors(['photo' => 'Invalid image format.']);
+
+                    $manager = new ImageManager(new Driver());
+
+                    $image = $manager->read($photo)
+                        ->toJpeg(80);
+
+                    Storage::disk('local')->put($path, (string) $image);
+
+                    $photoPath = $path;
+                } catch (\Exception $e) {
+                    return back()->withErrors([
+                        'photo' => 'Gagal upload foto.'
+                    ])->withInput();
                 }
+
+            } elseif ($request->filled('photo_data')) {
+                $imageData = $request->input('photo_data');
+
+                if (!preg_match('/^data:image\/(jpeg|jpg|png);base64,/', $imageData)) {
+                    return back()->withErrors([
+                        'photo' => 'Format gambar tidak valid.'
+                    ])->withInput();
+                }
+
+                $imageData = substr($imageData, strpos($imageData, ',') + 1);
+                $imageData = base64_decode($imageData);
+
+                if ($imageData === false) {
+                    return back()->withErrors([
+                        'photo' => 'Data gambar rusak.'
+                    ])->withInput();
+                }
+
+                try {
+                    $filename = Str::uuid() . '.jpg';
+                    $path = 'private/attendance-photos/' . $filename;
+
+                    $destinationPath = storage_path('app/private/attendance-photos');
+
+                    if (!file_exists($destinationPath)) {
+                        mkdir($destinationPath, 0755, true);
+                    }
+
+                    $manager = new ImageManager(new Driver());
+
+                    $image = $manager->read($imageData)
+                        ->toJpeg(80);
+
+                    Storage::disk('local')->put($path, (string) $image);
+
+                    $photoPath = $path;
+                } catch (\Exception $e) {
+                    return back()->withErrors([
+                        'photo' => 'Gagal upload foto.'
+                    ])->withInput();
+                }
+
             } else {
-                return back()->withErrors(['photo' => 'Foto wajib diisi untuk status hadir.']);
+                return back()->withErrors([
+                    'photo' => 'Foto wajib diisi untuk status hadir.'
+                ])->withInput();
             }
             
             if ($photoPath) {
@@ -202,34 +274,58 @@ class AttendanceController extends Controller
             }
         } else {
             $data['note'] = $validated['note'] ?? null;
+
             if ($request->hasFile('document')) {
                 $document = $request->file('document');
-                if ($document->isValid() && $document->getError() === UPLOAD_ERR_OK) {
-                    try {
-                        $extension = $document->getClientOriginalExtension();
-                        if (empty($extension)) {
-                            $extension = $document->guessExtension() ?: 'pdf';
-                        }
-                        $filename = 'document_' . time() . '_' . uniqid() . '.' . $extension;
-                        $destinationPath = storage_path('app/private/attendance-documents');
-                        
-                        if (!file_exists($destinationPath)) {
-                            mkdir($destinationPath, 0755, true);
-                        }
-                        
-                        $fullPath = $destinationPath . DIRECTORY_SEPARATOR . $filename;
-                        if ($document->move($destinationPath, $filename) && file_exists($fullPath)) {
-                            $data['document_path'] = 'private/attendance-documents/' . $filename;
-                        } else {
-                            return back()->withErrors(['document' => 'Gagal menyimpan dokumen.'])->withInput();
-                        }
-                    } catch (\Exception $e) {
-                        return back()->withErrors(['document' => 'Terjadi kesalahan: ' . $e->getMessage()])->withInput();
+
+                $allowedMimeTypes = [
+                    'application/pdf',
+                    'application/msword',
+                    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                    'image/jpeg',
+                    'image/png',
+                ];
+                if (!in_array($document->getMimeType(), $allowedMimeTypes)) {
+                    return back()->withErrors([
+                        'document' => 'Tipe file tidak valid.'
+                    ])->withInput();
+                }
+
+                if (!$document->isValid() || $document->getError() !== UPLOAD_ERR_OK) {
+                    return back()->withErrors([
+                        'document' => 'File dokumen tidak valid.'
+                    ])->withInput();
+                }
+
+                try {
+                    $extension = $document->getClientOriginalExtension();
+
+                    if (empty($extension)) {
+                        $extension = $document->guessExtension() ?: 'pdf';
                     }
-                } else {
-                    return back()->withErrors(['document' => 'File dokumen tidak valid.'])->withInput();
+
+                    $filename = Str::uuid() . '.' . $extension;
+                    $path = 'private/attendance-documents/' . $filename;
+
+                    $destinationPath = storage_path('app/private/attendance-documents');
+
+                    if (!file_exists($destinationPath)) {
+                        mkdir($destinationPath, 0755, true);
+                    }
+
+                    Storage::disk('local')->put(
+                        'private/attendance-documents/' . $filename,
+                        file_get_contents($document->getRealPath())
+                    );
+
+                    $data['document_path'] = $path;
+                } catch (\Exception $e) {
+                    return back()->withErrors([
+                        'document' => 'Gagal upload dokumen.'
+                    ])->withInput();
                 }
             }
+
             $data['document_status'] = 'pending';
         }
 
@@ -244,7 +340,15 @@ class AttendanceController extends Controller
         $nowWita = TimeService::nowWita();
 
         $validated = $request->validate([
-            'photo' => ['required_without:photo_data', 'nullable', 'image', 'max:2048'],
+            // 'photo' => ['required_without:photo_data', 'nullable', 'image', 'max:2048'],
+            'photo' => [
+                'required_without:photo_data',
+                'nullable',
+                'image',
+                'mimes:jpg,jpeg,png',
+                'mimetypes:image/jpeg,image/png',
+                'max:2048'
+            ],
             'photo_data' => ['required_without:photo', 'nullable', 'string'],
         ]);
 
@@ -271,60 +375,96 @@ class AttendanceController extends Controller
         
         if ($request->hasFile('photo')) {
             $photo = $request->file('photo');
-            if ($photo->isValid() && $photo->getError() === UPLOAD_ERR_OK) {
-                try {
-                    $extension = $photo->getClientOriginalExtension();
-                    if (empty($extension)) {
-                        $extension = $photo->guessExtension() ?: 'jpg';
-                    }
-                    $filename = 'checkout_' . time() . '_' . uniqid() . '.' . $extension;
-                    $destinationPath = storage_path('app/private/attendance-photos');
-                    
-                    if (!file_exists($destinationPath)) {
-                        mkdir($destinationPath, 0755, true);
-                    }
-                    
-                    $fullPath = $destinationPath . DIRECTORY_SEPARATOR . $filename;
-                    if ($photo->move($destinationPath, $filename) && file_exists($fullPath)) {
-                        $photoCheckoutPath = 'private/attendance-photos/' . $filename;
-                    } else {
-                        return back()->withErrors(['photo' => 'Gagal menyimpan foto checkout.'])->withInput();
-                    }
-                } catch (\Exception $e) {
-                    return back()->withErrors(['photo' => 'Terjadi kesalahan: ' . $e->getMessage()])->withInput();
-                }
-            } else {
-                return back()->withErrors(['photo' => 'File foto tidak valid.'])->withInput();
+
+            $allowedMimeTypes = [
+                'image/jpeg',
+                'image/png',
+            ];
+
+            if (!in_array($photo->getMimeType(), $allowedMimeTypes)) {
+                return back()->withErrors([
+                    'photo' => 'Tipe file tidak valid.'
+                ])->withInput();
             }
-        } elseif ($request->filled('photo_data')) {
-            $imageData = $request->input('photo_data');
-            if (preg_match('/^data:image\/(\w+);base64,/', $imageData, $type)) {
-                $imageData = substr($imageData, strpos($imageData, ',') + 1);
-                $type = strtolower($type[1]);
-                $imageData = base64_decode($imageData);
-                
-                if ($imageData === false) {
-                    return back()->withErrors(['photo' => 'Invalid image data.']);
-                }
-                
-                $fileName = 'checkout_' . time() . '_' . uniqid() . '.' . $type;
+
+            if (!$photo->isValid() || $photo->getError() !== UPLOAD_ERR_OK) {
+                return back()->withErrors([
+                    'photo' => 'File foto tidak valid.'
+                ])->withInput();
+            }
+
+            try {
+                $filename = Str::uuid() . '.jpg';
+                $photoCheckoutPath = 'private/attendance-photos/' . $filename;
+
                 $destinationPath = storage_path('app/private/attendance-photos');
-                
+
                 if (!file_exists($destinationPath)) {
                     mkdir($destinationPath, 0755, true);
                 }
-                
-                $fullPath = $destinationPath . DIRECTORY_SEPARATOR . $fileName;
-                if (file_put_contents($fullPath, $imageData) !== false && file_exists($fullPath)) {
-                    $photoCheckoutPath = 'private/attendance-photos/' . $fileName;
-                } else {
-                    return back()->withErrors(['photo' => 'Gagal menyimpan foto dari kamera.']);
-                }
-            } else {
-                return back()->withErrors(['photo' => 'Invalid image format.']);
+
+                $manager = new ImageManager(new Driver());
+
+                $image = $manager->read($photo)
+                    ->toJpeg(80);
+
+                Storage::disk('local')->put(
+                    $photoCheckoutPath,
+                    (string) $image
+                );
+            } catch (\Exception $e) {
+                return back()->withErrors([
+                    'photo' => 'Gagal menyimpan foto checkout.'
+                ])->withInput();
             }
+
+        } elseif ($request->filled('photo_data')) {
+            $imageData = $request->input('photo_data');
+
+            if (!preg_match('/^data:image\/(jpeg|jpg|png);base64,/', $imageData)) {
+                return back()->withErrors([
+                    'photo' => 'Format gambar tidak valid.'
+                ])->withInput();
+            }
+
+            $imageData = substr($imageData, strpos($imageData, ',') + 1);
+            $imageData = base64_decode($imageData);
+
+            if ($imageData === false) {
+                return back()->withErrors([
+                    'photo' => 'Data gambar rusak.'
+                ])->withInput();
+            }
+
+            try {
+                $filename = Str::uuid() . '.jpg';
+                $photoCheckoutPath = 'private/attendance-photos/' . $filename;
+
+                $destinationPath = storage_path('app/private/attendance-photos');
+
+                if (!file_exists($destinationPath)) {
+                    mkdir($destinationPath, 0755, true);
+                }
+
+                $manager = new ImageManager(new Driver());
+
+                $image = $manager->read($imageData)
+                    ->toJpeg(80);
+
+                Storage::disk('local')->put(
+                    $photoCheckoutPath,
+                    (string) $image
+                );
+            } catch (\Exception $e) {
+                return back()->withErrors([
+                    'photo' => 'Gagal menyimpan foto checkout.'
+                ])->withInput();
+            }
+
         } else {
-            return back()->withErrors(['photo' => 'Foto checkout wajib diisi.']);
+            return back()->withErrors([
+                'photo' => 'Foto checkout wajib diisi.'
+            ])->withInput();
         }
 
         $todayAttendance->update([
@@ -387,9 +527,8 @@ class AttendanceController extends Controller
         }
 
         return response()->file($filePath, [
-            'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0, private',
-            'Pragma' => 'no-cache',
-            'Expires' => '0',
+            'Content-Type' => mime_content_type($filePath),
+            'X-Content-Type-Options' => 'nosniff',
         ]);
     }
 
@@ -400,6 +539,10 @@ class AttendanceController extends Controller
     {
         $intern = Auth::user()->intern;
         $filePath = storage_path('app/private/attendance-documents/' . $filename);
+
+        if ($filename !== basename($filename)) {
+            abort(404, 'File not found');
+        }
 
         // Validate the file path to prevent directory traversal
         if (!str_starts_with(realpath($filePath) ?: '', realpath(storage_path('app/private/attendance-documents')) ?: '')) {
@@ -420,6 +563,8 @@ class AttendanceController extends Controller
             abort(403, 'Unauthorized');
         }
 
-        return response()->download($filePath);
+        return response()->download($filePath, null, [
+            'X-Content-Type-Options' => 'nosniff',
+        ]);
     }
 }

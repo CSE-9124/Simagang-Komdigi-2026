@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
+use Illuminate\Support\Str;
 
 class MicroSkillController extends Controller
 {
@@ -27,7 +30,9 @@ class MicroSkillController extends Controller
 
         $submissions = $query->orderByDesc('created_at')->paginate(15);
 
-        return view('intern.microskill.index', compact('submissions'));
+        $cekaktif = $intern && $intern->is_active;
+
+        return view('intern.microskill.index', compact('submissions', 'cekaktif'));
     }
 
     public function create()
@@ -47,28 +52,60 @@ class MicroSkillController extends Controller
                 Rule::unique('micro_skill_submissions', 'title')
                     ->where(fn ($query) => $query->where('intern_id', $intern->id)),
             ],
-            'description' => ['nullable', 'string'],
-            'photo' => ['required', 'image', 'max:4096'],
-        ]);
+            'description' => ['nullable', 'string', 'max:1000'],
+            // 'photo' => ['required', 'image', 'max:4096'],
+            'photo' => [
+                'nullable',
+                'image',
+                'mimes:jpg,jpeg,png',
+                'mimetypes:image/jpeg,image/png',
+                'max:4096'
+            ],
+        ]); 
 
         $photoPath = null;
         if ($request->hasFile('photo')) {
             $photo = $request->file('photo');
+
+            $allowedMimeTypes = [
+                'image/jpeg',
+                'image/png',
+            ];
+
+            if (!in_array($photo->getMimeType(), $allowedMimeTypes)) {
+                return back()->withErrors([
+                    'photo' => 'Tipe file tidak valid.'
+                ])->withInput();
+            }
+
             if ($photo->isValid() && $photo->getError() === UPLOAD_ERR_OK) {
-                $extension = $photo->getClientOriginalExtension() ?: ($photo->guessExtension() ?: 'jpg');
-                $filename = 'microskill_' . time() . '_' . uniqid() . '.' . $extension;
-                $destinationPath = storage_path('app/private/micro-skills');
-                if (!file_exists($destinationPath)) {
-                    mkdir($destinationPath, 0755, true);
-                }
-                $fullPath = $destinationPath . DIRECTORY_SEPARATOR . $filename;
-                if ($photo->move($destinationPath, $filename) && file_exists($fullPath)) {
+                try {
+                    // $extension = $photo->guessExtension() ?: 'jpg';
+
+                    $filename = Str::uuid() . '.jpg';
+
+                    $destinationPath = storage_path('app/private/micro-skills');
+
+                    if (!file_exists($destinationPath)) {
+                        mkdir($destinationPath, 0755, true);
+                    }
+
+                    $manager = new ImageManager(new Driver());
+
+                    $image = $manager->read($photo)
+                        ->toJpeg(80);
+
+                    Storage::disk('local')->put(
+                        'private/micro-skills/' . $filename,
+                        (string) $image
+                    );
+
                     $photoPath = 'private/micro-skills/' . $filename;
-                } else {
-                    return back()->withErrors(['photo' => 'Gagal menyimpan foto.'])->withInput();
+                } catch (\Exception $e) {
+                    return back()->withErrors([
+                        'photo' => 'Gagal upload foto.'
+                    ])->withInput();
                 }
-            } else {
-                return back()->withErrors(['photo' => 'File foto tidak valid.'])->withInput();
             }
         }
 
@@ -111,8 +148,15 @@ class MicroSkillController extends Controller
                     ->where(fn ($query) => $query->where('intern_id', $submission->intern_id))
                     ->ignore($submission->id),
             ],
-            'description' => ['nullable', 'string'],
-            'photo' => ['nullable', 'image', 'max:4096'],
+            'description' => ['nullable', 'string', 'max:1000'],
+            // 'photo' => ['nullable', 'image', 'max:4096'],
+            'photo' => [
+                'nullable',
+                'image',
+                'mimes:jpg,jpeg,png',
+                'mimetypes:image/jpeg,image/png',
+                'max:4096'
+             ],
         ]);
 
         if ($request->hasFile('photo')) {
@@ -120,26 +164,53 @@ class MicroSkillController extends Controller
             if ($submission->photo_path) {
                 $oldPath = storage_path('app/private/' . $submission->photo_path);
                 if (file_exists($oldPath)) {
-                    @unlink($oldPath);
+                    unlink($oldPath);
                 }
             }
 
             $photo = $request->file('photo');
+
+            $allowedMimeTypes = [
+                'image/jpeg',
+                'image/png',
+            ];
+
+            if (!in_array($photo->getMimeType(), $allowedMimeTypes)) {
+                return back()->withErrors([
+                    'photo' => 'Tipe file tidak valid.'
+                ])->withInput();
+            }
+
             if ($photo->isValid() && $photo->getError() === UPLOAD_ERR_OK) {
-                $extension = $photo->getClientOriginalExtension() ?: ($photo->guessExtension() ?: 'jpg');
-                $filename = 'microskill_' . time() . '_' . uniqid() . '.' . $extension;
-                $destinationPath = storage_path('app/private/micro-skills');
-                if (!file_exists($destinationPath)) {
-                    mkdir($destinationPath, 0755, true);
-                }
-                $fullPath = $destinationPath . DIRECTORY_SEPARATOR . $filename;
-                if ($photo->move($destinationPath, $filename) && file_exists($fullPath)) {
+                try {
+                    // $extension = $photo->guessExtension() ?: 'jpg';
+
+                    $filename = Str::uuid() . '.jpg';
+
+                    $destinationPath = storage_path('app/private/micro-skills');
+
+                    if (!file_exists($destinationPath)) {
+                        mkdir($destinationPath, 0755, true);
+                    }
+
+                    $manager = new ImageManager(new Driver());
+
+                    $image = $manager->read($photo)
+                        ->toJpeg(80);
+
+                    Storage::disk('local')->put(
+                        'private/micro-skills/' . $filename,
+                        (string) $image
+                    );
+
                     $validated['photo_path'] = 'private/micro-skills/' . $filename;
-                } else {
-                    return back()->withErrors(['photo' => 'Gagal menyimpan foto.'])->withInput();
+
+                } catch (\Exception $e) {
+                    return back()->withErrors([
+                        'photo' => 'Gagal upload foto.'
+                    ])->withInput();
                 }
-            } else {
-                return back()->withErrors(['photo' => 'File foto tidak valid.'])->withInput();
+                
             }
         }
 
@@ -163,7 +234,7 @@ class MicroSkillController extends Controller
         if ($submission->photo_path) {
             $photoPath = storage_path('app/private/' . $submission->photo_path);
             if (file_exists($photoPath)) {
-                @unlink($photoPath);
+                unlink($photoPath);
             }
         }
 
@@ -199,6 +270,9 @@ class MicroSkillController extends Controller
             abort(403, 'Unauthorized');
         }
 
-        return response()->file($filePath);
+        return response()->file($filePath, [
+            'Content-Type' => mime_content_type($filePath),
+            'X-Content-Type-Options' => 'nosniff',
+        ]);
     }
 }

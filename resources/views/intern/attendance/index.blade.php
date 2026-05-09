@@ -13,9 +13,12 @@
                     <h1 class="text-4xl font-bold leading-tight text-blue-600 mb-2 pb-2">Riwayat Absensi</h1>
                     <p class="text-gray-600">Pantau dan kelola absensi harian Anda</p>
                 </div>
-                <a href="{{ route('intern.attendance.create') }}" 
-                    class="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
-                    <i class="fas fa-plus mr-2"></i>Absensi Baru
+                @if($cekaktif)
+                    <a href="{{ route('intern.attendance.create') }}" 
+                        class="inline-flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
+                        <i class="fas fa-plus mr-2"></i>Absensi Baru
+                    </a>
+                @endif
                 </a>
             </div>
         </div>
@@ -230,10 +233,12 @@
                                             <i class="fas fa-inbox text-5xl mb-3 text-gray-300"></i>
                                             <p class="text-lg font-medium">Belum ada data absensi.</p>
                                             <p class="text-sm mt-2">Mulai dengan membuat absensi baru.</p>
-                                            <a href="{{ route('intern.attendance.create') }}" 
-                                                class="mt-4 inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all duration-300">
-                                                <i class="fas fa-plus mr-2"></i>Buat Absensi
-                                            </a>
+                                            @if($cekaktif)
+                                                <a href="{{ route('intern.attendance.create') }}" 
+                                                    class="mt-4 inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all duration-300">
+                                                    <i class="fas fa-plus mr-2"></i>Buat Absensi
+                                                </a>
+                                            @endif
                                         </div>
                                     </td>
                                 </tr>

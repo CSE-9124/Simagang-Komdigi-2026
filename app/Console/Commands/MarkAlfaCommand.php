@@ -19,6 +19,14 @@ class MarkAlfaCommand extends Command
         $nowWita = TimeService::nowWita();
         $todayWita = $nowWita->toDateString();
 
+        $checkInEnd = env('ATTENDANCE_CHECKIN_END', '10:00');
+        $currentTime = $nowWita->format('H:i');
+
+        if ($currentTime <= $checkInEnd) {
+            $this->info("Belum melewati batas check-in ({$checkInEnd}) — belum ada proses alfa.");
+            return self::SUCCESS;
+        }
+
         $this->info('Memproses alfa tanggal ' . $todayWita . ' (WITA) ...');
 
         // Skip jika hari Sabtu atau Minggu

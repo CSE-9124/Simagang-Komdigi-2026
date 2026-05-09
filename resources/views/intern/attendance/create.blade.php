@@ -275,27 +275,20 @@
             capturePhotoBtn.addEventListener('click', function() {
                 canvas.width = video.videoWidth;
                 canvas.height = video.videoHeight;
+
                 const ctx = canvas.getContext('2d');
-                // Flip horizontally to undo the video mirror
+
+                ctx.save();
                 ctx.scale(-1, 1);
                 ctx.drawImage(video, -video.videoWidth, 0);
+                ctx.restore();
 
                 const imageData = canvas.toDataURL('image/png');
+
                 capturedImage.src = imageData;
                 capturedImage.classList.remove('hidden');
-                photoData.value = imageData;
 
-                // Convert base64 to blob and create file
-                fetch(imageData)
-                    .then(res => res.blob())
-                    .then(blob => {
-                        const file = new File([blob], 'attendance-photo.png', {
-                            type: 'image/png'
-                        });
-                        const dataTransfer = new DataTransfer();
-                        dataTransfer.items.add(file);
-                        photoInput.files = dataTransfer.files;
-                    });
+                photoData.value = imageData;
             });
 
             stopCameraBtn.addEventListener('click', function() {
