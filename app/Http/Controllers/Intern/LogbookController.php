@@ -6,10 +6,36 @@ use App\Http\Controllers\Controller;
 use App\Models\Logbook;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class LogbookController extends Controller
 {
+    private function makeOneTimeLogbookPhotoUrl(?string $photoPath): ?string
+    {
+        if (!$photoPath) {
+            return null;
+        }
+
+        $filename = basename($photoPath);
+        $token = Str::random(64);
+
+        Cache::put(
+            "intern-logbook-token:{$token}",
+            [
+                'user_id' => Auth::id(),
+                'filename' => $filename,
+            ],
+            now()->addMinutes(5)
+        );
+
+        return route('intern.logbook.photo', [
+            'filename' => $filename,
+            'token' => $token,
+        ]);
+    }
+
     public function index()
     {
         $intern = Auth::user()->intern;
@@ -25,6 +51,10 @@ class LogbookController extends Controller
         $thisMonthCount = Logbook::where('intern_id', $intern->id)
             ->where('date', '>=', now()->startOfMonth())
             ->count();
+
+        $logbooks->each(function ($logbook) {
+            $logbook->photo_url = $this->makeOneTimeLogbookPhotoUrl($logbook->photo_path);
+        });
 
         return view('intern.logbook.index', compact('logbooks', 'totalLogbooks', 'withPhotoCount', 'thisMonthCount'));
     }
@@ -84,6 +114,8 @@ class LogbookController extends Controller
         if ($logbook->intern_id !== Auth::user()->intern->id) {
             abort(403);
         }
+
+        $logbook->photo_url = $this->makeOneTimeLogbookPhotoUrl($logbook->photo_path);
 
         return view('intern.logbook.edit', compact('logbook'));
     }
@@ -163,12 +195,41 @@ class LogbookController extends Controller
     }
 
     /**
-     * Serve private logbook photo with permission check
+     * Serve private logbook photo with one-time token validation
      */
-    public function servePhoto($filename)
+    public function servePhoto(Request $request, $filename)
     {
         $intern = Auth::user()->intern;
         $filePath = storage_path('app/private/logbook-photos/' . $filename);
+
+        if ($filename !== basename($filename)) {
+            abort(404, 'File not found');
+        }
+
+        $token = $request->query('token');
+        if ($token) {
+            $cacheKey = "intern-logbook-token:{$token}";
+            $tokenData = Cache::get($cacheKey);
+
+            if (
+                !$tokenData ||
+                ($tokenData['user_id'] ?? null) !== Auth::id() ||
+                ($tokenData['filename'] ?? null) !== $filename
+            ) {
+                abort(404, 'File not found');
+            }
+
+            // Token is valid, don't consume it - keep it in cache for the TTL duration
+        } else {
+            // No token provided, fall back to ownership check
+            $logbook = Logbook::where('intern_id', $intern->id)
+                ->where('photo_path', 'private/logbook-photos/' . $filename)
+                ->first();
+
+            if (!$logbook) {
+                abort(403, 'Unauthorized');
+            }
+        }
 
         // Validate the file path to prevent directory traversal
         if (!str_starts_with(realpath($filePath) ?: '', realpath(storage_path('app/private/logbook-photos')) ?: '')) {
@@ -180,15 +241,10 @@ class LogbookController extends Controller
             abort(404, 'File not found');
         }
 
-        // Check if logbook belongs to authenticated user
-        $logbook = Logbook::where('intern_id', $intern->id)
-            ->where('photo_path', 'private/logbook-photos/' . $filename)
-            ->first();
-
-        if (!$logbook) {
-            abort(403, 'Unauthorized');
-        }
-
-        return response()->file($filePath);
+        return response()->file($filePath, [
+            'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0, private',
+            'Pragma' => 'no-cache',
+            'Expires' => '0',
+        ]);
     }
 }

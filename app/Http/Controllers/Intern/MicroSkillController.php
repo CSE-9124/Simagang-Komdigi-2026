@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\MicroSkillSubmission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class MicroSkillController extends Controller
@@ -26,6 +28,11 @@ class MicroSkillController extends Controller
         }
 
         $submissions = $query->orderByDesc('created_at')->paginate(15);
+
+        // Generate one-time photo URLs for each submission
+        foreach ($submissions as $submission) {
+            $submission->photo_url = $this->makeOneTimeMicroSkillPhotoUrl($submission->photo_path);
+        }
 
         return view('intern.microskill.index', compact('submissions'));
     }
@@ -91,6 +98,9 @@ class MicroSkillController extends Controller
         if ($submission->intern_id !== Auth::user()->intern->id) {
             abort(403);
         }
+
+        // Generate one-time photo URL
+        $submission->photo_url = $this->makeOneTimeMicroSkillPhotoUrl($submission->photo_path);
 
         return view('intern.microskill.edit', compact('submission'));
     }
@@ -173,16 +183,45 @@ class MicroSkillController extends Controller
     }
 
     /**
-     * Serve private microskill photo with permission check
+     * Generate one-time temporary URL for microskill photo
      */
-    public function servePhoto($filename)
+    private function makeOneTimeMicroSkillPhotoUrl(?string $photoPath): ?string
     {
-        $intern = Auth::user()->intern;
+        if (!$photoPath) {
+            return null;
+        }
+
+        $filename = basename($photoPath);
+        $token = Str::random(64);
+        $cacheKey = "intern-photo-token:{$token}";
+
+        Cache::put(
+            $cacheKey,
+            [
+                'user_id' => Auth::id(),
+                'filename' => $filename,
+            ],
+            now()->addMinutes(5)
+        );
+
+        return route('intern.microskill.photo', ['filename' => $filename, 'token' => $token]);
+    }
+
+    /**
+     * Serve private microskill photo with token validation or ownership check
+     */
+    public function servePhoto(Request $request, $filename)
+    {
+        // Filename sanitization
+        if ($filename !== basename($filename)) {
+            abort(404, 'File not found');
+        }
+
         $filePath = storage_path('app/private/micro-skills/' . $filename);
 
         // Validate the file path to prevent directory traversal
         if (!str_starts_with(realpath($filePath) ?: '', realpath(storage_path('app/private/micro-skills')) ?: '')) {
-            abort(403, 'Unauthorized');
+            abort(404, 'File not found');
         }
 
         // Check if file exists
@@ -190,15 +229,32 @@ class MicroSkillController extends Controller
             abort(404, 'File not found');
         }
 
-        // Check if microskill submission belongs to authenticated user
-        $submission = MicroSkillSubmission::where('intern_id', $intern->id)
-            ->where('photo_path', 'private/micro-skills/' . $filename)
-            ->first();
+        // Try token validation first
+        $token = $request->query('token');
+        if ($token) {
+            $cacheKey = "intern-photo-token:{$token}";
+            $tokenData = Cache::get($cacheKey);
 
-        if (!$submission) {
-            abort(403, 'Unauthorized');
+            if (!$tokenData || $tokenData['user_id'] != Auth::id() || $tokenData['filename'] !== $filename) {
+                abort(404, 'File not found');
+            }
+            // Token is valid, don't consume it - keep in cache for duration
+        } else {
+            // No token: fallback to ownership check
+            $intern = Auth::user()->intern;
+            $submission = MicroSkillSubmission::where('intern_id', $intern->id)
+                ->where('photo_path', 'private/micro-skills/' . $filename)
+                ->first();
+
+            if (!$submission) {
+                abort(403, 'Unauthorized');
+            }
         }
 
-        return response()->file($filePath);
+        return response()->file($filePath, [
+            'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0',
+            'Pragma' => 'no-cache',
+            'Expires' => 'Thu, 01 Jan 1970 00:00:00 GMT',
+        ]);
     }
 }

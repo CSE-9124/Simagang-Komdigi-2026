@@ -361,7 +361,19 @@ class AttendanceController extends Controller
                 abort(404, 'File not found');
             }
 
-            Cache::forget($cacheKey);
+            // Token is valid, don't consume it - keep it in cache for the TTL duration
+        } else {
+            // No token provided, fall back to ownership check
+            $attendance = Attendance::where('intern_id', $intern->id)
+                ->where(function($query) use ($filename) {
+                    $query->where('photo_path', 'private/attendance-photos/' . $filename)
+                          ->orWhere('photo_checkout', 'private/attendance-photos/' . $filename);
+                })
+                ->first();
+
+            if (!$attendance) {
+                abort(403, 'Unauthorized');
+            }
         }
 
         // Validate the file path to prevent directory traversal
@@ -372,18 +384,6 @@ class AttendanceController extends Controller
         // Check if file exists
         if (!file_exists($filePath)) {
             abort(404, 'File not found');
-        }
-
-        // Check if attendance record belongs to authenticated user
-        $attendance = Attendance::where('intern_id', $intern->id)
-            ->where(function($query) use ($filename) {
-                $query->where('photo_path', 'private/attendance-photos/' . $filename)
-                      ->orWhere('photo_checkout', 'private/attendance-photos/' . $filename);
-            })
-            ->first();
-
-        if (!$attendance) {
-            abort(403, 'Unauthorized');
         }
 
         return response()->file($filePath, [
