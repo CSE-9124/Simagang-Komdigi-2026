@@ -314,6 +314,11 @@ class MicroSkillController extends Controller
 
         $this->authorize('view', $submission);
 
-        return response()->file($filePath);
+        return response()->file($filePath, [
+            'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0, private',
+            'Pragma' => 'no-cache',
+            'Expires' => '0',
+            'X-Content-Type-Options' => 'nosniff',
+        ]);
     }
 }

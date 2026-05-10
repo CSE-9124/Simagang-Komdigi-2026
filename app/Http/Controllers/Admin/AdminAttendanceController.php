@@ -75,30 +75,32 @@ class AdminAttendanceController extends Controller
     }
 
     public function servePhoto(string $filename)
-{
-    $photoPath = 'private/attendance-photos/' . $filename;
+    {
+        $photoPath = 'private/attendance-photos/' . $filename;
 
-    $attendance = Attendance::where(function ($query) use ($photoPath) {
-            $query->where('photo_path', $photoPath)
-                ->orWhere('photo_checkout', $photoPath);
-        })
-        ->firstOrFail();
+        $attendance = Attendance::where(function ($query) use ($photoPath) {
+                $query->where('photo_path', $photoPath)
+                    ->orWhere('photo_checkout', $photoPath);
+            })
+            ->firstOrFail();
 
-    // Authorize dengan policy
-    $this->authorize('view', $attendance);
+        // Authorize dengan policy
+        $this->authorize('view', $attendance);
 
-    $fullPath = storage_path('app/' . $photoPath);
+        $fullPath = storage_path('app/' . $photoPath);
 
-    if (!file_exists($fullPath)) {
-        abort(404, 'File not found');
+        if (!file_exists($fullPath)) {
+            abort(404, 'File not found');
+        }
+        
+
+        return response()->file($fullPath, [
+            'Cache-Control' => 'no-store, no-cache, must-revalidate',
+            'Pragma'        => 'no-cache',
+            'Expires'       => '0',
+            'X-Content-Type-Options' => 'nosniff',
+        ]);
     }
-
-    return response()->file($fullPath, [
-        'Cache-Control' => 'no-store, no-cache, must-revalidate',
-        'Pragma'        => 'no-cache',
-        'Expires'       => '0',
-    ]);
-}
 
     public function updateDocumentStatus(Request $request, Attendance $attendance)
     {

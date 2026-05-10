@@ -127,7 +127,7 @@
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div>
                                             <p class="text-sm text-gray-500 font-medium text-center">
-                                                {{$pengajuan->created_at->format('d M Y')}}
+                                                {{$pengajuan->created_at->format('d/m/y')}}
                                              </p>
                                             
                                         </div>

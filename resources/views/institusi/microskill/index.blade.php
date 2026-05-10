@@ -139,7 +139,7 @@
                                         <td class="px-3 sm:px-6 py-3 sm:py-5 whitespace-nowrap">
                                             <div class="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm">
                                                 <span class="text-gray-700 font-medium">
-                                                    {{ $s->submitted_at ? \Carbon\Carbon::parse($s->submitted_at)->format('d M Y') : '-' }}
+                                                    {{ $s->submitted_at ? \Carbon\Carbon::parse($s->submitted_at)->format('d/m/y') : '-' }}
                                                 </span>
                                                 <span class="text-gray-500 text-xs hidden sm:inline">
                                                     {{ $s->submitted_at ? \Carbon\Carbon::parse($s->submitted_at)->format('H:i') : '' }}

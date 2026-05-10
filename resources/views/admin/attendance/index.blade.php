@@ -127,7 +127,7 @@
                                     <tr class="bg-red-50">
                                         <td class="px-6 py-4 whitespace-nowrap text-center">
                                             <div class="text-sm font-medium text-gray-900">
-                                                {{ \Carbon\Carbon::parse($todayWita)->format('d M Y') }}
+                                                {{ \Carbon\Carbon::parse($todayWita)->format('d/m/y') }}
                                                 <span class="text-xs text-gray-400">(Hari ini)</span>
                                             </div>
                                         </td>
@@ -150,7 +150,7 @@
                                     <tr class="hover:bg-blue-50 transition-colors duration-150">
                                         <td class="px-6 py-4 whitespace-nowrap ">
                                             <div class="text-sm text-center font-medium text-gray-900">
-                                                {{ $attendance->date->format('d M Y') }}</div>
+                                                {{ $attendance->date->format('d/m/y') }}</div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="text-sm text-center font-medium text-gray-900">

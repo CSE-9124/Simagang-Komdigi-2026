@@ -135,7 +135,7 @@
                                                 <div class="flex items-center text-xs sm:text-sm text-gray-900">
                                                     <i class="fas fa-calendar mr-1 sm:mr-2 text-gray-400 text-xs"></i>
                                                     <span
-                                                        class="hidden sm:inline">{{ \Carbon\Carbon::parse($todayWita)->format('d M Y') }}</span>
+                                                        class="hidden sm:inline">{{ \Carbon\Carbon::parse($todayWita)->format('d/m/y') }}</span>
                                                     <span
                                                         class="sm:hidden">{{ \Carbon\Carbon::parse($todayWita)->format('d/m/y') }}</span>
                                                     <span class="ml-1 text-xs text-gray-400">(Hari ini)</span>
@@ -176,7 +176,7 @@
                                                 <div class="flex items-center text-xs sm:text-sm text-gray-900">
                                                     <i class="fas fa-calendar mr-1 sm:mr-2 text-gray-400 text-xs"></i>
                                                     <span
-                                                        class="hidden sm:inline">{{ \Carbon\Carbon::parse($a->date)->format('d M Y') }}</span>
+                                                        class="hidden sm:inline">{{ \Carbon\Carbon::parse($a->date)->format('d/m/y') }}</span>
                                                     <span
                                                         class="sm:hidden">{{ \Carbon\Carbon::parse($a->date)->format('d/m/y') }}</span>
                                                 </div>

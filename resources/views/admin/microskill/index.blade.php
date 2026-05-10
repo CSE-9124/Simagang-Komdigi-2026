@@ -81,7 +81,7 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $s->intern->institution }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $s->title }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ $s->submitted_at ? \Carbon\Carbon::parse($s->submitted_at)->format('d M Y H:i') : '-' }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">{{ $s->submitted_at ? \Carbon\Carbon::parse($s->submitted_at)->format('d/m/y') : '-' }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         @if($s->photo_path)
                                             @php $microSkillFilename = basename($s->photo_path); @endphp

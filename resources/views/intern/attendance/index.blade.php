@@ -147,7 +147,7 @@
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-100">
                                 {{-- Baris virtual hari ini: belum absen di hari kerja --}}
-                                @if ($todayVirtualAbsent)
+                                @if ($cekaktif && $todayVirtualAbsent)
                                     <tr class="bg-red-50">
                                         <td class="px-6 py-4 whitespace-nowrap text-center">
                                             <span class="text-sm font-medium text-gray-900">

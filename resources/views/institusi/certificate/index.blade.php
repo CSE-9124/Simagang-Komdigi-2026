@@ -86,7 +86,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="7" class="px-4 py-12 text-center text-gray-500">
+                                        <td colspan="9" class="px-4 py-12 text-center text-gray-500">
                                             Belum ada sertifikat tersedia atau tidak ditemukan untuk institusi Anda.
                                         </td>
                                     </tr>
