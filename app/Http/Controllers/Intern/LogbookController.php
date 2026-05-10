@@ -8,11 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
-<<<<<<< HEAD
-=======
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
->>>>>>> d2774afa5f6bd019ec9ea1b6a8c74b0a6a53f241
 use Illuminate\Support\Str;
 
 class LogbookController extends Controller
@@ -57,17 +54,13 @@ class LogbookController extends Controller
             ->where('date', '>=', now()->startOfMonth())
             ->count();
 
-<<<<<<< HEAD
+        $cekaktif = $intern && $intern->is_active;
+
         $logbooks->each(function ($logbook) {
             $logbook->photo_url = $this->makeOneTimeLogbookPhotoUrl($logbook->photo_path);
         });
 
-        return view('intern.logbook.index', compact('logbooks', 'totalLogbooks', 'withPhotoCount', 'thisMonthCount'));
-=======
-        $cekaktif = $intern && $intern->is_active;
-
         return view('intern.logbook.index', compact('logbooks', 'totalLogbooks', 'withPhotoCount', 'thisMonthCount', 'cekaktif'));
->>>>>>> d2774afa5f6bd019ec9ea1b6a8c74b0a6a53f241
     }
 
     public function create()
@@ -311,25 +304,11 @@ class LogbookController extends Controller
             abort(404, 'File not found');
         }
 
-<<<<<<< HEAD
         return response()->file($filePath, [
             'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0, private',
             'Pragma' => 'no-cache',
             'Expires' => '0',
-=======
-        // Check if logbook belongs to authenticated user
-        $logbook = Logbook::where('intern_id', $intern->id)
-            ->where('photo_path', 'private/logbook-photos/' . $filename)
-            ->first();
-
-        if (!$logbook) {
-            abort(403, 'Unauthorized');
-        }
-
-        return response()->file($filePath, [
-            'Content-Type' => mime_content_type($filePath),
             'X-Content-Type-Options' => 'nosniff',
->>>>>>> d2774afa5f6bd019ec9ea1b6a8c74b0a6a53f241
         ]);
     }
 }
