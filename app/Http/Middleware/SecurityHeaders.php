@@ -12,14 +12,17 @@ class SecurityHeaders
     {
         $response = $next($request);
 
+        if (! $response instanceof Response) {
+            $response = response($response);
+        }
+
         $response->headers->set('X-Frame-Options', 'DENY');
-
         $response->headers->set('X-Content-Type-Options', 'nosniff');
+        $response->headers->set('X-XSS-Protection', '1; mode=block');
+        $response->headers->set('Referrer-Policy', 'no-referrer-when-downgrade');
 
-        $response->headers->set(
-            'Content-Security-Policy',
-            "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:; img-src 'self' data: blob:; object-src 'none';"
-        );
+        $csp = "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:; img-src 'self' data: blob:; object-src 'none'; frame-ancestors 'none';";
+        $response->headers->set('Content-Security-Policy', $csp);
 
         return $response;
     }
