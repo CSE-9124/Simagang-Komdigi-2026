@@ -38,10 +38,8 @@ class LogbookController extends Controller
 
     public function show(Logbook $logbook)
     {
-        $mentor = Auth::user()->mentor;
-        if (!$mentor || $logbook->intern->mentor_id !== $mentor->id) {
-            abort(403, 'Unauthorized');
-        }
+        $this->authorize('view', $logbook);
+
         $logbook->load('intern');
         return view('mentor.logbook.show', compact('logbook'));
     }
@@ -51,7 +49,6 @@ class LogbookController extends Controller
      */
     public function servePhoto($filename)
     {
-        $mentor = Auth::user()->mentor;
         $filePath = storage_path('app/private/logbook-photos/' . $filename);
 
         if (!str_starts_with(realpath($filePath) ?: '', realpath(storage_path('app/private/logbook-photos')) ?: '')) {
@@ -62,15 +59,14 @@ class LogbookController extends Controller
             abort(404, 'File not found');
         }
 
-        $internIds = $mentor ? $mentor->interns()->pluck('id')->toArray() : [];
-
-        $logbook = Logbook::whereIn('intern_id', $internIds)
-            ->where('photo_path', 'private/logbook-photos/' . $filename)
+        $logbook = Logbook::where('photo_path', 'private/logbook-photos/' . $filename)
             ->first();
 
         if (!$logbook) {
             abort(403, 'Unauthorized');
         }
+
+        $this->authorize('view', $logbook);
 
         return response()->file($filePath, [
             'Cache-Control' => 'no-store, no-cache, must-revalidate',

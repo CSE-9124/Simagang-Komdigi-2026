@@ -130,10 +130,7 @@ class MicroSkillController extends Controller
 
     public function edit(MicroSkillSubmission $submission)
     {
-        // Pastikan user hanya bisa edit data miliknya
-        if ($submission->intern_id !== Auth::user()->intern->id) {
-            abort(403);
-        }
+        $this->authorize('update', $submission);
 
         // Generate one-time photo URL
         $submission->photo_url = $this->makeOneTimeMicroSkillPhotoUrl($submission->photo_path);
@@ -143,10 +140,7 @@ class MicroSkillController extends Controller
 
     public function update(Request $request, MicroSkillSubmission $submission)
     {
-        // Pastikan user hanya bisa update data miliknya
-        if ($submission->intern_id !== Auth::user()->intern->id) {
-            abort(403);
-        }
+        $this->authorize('update', $submission);
 
         $validated = $request->validate([
             'title' => [
@@ -234,10 +228,7 @@ class MicroSkillController extends Controller
 
     public function destroy(MicroSkillSubmission $submission)
     {
-        // Pastikan user hanya bisa delete data miliknya
-        if ($submission->intern_id !== Auth::user()->intern->id) {
-            abort(403);
-        }
+        $this->authorize('delete', $submission);
 
         // Delete the photo if it exists
         if ($submission->photo_path) {
@@ -311,15 +302,17 @@ class MicroSkillController extends Controller
             // Token is valid, don't consume it - keep in cache for duration
         } else {
             // No token: fallback to ownership check
-            $intern = Auth::user()->intern;
-            $submission = MicroSkillSubmission::where('intern_id', $intern->id)
-                ->where('photo_path', 'private/micro-skills/' . $filename)
-                ->first();
-
-            if (!$submission) {
-                abort(403, 'Unauthorized');
-            }
+            // Policy check below will enforce ownership and role-based access.
         }
+
+        $submission = MicroSkillSubmission::where('photo_path', 'private/micro-skills/' . $filename)
+            ->first();
+
+        if (!$submission) {
+            abort(403, 'Unauthorized');
+        }
+
+        $this->authorize('view', $submission);
 
         return response()->file($filePath);
     }

@@ -35,12 +35,16 @@ class AdminReportController extends Controller
 
     public function show(FinalReport $report)
     {
+        $this->authorize('view', $report);
+
         $report->load('intern');
         return view('admin.report.show', compact('report'));
     }
 
     public function updateStatus(Request $request, FinalReport $report)
     {
+        $this->authorize('grade', $report);
+
         $status = $request->input('status');
         
         $rules = [

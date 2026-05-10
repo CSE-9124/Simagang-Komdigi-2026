@@ -38,20 +38,15 @@ class ReportController extends Controller
 
     public function show(FinalReport $report)
     {
-        $mentor = Auth::user()->mentor;
-        if (!$mentor || $report->intern->mentor_id !== $mentor->id) {
-            abort(403, 'Unauthorized');
-        }
+        $this->authorize('view', $report);
+
         $report->load('intern');
         return view('mentor.report.show', compact('report'));
     }
 
     public function grade(Request $request, FinalReport $report)
     {
-        $mentor = Auth::user()->mentor;
-        if (!$mentor || $report->intern->mentor_id !== $mentor->id) {
-            abort(403, 'Unauthorized');
-        }
+        $this->authorize('grade', $report);
 
         $validated = $request->validate([
             'score' => ['required', 'integer', 'min:0', 'max:100'],

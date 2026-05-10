@@ -58,12 +58,11 @@ class MicroSkillController extends Controller
             abort(404, 'File not found');
         }
 
-        $internIds = $this->getInstitusiInternIds();
         $photoPath = 'private/micro-skills/' . $filename;
 
-        MicroSkillSubmission::whereIn('intern_id', $internIds)
-            ->where('photo_path', $photoPath)
-            ->firstOrFail();
+        $submission = MicroSkillSubmission::where('photo_path', $photoPath)->firstOrFail();
+
+        $this->authorize('view', $submission);
 
         $fullPath = storage_path('app/' . $photoPath);
 

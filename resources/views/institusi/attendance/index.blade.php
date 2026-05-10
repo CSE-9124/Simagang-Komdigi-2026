@@ -225,10 +225,14 @@
                                             </td>
                                             <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                                                 @if ($a->photo_path)
-                                                    <img src="{{ route('institusi.attendance.photo', basename($a->photo_path)) }}"
-                                                        alt="Check In"
+                                                    @php
+                                                        $photoUrl = route('institusi.attendance.photo', [
+                                                            'filename' => basename($a->photo_path),
+                                                        ]);
+                                                    @endphp
+                                                    <img src="{{ $photoUrl }}" alt="Check In"
                                                         class="w-10 h-10 sm:w-12 sm:h-12 object-cover rounded-lg border-2 border-blue-200 cursor-pointer hover:border-blue-400 transition-all shadow-sm"
-                                                        onclick="window.open('{{ route('institusi.attendance.photo', basename($a->photo_path)) }}', '_blank')"
+                                                        onclick="window.open('{{ $photoUrl }}', '_blank')"
                                                         title="Klik untuk melihat full size" />
                                                 @else
                                                     <span class="text-gray-400 text-xs sm:text-sm">-</span>
@@ -236,10 +240,14 @@
                                             </td>
                                             <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                                                 @if ($a->photo_checkout)
-                                                    <img src="{{ route('institusi.attendance.photo', basename($a->photo_checkout)) }}"
-                                                        alt="Check Out"
+                                                    @php
+                                                        $photoCheckoutUrl = route('institusi.attendance.photo', [
+                                                            'filename' => basename($a->photo_checkout),
+                                                        ]);
+                                                    @endphp
+                                                    <img src="{{ $photoCheckoutUrl }}" alt="Check Out"
                                                         class="w-10 h-10 sm:w-12 sm:h-12 object-cover rounded-lg border-2 border-blue-200 cursor-pointer hover:border-blue-400 transition-all shadow-sm"
-                                                        onclick="window.open('{{ route('institusi.attendance.photo', basename($a->photo_checkout)) }}', '_blank')"
+                                                        onclick="window.open('{{ $photoCheckoutUrl }}', '_blank')"
                                                         title="Klik untuk melihat full size" />
                                                 @else
                                                     <span class="text-gray-400 text-xs sm:text-sm">-</span>

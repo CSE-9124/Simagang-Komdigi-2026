@@ -139,10 +139,7 @@ class ReportController extends Controller
 
     public function update(Request $request, FinalReport $report)
     {
-        // Ensure the report belongs to the authenticated intern
-        if ($report->intern_id !== Auth::user()->intern->id) {
-            abort(403);
-        }
+        $this->authorize('update', $report);
 
         // Allow update if status is pending, rejected, or needs revision
         if ($report->status === 'approved' && !$report->needs_revision) {
@@ -275,10 +272,7 @@ class ReportController extends Controller
 
     public function storeTestimonial(Request $request, FinalReport $report)
     {
-        // Ensure the report belongs to the authenticated intern
-        if ($report->intern_id !== Auth::user()->intern->id) {
-            abort(403);
-        }
+        $this->authorize('update', $report);
 
         // Check if report is submitted
         if (!$report->submitted_at) {

@@ -44,7 +44,9 @@ class AdminLogbookController extends Controller
 
         $photoPath = 'private/logbook-photos/' . $filename;
 
-        Logbook::where('photo_path', $photoPath)->firstOrFail();
+        $logbook = Logbook::where('photo_path', $photoPath)->firstOrFail();
+
+        $this->authorize('view', $logbook);
 
         $fullPath = storage_path('app/' . $photoPath);
 
@@ -61,6 +63,8 @@ class AdminLogbookController extends Controller
 
     public function destroy(Logbook $logbook)
     {
+        $this->authorize('delete', $logbook);
+
         $logbook->delete();
 
         return back()->with('success', 'Logbook berhasil dihapus.');

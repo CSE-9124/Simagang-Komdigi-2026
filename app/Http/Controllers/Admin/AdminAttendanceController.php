@@ -68,6 +68,8 @@ class AdminAttendanceController extends Controller
 
     public function show(Attendance $attendance)
     {
+        $this->authorize('view', $attendance);
+
         $attendance->load('intern');
         return view('admin.attendance.show', compact('attendance'));
     }
@@ -76,21 +78,19 @@ class AdminAttendanceController extends Controller
 {
     $photoPath = 'private/attendance-photos/' . $filename;
 
-    Attendance::where(function ($query) use ($photoPath) {
+    $attendance = Attendance::where(function ($query) use ($photoPath) {
             $query->where('photo_path', $photoPath)
                 ->orWhere('photo_checkout', $photoPath);
         })
         ->firstOrFail();
 
+    // Authorize dengan policy
+    $this->authorize('view', $attendance);
+
     $fullPath = storage_path('app/' . $photoPath);
 
     if (!file_exists($fullPath)) {
         abort(404, 'File not found');
-    }
-
-    // Validasi signed URL
-    if (!request()->hasValidSignature()) {
-        abort(403, 'Link foto tidak valid atau sudah expired');
     }
 
     return response()->file($fullPath, [

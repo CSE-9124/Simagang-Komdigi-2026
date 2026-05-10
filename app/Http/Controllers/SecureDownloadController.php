@@ -3,9 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\FinalReport;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class SecureDownloadController extends Controller
@@ -23,9 +20,7 @@ class SecureDownloadController extends Controller
             abort(404);
         }
 
-        if (!$this->canAccessReport($report->intern_id)) {
-            abort(403, 'Unauthorized access.');
-        }
+        $this->authorize('view', $report);
 
         $fullPath = $this->resolveStoragePath($normalizedPath);
         if (!$fullPath) {
@@ -73,52 +68,6 @@ class SecureDownloadController extends Controller
                     return data_get($projectFile, 'path') === $path;
                 });
             });
-    }
-
-    private function canAccessReport(int $internId): bool
-    {
-        /** @var User|null $user */
-        $user = Auth::user();
-        if (!$user) {
-            return false;
-        }
-
-        if ($user->isAdmin()) {
-            return true;
-        }
-
-        if ($user->isIntern()) {
-            return optional($user->intern)->id === $internId;
-        }
-
-        if ($user->isMentor()) {
-            $mentorId = optional($user->mentor)->id;
-            if (!$mentorId) {
-                return false;
-            }
-
-            return DB::table('interns')
-                ->where('id', $internId)
-                ->where('mentor_id', $mentorId)
-                ->exists();
-        }
-
-        if ($user->isInstitusi()) {
-            $institusiId = optional($user->institusi)->id;
-            if (!$institusiId) {
-                return false;
-            }
-
-            return DB::table('interns')
-                ->join('users', 'users.id', '=', 'interns.user_id')
-                ->join('pengajuan_details', 'pengajuan_details.email', '=', 'users.email')
-                ->join('pengajuans', 'pengajuans.id', '=', 'pengajuan_details.pengajuan_id')
-                ->where('pengajuans.institusi_id', $institusiId)
-                ->where('interns.id', $internId)
-                ->exists();
-        }
-
-        return false;
     }
 
     private function resolveStoragePath(string $relativePath): ?string

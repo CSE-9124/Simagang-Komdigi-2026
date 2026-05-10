@@ -36,7 +36,6 @@ class MicroSkillController extends Controller
      */
     public function servePhoto($filename)
     {
-        $mentor = Auth::user()->mentor;
         $filePath = storage_path('app/private/micro-skills/' . $filename);
 
         if (!str_starts_with(realpath($filePath) ?: '', realpath(storage_path('app/private/micro-skills')) ?: '')) {
@@ -47,15 +46,14 @@ class MicroSkillController extends Controller
             abort(404, 'File not found');
         }
 
-        $internIds = $mentor ? $mentor->interns()->pluck('id')->toArray() : [];
-
-        $submission = MicroSkillSubmission::whereIn('intern_id', $internIds)
-            ->where('photo_path', 'private/micro-skills/' . $filename)
+        $submission = MicroSkillSubmission::where('photo_path', 'private/micro-skills/' . $filename)
             ->first();
 
         if (!$submission) {
             abort(403, 'Unauthorized');
         }
+
+        $this->authorize('view', $submission);
 
         return response()->file($filePath, [
             'Cache-Control' => 'no-store, no-cache, must-revalidate',

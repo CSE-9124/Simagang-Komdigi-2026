@@ -58,12 +58,9 @@ class LogbookController extends Controller
 
     public function show(Logbook $logbook)
     {
-        $internIds = $this->getInstitusiInternIds();
+        $logbook = Logbook::with('intern')->whereKey($logbook->id)->firstOrFail();
 
-        $logbook = Logbook::with('intern')
-            ->whereKey($logbook->id)
-            ->whereIn('intern_id', $internIds)
-            ->firstOrFail();
+        $this->authorize('view', $logbook);
 
         return view('institusi.logbook.show', compact('logbook'));
     }
@@ -74,12 +71,11 @@ class LogbookController extends Controller
             abort(404, 'File not found');
         }
 
-        $internIds = $this->getInstitusiInternIds();
         $photoPath = 'private/logbook-photos/' . $filename;
 
-        Logbook::whereIn('intern_id', $internIds)
-            ->where('photo_path', $photoPath)
-            ->firstOrFail();
+        $logbook = Logbook::where('photo_path', $photoPath)->firstOrFail();
+
+        $this->authorize('view', $logbook);
 
         $fullPath = storage_path('app/' . $photoPath);
 

@@ -504,17 +504,20 @@ class AttendanceController extends Controller
             // Token is valid, don't consume it - keep it in cache for the TTL duration
         } else {
             // No token provided, fall back to ownership check
-            $attendance = Attendance::where('intern_id', $intern->id)
-                ->where(function($query) use ($filename) {
-                    $query->where('photo_path', 'private/attendance-photos/' . $filename)
-                          ->orWhere('photo_checkout', 'private/attendance-photos/' . $filename);
-                })
-                ->first();
-
-            if (!$attendance) {
-                abort(403, 'Unauthorized');
-            }
+            // Policy check below will enforce ownership after the record is found.
         }
+
+        $attendance = Attendance::where(function ($query) use ($filename) {
+                $query->where('photo_path', 'private/attendance-photos/' . $filename)
+                    ->orWhere('photo_checkout', 'private/attendance-photos/' . $filename);
+            })
+            ->first();
+
+        if (!$attendance) {
+            abort(403, 'Unauthorized');
+        }
+
+        $this->authorize('view', $attendance);
 
         // Validate the file path to prevent directory traversal
         if (!str_starts_with(realpath($filePath) ?: '', realpath(storage_path('app/private/attendance-photos')) ?: '')) {
@@ -555,13 +558,14 @@ class AttendanceController extends Controller
         }
 
         // Check if document belongs to authenticated user
-        $attendance = Attendance::where('intern_id', $intern->id)
-            ->where('document_path', 'private/attendance-documents/' . $filename)
+        $attendance = Attendance::where('document_path', 'private/attendance-documents/' . $filename)
             ->first();
 
         if (!$attendance) {
             abort(403, 'Unauthorized');
         }
+
+        $this->authorize('view', $attendance);
 
         return response()->download($filePath, null, [
             'X-Content-Type-Options' => 'nosniff',

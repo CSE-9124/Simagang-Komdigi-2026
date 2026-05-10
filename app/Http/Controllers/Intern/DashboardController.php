@@ -8,10 +8,8 @@ use App\Models\Intern;
 use App\Models\MicroSkillSubmission;
 use App\Models\Certificate;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 class DashboardController extends Controller
 {
@@ -22,20 +20,8 @@ class DashboardController extends Controller
         }
 
         $filename = basename($photoPath);
-        $token = Str::random(64);
-
-        Cache::put(
-            "intern-photo-token:{$token}",
-            [
-                'user_id' => Auth::id(),
-                'filename' => $filename,
-            ],
-            now()->addMinutes(5)
-        );
-
         return route('intern.attendance.photo', [
             'filename' => $filename,
-            'token' => $token,
         ]);
     }
 

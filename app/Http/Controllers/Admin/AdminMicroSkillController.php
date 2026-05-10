@@ -32,7 +32,9 @@ class AdminMicroSkillController extends Controller
 
         $photoPath = 'private/micro-skills/' . $filename;
 
-        MicroSkillSubmission::where('photo_path', $photoPath)->firstOrFail();
+        $submission = MicroSkillSubmission::where('photo_path', $photoPath)->firstOrFail();
+
+        $this->authorize('view', $submission);
 
         $fullPath = storage_path('app/' . $photoPath);
 

@@ -166,7 +166,9 @@ Route::middleware(['auth', 'intern'])->prefix('intern')->name('intern.')->group(
     Route::get('/attendance/create', [AttendanceController::class, 'create'])->name('attendance.create');
     Route::post('/attendance', [AttendanceController::class, 'store'])->name('attendance.store');
     Route::post('/attendance/checkout', [AttendanceController::class, 'checkOut'])->name('attendance.checkout');
-    Route::get('/attendance/photo/{filename}', [AttendanceController::class, 'servePhoto'])->name('attendance.photo');
+    Route::get('/attendance/photo/{filename}', [AttendanceController::class, 'servePhoto'])
+        ->name('attendance.photo')
+        ->where('filename', '[^/]+');
     Route::get('/attendance/document/{filename}', [AttendanceController::class, 'serveDocument'])->name('attendance.document');
     
     // Logbook Routes
@@ -242,7 +244,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Attendance Monitoring Route
     Route::get('/attendance/photo/{filename}', [AdminAttendanceController::class, 'servePhoto'])
     ->name('attendance.photo')
-    ->middleware('signed')
     ->where('filename', '[^/]+');
     Route::get('/attendance', [AdminAttendanceController::class, 'index'])->name('attendance.index');
     Route::get('/attendance/{attendance}', [AdminAttendanceController::class, 'show'])->name('attendance.show');
@@ -309,7 +310,6 @@ Route::middleware(['auth', 'mentor'])->prefix('mentor')->name('mentor.')->group(
     Route::get('/attendance', [MentorAttendanceController::class, 'index'])->name('attendance.index');
     Route::get('/attendance/photo/{filename}', [MentorAttendanceController::class, 'servePhoto'])
         ->name('attendance.photo')
-        ->middleware('signed')
         ->where('filename', '[^/]+');
     Route::get('/logbook', [MentorLogbookController::class, 'index'])->name('logbook.index');
     Route::get('/logbook/{logbook}', [MentorLogbookController::class, 'show'])->name('logbook.show');

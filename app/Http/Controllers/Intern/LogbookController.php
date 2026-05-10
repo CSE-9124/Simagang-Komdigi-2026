@@ -144,10 +144,7 @@ class LogbookController extends Controller
 
     public function edit(Logbook $logbook)
     {
-        // Ensure the logbook belongs to the authenticated intern
-        if ($logbook->intern_id !== Auth::user()->intern->id) {
-            abort(403);
-        }
+        $this->authorize('update', $logbook);
 
         $logbook->photo_url = $this->makeOneTimeLogbookPhotoUrl($logbook->photo_path);
 
@@ -156,10 +153,7 @@ class LogbookController extends Controller
 
     public function update(Request $request, Logbook $logbook)
     {
-        // Ensure the logbook belongs to the authenticated intern
-        if ($logbook->intern_id !== Auth::user()->intern->id) {
-            abort(403);
-        }
+        $this->authorize('update', $logbook);
 
         $validated = $request->validate([
             'date' => ['required', 'date'],
@@ -239,10 +233,7 @@ class LogbookController extends Controller
 
     public function destroy(Logbook $logbook)
     {
-        // Ensure the logbook belongs to the authenticated intern
-        if ($logbook->intern_id !== Auth::user()->intern->id) {
-            abort(403);
-        }
+        $this->authorize('delete', $logbook);
 
         if ($logbook->photo_path) {
             $photoPath = storage_path('app/private/' . $logbook->photo_path);
@@ -285,14 +276,17 @@ class LogbookController extends Controller
             // Token is valid, don't consume it - keep it in cache for the TTL duration
         } else {
             // No token provided, fall back to ownership check
-            $logbook = Logbook::where('intern_id', $intern->id)
-                ->where('photo_path', 'private/logbook-photos/' . $filename)
-                ->first();
-
-            if (!$logbook) {
-                abort(403, 'Unauthorized');
-            }
+            // Policy check below will enforce ownership and role-based access.
         }
+
+        $logbook = Logbook::where('photo_path', 'private/logbook-photos/' . $filename)
+            ->first();
+
+        if (!$logbook) {
+            abort(403, 'Unauthorized');
+        }
+
+        $this->authorize('view', $logbook);
 
         // Validate the file path to prevent directory traversal
         if (!str_starts_with(realpath($filePath) ?: '', realpath(storage_path('app/private/logbook-photos')) ?: '')) {
