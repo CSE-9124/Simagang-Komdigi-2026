@@ -24,6 +24,14 @@ class SecurityHeaders
         $csp = "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:; img-src 'self' data: blob:; object-src 'none'; frame-ancestors 'none';";
         $response->headers->set('Content-Security-Policy', $csp);
 
+        // Prevent stale authenticated pages/files from being reused after user switch.
+        if ($request->user()) {
+            $response->headers->set('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0, private');
+            $response->headers->set('Pragma', 'no-cache');
+            $response->headers->set('Expires', '0');
+            $response->headers->set('Vary', 'Cookie, Authorization');
+        }
+
         return $response;
     }
 }
