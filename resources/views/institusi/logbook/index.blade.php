@@ -92,7 +92,7 @@
                                     <tr class="hover:bg-blue-50 transition-colors duration-150">
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="flex items-center text-sm text-gray-900">
-                                                {{ \Carbon\Carbon::parse($l->date)->format('d M Y') }}
+                                                {{ \Carbon\Carbon::parse($l->date)->format('d/m/y') }}
                                             </div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">

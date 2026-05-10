@@ -152,8 +152,9 @@ class PengajuanController extends Controller
         $pdf->Write(0, $pengajuan->nomor_surat_balasan ?? '-');
 
         //Tanggal
+        $tanggalSurat= $pengajuan->updated_at;
         $pdf->SetXY(146, 57.8); 
-        $pdf->Write(0, "Makassar, " . $pengajuan->updated_at->translatedFormat('d F Y'));
+        $pdf->Write(0, "Makassar, " . $tanggalSurat->translatedFormat('d'). ' ' . bulanSingkat($tanggalSurat) . ' ' . $tanggalSurat->translatedFormat('Y'));
 
         // Tujuan surat
         $pdf->SetXY(18, 85.7); 
@@ -167,18 +168,46 @@ class PengajuanController extends Controller
             $pdf->Write(0, "Fakultas ". $pengajuan->institusi->fakultas . " " . $pengajuan->institusi->nama_institusi);
         }
 
-        // nomor surat pengajuan
-        $pdf->SetXY(128.5, 108.1); 
-        $pdf->Write(0, $pengajuan->no_surat);
-
-        // tanggal pengajuan
+        // isi
         $tanggal = $pengajuan->created_at;
-        $pdf->SetXY(32.8, 113.7); 
-        $pdf->Write(0, 
-            $tanggal->translatedFormat('d') . ' ' . 
-            bulanSingkat($tanggal) . ' ' . 
-            $tanggal->translatedFormat('Y')
-        );
+
+        $teks = "Sehubungan dengan Surat Permohonan Izin Magang No. {$pengajuan->no_surat} "
+            . "tanggal "
+            . $tanggal->translatedFormat('d') . ' ' . bulanSingkat($tanggal) . ' ' . $tanggal->translatedFormat('Y')
+            . " yang diajukan oleh mahasiswa/siswa dari instansi Bapak/Ibu kepada kami, "
+            . "dengan ini kami menyampaikan bahwa permohonan tersebut dapat kami setujui.";
+
+        $x = 18;
+        $y = 108.2;
+        $indent = 10;
+        $width = 174;
+
+        $pdf->SetFont('Times', '', 12);
+        $pdf->setCellHeightRatio(1.5);
+
+        // pecah teks berdasarkan lebar baris pertama
+        $words = explode(' ', $teks);
+        $barisPertama = '';
+        $sisa = '';
+
+        foreach ($words as $i => $word) {
+            $coba = trim($barisPertama . ' ' . $word);
+
+            if ($pdf->GetStringWidth($coba) <= ($width - $indent)) {
+                $barisPertama = $coba;
+            } else {
+                $sisa = implode(' ', array_slice($words, $i));
+                break;
+            }
+        }
+
+        // baris pertama (indent)
+        $pdf->SetXY($x + $indent, $y);
+        $pdf->Cell($width - $indent, 0, $barisPertama, 0, 1, 'J');
+
+        // lanjut paragraf normal
+        $pdf->SetXY($x, $pdf->GetY());
+        $pdf->MultiCell($width, 0, $sisa, 0, 'J');
 
         // ttd
         $pdf->Image(

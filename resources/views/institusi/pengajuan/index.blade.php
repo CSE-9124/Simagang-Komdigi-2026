@@ -28,7 +28,7 @@
                     ['label' => 'Disetujui',        'value' => $pengajuanApproved, 'color' => 'green', 'icon' => 'fa-calendar-times'],
                     ['label' => 'Menunggu Approval','value' => $pengajuanPending,  'color' => 'yellow',    'icon' => 'fa-calendar-minus'],
                     ['label' => 'Revisi',            'value' => $pengajuanRevised,   'color' => 'orange', 'icon' => 'fa-exclamation-circle'],
-                    ['label' => 'Ditolak',          'value' => $pengajuanRejected,  'color' => 'red',  'icon' => 'fa-file-alt'],
+                    ['label' => 'Ditolak',          'value' => $pengajuanRejected,  'color' => 'red',  'icon' => 'fas fa-times-circle'],
                 ];
             @endphp
 
@@ -73,7 +73,7 @@
                                 <tr class="hover:bg-blue-50 transition-colors duration-150">
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div>
-                                            <p class="text-sm text-gray-500 text-center">
+                                            <p class="text-sm text-gray-500">
                                                 {{ $pengajuan->no_surat }}
                                              </p>
                                             
@@ -82,7 +82,7 @@
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div>
                                             <p class="text-sm text-gray-500 text-center">
-                                                {{ $pengajuan->created_at->format('d M Y') }}
+                                                {{ $pengajuan->created_at->format('d/m/y') }}
                                             </p>
                                         </div>
                                     <td class="px-6 py-4 text-left">
