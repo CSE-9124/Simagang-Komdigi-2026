@@ -140,25 +140,54 @@
         /* ── HERO ── */
         .hero {
             position: relative;
-            background: linear-gradient(135deg, #0c2d5e 0%, #1251a3 40%, #0891b2 100%);
             overflow: hidden;
             min-height: 90vh;
             display: flex;
             align-items: center;
         }
-        .hero-blob {
+
+        .hero-bg-image {
             position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.25;
-            pointer-events: none;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+            z-index: 0;
         }
-        .hero-blob-1 { width: 500px; height: 500px; background: #38bdf8; top: -150px; left: -100px; }
-        .hero-blob-2 { width: 400px; height: 400px; background: #818cf8; bottom: -100px; right: 0; }
-        .hero-blob-3 { width: 300px; height: 300px; background: #22d3ee; top: 40%; left: 40%; }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                105deg,
+                rgba(8, 28, 70, 0.53) 0%,
+                rgba(12, 52, 120, 0.70) 50%,
+                rgba(8, 60, 100, 0.347) 100%
+            );
+            z-index: 1;
+        }
+
+        .hero-accent {
+            position: absolute;
+            bottom: -120px;
+            left: -80px;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(34,211,238,0.18) 0%, transparent 70%);
+            z-index: 2;
+            pointer-events: none;
+            animation: pulseAccent 6s ease-in-out infinite alternate;
+        }
+        @keyframes pulseAccent {
+            from { transform: scale(1); opacity: 0.8; }
+            to   { transform: scale(1.15); opacity: 1; }
+        }
 
         .hero-inner {
             position: relative;
+            z-index: 3;
             max-width: 1280px;
             margin: 0 auto;
             padding: 5rem 1.5rem;
@@ -169,58 +198,41 @@
             width: 100%;
         }
 
-        /* Kolom kiri: satu flex column — badge → judul → desc → stats → btns */
         .hero-text-col {
             display: flex;
             flex-direction: column;
         }
 
-        /* .hero-badge {
-            display: inline-flex;
-            align-self: flex-start;
-            align-items: center;
-            gap: 8px;
-            background: rgba(56,189,248,0.18);
-            border: 1px solid rgba(56,189,248,0.35);
-            color: #7dd3fc;
-            font-size: 12px;
-            font-weight: 600;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            padding: 6px 16px;
-            border-radius: 50px;
-            margin-bottom: 1.25rem;
-        } */
         .hero-title {
             font-size: clamp(2rem, 4vw, 3rem);
             font-weight: 800;
             line-height: 1.15;
             color: white;
             margin: 0 0 1.25rem;
+            text-shadow: 0 2px 20px rgba(0,0,0,0.3);
         }
         .hero-title span { color: #7dd3fc; }
 
         .hero-desc {
             font-size: 1rem;
             line-height: 1.75;
-            color: rgba(255,255,255,0.75);
-            margin: 0;          /* stats langsung menyusul */
+            color: rgba(255,255,255,0.82);
+            margin: 0;
             max-width: 480px;
+            text-shadow: 0 1px 8px rgba(0,0,0,0.25);
         }
 
-        /* Stats — tepat di bawah deskripsi */
         .hero-stats {
             display: flex;
             gap: 2rem;
             margin-top: 1.5rem;
             padding-bottom: 1.75rem;
-            border-bottom: 1px solid rgba(255,255,255,0.14);
+            border-bottom: 1px solid rgba(255,255,255,0.2);
         }
-        .hero-stat-num { font-size: 1.75rem; font-weight: 800; color: white; line-height: 1; }
-        .hero-stat-label { font-size: 11px; color: rgba(255,255,255,0.55); margin-top: 4px; }
-        .hero-stat-divider { width: 1px; background: rgba(255,255,255,0.14); flex-shrink: 0; }
+        .hero-stat-num { font-size: 1.75rem; font-weight: 800; color: white; line-height: 1; text-shadow: 0 2px 12px rgba(0,0,0,0.2); }
+        .hero-stat-label { font-size: 11px; color: rgba(255,255,255,0.65); margin-top: 4px; }
+        .hero-stat-divider { width: 1px; background: rgba(255,255,255,0.2); flex-shrink: 0; }
 
-        /* Tombol — di bawah stats */
         .hero-btns {
             display: flex;
             flex-wrap: wrap;
@@ -238,42 +250,50 @@
             font-size: 15px;
             border-radius: 9999px;
             text-decoration: none;
-            box-shadow: 0 6px 28px rgba(34,211,238,0.28);
+            box-shadow: 0 6px 28px rgba(34,211,238,0.35);
             transition: all 0.25s;
         }
-        .btn-primary:hover { background: #38bdf8; transform: translateY(-2px); }
+        .btn-primary:hover { background: #38bdf8; transform: translateY(-2px); box-shadow: 0 10px 36px rgba(34,211,238,0.45); }
         .btn-outline {
             display: inline-flex;
             align-items: center;
             gap: 10px;
             padding: 14px 32px;
-            background: rgba(255,255,255,0.12);
-            border: 1.5px solid rgba(255,255,255,0.28);
+            background: rgba(255,255,255,0.15);
+            border: 1.5px solid rgba(255,255,255,0.4);
             color: white;
             font-weight: 600;
             font-size: 15px;
             border-radius: 9999px;
             text-decoration: none;
+            backdrop-filter: blur(6px);
             transition: all 0.25s;
         }
-        .btn-outline:hover { background: rgba(255,255,255,0.22); }
+        .btn-outline:hover { background: rgba(255,255,255,0.28); border-color: rgba(255,255,255,0.6); }
 
-        /* Kolom kanan: gambar */
         .hero-image-wrap {
             width: 100%;
             display: flex;
             justify-content: flex-end;
         }
-        .hero-image-card { width: 100%; }
+        .hero-image-card {
+            width: 100%;
+            background: rgba(255,255,255,0.06);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 20px;
+            padding: 12px;
+            box-shadow: 0 32px 80px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.05);
+        }
         .hero-image-card img {
             width: 100%;
             max-width: 100%;
             height: auto;
             object-fit: contain;
             display: block;
+            border-radius: 12px;
         }
 
-        /* ── SECTION WRAPPER ── */
         .section-header { text-align: center; max-width: 640px; margin: 0 auto 3.5rem; }
         .section-eyebrow {
             display: inline-block;
@@ -347,7 +367,6 @@
         .process-title { font-size: 1.2rem; font-weight: 700; color: #0f2d4a; margin: 0 0 0.6rem; }
         .process-desc { font-size: 0.95rem; color: #4b6580; line-height: 1.6; margin: 0; }
 
-        /* Carousel shared styles */
         .process-carousel { display: none; overflow: hidden; }
         .testi-carousel  { display: none; overflow: hidden; }
         .carousel-wrapper { display: flex; transition: transform 0.4s ease-out; }
@@ -600,13 +619,18 @@
             box-shadow: 0 5px 15px rgba(34, 211, 238, 0.2);
         }
 
+        /* Padding body agar konten tidak tertutup fixed footer */
+        body { padding-bottom: 60px; } /* tinggi footer desktop */
+
         /* Responsif untuk Mobile */
         @media (max-width: 768px) {
             .main-footer { padding: 10px 0; }
-            .footer-simple-inner { flex-direction: column; gap: 8px; }
+            .footer-simple-inner { flex-direction: column; gap: 8px; padding: 4px 1rem; }
             .copyright-simple { order: 3; font-size: 11px; }
             .footer-logos-simple { order: 1; justify-content: center; }
             .social-links-simple { order: 2; justify-content: center; }
+            /* Tambah padding bawah lebih besar di mobile karena footer jadi lebih tinggi (stacked) */
+            body { padding-bottom: 110px; }
         }
 
 
@@ -858,36 +882,33 @@
 
 <!-- ===== HERO ===== -->
 <section id="hero" class="hero">
-    <div class="hero-blob hero-blob-1"></div>
-    <div class="hero-blob hero-blob-2"></div>
-    <div class="hero-blob hero-blob-3"></div>
+    <!-- Background image — ganti path sesuai lokasi foto Anda -->
+    <img src="{{ asset('storage/photos-landingpage/hero-bg.png') }}" alt="" class="hero-bg-image" aria-hidden="true">
+    <!-- Dark transparent overlay agar teks tetap terbaca -->
+    <div class="hero-overlay"></div>
+    <!-- Accent glow kiri bawah -->
+    <div class="hero-accent"></div>
 
     <div class="hero-inner">
 
         <div class="hero-text-col">
-{{-- 
-            <div class="hero-badge">
-                <i class="fas fa-circle" style="font-size:6px"></i>
-                Sistem Manajemen Magang
-            </div> --}}
-
             <h1 class="hero-title">
-                Sistem Magang untuk <span>Kampus & Sekolah</span> Masa Kini
+                Sitem Magang untuk <span>Kampus dan Sekolah</span> Masa Kini
             </h1>
 
             <p class="hero-desc">
-                BBLSDM Komdigi Makassar menghadirkan solusi digital untuk mempermudah pengelolaan peserta magang secara efisien dan real time.
+                Dapatkan pengalaman terbaik hanya melalui mitra terpercaya. Masa depan menawarkan peluang yang lebih besar saatnya tumbuh menjadi talenta profesional dan uji kemampuanmu bersama BBLSDM Komdigi Makassar sekarang.
             </p>
 
             <div class="hero-stats">
                 <div>
                     <div class="hero-stat-num">{{ $totalPesertaAktif }}</div>
-                    <div class="hero-stat-label">Peserta Aktif</div>
+                    <div class="hero-stat-label">Siswa/Mahasiswa</div>
                 </div>
                 <div class="hero-stat-divider"></div>
                 <div>
                     <div class="hero-stat-num">11+</div>
-                    <div class="hero-stat-label">Institusi Bergabung</div>
+                    <div class="hero-stat-label">Mitra pendidikan dan industri</div>
                 </div>
                 <div class="hero-stat-divider"></div>
                 <div>
@@ -909,11 +930,11 @@
 
         </div>
 
-        <div class="hero-image-wrap">
+        {{-- <div class="hero-image-wrap">
             <div class="hero-image-card">
-                <img src="{{ asset('storage/tutorial/hero.png') }}" alt="Dashboard Simagang">
+                <img src="{{ asset('storage/photos-landingpage/hero.png') }}" alt="Dashboard Simagang">
             </div>
-        </div>
+        </div> --}}
 
     </div>
 </section>
@@ -1217,34 +1238,34 @@
                 <div class="news-main-overlay absolute inset-0 bg-gradient-to-t from-[#020b1a] via-transparent to-transparent flex flex-direction-column justify-end p-10">
                     <span class="bg-[#00f2ff] text-[#020b1a] text-[10px] font-bold px-3 py-1 rounded-full w-fit mb-4 uppercase">Kegiatan</span>
                     <h3 class="text-2xl md:text-3xl font-bold text-white mb-3">Kamis Bersih & Senam</h3>
-                    <p class="text-gray-300 text-sm">6 Mei 2026</p>
+                    <p class="text-gray-300 text-sm">16 April 2026</p>
                 </div>
             </div>
 
             <div class="min-w-full h-full relative">
-                <img src="{{ url('storage/photos-landingpage/pengajian.png') }}" class="w-full h-full object-cover" alt="Berita 3">
+                <img src="{{ url('storage/photos-landingpage/sharingsession02.jpg') }}" class="w-full h-full object-cover" alt="Berita 3">
                 <div class="news-main-overlay absolute inset-0 bg-gradient-to-t from-[#020b1a] via-transparent to-transparent flex flex-direction-column justify-end p-10">
                     <span class="bg-[#00f2ff] text-[#020b1a] text-[10px] font-bold px-3 py-1 rounded-full w-fit mb-4 uppercase">Update</span>
-                    <h3 class="text-2xl md:text-3xl font-bold text-white mb-3">Kajian Rutin</h3>
+                    <h3 class="text-2xl md:text-3xl font-bold text-white mb-3">Sharing Session : Bijak Berkomentar di Era Digital</h3>
                     <p class="text-gray-300 text-sm">7 Mei 2026</p>
                 </div>
             </div>
 
             <div class="min-w-full h-full relative">
-                <img src="{{ url('storage/photos-landingpage/fotobersama.png') }}" class="w-full h-full object-cover" alt="Berita 2">
+                <img src="{{ url('storage/photos-landingpage/diskusi02.jpeg') }}" class="w-full h-full object-cover" alt="Berita 2">
                 <div class="news-main-overlay absolute inset-0 bg-gradient-to-t from-[#020b1a] via-transparent to-transparent flex flex-direction-column justify-end p-10">
                     <span class="bg-[#00f2ff] text-[#020b1a] text-[10px] font-bold px-3 py-1 rounded-full w-fit mb-4 uppercase">Kegiatan</span>
-                    <h3 class="text-2xl md:text-3xl font-bold text-white mb-3">Foto Bersama</h3>
-                    <p class="text-gray-300 text-sm">6 Mei 2026</p>
+                    <h3 class="text-2xl md:text-3xl font-bold text-white mb-3">Diskusi Bersama Mentor</h3>
+                    <p class="text-gray-300 text-sm">1 April 2026</p>
                 </div>
             </div>
 
             <div class="min-w-full h-full relative">
-                <img src="{{ url('storage/photos-landingpage/sharingsession02.jpg') }}" class="w-full h-full object-cover" alt="Berita 2">
+                <img src="{{ url('storage/photos-landingpage/sharingsession03.jpeg') }}" class="w-full h-full object-cover" alt="Berita 2">
                 <div class="news-main-overlay absolute inset-0 bg-gradient-to-t from-[#020b1a] via-transparent to-transparent flex flex-direction-column justify-end p-10">
                     <span class="bg-[#00f2ff] text-[#020b1a] text-[10px] font-bold px-3 py-1 rounded-full w-fit mb-4 uppercase">Kegiatan</span>
-                    <h3 class="text-2xl md:text-3xl font-bold text-white mb-3">Sharing Session : Bijak Berkomentar di Era Digital</h3>
-                    <p class="text-gray-300 text-sm">8 Mei 2026</p>
+                    <h3 class="text-2xl md:text-3xl font-bold text-white mb-3">Sharing Session : </h3>
+                    <p class="text-gray-300 text-sm">1 April 2026</p>
                 </div>
             </div>
 
@@ -1253,7 +1274,26 @@
                 <div class="news-main-overlay absolute inset-0 bg-gradient-to-t from-[#020b1a] via-transparent to-transparent flex flex-direction-column justify-end p-10">
                     <span class="bg-[#00f2ff] text-[#020b1a] text-[10px] font-bold px-3 py-1 rounded-full w-fit mb-4 uppercase">Kegiatan</span>
                     <h3 class="text-2xl md:text-3xl font-bold text-white mb-3">Mengerjakan Project</h3>
-                    <p class="text-gray-300 text-sm">8 Mei 2026</p>
+                    <p class="text-gray-300 text-sm">12 Februari 2026</p>
+                </div>
+            </div>
+
+
+            <div class="min-w-full h-full relative">
+                <img src="{{ url('storage/photos-landingpage/diskusi.jpeg') }}" class="w-full h-full object-cover" alt="Berita 2">
+                <div class="news-main-overlay absolute inset-0 bg-gradient-to-t from-[#020b1a] via-transparent to-transparent flex flex-direction-column justify-end p-10">
+                    <span class="bg-[#00f2ff] text-[#020b1a] text-[10px] font-bold px-3 py-1 rounded-full w-fit mb-4 uppercase">Kegiatan</span>
+                    <h3 class="text-2xl md:text-3xl font-bold text-white mb-3">Diskusi Kelas</h3>
+                    <p class="text-gray-300 text-sm">1 April 2026</p>
+                </div>
+            </div>
+
+            <div class="min-w-full h-full relative">
+                <img src="{{ url('storage/photos-landingpage/sharingsession04.jpeg') }}" class="w-full h-full object-cover" alt="Berita 2">
+                <div class="news-main-overlay absolute inset-0 bg-gradient-to-t from-[#020b1a] via-transparent to-transparent flex flex-direction-column justify-end p-10">
+                    <span class="bg-[#00f2ff] text-[#020b1a] text-[10px] font-bold px-3 py-1 rounded-full w-fit mb-4 uppercase">Kegiatan</span>
+                    <h3 class="text-2xl md:text-3xl font-bold text-white mb-3">Sharing Session : Data Visualization</h3>
+                    <p class="text-gray-300 text-sm">1 April 2026</p>
                 </div>
             </div>
         </div>
