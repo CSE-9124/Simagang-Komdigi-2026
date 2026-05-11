@@ -2,138 +2,224 @@
 
 @section('title', 'Pantau Logbook - Sistem Magang')
 
+@push('styles')
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+        * {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .dash-bg {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #e8eeff 0%, #f0f4ff 40%, #e4ecff 100%);
+        }
+
+        .hero-strip {
+            background: linear-gradient(100deg, #1e3a8a 0%, #3b4fd8 50%, #4f46e5 100%);
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(20, 40, 120, 0.16);
+            color: #fff;
+        }
+
+        .hero-strip::before {
+            content: '';
+            position: absolute;
+            top: -60px;
+            right: -60px;
+            width: 220px;
+            height: 220px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 50%;
+        }
+
+        .hero-strip::after {
+            content: '';
+            position: absolute;
+            bottom: -80px;
+            left: 30%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 50%;
+        }
+
+        .panel {
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 1px 3px rgba(30, 58, 138, 0.06), 0 4px 20px rgba(30, 58, 138, 0.06);
+            overflow: hidden;
+        }
+
+        .input-main {
+            width: 100%;
+            padding: 0.6rem 0.9rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.6rem;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+            transition: all .15s ease;
+        }
+
+        .input-main:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+        }
+
+        @media (max-width:768px) {
+            .hero-title {
+                font-size: 1.6rem;
+            }
+
+            .action-mobile {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .table-responsive {
+                overflow: auto;
+            }
+        }
+
+        .table-min-w {
+            min-width: 900px;
+        }
+    </style>
+@endpush
+
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-blue-100 py-8">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        <!-- Header -->
-        <div class="mb-8">
-            <h1 class="text-4xl font-bold leading-tight bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-3 pb-2">
-                Pantau Logbook Anak Magang
-            </h1>
-            <p class="text-gray-600">Monitoring aktivitas harian anak magang</p>
-        </div>
+    <div class="dash-bg py-8 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
 
-        <!-- Filter Form -->
-        <div class="bg-white rounded-2xl shadow-lg mb-8">
-            <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-4 rounded-t-2xl">
-                <h2 class="text-xl font-bold text-white flex items-center">
-                    <i class="fas fa-filter mr-3"></i>
-                    Filter Data
-                </h2>
+            <div class="hero-strip mb-6">
+                <div class="relative z-10 px-6 py-7">
+                    <h1 class="hero-title text-4xl font-bold mb-1">Pantau Logbook Anak Magang</h1>
+                    <p class="text-blue-100">Monitoring aktivitas harian anak magang</p>
+                </div>
             </div>
-            <form method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4 p-6">
-                <div>
-                    <label class="block text-sm font-medium text-gray-600 mb-2">Cari (nama/institusi)</label>
-                    <input type="text" name="q" value="{{ request('q') }}" 
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" 
-                           placeholder="Ketik untuk mencari..." />
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-600 mb-2">Dari Tanggal</label>
-                    <input type="date" name="date_from" value="{{ request('date_from') }}" 
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" />
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-600 mb-2">Hingga Tanggal</label>
-                    <input type="date" name="date_to" value="{{ request('date_to') }}" 
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" />
-                </div>
-                <div class="flex items-end gap-2">
-                    <button class="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center" 
-                            type="submit">
-                        <i class="fas fa-filter mr-2"></i>
-                        Filter
-                    </button>
-                    @if(request()->anyFilled(['q', 'date_from', 'date_to']))
-                        <a href="{{ route('admin.logbook.index') }}" class="bg-blue-100 hover:bg-blue-200 text-blue-700 font-bold py-2 px-4 rounded-lg transition duration-200">
-                            <i class="fas fa-times"></i>
-                        </a>
-                    @endif
-                </div>
-            </form>
-        </div>
 
-        <!-- Logbook Table -->
-        <div class="bg-white rounded-2xl shadow-md border border-blue-100 overflow-hidden">
-            <div class="bg-blue-600 px-6 py-4">
-                <h2 class="text-xl font-bold text-white flex items-center">
-                    <i class="fas fa-book mr-3"></i>
-                    Data Logbook
-                </h2>
+            <!-- Filter Form -->
+            <div class="panel mb-6">
+                <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-4">
+                    <h2 class="text-xl font-bold text-white flex items-center"><i class="fas fa-filter mr-3"></i>Filter Data
+                    </h2>
+                </div>
+                <form method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4 p-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-2">Cari (nama/institusi)</label>
+                        <input type="text" name="q" value="{{ request('q') }}" class="input-main"
+                            placeholder="Ketik untuk mencari..." />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-2">Dari Tanggal</label>
+                        <input type="date" name="date_from" value="{{ request('date_from') }}" class="input-main" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-2">Hingga Tanggal</label>
+                        <input type="date" name="date_to" value="{{ request('date_to') }}" class="input-main" />
+                    </div>
+                    <div class="flex items-end gap-2">
+                        <button type="submit"
+                            class="action-mobile flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center">
+                            <i class="fas fa-filter mr-2"></i>Filter
+                        </button>
+                        @if (request()->anyFilled(['q', 'date_from', 'date_to']))
+                            <a href="{{ route('admin.logbook.index') }}"
+                                class="bg-blue-100 hover:bg-blue-200 text-blue-700 font-bold py-2 px-4 rounded-lg transition duration-200 flex items-center justify-center">
+                                <i class="fas fa-times"></i>
+                            </a>
+                        @endif
+                    </div>
+                </form>
             </div>
-            <div class="p-6">
-                <div class="overflow-x-auto overflow-y-auto max-h-[500px]">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead>
-                            <tr class="bg-blue-50">
-                                <th class="px-6 py-4 text-center text-xs font-bold text-blue-900 uppercase tracking-wider rounded-tl-lg">Nama</th>
-                                <th class="px-6 py-4 text-center text-xs font-bold text-blue-900 uppercase tracking-wider">Institusi</th>
-                                <th class="px-6 py-4 text-center text-xs font-bold text-blue-900 uppercase tracking-wider">Tanggal</th>
-                                <th class="px-6 py-4 text-center text-xs font-bold text-blue-900 uppercase tracking-wider">Aktivitas</th>
-                                <th class="px-6 py-4 text-center text-xs font-bold text-blue-900 uppercase tracking-wider rounded-tr-lg">Foto</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-100">
-                            @forelse($logbooks as $l)
-                                <tr class="hover:bg-blue-50 transition-colors duration-150">
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            @if($l->intern->photo_path)
-                                                <img src="{{ url('storage/' . $l->intern->photo_path) }}"
+
+            <!-- Logbook Table -->
+            <div class="panel overflow-hidden">
+                <div class="bg-blue-600 px-6 py-4">
+                    <h2 class="text-xl font-bold text-white flex items-center"><i class="fas fa-book mr-3"></i>Data Logbook
+                    </h2>
+                </div>
+                <div class="p-6">
+                    <div class="table-responsive max-h-[560px]">
+                        <table class="min-w-full table-min-w divide-y divide-gray-200">
+                            <thead>
+                                <tr class="bg-blue-50">
+                                    <th
+                                        class="px-6 py-4 text-center text-xs font-bold text-blue-900 uppercase tracking-wider rounded-tl-lg">
+                                        Nama</th>
+                                    <th
+                                        class="px-6 py-4 text-center text-xs font-bold text-blue-900 uppercase tracking-wider">
+                                        Institusi</th>
+                                    <th
+                                        class="px-6 py-4 text-center text-xs font-bold text-blue-900 uppercase tracking-wider">
+                                        Tanggal</th>
+                                    <th
+                                        class="px-6 py-4 text-center text-xs font-bold text-blue-900 uppercase tracking-wider">
+                                        Aktivitas</th>
+                                    <th
+                                        class="px-6 py-4 text-center text-xs font-bold text-blue-900 uppercase tracking-wider rounded-tr-lg">
+                                        Foto</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-100">
+                                @forelse($logbooks as $l)
+                                    <tr class="hover:bg-blue-50 transition-colors duration-150">
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center">
+                                                @if ($l->intern->photo_path)
+                                                    <img src="{{ url('storage/' . $l->intern->photo_path) }}"
                                                         class="w-10 h-10 rounded-full object-cover border-2 border-blue-200 mr-3"
                                                         alt="{{ $l->intern->name }}">
-                                             @else
-                                                <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3 border-2 border-blue-200">
-                                                    <i class="fas fa-user text-blue-600"></i>
-                                                </div>
+                                                @else
+                                                    <div
+                                                        class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3 border-2 border-blue-200">
+                                                        <i class="fas fa-user text-blue-600"></i></div>
+                                                @endif
+                                                <span
+                                                    class="text-sm font-medium text-gray-900">{{ $l->intern->name }}</span>
+                                            </div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm text-gray-600">{{ $l->intern->institution }}</div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="text-sm text-gray-600">
+                                                {{ \Carbon\Carbon::parse($l->date)->format('d/m/y') }}</div>
+                                        </td>
+                                        <td class="px-6 py-4">
+                                            <div class="text-sm text-gray-900">{{ $l->activity }}</div>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            @if ($l->photo_path)
+                                                @php $logbookFilename = basename($l->photo_path); @endphp
+                                                @php $logbookUrl = URL::temporarySignedRoute('admin.logbook.photo', now()->addSeconds(30), ['filename' => $logbookFilename]); @endphp
+                                                <img src="{{ $logbookUrl }}" alt="Logbook"
+                                                    class="w-12 h-12 object-cover rounded-lg border-2 border-blue-200 cursor-pointer hover:border-blue-400 transition-all"
+                                                    onclick="window.open('{{ $logbookUrl }}', '_blank')"
+                                                    title="Klik untuk melihat full size">
+                                            @else
+                                                <span class="text-gray-400">-</span>
                                             @endif
-                                            <span class="text-sm font-medium text-gray-900">
-                                                {{ $l->intern->name }}
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-600">{{ $l->intern->institution }}</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-600">{{ \Carbon\Carbon::parse($l->date)->format('d/m/y') }}</div>
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <div class="text-sm text-gray-900">{{ $l->activity }}</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        @if($l->photo_path)
-                                            @php $logbookFilename = basename($l->photo_path); @endphp
-                                            @php $logbookUrl = URL::temporarySignedRoute('admin.logbook.photo', now()->addSeconds(30), ['filename' => $logbookFilename]); @endphp
-                                            <img src="{{ $logbookUrl }}" 
-                                                alt="Logbook" 
-                                                class="w-12 h-12 object-cover rounded-lg border-2 border-blue-200 cursor-pointer hover:border-blue-400 transition-all" 
-                                                onclick="window.open('{{ $logbookUrl }}', '_blank')" 
-                                                title="Klik untuk melihat full size">
-                                        @else
-                                            <span class="text-gray-400">-</span>
-                                        @endif
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="5" class="px-6 py-8 text-center">
-                                        <div class="flex flex-col items-center justify-center text-gray-500">
-                                            <i class="fas fa-inbox text-4xl mb-3 text-gray-300"></i>
-                                            <p class="text-sm">Tidak ada data logbook.</p>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-                <div class="mt-6">
-                    {{ $logbooks->links() }}
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="5" class="px-6 py-8 text-center">
+                                            <div class="flex flex-col items-center justify-center text-gray-500">
+                                                <i class="fas fa-inbox text-4xl mb-3 text-gray-300"></i>
+                                                <p class="text-sm">Tidak ada data logbook.</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="mt-6">{{ $logbooks->links() }}</div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 @endsection

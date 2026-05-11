@@ -2,65 +2,245 @@
 
 @section('title', 'Mikro Skill Anak Bimbingan - Sistem Magang')
 
+@push('styles')
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap');
+
+        *,
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .mono {
+            font-family: 'DM Mono', monospace;
+        }
+
+        .dash-bg {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #e8eeff 0%, #f0f4ff 40%, #e4ecff 100%);
+        }
+
+        .hero-strip {
+            background: linear-gradient(110deg, #1e3a8a 0%, #3b4fd8 55%, #4f46e5 100%);
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(20, 40, 120, 0.16);
+        }
+
+        .hero-strip::before {
+            content: '';
+            position: absolute;
+            top: -70px;
+            right: -50px;
+            width: 220px;
+            height: 220px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .hero-strip::after {
+            content: '';
+            position: absolute;
+            bottom: -100px;
+            left: 18%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .stat-tile {
+            background: #fff;
+            border-radius: 18px;
+            padding: 18px 20px;
+            box-shadow: 0 1px 3px rgba(20, 40, 120, 0.06), 0 4px 16px rgba(20, 40, 120, 0.06);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            transition: transform .2s ease, box-shadow .2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-tile::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            border-radius: 0 0 18px 18px;
+        }
+
+        .stat-tile:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 28px rgba(20, 40, 120, 0.12);
+        }
+
+        .tile-blue::after {
+            background: linear-gradient(90deg, #3b82f6, #6366f1);
+        }
+
+        .tile-indigo::after {
+            background: linear-gradient(90deg, #6366f1, #8b5cf6);
+        }
+
+        .tile-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .panel {
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 1px 3px rgba(20, 40, 120, 0.06), 0 4px 18px rgba(20, 40, 120, 0.06);
+            overflow: hidden;
+        }
+
+        .panel-header {
+            background: linear-gradient(100deg, #1e3a8a 0%, #3b4fd8 100%);
+            padding: 16px 22px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .panel-header h2 {
+            color: #fff;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 0.01em;
+            margin: 0;
+        }
+
+        .panel-body {
+            padding: 20px 22px;
+        }
+
+        .section-card {
+            background: #f8faff;
+            border: 1px solid #e8eeff;
+            border-radius: 18px;
+        }
+
+        .field-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #1e3a8a;
+        }
+
+        .field-select {
+            width: 100%;
+            border-radius: 14px;
+            border: 1px solid #dbe3f0;
+            background: #fff;
+            padding: 0.9rem 1rem;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+        }
+
+        .field-select:focus {
+            outline: none;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            border: 1px solid #e8eeff;
+            border-radius: 18px;
+        }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+    </style>
+@endpush
+
 @section('content')
-    <div class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-blue-100 py-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="dash-bg py-8">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+            <div class="hero-strip px-6 py-7 sm:px-8 sm:py-8">
+                <div class="relative z-10 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+                    <div class="max-w-3xl text-white">
+                        <p class="text-xs sm:text-sm uppercase tracking-[0.3em] text-blue-100/80">Institusi Dashboard</p>
+                        <h1 class="mt-2 text-3xl sm:text-4xl font-extrabold leading-tight">Mikro Skill Anak Magang</h1>
+                        <p class="mt-3 text-sm sm:text-base text-blue-100/90">Pantau pencapaian dan pengembangan keterampilan
+                            anak magang.</p>
+                    </div>
 
-            <div class="mb-8">
-                <h1 class="text-3xl sm:text-4xl font-bold text-blue-600 mb-3">Mikro Skill Anak Magang</h1>
-                <p class="text-sm sm:text-base text-gray-600">Pantau pencapaian dan pengembangan keterampilan anak magang</p>
-            </div>
-
-            {{-- ===== STATS CARDS ===== --}}
-            <div class="mb-6 grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                {{-- Total Submissions --}}
-                <div
-                    class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-blue-100">
-                    <div class="p-4 sm:p-6 flex items-center justify-between">
-                        <div>
-                            <p class="text-xs font-medium text-gray-500 mb-1">Total Submissions</p>
-                            <h3 class="text-2xl sm:text-3xl font-bold text-gray-900">{{ $submissions->total() }}</h3>
-                        </div>
-                        <div
-                            class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
-                            <i class="fas fa-layer-group text-blue-600 text-base sm:text-lg"></i>
+                    <div
+                        class="bg-white/10 border border-white/10 rounded-2xl px-4 py-4 text-white shadow-sm backdrop-blur-sm">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="flex h-11 w-11 items-center justify-center rounded-2xl bg-white text-blue-600 shadow-sm">
+                                <i class="fas fa-layer-group"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs uppercase tracking-[0.25em] text-blue-100/80">Data</p>
+                                <p class="text-base font-bold">{{ $submissions->total() }} Submission</p>
+                            </div>
                         </div>
                     </div>
-                    <div class="h-1 bg-gradient-to-r from-blue-500 to-blue-600"></div>
-                </div>
-
-                {{-- Unique Interns --}}
-                <div
-                    class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-blue-100">
-                    <div class="p-4 sm:p-6 flex items-center justify-between">
-                        <div>
-                            <p class="text-xs font-medium text-gray-500 mb-1">Unique Interns</p>
-                            <h3 class="text-2xl sm:text-3xl font-bold text-gray-900">
-                                {{ $submissions->pluck('intern_id')->unique()->count() }}
-                            </h3>
-                        </div>
-                        <div
-                            class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-indigo-100 flex items-center justify-center flex-shrink-0">
-                            <i class="fas fa-users text-indigo-600 text-base sm:text-lg"></i>
-                        </div>
-                    </div>
-                    <div class="h-1 bg-gradient-to-r from-blue-500 to-indigo-600"></div>
                 </div>
             </div>
 
-            {{-- ===== FILTER ===== --}}
-            <div
-                class="bg-gradient-to-br from-white to-blue-50 rounded-2xl shadow-xl border border-blue-200 overflow-hidden mb-6">
-                <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-4 sm:px-6 py-3 sm:py-5">
-                    <h2 class="text-lg sm:text-xl font-bold text-white">Filter Data</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                <div class="stat-tile tile-blue">
+                    <div class="flex items-center justify-between gap-4">
+                        <div>
+                            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Total Submissions</p>
+                            <h3 class="mt-2 text-3xl font-extrabold text-slate-900">{{ $submissions->total() }}</h3>
+                        </div>
+                        <div class="tile-icon bg-gradient-to-br from-blue-500 to-indigo-600">
+                            <i class="fas fa-layer-group"></i>
+                        </div>
+                    </div>
+                    <p class="text-sm text-slate-500">Seluruh submission mikro skill.</p>
                 </div>
-                <div class="p-4 sm:p-6">
+
+                <div class="stat-tile tile-indigo">
+                    <div class="flex items-center justify-between gap-4">
+                        <div>
+                            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Unique Interns</p>
+                            <h3 class="mt-2 text-3xl font-extrabold text-slate-900">
+                                {{ $submissions->pluck('intern_id')->unique()->count() }}</h3>
+                        </div>
+                        <div class="tile-icon bg-gradient-to-br from-indigo-500 to-purple-600">
+                            <i class="fas fa-users"></i>
+                        </div>
+                    </div>
+                    <p class="text-sm text-slate-500">Jumlah anak magang.</p>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <i class="fas fa-filter text-blue-200 text-base"></i>
+                    <h2>Filter Data</h2>
+                </div>
+                <div class="panel-body">
                     <form method="GET" action="{{ route('institusi.microskill.index') }}">
-                        <div class="flex flex-col sm:flex-row justify-between gap-3 sm:gap-5">
-                            <div class="flex-1 flex flex-col">
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">Anak Magang</label>
-                                <select name="intern_id"
-                                    class="px-3 sm:px-4 py-2 sm:py-2.5 border-2 border-gray-300 rounded-xl text-sm sm:text-base text-gray-700 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all hover:border-blue-400 appearance-none bg-white cursor-pointer shadow-sm hover:shadow-md">
+                        <div class="flex flex-col lg:flex-row lg:items-end gap-4">
+                            <div class="flex-1">
+                                <label class="field-label">Anak Magang</label>
+                                <select name="intern_id" class="field-select">
                                     <option value="">-- Semua Anak Magang --</option>
                                     @foreach ($interns as $intern)
                                         <option value="{{ $intern->id }}" @selected(request('intern_id') == $intern->id)>
@@ -70,16 +250,15 @@
                                 </select>
                             </div>
 
-                            <div class="flex items-end gap-2 flex-shrink-0">
+                            <div class="flex items-center gap-2">
                                 <button type="submit"
-                                    class="flex-1 sm:flex-none inline-flex items-center justify-center px-4 sm:px-6 py-2 sm:py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold text-sm sm:text-base rounded-xl hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95 transition-all duration-300">
-                                    <i class="fas fa-search mr-1 sm:mr-2"></i>
-                                    <span>Cari</span>
+                                    class="inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-lg transition hover:shadow-xl">
+                                    <i class="fas fa-search mr-2"></i>Cari
                                 </button>
                                 @if (request()->filled('intern_id'))
                                     <a href="{{ route('institusi.microskill.index') }}"
-                                        class="inline-flex items-center justify-center bg-blue-100 hover:bg-blue-200 text-blue-700 font-bold py-2 sm:py-2.5 px-3 sm:px-4 rounded-xl transition duration-200 shadow-md hover:shadow-lg transform hover:scale-105 active:scale-95">
-                                        <i class="fas fa-times text-lg"></i>
+                                        class="inline-flex items-center justify-center rounded-2xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm font-semibold text-blue-700 transition hover:bg-blue-100">
+                                        <i class="fas fa-times"></i>
                                     </a>
                                 @endif
                             </div>
@@ -88,13 +267,13 @@
                 </div>
             </div>
 
-            {{-- ===== TABEL ===== --}}
-            <div class="bg-white rounded-2xl shadow-xl border border-blue-100 overflow-hidden">
-                <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-4 sm:px-6 py-3 sm:py-5">
-                    <h2 class="text-lg sm:text-xl font-bold text-white">Data Mikro Skill</h2>
+            <div class="panel">
+                <div class="panel-header">
+                    <i class="fas fa-table text-blue-200 text-base"></i>
+                    <h2>Data Mikro Skill</h2>
                 </div>
-                <div class="p-3 sm:p-6 overflow-x-auto">
-                    <div class="overflow-x-auto rounded-xl border border-gray-200">
+                <div class="panel-body">
+                    <div class="table-wrap">
                         <table class="w-full divide-y divide-gray-200">
                             <thead>
                                 <tr class="bg-gradient-to-r from-blue-600 to-indigo-600">
@@ -114,8 +293,7 @@
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
                                 @forelse($submissions as $s)
-                                    <tr
-                                        class="hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-300 border-b border-gray-200">
+                                    <tr class="hover:bg-blue-50 transition-colors duration-150">
                                         <td class="px-3 sm:px-6 py-3 sm:py-5 whitespace-nowrap">
                                             <div class="flex items-center gap-2 sm:gap-3">
                                                 @if ($s->intern->photo_path)
@@ -129,19 +307,20 @@
                                                     </div>
                                                 @endif
                                                 <span
-                                                    class="text-xs sm:text-sm font-semibold text-gray-900 truncate">{{ $s->intern->name }}</span>
+                                                    class="text-xs sm:text-sm font-semibold text-slate-900 truncate">{{ $s->intern->name }}</span>
                                             </div>
                                         </td>
                                         <td class="px-3 sm:px-6 py-3 sm:py-5">
-                                            <span
-                                                class="text-xs sm:text-sm font-medium text-gray-900 truncate">{{ Str::limit($s->title, 40) }}</span>
+                                            <span class="text-xs sm:text-sm font-medium text-slate-700">
+                                                {{ Str::limit($s->title, 40) }}
+                                            </span>
                                         </td>
                                         <td class="px-3 sm:px-6 py-3 sm:py-5 whitespace-nowrap">
                                             <div class="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm">
-                                                <span class="text-gray-700 font-medium">
+                                                <span class="font-semibold text-slate-700">
                                                     {{ $s->submitted_at ? \Carbon\Carbon::parse($s->submitted_at)->format('d/m/y') : '-' }}
                                                 </span>
-                                                <span class="text-gray-500 text-xs hidden sm:inline">
+                                                <span class="text-slate-500 text-xs hidden sm:inline">
                                                     {{ $s->submitted_at ? \Carbon\Carbon::parse($s->submitted_at)->format('H:i') : '' }}
                                                 </span>
                                             </div>
@@ -155,8 +334,8 @@
                                                     title="Klik untuk melihat full size" />
                                             @else
                                                 <div
-                                                    class="inline-flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-gray-100 rounded-lg border-2 border-gray-200">
-                                                    <i class="fas fa-image text-gray-300 text-sm sm:text-lg"></i>
+                                                    class="inline-flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-slate-100 rounded-lg border-2 border-slate-200">
+                                                    <i class="fas fa-image text-slate-300 text-sm sm:text-lg"></i>
                                                 </div>
                                             @endif
                                         </td>
@@ -186,7 +365,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 @endsection

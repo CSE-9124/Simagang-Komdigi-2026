@@ -2,226 +2,358 @@
 
 @section('title', 'Anak Magang - Sistem Magang')
 
+@push('styles')
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap');
+
+        *,
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .mono {
+            font-family: 'DM Mono', monospace;
+        }
+
+        .dash-bg {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #e8eeff 0%, #f0f4ff 40%, #e4ecff 100%);
+        }
+
+        .hero-strip {
+            background: linear-gradient(110deg, #1e3a8a 0%, #3b4fd8 55%, #4f46e5 100%);
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(20, 40, 120, 0.16);
+        }
+
+        .hero-strip::before {
+            content: '';
+            position: absolute;
+            top: -70px;
+            right: -50px;
+            width: 220px;
+            height: 220px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .hero-strip::after {
+            content: '';
+            position: absolute;
+            bottom: -100px;
+            left: 18%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .stat-tile {
+            background: #fff;
+            border-radius: 18px;
+            padding: 18px 20px;
+            box-shadow: 0 1px 3px rgba(20, 40, 120, 0.06), 0 4px 16px rgba(20, 40, 120, 0.06);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            transition: transform .2s ease, box-shadow .2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-tile::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            border-radius: 0 0 18px 18px;
+        }
+
+        .stat-tile:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 28px rgba(20, 40, 120, 0.12);
+        }
+
+        .tile-blue::after {
+            background: linear-gradient(90deg, #3b82f6, #6366f1);
+        }
+
+        .tile-green::after {
+            background: linear-gradient(90deg, #22c55e, #10b981);
+        }
+
+        .tile-purple::after {
+            background: linear-gradient(90deg, #8b5cf6, #a855f7);
+        }
+
+        .tile-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .panel {
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 1px 3px rgba(20, 40, 120, 0.06), 0 4px 18px rgba(20, 40, 120, 0.06);
+            overflow: hidden;
+        }
+
+        .panel-header {
+            background: linear-gradient(100deg, #1e3a8a 0%, #3b4fd8 100%);
+            padding: 16px 22px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .panel-header h2 {
+            color: #fff;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 0.01em;
+            margin: 0;
+        }
+
+        .panel-body {
+            padding: 20px 22px;
+        }
+
+        .section-card {
+            background: #f8faff;
+            border: 1px solid #e8eeff;
+            border-radius: 18px;
+        }
+
+        .field-input,
+        .field-select {
+            width: 100%;
+            border-radius: 14px;
+            border: 1px solid #dbe3f0;
+            background: #fff;
+            padding: 0.9rem 1rem;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+        }
+
+        .field-input:focus,
+        .field-select:focus {
+            outline: none;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+        }
+
+        .field-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #1e3a8a;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            border: 1px solid #e8eeff;
+            border-radius: 18px;
+        }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+    </style>
+@endpush
+
 @section('content')
-    <div class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-blue-100 py-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="dash-bg py-8">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+            <div class="hero-strip px-6 py-7 sm:px-8 sm:py-8">
+                <div class="relative z-10 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+                    <div class="max-w-3xl text-white">
+                        <p class="text-xs sm:text-sm uppercase tracking-[0.3em] text-blue-100/80">Institusi Dashboard</p>
+                        <h1 class="mt-2 text-3xl sm:text-4xl font-extrabold leading-tight">Monitoring Anak Magang</h1>
+                        <p class="mt-3 text-sm sm:text-base text-blue-100/90">Kelola dan pantau perkembangan anak magang.</p>
+                    </div>
 
-            <div class="mb-8">
-                <h1 class="text-3xl sm:text-4xl font-bold text-blue-600 mb-3">
-                    Monitoring Anak Magang
-                </h1>
-                <p class="text-sm sm:text-base text-gray-600">Kelola dan pantau perkembangan anak magang Anda</p>
-            </div>
-<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 mt-8">
-    
-    {{-- Absensi --}}
-    <a href="{{ route('institusi.attendance.index') }}"
-        class="group flex flex-col bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-blue-200 hover:border-blue-400 transform hover:scale-105">
-        <div class="p-5 sm:p-6 flex-1">
-            <div class="flex items-center justify-between mb-4">
-                <div class="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-blue-500 to-blue-700 rounded-2xl flex items-center justify-center shadow-lg transform group-hover:rotate-12 transition-transform duration-300">
-                    <i class="fas fa-clipboard-check text-white text-xl sm:text-2xl"></i>
-                </div>
-                <div class="transform group-hover:translate-x-2 transition-transform duration-300">
-                    <i class="fas fa-arrow-right text-blue-600 text-xl sm:text-2xl"></i>
-                </div>
-            </div>
-            <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-2">Absensi</h3>
-            <p class="text-xs sm:text-sm text-gray-600">Lihat dan kelola data kehadiran anak magang</p>
-        </div>
-        <div class="h-2 bg-gradient-to-r from-blue-500 to-blue-700 mt-auto"></div>
-    </a>
-
-    {{-- Logbook --}}
-    <a href="{{ route('institusi.logbook.index') }}"
-        class="group flex flex-col bg-gradient-to-br from-green-50 to-emerald-100 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-green-200 hover:border-green-400 transform hover:scale-105">
-        <div class="p-5 sm:p-6 flex-1">
-            <div class="flex items-center justify-between mb-4">
-                <div class="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-green-500 to-emerald-700 rounded-2xl flex items-center justify-center shadow-lg transform group-hover:rotate-12 transition-transform duration-300">
-                    <i class="fas fa-book text-white text-xl sm:text-2xl"></i>
-                </div>
-                <div class="transform group-hover:translate-x-2 transition-transform duration-300">
-                    <i class="fas fa-arrow-right text-green-600 text-xl sm:text-2xl"></i>
-                </div>
-            </div>
-            <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-2">Logbook</h3>
-            <p class="text-xs sm:text-sm text-gray-600">Pantau catatan harian dan aktivitas</p>
-        </div>
-        <div class="h-2 bg-gradient-to-r from-green-500 to-emerald-700 mt-auto"></div>
-    </a>
-
-    {{-- Nilai --}}
-    <a href="{{ route('institusi.certificate.index') }}"
-        class="group flex flex-col bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 border-purple-200 hover:border-purple-400 transform hover:scale-105 sm:col-span-2 md:col-span-1">
-        <div class="p-5 sm:p-6 flex-1">
-            <div class="flex items-center justify-between mb-4">
-                <div class="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-purple-500 to-fuchsia-700 rounded-2xl flex items-center justify-center shadow-lg transform group-hover:rotate-12 transition-transform duration-300">
-                    <i class="fas fa-certificate text-white text-xl sm:text-2xl"></i>
-                </div>
-                <div class="transform group-hover:translate-x-2 transition-transform duration-300">
-                    <i class="fas fa-arrow-right text-purple-600 text-xl sm:text-2xl"></i>
-                </div>
-            </div>
-            <h3 class="text-lg sm:text-xl font-bold text-gray-900 mb-2">Nilai</h3>
-            <p class="text-xs sm:text-sm text-gray-600">Lihat nilai laporan dan sertifikat anak magang Anda.</p>
-        </div>
-        <div class="h-2 bg-gradient-to-r from-purple-500 to-fuchsia-700 mt-auto"></div>
-    </a>
-
-</div>
-
-            <div
-                class="bg-gradient-to-br from-white to-blue-50 rounded-2xl shadow-xl border border-blue-200 overflow-hidden mb-6 mt-5">
-                <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-4 sm:px-6 py-3 sm:py-5">
-                    <h2 class="text-lg sm:text-xl font-bold text-white">
-                        Cari Anak Magang
-                    </h2>
-                </div>
-                <div class="p-3 sm:p-6">
-
-                    <form method="GET" action="{{ route('institusi.intern.index') }}" class="mb-4 sm:mb-6">
-                        <div class="flex gap-2">
-                            <div class="flex-1 relative group">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <i
-                                        class="fas fa-search text-gray-400 group-focus-within:text-blue-500 transition-colors"></i>
-                                </div>
-                                <input type="text" name="search" id="search" value="{{ request('search') }}"
-                                    placeholder="Cari nama anak magang..."
-                                    class="block w-full pl-10 pr-3 py-3 border-2 border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all hover:border-blue-400 text-sm">
+                    <div class="bg-white/10 border border-white/10 rounded-2xl px-4 py-4 text-white shadow-sm backdrop-blur-sm">
+                        <div class="flex items-center gap-3">
+                            <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-white text-blue-600 shadow-sm">
+                                <i class="fas fa-users"></i>
                             </div>
-                            <div class="relative group w-40 sm:w-44">
-                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                    <i class="fas fa-filter text-gray-400 group-focus-within:text-blue-500 transition-colors"></i>
-                                </div>
-                                <select name="status" id="status"
-                                    class="block w-full pl-10 pr-10 py-3 appearance-none border-2 border-gray-300 rounded-xl bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all hover:border-blue-400 text-sm">
+                            <div>
+                                <p class="text-xs uppercase tracking-[0.25em] text-blue-100/80">Data</p>
+                                <p class="text-base font-bold">{{ $interns->count() }} Anak Magang</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
+                <a href="{{ route('institusi.attendance.index') }}" class="stat-tile tile-blue group">
+                    <div class="flex items-center justify-between gap-4">
+                        <div>
+                            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Absensi</p>
+                            <h3 class="mt-2 text-xl font-extrabold text-slate-900">Monitoring Kehadiran</h3>
+                        </div>
+                        <div class="tile-icon bg-gradient-to-br from-blue-500 to-blue-700 group-hover:rotate-12 transition-transform duration-300">
+                            <i class="fas fa-clipboard-check"></i>
+                        </div>
+                    </div>
+                    <p class="text-sm text-slate-500">Lihat dan kelola data kehadiran anak magang.</p>
+                </a>
+
+                <a href="{{ route('institusi.logbook.index') }}" class="stat-tile tile-green group">
+                    <div class="flex items-center justify-between gap-4">
+                        <div>
+                            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Logbook</p>
+                            <h3 class="mt-2 text-xl font-extrabold text-slate-900">Catatan Harian</h3>
+                        </div>
+                        <div class="tile-icon bg-gradient-to-br from-green-500 to-emerald-700 group-hover:rotate-12 transition-transform duration-300">
+                            <i class="fas fa-book"></i>
+                        </div>
+                    </div>
+                    <p class="text-sm text-slate-500">Pantau catatan harian dan aktivitas.</p>
+                </a>
+
+                <a href="{{ route('institusi.certificate.index') }}" class="stat-tile tile-purple group sm:col-span-2 md:col-span-1">
+                    <div class="flex items-center justify-between gap-4">
+                        <div>
+                            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Nilai</p>
+                            <h3 class="mt-2 text-xl font-extrabold text-slate-900">Sertifikat & Nilai</h3>
+                        </div>
+                        <div class="tile-icon bg-gradient-to-br from-purple-500 to-fuchsia-700 group-hover:rotate-12 transition-transform duration-300">
+                            <i class="fas fa-certificate"></i>
+                        </div>
+                    </div>
+                    <p class="text-sm text-slate-500">Lihat nilai laporan dan sertifikat anak magang.</p>
+                </a>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <i class="fas fa-search text-blue-200 text-base"></i>
+                    <h2>Cari Anak Magang</h2>
+                </div>
+                <div class="panel-body">
+                    <form method="GET" action="{{ route('institusi.intern.index') }}">
+                        <div class="flex flex-col lg:flex-row gap-3 lg:items-end">
+                            <div class="flex-1">
+                                <label for="search" class="field-label">Nama Anak Magang</label>
+                                <input type="text" name="search" id="search" value="{{ request('search') }}" placeholder="Cari nama anak magang..." class="field-input">
+                            </div>
+
+                            <div class="w-full lg:w-56">
+                                <label for="status" class="field-label">Status</label>
+                                <select name="status" id="status" class="field-select">
                                     <option value="" {{ request('status') == '' ? 'selected' : '' }}>Semua</option>
                                     <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Aktif</option>
                                     <option value="alumni" {{ request('status') == 'alumni' ? 'selected' : '' }}>Alumni</option>
                                 </select>
-                                <div class="absolute inset-y-0 right-3 flex items-center pointer-events-none">
-                                    <svg class="w-4 h-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                        <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd"/>
-                                    </svg>
-                                </div>
                             </div>
-                            <button type="submit"
-                                class="inline-flex items-center justify-center px-4 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold text-sm rounded-xl hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-xl transition-all duration-300 flex-shrink-0 whitespace-nowrap">
-                                <i class="fas fa-search mr-2"></i>
-                                Cari
-                            </button>
-                            @if (request()->filled('search') || request()->filled('status'))
-                                <a href="{{ route('institusi.intern.index') }}"
-                                    class="inline-flex items-center justify-center bg-blue-100 hover:bg-blue-200 text-blue-700 font-bold py-3 px-4 rounded-xl transition duration-200 shadow-md hover:shadow-lg flex-shrink-0">
-                                    <i class="fas fa-times"></i>
-                                </a>
-                            @endif
+
+                            <div class="flex items-center gap-2">
+                                <button type="submit" class="inline-flex items-center justify-center rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-lg transition hover:shadow-xl">
+                                    <i class="fas fa-search mr-2"></i>Cari
+                                </button>
+                                @if (request()->filled('search') || request()->filled('status'))
+                                    <a href="{{ route('institusi.intern.index') }}" class="inline-flex items-center justify-center rounded-2xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm font-semibold text-blue-700 transition hover:bg-blue-100">
+                                        <i class="fas fa-times"></i>
+                                    </a>
+                                @endif
+                            </div>
                         </div>
                     </form>
+                </div>
+            </div>
 
-                    <div class="overflow-x-auto rounded-xl shadow-inner">
+            <div class="panel">
+                <div class="panel-header">
+                    <i class="fas fa-table text-blue-200 text-base"></i>
+                    <h2>Data Anak Magang</h2>
+                </div>
+                <div class="panel-body">
+                    <div class="table-wrap">
                         <table class="w-full divide-y divide-gray-200">
                             <thead>
-                                <tr class="bg-gradient-to-r from-blue-500 to-indigo-500">
-                                    <th
-                                        class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-white uppercase tracking-wider">
-                                        Foto</th>
-                                    <th
-                                        class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-white uppercase tracking-wider">
-                                        Nama</th>
-                                    <th
-                                        class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-white uppercase tracking-wider">
-                                        Status</th>
-                                    <th
-                                        class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-white uppercase tracking-wider hidden sm:table-cell">
-                                        Prodi</th>
-                                    <th
-                                        class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-white uppercase tracking-wider">
-                                        Logbook</th>
-                                    <th
-                                        class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-white uppercase tracking-wider">
-                                        Absensi</th>
-                                    <th
-                                        class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-white uppercase tracking-wider">
-                                        Mikroskill</th>
+                                <tr class="bg-gradient-to-r from-blue-600 to-indigo-600">
+                                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-white uppercase tracking-wider">Foto</th>
+                                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-white uppercase tracking-wider">Nama</th>
+                                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-white uppercase tracking-wider">Status</th>
+                                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-white uppercase tracking-wider hidden sm:table-cell">Prodi</th>
+                                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-white uppercase tracking-wider">Logbook</th>
+                                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-white uppercase tracking-wider">Absensi</th>
+                                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-white uppercase tracking-wider">Mikroskill</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-100">
                                 @forelse($interns as $intern)
-                                    <tr
-                                        class="hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-200">
+                                    <tr class="hover:bg-blue-50 transition-colors duration-200">
                                         <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                                             @if ($intern->photo_path)
-                                                <div
-                                                    class="w-12 h-12 sm:w-14 sm:h-14 flex-shrink-0 rounded-full overflow-hidden border-3 border-blue-300 shadow-lg ring-2 ring-blue-100 hover:ring-blue-400 transition-all aspect-square flex items-center justify-center">
-                                                    <img src="{{ url('storage/' . $intern->photo_path) }}"
-                                                        class="w-full h-full object-cover object-center"
-                                                        alt="{{ $intern->name }}" />
+                                                <div class="w-12 h-12 sm:w-14 sm:h-14 flex-shrink-0 rounded-full overflow-hidden border-2 border-blue-200 shadow-sm ring-2 ring-blue-100 aspect-square flex items-center justify-center">
+                                                    <img src="{{ url('storage/' . $intern->photo_path) }}" class="w-full h-full object-cover object-center" alt="{{ $intern->name }}" />
                                                 </div>
                                             @else
-                                                <div
-                                                    class="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center shadow-lg ring-2 ring-blue-100 hover:ring-blue-400 transition-all flex-shrink-0 aspect-square">
+                                                <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center shadow-sm ring-2 ring-blue-100 flex-shrink-0 aspect-square">
                                                     <i class="fas fa-user text-white text-lg sm:text-xl"></i>
                                                 </div>
                                             @endif
                                         </td>
                                         <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
-                                            <a class="text-blue-600 hover:text-indigo-700 font-bold hover:underline transition-colors text-xs sm:text-sm md:text-base">
-                                                {{ $intern->name }}
-                                            </a>
+                                            <span class="text-blue-700 hover:text-indigo-700 font-bold transition-colors text-xs sm:text-sm md:text-base">{{ $intern->name }}</span>
                                         </td>
                                         <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                                             @if ($intern->is_active)
-                                                <span
-                                                    class="px-2.5 sm:px-3 py-1.5 sm:py-2 inline-flex items-center justify-center text-xs sm:text-sm leading-5 font-bold rounded-full bg-green-100 text-green-800 shadow-sm">
-                                                    Aktif
-                                                </span>
+                                                <span class="status-pill bg-green-100 text-green-800 shadow-sm">Aktif</span>
                                             @else
-                                                <span
-                                                    class="px-2.5 sm:px-3 py-1.5 sm:py-2 inline-flex items-center justify-center text-xs sm:text-sm leading-5 font-bold rounded-full bg-gray-100 text-gray-800 shadow-sm">
-                                                    Alumni
-                                                </span>
+                                                <span class="status-pill bg-slate-100 text-slate-700 shadow-sm">Alumni</span>
                                             @endif
                                         </td>
                                         <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap hidden sm:table-cell">
-                                            <div class="text-xs sm:text-sm text-gray-700 flex items-center font-medium">
-                                                {{ $intern->major }}
-                                            </div>
+                                            <div class="text-xs sm:text-sm text-slate-700 font-medium">{{ $intern->major }}</div>
                                         </td>
                                         <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
-                                            <span
-                                                class="px-2.5 sm:px-3 py-1.5 sm:py-2 inline-flex items-center justify-center text-xs sm:text-sm leading-5 font-bold rounded-full bg-gradient-to-r from-purple-100 to-purple-200 text-purple-800 shadow-sm hover:shadow-md transition-all">
-                                                <i class="fas fa-book mr-1.5 sm:mr-2"></i>
-                                                {{ $intern->logbooks_count }}
+                                            <span class="status-pill bg-gradient-to-r from-purple-100 to-purple-200 text-purple-800">
+                                                <i class="fas fa-book mr-1.5"></i>{{ $intern->logbooks_count }}
                                             </span>
                                         </td>
                                         <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
-                                            <span
-                                                class="px-2.5 sm:px-3 py-1.5 sm:py-2 inline-flex items-center justify-center text-xs sm:text-sm leading-5 font-bold rounded-full bg-gradient-to-r from-green-100 to-green-200 text-green-800 shadow-sm hover:shadow-md transition-all">
-                                                <i class="fas fa-check-circle mr-1.5 sm:mr-2"></i>
-                                                {{ $intern->attendances_count }}
+                                            <span class="status-pill bg-gradient-to-r from-green-100 to-green-200 text-green-800">
+                                                <i class="fas fa-check-circle mr-1.5"></i>{{ $intern->attendances_count }}
                                             </span>
                                         </td>
                                         <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
-                                            <span
-                                                class="px-2.5 sm:px-3 py-1.5 sm:py-2 inline-flex items-center justify-center text-xs sm:text-sm leading-5 font-bold rounded-full bg-gradient-to-r from-blue-100 to-blue-200 text-blue-800 shadow-sm hover:shadow-md transition-all">
-                                                <i class="fas fa-graduation-cap mr-1.5 sm:mr-2"></i>
-                                                {{ $intern->micro_skills_count }}
+                                            <span class="status-pill bg-gradient-to-r from-blue-100 to-blue-200 text-blue-800">
+                                                <i class="fas fa-graduation-cap mr-1.5"></i>{{ $intern->micro_skills_count }}
                                             </span>
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
                                         <td colspan="7" class="px-6 py-12 text-center">
-                                            <div class="flex flex-col items-center justify-center text-gray-500">
-                                                <div
-                                                    class="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mb-4">
+                                            <div class="flex flex-col items-center justify-center">
+                                                <div class="w-24 h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mb-4 shadow-md">
                                                     <i class="fas fa-user-slash text-5xl text-gray-300"></i>
                                                 </div>
                                                 <p class="text-lg font-bold text-gray-700 mb-2">Belum ada anak magang</p>
-                                                <p class="text-sm text-gray-400">Data anak magang akan muncul di sini
-                                                </p>
+                                                <p class="text-sm text-gray-400">Data anak magang akan muncul di sini</p>
                                             </div>
                                         </td>
                                     </tr>
@@ -237,7 +369,6 @@
                     @endif
                 </div>
             </div>
-
         </div>
     </div>
 @endsection

@@ -44,7 +44,9 @@ class DashboardController extends Controller
 
         $internIds = $interns->pluck('id');
         $microPending = MicroSkillSubmission::whereIn('intern_id', $internIds)->where('status', 'pending')->count();
-        $microTotal = MicroSkillSubmission::whereIn('intern_id', $internIds)->count();
+        $microTodayTotal = MicroSkillSubmission::whereIn('intern_id', $internIds)
+            ->whereDate('submitted_at', $today)
+            ->count();
 
         $topMicroSkills = \App\Models\Intern::leftJoin('micro_skill_submissions', 'interns.id', '=', 'micro_skill_submissions.intern_id')
             ->whereIn('interns.id', $internIds)
@@ -64,7 +66,7 @@ class DashboardController extends Controller
                 ];
             });
 
-        return view('mentor.dashboard', compact('mentor', 'interns', 'alumni', 'todayAttendances', 'todayAbsentInterns', 'today', 'microPending', 'microTotal', 'topMicroSkills'));
+        return view('mentor.dashboard', compact('mentor', 'interns', 'alumni', 'todayAttendances', 'todayAbsentInterns', 'today', 'microPending', 'microTodayTotal', 'topMicroSkills'));
     }
 }
 

@@ -127,6 +127,8 @@ Route::middleware(['auth', 'institusi'])->prefix('institusi')->name('institusi.'
     Route::get('/pengajuan/create', [PengajuanController::class, 'create'])->name('pengajuan.create');
     Route::post('/pengajuan', [PengajuanController::class, 'store'])->name('pengajuan.store');
     Route::get('/pengajuan/{id}', [PengajuanController::class, 'show'])->name('pengajuan.show');
+    Route::get('/pengajuan/{id}/edit', [PengajuanController::class, 'edit'])->name('pengajuan.edit');
+    Route::put('/pengajuan/{id}', [PengajuanController::class, 'update'])->name('pengajuan.update');
     Route::delete('/pengajuan/{id}', [PengajuanController::class, 'destroy'])->name('pengajuan.destroy');
     // surat balasan untuk institusi
     Route::get('/surat-balasan/{pengajuan}', [PengajuanController::class, 'generateSuratBalasan'])->name('pengajuan.surat-balasan');

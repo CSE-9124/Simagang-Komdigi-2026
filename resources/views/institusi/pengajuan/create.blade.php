@@ -2,267 +2,407 @@
 
 @section('title', 'Tambah Pengajuan Magang - Sistem Magang')
 
-@section('content')
-<div class="min-h-screen bg-blue-50 py-8">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        <!-- Header -->
-        <div class="mb-8">
-            <h1 class="text-4xl font-bold leading-tight text-blue-600 mb-2 pb-2">
-                Tambah Pengajuan Magang
-            </h1>
-            <p class="text-gray-600">Ajukan permohonan magang Anda dengan lengkap</p>
-        </div>
+@push('styles')
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
-        <!-- Form Card -->
-        <div class="bg-white rounded-2xl shadow-lg border border-blue-100 overflow-hidden">
-            <div class="bg-blue-600 px-6 py-4">
-                <h2 class="text-xl font-bold text-white flex items-center">
-                    <i class="fas fa-edit mr-3"></i>
-                    Form Pengajuan Magang
-                </h2>
-            </div>
-
-            <div class="p-8">
-                <form method="POST" action="{{ route('institusi.pengajuan.store') }}" enctype="multipart/form-data">
-                    @csrf
-
-                    <div class="p-8 border-b">
-                        <div class="flex items-start md:items-center gap-4 mb-6">
-                                <div class="w-14 h-14 md:w-10 md:h-10 p-3 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
-                                    <i class="fas fa-briefcase text-blue-600 text-xl md:text-base"></i>
-                                </div>
-                                <div>
-                                    <h2 class="text-base md:text-lg font-bold text-blue-900">Informasi Pengerjaan Magang</h2>
-                                    <p class="text-xs md:text-sm text-gray-600">Isi informasi periode magang, tujuan kegiatan, dan unggah surat pengajuan. </p>
-                                </div>
-                            </div>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-
-                            <div>
-                                <label for="no_surat" class="text-sm font-medium text-blue-900 mb-2">
-                                    Nomor Surat Pengajuan <span class="text-red-500">*</span>
-                                </label>
-                                <input type="text" name="no_surat" id="no_surat" value="{{ old('no_surat') }}"
-                                    placeholder="contoh: 13035/UN4.1.17/HM.01.01/2025"
-                                    required
-                                    class="mt-1 w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                                @error('no_surat')<p class="text-sm text-red-500 mt-1">{{ $message }}</p>@enderror  
-                            </div>
-
-                            <div>
-                                <label for="tujuan_surat" class="text-sm font-medium text-blue-900 mb-2">
-                                    Penandatangan Surat <span class="text-red-500">*</span>
-                                </label>
-                                <input type="text" name="tujuan_surat" id="tujuan_surat" value="{{ old('tujuan_surat') }}"
-                                    placeholder="contoh: Wakil Dekan Bidang Akademik dan Kemahasiswaan"
-                                    required
-                                    class="mt-1 w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                                @error('tujuan_surat')<p class="text-sm text-red-500 mt-1">{{ $message }}</p>@enderror
-                            </div>
-
-                            <!-- Tanggal Field -->
-                            <div>
-                                <label class="text-sm font-medium text-blue-900 mb-2">
-                                    Tanggal Masuk <span class="text-red-500">*</span>
-                                </label>
-                                <input type="date" name="start_date" value="{{ old('start_date') }}" required
-                                    class="mt-1 w-full px-4 py-3 rounded-xl border border-gray-300
-                                        focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                                @error('start_date')<p class="text-sm text-red-500 mt-1">{{ $message }}</p>@enderror
-                            </div>
-        
-                            <div>
-                                <label class="text-sm font-medium text-blue-900 mb-2">Tanggal Keluar <span class="text-red-500">*</span></label>
-                                <input type="date" name="end_date" value="{{ old('end_date') }}" required
-                                    class="mt-1 w-full px-4 py-3 rounded-xl border border-gray-300
-                                        focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                                @error('end_date')<p class="text-sm text-red-500 mt-1">{{ $message }}</p>@enderror
-                            </div>
-
-                            <div class="md:col-span-2">
-                                <label class="text-sm font-medium text-blue-900 mb-2">
-                                    Keperluan <span class="text-red-500">*</span>
-                                </label>
-                                <select name="keperluan" required class="mt-1 w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                                    <option value="{{ old('keperluan') }}">{{ old('keperluan') ?: 'Pilih' }}</option>
-                                        @foreach(['Magang','KKN Profesi','PKL','Praktek Industri','Magang Industri','Guru Magang Industri','Job on Training'] as $p)
-                                            <option value="{{ $p }}" {{ old('keperluan')==$p?'selected':'' }}>{{ $p }}</option>
-                                        @endforeach
-                                </select>
-                                @error('keperluan')<p class="text-sm text-red-500 mt-1">{{ $message }}</p>@enderror
-                            </div>
-                            
-                            <!-- Surat Magang Field -->
-                            <div class="mb-6">
-                                <label for="surat_magang" class="block text-sm font-semibold text-gray-700 mb-2">
-                                    Surat Magang (.pdf) <span class="text-red-500">*</span>
-                                </label>
-                                <input type="file" name="surat_magang" id="surat_magang" accept=".pdf" required 
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
-                                @error('surat_magang')
-                                    <p class="mt-2 text-sm text-red-600 flex items-center">
-                                        <i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}
-                                    </p>
-                                @enderror
-                            </div>
-                        </div>
-                    </div>
-
-                    {{-- informasi calon anak magang --}}
-                    <div class="p-8 border-b bg-gray-50">
-                        <div class="flex items-start md:items-center gap-4 mb-6">
-                                <div class="w-14 h-14 md:w-10 md:h-10 p-3 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
-                                    <i class="fas fa-user text-blue-600 text-xl md:text-base"></i>
-                                </div>
-                                <div>
-                                    <h2 class="text-base md:text-lg font-bold text-blue-900">Informasi Calon Anak Magang</h2>
-                                    <p class="text-xs md:text-sm text-gray-600">Isi data dan kontak calon anak magang</p>
-                                </div>
-                            </div>
-
-                        <div id="intern-container">
-
-                            <!-- CARD 1 -->
-                            <div class="intern-card mb-6">
-                                <div class="flex items-center justify-between mb-4">
-                                    <h3 class="text-md font-semibold text-blue-700 peserta-title">
-                                        Calon Anak Magang 1
-                                    </h3>
-                                    <button type="button" onclick="removeIntern(this)" class="delete-btn text-red-500 hover:text-red-700 font-semibold transition-colors hidden">
-                                        <i class="fas fa-trash mr-1"></i>Hapus
-                                    </button>
-                                </div>
-
-                                <div class="mb-6">
-                                    <label class="text-sm font-medium text-blue-900 mb-2">
-                                        Nama Lengkap <span class="text-red-500">*</span>
-                                    </label>
-                                    <input type="text" name="name[]" required
-                                        class="mt-1 w-full px-4 py-3 rounded-xl border border-gray-300 shadow-sm
-                                        focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                                </div>
-
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div>
-                                        <label class="text-sm font-medium text-blue-900 mb-2">
-                                            Email <span class="text-red-500">*</span>
-                                        </label>
-                                        <input type="email" name="email[]" required
-                                            class="mt-1 w-full px-4 py-3 rounded-xl border border-gray-300 shadow-sm
-                                            focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                                    </div>
-
-                                    <div>
-                                        <label class="text-sm font-medium text-blue-900 mb-2">
-                                            Jurusan <span class="text-red-500">*</span>
-                                        </label>
-                                        <input type="text" name="jurusan[]" required
-                                            class="mt-1 w-full px-4 py-3 rounded-xl border border-gray-300
-                                            focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                                    </div>
-
-                                    <div>
-                                        <label class="text-sm font-medium text-blue-900 mb-2">
-                                            Jenis Kelamin <span class="text-red-500">*</span>
-                                        </label>
-                                        <select name="jenis_kelamin[]" required
-                                            class="mt-1 w-full px-4 py-3 rounded-xl border border-gray-300
-                                            focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                                            <option value="">Pilih</option>
-                                            <option value="L">Laki-laki</option>
-                                            <option value="P">Perempuan</option>
-                                        </select>
-                                    </div>
-
-                                    <div>
-                                        <label class="text-sm font-medium text-blue-900 mb-2">
-                                            Nomor Telepon <span class="text-red-500">*</span>
-                                        </label>
-                                        <input type="text" name="no_telp[]" required
-                                            class="mt-1 w-full px-4 py-3 rounded-xl border border-gray-300
-                                            focus:outline-none focus:ring-blue-500 focus:border-blue-500">
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <!-- BUTTON -->
-                    <div class="flex items-center justify-between mt-4 mb-6">
-                        <span class="text-sm text-gray-500" id="count-info">1 peserta ditambahkan</span>
-                        <button type="button" onclick="addIntern()"
-                            class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition-all">
-                            <i class="fas fa-plus mr-2"></i> Tambah Peserta
-                        </button>
-                    </div>
-
-                    <!-- Action Buttons -->
-                    <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-gray-200">
-                        <a href="{{ route('institusi.pengajuan.index') }}" 
-                            class="inline-flex items-center text-blue-600 hover:text-blue-700 font-semibold transition-colors">
-                                <i class="fas fa-arrow-left mr-2"></i>Kembali 
-                        </a>
-                        <button type="submit" 
-                            class="inline-flex items-center px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 w-full sm:w-auto justify-center">
-                            <i class="fas fa-save mr-2"></i>Simpan Pengajuan
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
-    </div>
-</div>
-
-<script>
-    let count = 1;
-
-    function updateTitles() {
-        const cards = document.querySelectorAll('.intern-card');
-        cards.forEach((card, index) => {
-            card.querySelector('.peserta-title').innerText = 'Calon Anak Magang ' + (index + 1);
-            
-            // Tampilkan tombol hapus hanya jika ada lebih dari 1 kartu
-            const deleteBtn = card.querySelector('.delete-btn');
-            if (cards.length > 1) {
-                deleteBtn.classList.remove('hidden');
-            } else {
-                deleteBtn.classList.add('hidden');
-            }
-        });
-        document.getElementById('count-info').innerText = cards.length + ' calon anak magang ditambahkan';
-    }
-
-    function addIntern() {
-        const container = document.getElementById('intern-container');
-        const firstCard = container.querySelector('.intern-card');
-
-        const newCard = firstCard.cloneNode(true);
-
-        // reset semua input
-        newCard.querySelectorAll('input').forEach(input => input.value = '');
-        newCard.querySelectorAll('select').forEach(select => select.selectedIndex = 0);
-
-        container.appendChild(newCard);
-
-        count++;
-        updateTitles();
-    }
-
-    function removeIntern(button) {
-        const card = button.closest('.intern-card');
-        const container = document.getElementById('intern-container');
-        
-        // Pastikan minimal ada 1 kartu
-        if (container.querySelectorAll('.intern-card').length > 1) {
-            card.remove();
-            updateTitles();
-        } else {
-            alert('Minimal harus ada 1 peserta');
+        *,
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
-    }
-</script>
+
+        .dash-bg {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #e8eeff 0%, #f0f4ff 40%, #e4ecff 100%);
+        }
+
+        .hero-strip {
+            background: linear-gradient(110deg, #1e3a8a 0%, #3b4fd8 55%, #4f46e5 100%);
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(20, 40, 120, 0.16);
+        }
+
+        .hero-strip::before {
+            content: '';
+            position: absolute;
+            top: -70px;
+            right: -50px;
+            width: 220px;
+            height: 220px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .hero-strip::after {
+            content: '';
+            position: absolute;
+            bottom: -100px;
+            left: 18%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .panel {
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 1px 3px rgba(30, 58, 138, 0.06), 0 4px 18px rgba(30, 58, 138, 0.06);
+            overflow: hidden;
+        }
+
+        .section-card {
+            background: #f8faff;
+            border: 1px solid #e8eeff;
+            border-radius: 18px;
+        }
+
+        .soft-badge {
+            background: linear-gradient(135deg, #eff6ff, #f5f3ff);
+            border: 1px solid #dbeafe;
+        }
+
+        .field-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #1e3a8a;
+        }
+
+        .field-input,
+        .field-select {
+            width: 100%;
+            border-radius: 14px;
+            border: 1px solid #dbe3f0;
+            background: #fff;
+            padding: 0.9rem 1rem;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+        }
+
+        .field-input:focus,
+        .field-select:focus {
+            outline: none;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+        }
+
+        .upload-box {
+            width: 100%;
+            border-radius: 16px;
+            border: 1px dashed #c7d2fe;
+            background: #f8faff;
+            padding: 0.9rem 1rem;
+        }
+
+        .intern-card {
+            background: #fff;
+            border: 1px solid #e8eeff;
+            border-radius: 18px;
+            padding: 1.25rem;
+            box-shadow: 0 1px 3px rgba(30, 58, 138, 0.05);
+        }
+
+        .action-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #2563eb;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+
+        .action-link:hover {
+            color: #1d4ed8;
+        }
+
+        .primary-btn {
+            background: linear-gradient(135deg, #2563eb, #4f46e5);
+        }
+    </style>
+@endpush
+
+@section('content')
+    <div class="dash-bg py-6 sm:py-8">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+
+            <div class="hero-strip px-5 sm:px-8 py-6 sm:py-8">
+                <div class="relative z-10 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+                    <div class="max-w-3xl text-white">
+                        <p class="text-xs sm:text-sm uppercase tracking-[0.3em] text-blue-100/80">Institusi Dashboard</p>
+                        <h1 class="mt-2 text-3xl sm:text-4xl font-extrabold leading-tight">Tambah Pengajuan Magang</h1>
+                    </div>
+
+                    <div class="soft-badge rounded-2xl px-4 py-4 text-sm font-semibold text-slate-700 shadow-sm">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="flex h-11 w-11 items-center justify-center rounded-2xl bg-white text-blue-600 shadow-sm">
+                                <i class="fas fa-file-pen"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs uppercase tracking-[0.25em] text-slate-400">Form</p>
+                                <p class="text-base font-bold text-slate-900">Pengajuan Magang</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="border-b border-slate-100 bg-white px-5 sm:px-8 py-4 sm:py-5">
+                    <div class="flex items-center gap-3">
+                        <div class="flex h-11 w-11 items-center justify-center rounded-2xl bg-blue-50 text-blue-600">
+                            <i class="fas fa-edit text-lg"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Pengajuan</p>
+                            <h2 class="text-base sm:text-lg font-bold text-slate-900">Form Pengajuan Magang</h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-5 sm:p-8">
+                    <form method="POST" action="{{ route('institusi.pengajuan.store') }}" enctype="multipart/form-data">
+                        @csrf
+
+                        <div class="section-card p-5 sm:p-6 mb-6 sm:mb-8">
+                            <div class="flex items-start gap-4 mb-6">
+                                <div
+                                    class="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-100 text-blue-600 flex-shrink-0">
+                                    <i class="fas fa-briefcase text-lg"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-base sm:text-lg font-bold text-slate-900">Informasi Pengerjaan Magang
+                                    </h3>
+                                    <p class="text-xs sm:text-sm text-slate-500">Isi periode magang, tujuan kegiatan, dan
+                                        unggah surat pengajuan.</p>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
+                                <div>
+                                    <label for="no_surat" class="field-label">
+                                        Nomor Surat Pengajuan <span class="text-red-500">*</span>
+                                    </label>
+                                    <input type="text" name="no_surat" id="no_surat" value="{{ old('no_surat') }}"
+                                        placeholder="contoh: 13035/UN4.1.17/HM.01.01/2025" required class="field-input">
+                                    @error('no_surat')
+                                        <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <div>
+                                    <label for="tujuan_surat" class="field-label">
+                                        Penandatangan Surat <span class="text-red-500">*</span>
+                                    </label>
+                                    <input type="text" name="tujuan_surat" id="tujuan_surat"
+                                        value="{{ old('tujuan_surat') }}"
+                                        placeholder="contoh: Wakil Dekan Bidang Akademik dan Kemahasiswaan" required
+                                        class="field-input">
+                                    @error('tujuan_surat')
+                                        <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <div>
+                                    <label class="field-label">
+                                        Tanggal Masuk <span class="text-red-500">*</span>
+                                    </label>
+                                    <input type="date" name="start_date" value="{{ old('start_date') }}" required
+                                        class="field-input">
+                                    @error('start_date')
+                                        <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <div>
+                                    <label class="field-label">Tanggal Keluar <span class="text-red-500">*</span></label>
+                                    <input type="date" name="end_date" value="{{ old('end_date') }}" required
+                                        class="field-input">
+                                    @error('end_date')
+                                        <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <div class="md:col-span-2">
+                                    <label class="field-label">
+                                        Keperluan <span class="text-red-500">*</span>
+                                    </label>
+                                    <select name="keperluan" required class="field-select">
+                                        <option value="" disabled {{ old('keperluan') ? '' : 'selected' }}>Pilih
+                                        </option>
+                                        @foreach (['Magang', 'KKN Profesi', 'PKL', 'Praktek Industri', 'Magang Industri', 'Guru Magang Industri', 'Job on Training'] as $p)
+                                            <option value="{{ $p }}"
+                                                {{ old('keperluan') == $p ? 'selected' : '' }}>{{ $p }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('keperluan')
+                                        <p class="mt-2 text-sm text-red-500">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                <div class="md:col-span-2">
+                                    <label for="surat_magang" class="field-label">
+                                        Surat Magang (.pdf) <span class="text-red-500">*</span>
+                                    </label>
+                                    <input type="file" name="surat_magang" id="surat_magang" accept=".pdf" required
+                                        class="upload-box">
+                                    @error('surat_magang')
+                                        <p class="mt-2 text-sm text-red-600 flex items-center gap-1">
+                                            <i class="fas fa-exclamation-circle"></i>{{ $message }}
+                                        </p>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="section-card p-5 sm:p-6 mb-6 sm:mb-8">
+                            <div class="flex items-start gap-4 mb-6">
+                                <div
+                                    class="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-100 text-indigo-600 flex-shrink-0">
+                                    <i class="fas fa-user text-lg"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-base sm:text-lg font-bold text-slate-900">Informasi Calon Anak Magang
+                                    </h3>
+                                    <p class="text-xs sm:text-sm text-slate-500">Isi data dan kontak calon anak magang.</p>
+                                </div>
+                            </div>
+
+                            <div id="intern-container">
+                                <div class="intern-card mb-6">
+                                    <div class="flex items-center justify-between mb-4">
+                                        <h3 class="text-md font-semibold text-blue-700 peserta-title">
+                                            Calon Anak Magang 1
+                                        </h3>
+                                        <button type="button" onclick="removeIntern(this)"
+                                            class="delete-btn text-red-500 hover:text-red-700 font-semibold transition-colors hidden">
+                                            <i class="fas fa-trash mr-1"></i>Hapus
+                                        </button>
+                                    </div>
+
+                                    <div class="mb-6">
+                                        <label class="field-label">
+                                            Nama Lengkap <span class="text-red-500">*</span>
+                                        </label>
+                                        <input type="text" name="name[]" required class="field-input">
+                                    </div>
+
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
+                                        <div>
+                                            <label class="field-label">
+                                                Email <span class="text-red-500">*</span>
+                                            </label>
+                                            <input type="email" name="email[]" required class="field-input">
+                                        </div>
+
+                                        <div>
+                                            <label class="field-label">
+                                                Jurusan <span class="text-red-500">*</span>
+                                            </label>
+                                            <input type="text" name="jurusan[]" required class="field-input">
+                                        </div>
+
+                                        <div>
+                                            <label class="field-label">
+                                                Jenis Kelamin <span class="text-red-500">*</span>
+                                            </label>
+                                            <select name="jenis_kelamin[]" required class="field-select">
+                                                <option value="">Pilih</option>
+                                                <option value="L">Laki-laki</option>
+                                                <option value="P">Perempuan</option>
+                                            </select>
+                                        </div>
+
+                                        <div>
+                                            <label class="field-label">
+                                                Nomor Telepon <span class="text-red-500">*</span>
+                                            </label>
+                                            <input type="text" name="no_telp[]" required class="field-input">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                            <span class="text-sm text-slate-500" id="count-info">1 calon anak magang ditambahkan</span>
+                            <button type="button" onclick="addIntern()"
+                                class="inline-flex items-center justify-center rounded-2xl border border-blue-200 bg-blue-50 px-4 py-2.5 text-sm font-semibold text-blue-700 transition hover:border-blue-300 hover:bg-blue-100">
+                                <i class="fas fa-plus mr-2"></i> Tambah Peserta
+                            </button>
+                        </div>
+
+                        <div
+                            class="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-100 pt-6">
+                            <a href="{{ route('institusi.pengajuan.index') }}" class="action-link">
+                                <i class="fas fa-arrow-left"></i>
+                                Kembali
+                            </a>
+                            <button type="submit"
+                                class="primary-btn inline-flex w-full sm:w-auto items-center justify-center rounded-2xl px-8 py-3 text-sm sm:text-base font-semibold text-white shadow-lg transition hover:shadow-xl">
+                                <i class="fas fa-save mr-2"></i>
+                                Simpan Pengajuan
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        let count = 1;
+
+        function updateTitles() {
+            const cards = document.querySelectorAll('.intern-card');
+            cards.forEach((card, index) => {
+                card.querySelector('.peserta-title').innerText = 'Calon Anak Magang ' + (index + 1);
+
+                // Tampilkan tombol hapus hanya jika ada lebih dari 1 kartu
+                const deleteBtn = card.querySelector('.delete-btn');
+                if (cards.length > 1) {
+                    deleteBtn.classList.remove('hidden');
+                } else {
+                    deleteBtn.classList.add('hidden');
+                }
+            });
+            document.getElementById('count-info').innerText = cards.length + ' calon anak magang ditambahkan';
+        }
+
+        function addIntern() {
+            const container = document.getElementById('intern-container');
+            const firstCard = container.querySelector('.intern-card');
+
+            const newCard = firstCard.cloneNode(true);
+
+            // reset semua input
+            newCard.querySelectorAll('input').forEach(input => input.value = '');
+            newCard.querySelectorAll('select').forEach(select => select.selectedIndex = 0);
+
+            container.appendChild(newCard);
+
+            count++;
+            updateTitles();
+        }
+
+        function removeIntern(button) {
+            const card = button.closest('.intern-card');
+            const container = document.getElementById('intern-container');
+
+            // Pastikan minimal ada 1 kartu
+            if (container.querySelectorAll('.intern-card').length > 1) {
+                card.remove();
+                updateTitles();
+            } else {
+                alert('Minimal harus ada 1 peserta');
+            }
+        }
+    </script>
 @endsection

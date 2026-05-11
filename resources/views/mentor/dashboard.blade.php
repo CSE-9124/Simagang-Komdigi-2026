@@ -574,12 +574,13 @@
                 {{-- Mikro Skill --}}
                 <div class="stat-tile tile-indigo">
                     <div class="flex items-center justify-between">
-                        <p class="text-xs font-semibold text-gray-500 leading-tight">Mikro<br>Skill</p>
+                        <p class="text-xs font-semibold text-gray-500 leading-tight">Mikro<br>Skill<br>Hari Ini</p>
                         <div class="tile-icon" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);">
                             <i class="fas fa-graduation-cap"></i>
                         </div>
                     </div>
-                    <p class="text-3xl font-extrabold text-gray-900 mono">{{ $microTotal }}</p>
+                    <p class="text-3xl font-extrabold text-gray-900 mono">{{ $microTodayTotal }}</p>
+                    <p class="text-xs font-medium text-gray-500">Jumlah total pada hari ini</p>
                 </div>
 
                 {{-- Alumni --}}

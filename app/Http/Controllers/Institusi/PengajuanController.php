@@ -95,6 +95,99 @@ class PengajuanController extends Controller
             ->with('success', 'Pengajuan berhasil dikirim');
     }
 
+    public function edit(int $id)
+    {
+        $pengajuan = Pengajuan::with('details')
+            ->where('institusi_id', Auth::user()->institusi->id)
+            ->findOrFail($id);
+
+        if ($pengajuan->status !== 'revised') {
+            return redirect()
+                ->route('institusi.pengajuan.index')
+                ->with('error', 'Pengajuan hanya bisa diedit ketika status revisi. Pengajuan dengan status pending, approved, atau rejected tidak dapat diubah.');
+        }
+
+        return view('institusi.pengajuan.edit', compact('pengajuan'));
+    }
+
+    public function update(Request $request, int $id)
+    {
+        $pengajuan = Pengajuan::where('institusi_id', Auth::user()->institusi->id)->findOrFail($id);
+
+        if ($pengajuan->status !== 'revised') {
+            return redirect()
+                ->route('institusi.pengajuan.index')
+                ->with('error', 'Pengajuan hanya bisa diedit ketika status revisi. Pengajuan dengan status pending, approved, atau rejected tidak dapat diubah.');
+        }
+
+        $request->validate([
+            'surat_magang' => 'nullable|file|mimes:pdf',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+            'keperluan' => 'required|string',
+            'no_surat' => ['required', 'string', Rule::unique('pengajuans', 'no_surat')->where('institusi_id', Auth::user()->institusi->id)->ignore($pengajuan->id)],
+            'tujuan_surat' => 'required|string',
+
+            // validasi array peserta
+            'name.*' => 'required|string',
+            'email.*' => 'required|email',
+            'jurusan.*' => 'required|string',
+            'jenis_kelamin.*' => 'required|in:L,P',
+            'no_telp.*' => 'required|string',
+        ], [
+            'no_surat.unique' => 'Nomor surat ini sudah pernah digunakan oleh institusi Anda. Silakan gunakan nomor surat yang berbeda.',
+        ]);
+
+        // Handle file upload jika ada
+        if ($request->hasFile('surat_magang')) {
+            $file = $request->file('surat_magang');
+            $fileName = $file->getClientOriginalName();
+            $extension = $file->getClientOriginalExtension() ?: ($file->guessExtension() ?: 'pdf');
+            $storedFileName = 'surat_' . time() . '_' . uniqid() . '.' . $extension;
+            $destinationPath = storage_path('app/private/surat_magang');
+
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0755, true);
+            }
+
+            if (!$file->move($destinationPath, $storedFileName)) {
+                return back()->withErrors(['surat_magang' => 'Gagal menyimpan file.'])->withInput();
+            }
+
+            $path = 'surat_magang/' . $storedFileName;
+            $pengajuan->surat_path = $path;
+        }
+
+        // Update data pengajuan
+        $pengajuan->update([
+            'start_date' => $request->start_date,
+            'end_date' => $request->end_date,
+            'keperluan' => $request->keperluan,
+            'no_surat' => $request->no_surat,
+            'tujuan_surat' => $request->tujuan_surat,
+            'surat_path' => $pengajuan->surat_path,
+        ]);
+
+        // Hapus detail lama
+        $pengajuan->details()->delete();
+
+        // Simpan detail baru
+        foreach ($request->name as $i => $nama) {
+            PengajuanDetail::create([
+                'pengajuan_id' => $pengajuan->id,
+                'nama' => $nama,
+                'email' => $request->email[$i],
+                'jurusan' => $request->jurusan[$i],
+                'jenis_kelamin' => $request->jenis_kelamin[$i],
+                'no_telp' => $request->no_telp[$i],
+            ]);
+        }
+
+        return redirect()
+            ->route('institusi.pengajuan.index')
+            ->with('success', 'Pengajuan berhasil diperbarui');
+    }
+
     public function show(int $id, PengajuanWhatsappService $whatsappService)
     {
         $pengajuan = Pengajuan::with(['details', 'institusi'])
