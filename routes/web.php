@@ -333,14 +333,15 @@ Route::middleware(['auth', 'mentor'])->prefix('mentor')->name('mentor.')->group(
         ->name('logbook.photo')
         ->middleware('signed')
         ->where('filename', '[^/]+');
-    Route::get('/report', [MentorReportController::class, 'index'])->name('report.index');
-    Route::get('/report/{report}', [MentorReportController::class, 'show'])->name('report.show');
-    Route::put('/report/{report}/grade', [MentorReportController::class, 'grade'])->name('report.grade');
-    Route::get('/microskill', [MentorMicroSkillController::class, 'index'])->name('microskill.index');
-    Route::get('/microskill/photo/{filename}', [MentorMicroSkillController::class, 'servePhoto'])
+        Route::get('/report', [MentorReportController::class, 'index'])->name('report.index');
+        Route::get('/report/{report}', [MentorReportController::class, 'show'])->name('report.show');
+        Route::put('/report/{report}/grade', [MentorReportController::class, 'grade'])->name('report.grade');
+        Route::get('/microskill', [MentorMicroSkillController::class, 'index'])->name('microskill.index');
+        Route::get('/microskill/photo/{filename}', [MentorMicroSkillController::class, 'servePhoto'])
         ->name('microskill.photo')
         ->middleware('signed')
         ->where('filename', '[^/]+');
+        Route::get('/microskill/{id}/detail', [MentorMicroSkillController::class, 'show'])->name('microskill.show');
     Route::get('/microskill/leaderboard', [MentorMicroSkillLeaderboardController::class, 'index'])->name('microskill.leaderboard');
     Route::resource('certificates', CertificateController::class)
             ->only(['index', 'create', 'store', 'show', "update"]);
