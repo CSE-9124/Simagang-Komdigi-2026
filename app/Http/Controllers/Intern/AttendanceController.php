@@ -368,7 +368,7 @@ class AttendanceController extends Controller
         }
 
         if ($nowWita->format('H:i') < '16:00') {
-            return back()->withErrors(['error' => 'Absensi keluar hanya bisa mulai pukul 16:45 WITA.']);
+            return back()->withErrors(['error' => 'Absensi keluar hanya bisa mulai pukul 16:00 WITA.']);
         }
 
         $photoCheckoutPath = null;
