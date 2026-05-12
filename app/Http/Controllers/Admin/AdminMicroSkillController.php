@@ -71,6 +71,34 @@ class AdminMicroSkillController extends Controller
             'X-Content-Type-Options' => 'nosniff',
         ]);
     }
+
+    public function create()
+    {
+        return view('admin.microskill.create');
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'judul_micro' => 'required|string|max:255',
+            'link_micro' => 'required|url',
+        ]);
+
+        MicroSkill::create([
+            'judul_micro' => $request->judul_micro,
+            'link_micro' => $request->link_micro,
+        ]);
+
+        return redirect()->route('admin.microskill.index')->with('success', 'Microskill berhasil ditambahkan.');
+    }
+
+    public function destroy($id)
+    {
+        $microskill = MicroSkill::findOrFail($id);
+        $microskill->delete();
+
+        return redirect()->route('admin.microskill.index')->with('success', 'Microskill berhasil dihapus.');
+    }
 }
 
 
