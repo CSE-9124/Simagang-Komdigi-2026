@@ -454,7 +454,7 @@
                                 </div>
                                 <div>
                                     <p class="font-semibold text-gray-800 text-sm">Status Kehadiran</p>
-                                    <p class="text-xs text-gray-400">{{ \Carbon\Carbon::today()->translatedFormat('l, d F Y') }}</p>
+                                    <p class="text-xs text-gray-400">{{ \Carbon\Carbon::today()->locale('id')->translatedFormat('l, d F Y') }}</p>
                                 </div>
                             </div>
                             <span class="count-pill"
