@@ -336,15 +336,15 @@
                         </div>
                     </div>
 
-                    <div class="stat-tile" style="--stat-color:#10b981;">
+                    <div class="stat-tile" style="--stat-color:#ef4444;">
                         <div class="flex items-start justify-between">
                             <div>
-                                <p class="text-xs font-bold text-gray-500 uppercase">Dengan Foto</p>
+                                <p class="text-xs font-bold text-gray-500 uppercase">Logbook yang harus diselesaikan</p>
                                 <p class="text-2xl font-extrabold mt-2">
-                                    {{ $withPhotoCount ?? $logbooks->where('photo_path', '!=', null)->count() }}</p>
+                                    {{ $belumDikerjakan ?? 0 }}</p>
                             </div>
-                            <div class="stat-icon" style="background:linear-gradient(135deg,#10b981,#059669);">
-                                <i class="fas fa-image"></i>
+                            <div class="stat-icon" style="background:linear-gradient(135deg,#dc2626,#ef4444);">
+                                <i class="fas fa-hourglass-end"></i>
                             </div>
                         </div>
                     </div>

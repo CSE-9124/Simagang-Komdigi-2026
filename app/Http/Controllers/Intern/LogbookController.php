@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Intern;
 
 use App\Http\Controllers\Controller;
 use App\Models\Logbook;
+use App\Models\Attendance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
@@ -47,12 +48,13 @@ class LogbookController extends Controller
 
         // Aggregate counts across all logbook records for this intern
         $totalLogbooks = Logbook::where('intern_id', $intern->id)->count();
-        $withPhotoCount = Logbook::where('intern_id', $intern->id)
-            ->whereNotNull('photo_path')
-            ->count();
         $thisMonthCount = Logbook::where('intern_id', $intern->id)
             ->where('date', '>=', now()->startOfMonth())
             ->count();
+        
+        // Calculate days not yet filled (belum mengerjakan = total hadir - total logbook)
+        $totalHadir = Attendance::where('intern_id', $intern->id)->count();
+        $belumDikerjakan = max(0, $totalHadir - $totalLogbooks);
 
         $cekaktif = $intern && $intern->is_active;
 
@@ -60,7 +62,7 @@ class LogbookController extends Controller
             $logbook->photo_url = $this->makeOneTimeLogbookPhotoUrl($logbook->photo_path);
         });
 
-        return view('intern.logbook.index', compact('logbooks', 'totalLogbooks', 'withPhotoCount', 'thisMonthCount', 'cekaktif'));
+        return view('intern.logbook.index', compact('logbooks', 'totalLogbooks', 'thisMonthCount', 'belumDikerjakan', 'cekaktif'));
     }
 
     public function create()
