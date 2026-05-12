@@ -6,22 +6,45 @@
     <div class="min-h-screen bg-blue-50 py-8">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
 
-            <!-- Header -->
-            <div class="mb-8">
-                <h1 class="text-4xl font-bold text-blue-600 mb-2">Absensi Baru</h1>
-                <p class="text-gray-600">Catat kehadiran Anda hari ini</p>
+            @push('styles')
+            <style>
+                @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap');
+                * { font-family: 'Plus Jakarta Sans', sans-serif; }
+                .hero-strip { background: linear-gradient(110deg, #0f2878 0%, #2d3ecb 55%, #4f46e5 100%); border-radius: 20px; position: relative; overflow: hidden; margin-bottom: 28px; }
+                .hero-strip::before { content: ''; position: absolute; top: -80px; right: -60px; width: 260px; height: 260px; background: rgba(255,255,255,0.05); border-radius: 50%; pointer-events: none; }
+                .hero-strip::after { content: ''; position: absolute; bottom: -100px; left: 25%; width: 320px; height: 320px; background: rgba(255,255,255,0.04); border-radius: 50%; pointer-events: none; }
+                .panel { background:#fff;border-radius:20px;padding:24px;box-shadow:0 1px 3px rgba(30,58,138,0.06), 0 4px 20px rgba(30,58,138,0.06); }
+                .cta-btn { display:inline-flex;align-items:center;gap:8px;padding:11px 24px;background:linear-gradient(110deg,#1e3a8a,#3b4fd8);color:#fff;border-radius:12px;font-size:14px;font-weight:600;text-decoration:none;transition:all .2s ease }
+                .cta-btn:hover { box-shadow:0 6px 16px rgba(59,79,216,0.3); transform:translateY(-1px); color:#fff }
+            </style>
+            @endpush
+
+            <!-- Header (logbook-style hero) -->
+            <div class="hero-strip shadow-xl mb-6">
+                <div class="relative z-10 px-6 py-8">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                        <div>
+                            <h1 class="text-3xl font-bold leading-tight text-white mb-1">Absensi Baru</h1>
+                            <p class="text-blue-200">Catat kehadiran Anda hari ini</p>
+                        </div>
+                        <a href="{{ route('intern.attendance.index') }}" class="cta-btn" style="width:auto;">
+                            <i class="fas fa-arrow-left"></i>
+                            Kembali
+                        </a>
+                    </div>
+                </div>
             </div>
 
             <!-- Form Card -->
-                <div class="bg-white rounded-2xl shadow-lg border border-blue-100 overflow-hidden">
-                <div class="bg-blue-600 px-6 py-4">
-                    <h2 class="text-xl font-bold text-white flex items-center">
-                        <i class="fas fa-clipboard-check mr-3"></i>
-                        Form Absensi
-                    </h2>
-                </div>
+            <div class="panel">
+                <div class="bg-blue-600 px-6 py-4 rounded-t-xl" style="margin:-24px -24px 12px -24px; padding:18px 24px;">
+                        <h2 class="text-xl font-bold text-white flex items-center">
+                            <i class="fas fa-clipboard-check mr-3"></i>
+                            Form Absensi
+                        </h2>
+                    </div>
 
-                <div class="p-6">
+                    <div class="p-6">
                     <form method="POST" action="{{ route('intern.attendance.store') }}" enctype="multipart/form-data"
                         id="attendanceForm">
                         @csrf
@@ -148,14 +171,13 @@
                                 class="inline-flex items-center text-blue-600 hover:text-blue-700 font-semibold transition-colors">
                                 <i class="fas fa-arrow-left mr-2"></i>Kembali ke Daftar
                             </a>
-                            <button type="submit"
-                                class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
-                                <i class="fas fa-save mr-2"></i>Simpan Absensi
-                            </button>
+                                <button type="submit"
+                                    class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300">
+                                    <i class="fas fa-save mr-2"></i>Simpan Absensi
+                                </button>
                         </div>
                     </form>
                 </div>
-            </div>
 
             <!-- Info Cards -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
