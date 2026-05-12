@@ -2,218 +2,695 @@
 
 @section('title', 'Detail Anak Magang - Sistem Magang')
 
+@push('styles')
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap');
+
+    * { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .mono { font-family: 'DM Mono', monospace; }
+    body { background: #f0f4ff; }
+
+    .dash-bg {
+        background: linear-gradient(135deg, #e8eeff 0%, #f0f4ff 40%, #e4ecff 100%);
+        min-height: 100vh;
+    }
+
+    /* ── Profile Strip ── */
+    .profile-strip {
+        background: linear-gradient(100deg, #1e3a8a 0%, #3b4fd8 50%, #4f46e5 100%);
+        position: relative;
+        overflow: hidden;
+        border-radius: 1rem;
+        box-shadow: 0 10px 30px rgba(20, 40, 120, 0.16);
+    }
+    .profile-strip::before {
+        content: '';
+        position: absolute;
+        top: -60px; right: -60px;
+        width: 220px; height: 220px;
+        background: rgba(255,255,255,0.06);
+        border-radius: 50%;
+    }
+    .profile-strip::after {
+        content: '';
+        position: absolute;
+        bottom: -80px; left: 30%;
+        width: 300px; height: 300px;
+        background: rgba(255,255,255,0.04);
+        border-radius: 50%;
+    }
+
+    /* ── Panel ── */
+    .panel {
+        background: #fff;
+        border-radius: 20px;
+        padding: 24px;
+        box-shadow: 0 1px 3px rgba(30,58,138,0.06), 0 4px 20px rgba(30,58,138,0.06);
+    }
+
+    /* ── Section label ── */
+    .section-label {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #94a3b8;
+        margin-bottom: 14px;
+    }
+
+    /* ── Stat tiles (same as dashboard) ── */
+    .stat-tile {
+        background: #fff;
+        border-radius: 1.25rem;
+        padding: 1.25rem;
+        box-shadow: 0 1px 3px rgba(30,58,138,0.06), 0 4px 20px rgba(30,58,138,0.06);
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+    .stat-tile:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 24px rgba(59,79,216,0.16);
+    }
+    .stat-tile::after {
+        content: '';
+        position: absolute;
+        bottom: 0; left: 0; right: 0;
+        height: 3px;
+        background: var(--stat-color, #3b82f6);
+    }
+    .stat-tile .stat-value {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #1f2937;
+        margin: 6px 0 0;
+        font-family: 'DM Mono', monospace;
+    }
+    .stat-tile .stat-label {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: #94a3b8;
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+    }
+    .stat-icon {
+        width: 2.75rem; height: 2.75rem;
+        border-radius: 0.75rem;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.2rem;
+        color: white;
+    }
+
+    /* ── Info grid ── */
+    .info-item {
+        padding: 14px 0;
+        border-bottom: 1px solid #f1f5f9;
+    }
+    .info-item:last-child { border-bottom: none; }
+    .info-label {
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #94a3b8;
+        margin-bottom: 4px;
+    }
+    .info-value {
+        font-size: 14px;
+        font-weight: 600;
+        color: #1f2937;
+    }
+
+    /* ── Status badge ── */
+    .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 4px 12px;
+        border-radius: 999px;
+        font-size: 11px;
+        font-weight: 700;
+    }
+    .badge-green { background: #dcfce7; color: #15803d; }
+    .badge-red   { background: #fee2e2; color: #b91c1c; }
+    .badge-blue  { background: #e0e7ff; color: #3730a3; }
+    .badge-gray  { background: #f1f5f9; color: #64748b; }
+    .badge-amber { background: #fef9c3; color: #a16207; }
+
+    /* ── Attendance table ── */
+    .att-table { width: 100%; border-collapse: collapse; }
+    .att-table th {
+        padding: 9px 14px;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #3730a3;
+        background: #f0f4ff;
+        text-align: center;
+    }
+    .att-table th:first-child { border-radius: 10px 0 0 10px; }
+    .att-table th:last-child  { border-radius: 0 10px 10px 0; }
+    .att-table td {
+        padding: 11px 14px;
+        font-size: 13px;
+        color: #334155;
+        text-align: center;
+        border-bottom: 1px solid #f8faff;
+        vertical-align: middle;
+    }
+    .att-table tbody tr:last-child td { border-bottom: none; }
+    .att-table tbody tr:hover { background: #f8faff; }
+
+    /* ── Logbook cards ── */
+    .logbook-item {
+        padding: 14px 16px;
+        border-radius: 14px;
+        background: #f8faff;
+        border: 1px solid #e8eeff;
+        transition: all 0.2s ease;
+    }
+    .logbook-item:hover {
+        background: #eff2ff;
+        border-color: #c7d2fe;
+        transform: translateX(3px);
+    }
+    .logbook-date {
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #6366f1;
+        margin-bottom: 5px;
+    }
+    .logbook-text {
+        font-size: 13px;
+        color: #475569;
+        line-height: 1.5;
+    }
+
+    /* ── Laporan Akhir ── */
+    .report-card {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 16px 20px;
+        border-radius: 14px;
+        background: #f0f4ff;
+        border: 1.5px solid #e0e7ff;
+        flex-wrap: wrap;
+    }
+    .report-card-info p { margin: 0; }
+    .report-name {
+        font-size: 14px;
+        font-weight: 700;
+        color: #1e3a8a;
+    }
+    .report-date {
+        font-size: 11px;
+        color: #94a3b8;
+        margin-top: 2px !important;
+    }
+
+    /* ── CTA button ── */
+    .cta-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 22px;
+        background: linear-gradient(110deg, #1e3a8a, #3b4fd8);
+        color: #fff;
+        border-radius: 12px;
+        font-size: 13px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+    .cta-btn:hover {
+        box-shadow: 0 6px 16px rgba(59,79,216,0.3);
+        transform: translateY(-1px);
+        color: #fff;
+        text-decoration: none;
+    }
+
+    /* ── Edit button ── */
+    .edit-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 20px;
+        background: rgba(255,255,255,0.15);
+        border: 1.5px solid rgba(255,255,255,0.3);
+        color: #fff;
+        border-radius: 12px;
+        font-size: 13px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+    }
+    .edit-btn:hover {
+        background: rgba(255,255,255,0.25);
+        border-color: rgba(255,255,255,0.5);
+        color: #fff;
+        text-decoration: none;
+        transform: translateY(-1px);
+    }
+
+    /* ── Back btn ── */
+    .btn-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 11px 20px;
+        border-radius: 12px;
+        background: #f0f4ff;
+        border: 1.5px solid #e0e7ff;
+        color: #3b4fd8;
+        font-weight: 600;
+        font-size: 14px;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+    .btn-back:hover {
+        background: #e8eeff;
+        border-color: #a5b4fc;
+        transform: translateY(-1px);
+        color: #3b4fd8;
+        text-decoration: none;
+    }
+
+    /* ── Section header ── */
+    .section-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 16px;
+    }
+    .section-icon {
+        width: 34px; height: 34px;
+        border-radius: 10px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 13px;
+        color: white;
+        flex-shrink: 0;
+    }
+    .section-icon.blue   { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+    .section-icon.indigo { background: linear-gradient(135deg, #6366f1, #4f46e5); }
+    .section-icon.green  { background: linear-gradient(135deg, #22c55e, #16a34a); }
+    .section-icon.violet { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+    .section-icon.amber  { background: linear-gradient(135deg, #f59e0b, #d97706); }
+
+    .section-header-text h3 {
+        font-size: 14px;
+        font-weight: 700;
+        color: #1e3a8a;
+        margin: 0;
+    }
+    .section-header-text p {
+        font-size: 11px;
+        color: #94a3b8;
+        margin: 0;
+    }
+
+    /* ── Animations ── */
+    @keyframes fadeSlideUp {
+        from { opacity: 0; transform: translateY(16px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+    .anim-1 { animation: fadeSlideUp 0.5s ease both; }
+    .anim-2 { animation: fadeSlideUp 0.5s ease 0.1s both; }
+    .anim-3 { animation: fadeSlideUp 0.5s ease 0.2s both; }
+    .anim-4 { animation: fadeSlideUp 0.5s ease 0.3s both; }
+    .anim-5 { animation: fadeSlideUp 0.5s ease 0.4s both; }
+
+    @media (max-width: 640px) {
+        .panel { padding: 16px; }
+        .stat-tile .stat-value { font-size: 1.4rem; }
+    }
+    @media (max-width: 768px) {
+        .md-grid-2 { grid-template-columns: 1fr !important; }
+        .md-col-span-2 { grid-column: span 1 !important; }
+    }
+</style>
+@endpush
+
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-blue-100 py-8">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="dash-bg py-8">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-5">
 
-        <!-- Header -->
-        <div class="bg-blue-600 shadow-lg rounded-lg p-6 mt-6 mb-6">
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <div>
-                    <h1 class="text-3xl font-bold text-white mb-1">Detail Anak Magang</h1>
-                    <p class="text-blue-100 text-sm">
-                        Informasi profil dan aktivitas magang
-                    </p>
+    {{-- ── PROFILE HEADER ── --}}
+    <div class="profile-strip anim-1">
+        <div class="px-6 py-7 flex flex-col sm:flex-row items-center sm:items-start gap-5 relative z-10">
+
+            {{-- Foto peserta ── --}}
+            @if($intern->photo_path)
+                <div style="background:linear-gradient(135deg,#60a5fa,#818cf8);padding:3px;border-radius:9999px;display:inline-flex;flex-shrink:0;">
+                    <img src="{{ url('storage/'.$intern->photo_path) }}"
+                         alt="{{ $intern->name }}"
+                         style="width:80px;height:80px;border-radius:9999px;object-fit:cover;">
                 </div>
-
-                <a href="{{ route('admin.intern.edit', $intern) }}"
-                class="inline-flex items-center gap-2 w-20 h-10 p-1 bg-white/90 hover:bg-white
-                        text-blue-700 font-semibold px-5 py-2.5 rounded-lg shadow transition">
-                    <i class="fas fa-edit "></i>
-                    Edit
-                </a>
-            </div>
-        </div>
-
-        <!-- Profile -->
-        <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-
-                <div class="flex flex-col items-center">
-                    @if($intern->photo_path)
-        <img src="{{ url('storage/'.$intern->photo_path) }}"
-            alt="{{ $intern->name }}"
-            class="w-40 h-40 rounded-full object-cover
-                    border-4 border-blue-300
-                    shadow-lg ring-4 ring-blue-100">
-                @else
-                    <div class="w-40 h-40 rounded-full
-                                bg-blue-100
-                                flex items-center justify-center
-                                border-4 border-blue-200
-                                shadow-lg">
-                        <i class="fas fa-user text-5xl text-blue-500"></i>
+            @else
+                <div style="background:linear-gradient(135deg,#60a5fa,#818cf8);padding:3px;border-radius:9999px;display:inline-flex;flex-shrink:0;">
+                    <div style="background:linear-gradient(135deg,#3b82f6,#6366f1);border-radius:9999px;width:80px;height:80px;display:flex;align-items:center;justify-content:center;">
+                        <span style="font-size:2rem;font-weight:800;color:#fff;">
+                            {{ strtoupper(substr($intern->name, 0, 1)) }}
+                        </span>
                     </div>
-                @endif
-                    <span class="mt-4 px-4 py-1.5 rounded-full text-xs font-semibold
-                        {{ $intern->is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
-                        {{ $intern->is_active ? 'Aktif' : 'Tidak Aktif' }}
-                    </span>
+                </div>
+            @endif
 
-                    @if($intern->team)
-                        <span class="mt-2 text-xs text-gray-500">
-                            Tim: {{ $intern->team }}
+            {{-- Identity ── --}}
+            <div class="flex-1 text-center sm:text-left">
+                <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2 mb-1">
+                    <h1 class="text-xl font-bold text-white">{{ $intern->name }}</h1>
+                    @if($intern->is_active)
+                        <span style="background:rgba(34,197,94,0.2);color:#86efac;border:1px solid rgba(134,239,172,0.3);padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;">
+                            <i class="fas fa-circle text-xs mr-1"></i>Aktif
+                        </span>
+                    @else
+                        <span style="background:rgba(239,68,68,0.2);color:#fca5a5;border:1px solid rgba(252,165,165,0.3);padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;">
+                            <i class="fas fa-circle text-xs mr-1"></i>Tidak Aktif
                         </span>
                     @endif
                 </div>
+                <p class="text-blue-200 font-semibold text-sm">{{ $intern->institution }}</p>
+                <p class="text-blue-300 text-xs mt-1">
+                    <i class="fas fa-graduation-cap mr-1"></i>{{ $intern->education_level }} · {{ $intern->major ?? 'Jurusan tidak diisi' }}
+                    &nbsp;·&nbsp;
+                    <i class="fas fa-calendar-alt mr-1"></i>
+                    {{ $intern->start_date->format('d M Y') }} – {{ $intern->end_date->format('d M Y') }}
+                </p>
+                @if($intern->team)
+                    <p class="text-blue-300 text-xs mt-1">
+                        <i class="fas fa-layer-group mr-1"></i>Tim: {{ $intern->team->name ?? $intern->team }}
+                    </p>
+                @endif
+            </div>
 
-                <!-- Info -->
-                <div class="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-                    <div>
-                        <p class="text-gray-500 text-xs">Nama</p>
-                        <p class="font-semibold text-gray-900">{{ $intern->name }}</p>
-                    </div>
-                    <div>
-                        <p class="text-gray-500 text-xs">Email</p>
-                        <p class="font-semibold text-gray-900">{{ $intern->user->email }}</p>
-                    </div>
-                    <div>
-                        <p class="text-gray-500 text-xs">Jenis Kelamin</p>
-                        <p class="font-semibold text-gray-900">{{ $intern->gender }}</p>
-                    </div>
-                    <div>
-                        <p class="text-gray-500 text-xs">Telepon</p>
-                        <p class="font-semibold text-gray-900">{{ $intern->phone ?? '-' }}</p>
-                    </div>
-                    <div>
-                        <p class="text-gray-500 text-xs">Pendidikan</p>
-                        <p class="font-semibold text-gray-900">{{ $intern->education_level }}</p>
-                    </div>
-                    <div>
-                        <p class="text-gray-500 text-xs">Jurusan</p>
-                        <p class="font-semibold text-gray-900">{{ $intern->major ?? '-' }}</p>
-                    </div>
-                    <div class="sm:col-span-2">
-                        <p class="text-gray-500 text-xs">Institusi</p>
-                        <p class="font-semibold text-gray-900">{{ $intern->institution }}</p>
-                    </div>
-                    <div>
-                        <p class="text-gray-500 text-xs">Mentor</p>
-                        <p class="font-semibold text-gray-900">
-                            {{ $intern->mentor ? $intern->mentor->name : 'Belum ada mentor' }}
-                        </p>
-                    </div>
-                    <div>
-                        <p class="text-gray-500 text-xs">Periode Magang</p>
-                        <p class="font-semibold text-gray-900">
-                            {{ $intern->start_date->format('d M Y') }}
-                            –
-                            {{ $intern->end_date->format('d M Y') }}
-                        </p>
-                    </div>
+            {{-- Actions ── --}}
+            <div class="flex-shrink-0 flex flex-col sm:flex-row gap-2">
+                <a href="{{ route('admin.intern.edit', $intern) }}" class="edit-btn">
+                    <i class="fas fa-edit text-xs"></i>
+                    Edit Data
+                </a>
+                <a href="{{ route('admin.intern.index') }}" class="edit-btn">
+                    <i class="fas fa-arrow-left text-xs"></i>
+                    Kembali
+                </a>
+            </div>
+        </div>
+    </div>
+
+    {{-- ── STAT TILES ── --}}
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 anim-2">
+        <div class="stat-tile" style="--stat-color:#22c55e;">
+            <div class="flex items-start justify-between">
+                <div>
+                    <p class="stat-label">Hadir</p>
+                    <p class="stat-value">{{ $stats['total_hadir'] }}</p>
+                </div>
+                <div class="stat-icon" style="background:linear-gradient(135deg,#22c55e,#16a34a);">
+                    <i class="fas fa-calendar-check"></i>
                 </div>
             </div>
         </div>
-
-        <!-- Statistik -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-            <div class="bg-white rounded-xl shadow-sm p-5 flex justify-between items-center">
+        <div class="stat-tile" style="--stat-color:#f59e0b;">
+            <div class="flex items-start justify-between">
                 <div>
-                    <p class="text-sm text-gray-500">Hadir</p>
-                    <p class="text-2xl font-bold">{{ $stats['total_hadir'] }}</p>
+                    <p class="stat-label">Izin</p>
+                    <p class="stat-value">{{ $stats['total_izin'] }}</p>
                 </div>
-                <i class="fas fa-calendar-check text-green-600 text-2xl"></i>
-            </div>
-
-            <div class="bg-white rounded-xl shadow-sm p-5 flex justify-between items-center">
-                <div>
-                    <p class="text-sm text-gray-500">Izin</p>
-                    <p class="text-2xl font-bold">{{ $stats['total_izin'] }}</p>
+                <div class="stat-icon" style="background:linear-gradient(135deg,#f59e0b,#d97706);">
+                    <i class="fas fa-calendar-times"></i>
                 </div>
-                <i class="fas fa-calendar-times text-yellow-500 text-2xl"></i>
-            </div>
-
-            <div class="bg-white rounded-xl shadow-sm p-5 flex justify-between items-center">
-                <div>
-                    <p class="text-sm text-gray-500">Sakit</p>
-                    <p class="text-2xl font-bold">{{ $stats['total_sakit'] }}</p>
-                </div>
-                <i class="fas fa-calendar-minus text-red-500 text-2xl"></i>
-            </div>
-
-            <div class="bg-white rounded-xl shadow-sm p-5 flex justify-between items-center">
-                <div>
-                    <p class="text-sm text-gray-500">Logbook</p>
-                    <p class="text-2xl font-bold">{{ $stats['total_logbooks'] }}</p>
-                </div>
-                <i class="fas fa-book text-blue-600 text-2xl"></i>
             </div>
         </div>
+        <div class="stat-tile" style="--stat-color:#ef5350;">
+            <div class="flex items-start justify-between">
+                <div>
+                    <p class="stat-label">Sakit</p>
+                    <p class="stat-value">{{ $stats['total_sakit'] }}</p>
+                </div>
+                <div class="stat-icon" style="background:linear-gradient(135deg,#ef5350,#e53935);">
+                    <i class="fas fa-heartbeat"></i>
+                </div>
+            </div>
+        </div>
+        <div class="stat-tile" style="--stat-color:#3b82f6;">
+            <div class="flex items-start justify-between">
+                <div>
+                    <p class="stat-label">Logbook</p>
+                    <p class="stat-value">{{ $stats['total_logbooks'] }}</p>
+                </div>
+                <div class="stat-icon" style="background:linear-gradient(135deg,#3b82f6,#2563eb);">
+                    <i class="fas fa-book"></i>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-            <div class="bg-white rounded-xl shadow-sm p-6">
-                <h2 class="text-lg font-semibold mb-4">Riwayat Absensi</h2>
-                <table class="w-full text-sm divide-y divide-gray-200">
-                    <thead>
-                        <tr class="text-center bg-blue-50">
-                            <th class="px-6 py-4 text-xs font-bold text-blue-900 uppercase">Tanggal</th>
-                            <th class="px-6 py-4 text-xs font-bold text-blue-900 uppercase">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($intern->attendances as $attendance)
-                            <tr class="border-b text-center">
-                                <td class="py-2">{{ $attendance->date->format('d/m/Y') }}</td>
-                                <td class="py-2 capitalize">{{ $attendance->status }}</td>
-                            </tr>
-                        @empty
+    {{-- ── MAIN GRID ── --}}
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+
+        {{-- LEFT: Info Profil ── --}}
+        <div class="lg:col-span-1 space-y-5">
+
+            {{-- Informasi Pribadi ── --}}
+            <div class="panel anim-3">
+                <div class="section-header">
+                    <div class="section-icon blue"><i class="fas fa-user"></i></div>
+                    <div class="section-header-text">
+                        <h3>Informasi Pribadi</h3>
+                        <p>Data diri peserta</p>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <p class="info-label">Nama Lengkap</p>
+                    <p class="info-value">{{ $intern->name }}</p>
+                </div>
+                <div class="info-item">
+                    <p class="info-label">Email</p>
+                    <p class="info-value mono" style="font-size:12px;word-break:break-all;">{{ $intern->user->email }}</p>
+                </div>
+                <div class="info-item">
+                    <p class="info-label">Jenis Kelamin</p>
+                    <p class="info-value">{{ $intern->gender }}</p>
+                </div>
+                <div class="info-item">
+                    <p class="info-label">Telepon</p>
+                    <p class="info-value mono" style="font-size:13px;">{{ $intern->phone ?? '—' }}</p>
+                </div>
+                <div class="info-item">
+                    <p class="info-label">Jenjang Pendidikan</p>
+                    <p class="info-value">{{ $intern->education_level }}</p>
+                </div>
+                <div class="info-item">
+                    <p class="info-label">Jurusan</p>
+                    <p class="info-value">{{ $intern->major ?? '—' }}</p>
+                </div>
+                <div class="info-item">
+                    <p class="info-label">Institusi</p>
+                    <p class="info-value">{{ $intern->institution }}</p>
+                </div>
+            </div>
+
+            {{-- Penempatan ── --}}
+            <div class="panel anim-3">
+                <div class="section-header">
+                    <div class="section-icon green"><i class="fas fa-users"></i></div>
+                    <div class="section-header-text">
+                        <h3>Penempatan</h3>
+                        <p>Mentor & tim</p>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <p class="info-label">Mentor</p>
+                    <p class="info-value">{{ $intern->mentor?->name ?? 'Belum ada mentor' }}</p>
+                </div>
+                <div class="info-item">
+                    <p class="info-label">Tim</p>
+                    @if($intern->team)
+                        <span class="badge badge-blue" style="margin-top:2px;">
+                            <i class="fas fa-layer-group text-xs"></i>
+                            {{ $intern->team->name ?? $intern->team }}
+                        </span>
+                    @else
+                        <p class="info-value" style="color:#94a3b8;">Belum ada tim</p>
+                    @endif
+                </div>
+                <div class="info-item">
+                    <p class="info-label">Periode Magang</p>
+                    <p class="info-value mono" style="font-size:12px;">
+                        {{ $intern->start_date->format('d M Y') }}<br>
+                        <span style="color:#94a3b8;font-size:10px;">s/d</span><br>
+                        {{ $intern->end_date->format('d M Y') }}
+                    </p>
+                </div>
+                <div class="info-item">
+                    <p class="info-label">Status</p>
+                    @if($intern->is_active)
+                        <span class="badge badge-green" style="margin-top:2px;">
+                            <i class="fas fa-circle" style="font-size:6px;"></i> Aktif
+                        </span>
+                    @else
+                        <span class="badge badge-red" style="margin-top:2px;">
+                            <i class="fas fa-circle" style="font-size:6px;"></i> Tidak Aktif
+                        </span>
+                    @endif
+                </div>
+            </div>
+
+        </div>
+
+        {{-- RIGHT: Absensi + Logbook ── --}}
+        <div class="lg:col-span-2 space-y-5">
+
+            {{-- Riwayat Absensi ── --}}
+            <div class="panel anim-4">
+                <div class="section-header">
+                    <div class="section-icon indigo"><i class="fas fa-clipboard-list"></i></div>
+                    <div class="section-header-text">
+                        <h3>Riwayat Absensi</h3>
+                        <p>Rekap kehadiran peserta</p>
+                    </div>
+                </div>
+
+                <div style="overflow-x:auto;overflow-y:auto;max-height:340px;border-radius:12px;border:1px solid #e8eeff;">
+                    <table class="att-table">
+                        <thead>
                             <tr>
-                                <td colspan="2" class="py-4 text-center text-gray-400">
-                                    Belum ada absensi
-                                </td>
+                                <th>Tanggal</th>
+                                <th>Status</th>
+                                <th>Masuk</th>
+                                <th>Keluar</th>
                             </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @forelse($intern->attendances as $attendance)
+                                <tr>
+                                    <td class="mono" style="font-size:12px;">
+                                        {{ $attendance->date->format('d/m/Y') }}
+                                    </td>
+                                    <td>
+                                        @php
+                                            $badgeClass = match($attendance->status) {
+                                                'hadir' => 'badge-green',
+                                                'izin'  => 'badge-amber',
+                                                'sakit' => 'badge badge-red',
+                                                default => 'badge-gray',
+                                            };
+                                            $badgeIcon = match($attendance->status) {
+                                                'hadir' => 'fa-check-circle',
+                                                'izin'  => 'fa-clipboard',
+                                                'sakit' => 'fa-heartbeat',
+                                                default => 'fa-times-circle',
+                                            };
+                                            $badgeText = match($attendance->status) {
+                                                'hadir' => 'Hadir',
+                                                'izin'  => 'Izin',
+                                                'sakit' => 'Sakit',
+                                                default => 'Alfa',
+                                            };
+                                        @endphp
+                                        <span class="badge {{ $badgeClass }}">
+                                            <i class="fas {{ $badgeIcon }} text-xs"></i>
+                                            {{ $badgeText }}
+                                        </span>
+                                    </td>
+                                    <td class="mono" style="font-size:12px;">
+                                        {{ $attendance->check_in ? \Carbon\Carbon::parse($attendance->check_in)->format('H:i') : '—' }}
+                                    </td>
+                                    <td class="mono" style="font-size:12px;">
+                                        {{ $attendance->check_out ? \Carbon\Carbon::parse($attendance->check_out)->format('H:i') : '—' }}
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="4" style="padding:32px;text-align:center;color:#94a3b8;">
+                                        <i class="fas fa-inbox text-3xl mb-2" style="display:block;color:#e2e8f0;"></i>
+                                        Belum ada riwayat absensi
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
-            <!-- Logbook -->
-            <div class="bg-white rounded-xl shadow-sm p-6">
-                <h2 class="text-lg font-semibold mb-4">Logbook Terakhir</h2>
-                <div class="space-y-3 max-h-80 overflow-y-auto">
+            {{-- Logbook ── --}}
+            <div class="panel anim-4">
+                <div class="section-header">
+                    <div class="section-icon violet"><i class="fas fa-book-open"></i></div>
+                    <div class="section-header-text">
+                        <h3>Logbook Terakhir</h3>
+                        <p>Aktivitas harian peserta</p>
+                    </div>
+                </div>
+
+                <div class="space-y-2" style="max-height:320px;overflow-y:auto;padding-right:4px;">
                     @forelse($intern->logbooks as $logbook)
-                        <div class="border rounded-lg p-3 bg-blue-50 hover:bg-blue-100 transition">
-                            <p class="text-xs text-gray-500 mb-1">
+                        <div class="logbook-item">
+                            <p class="logbook-date">
+                                <i class="fas fa-calendar-day mr-1"></i>
                                 {{ $logbook->date->format('d M Y') }}
                             </p>
-                            <p class="text-sm text-gray-700">
-                                {{ $logbook->activity }}
-                            </p>
+                            <p class="logbook-text">{{ $logbook->activity }}</p>
                         </div>
                     @empty
-                        <p class="text-center text-gray-400">Belum ada logbook</p>
+                        <div style="padding:32px;text-align:center;color:#94a3b8;">
+                            <i class="fas fa-book text-3xl mb-2" style="display:block;color:#e2e8f0;"></i>
+                            <p style="font-size:13px;margin:0;">Belum ada logbook</p>
+                        </div>
                     @endforelse
                 </div>
             </div>
-        </div>
 
-        <!-- Laporan Akhir -->
-        @if($intern->finalReport)
-            <div class="bg-white rounded-xl shadow-sm p-6 mb-10">
-                <h2 class="text-lg font-semibold mb-4">Laporan Akhir</h2>
-                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
-                    <div>
-                        <p class="font-semibold">{{ $intern->finalReport->file_name }}</p>
-                        <p class="text-xs text-gray-500">
-                            {{ $intern->finalReport->submitted_at->format('d F Y H:i') }}
-                        </p>
+            {{-- Laporan Akhir ── --}}
+            @if($intern->finalReport)
+                <div class="panel anim-5">
+                    <div class="section-header">
+                        <div class="section-icon amber"><i class="fas fa-file-alt"></i></div>
+                        <div class="section-header-text">
+                            <h3>Laporan Akhir</h3>
+                            <p>Dokumen penutup magang</p>
+                        </div>
                     </div>
-                    <a href="{{ route('admin.report.show', $intern->finalReport) }}"
-                    class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg font-semibold transition">
-                        Lihat Detail
-                    </a>
+                    <div class="report-card">
+                        <div class="report-card-info">
+                            <p class="report-name">
+                                <i class="fas fa-paperclip mr-1" style="color:#6366f1;"></i>
+                                {{ $intern->finalReport->file_name }}
+                            </p>
+                            <p class="report-date">
+                                <i class="fas fa-clock mr-1"></i>
+                                Dikirim {{ $intern->finalReport->submitted_at->format('d F Y, H:i') }}
+                            </p>
+                        </div>
+                        <a href="{{ route('admin.report.show', $intern->finalReport) }}" class="cta-btn">
+                            Lihat Laporan
+                            <i class="fas fa-arrow-right text-xs"></i>
+                        </a>
+                    </div>
                 </div>
-            </div>
-        @endif
+            @endif
 
-        <div class="mt-10 mb-5">
-            <a href="{{ route('admin.intern.index') }}"
-            class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 font-semibold transition">
-                <i class="fas fa-arrow-left"></i>
-                Kembali ke Daftar Anak Magang
-            </a>
         </div>
-
     </div>
+
+    {{-- ── FOOTER BACK ── --}}
+    <div class="anim-5" style="padding-bottom:8px;">
+        <a href="{{ route('admin.intern.index') }}" class="btn-back">
+            <i class="fas fa-arrow-left text-xs"></i>
+            Kembali ke Daftar Anak Magang
+        </a>
+    </div>
+
+</div>
 </div>
 @endsection
