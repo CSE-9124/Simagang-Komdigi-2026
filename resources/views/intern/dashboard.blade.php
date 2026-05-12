@@ -420,7 +420,7 @@
             </div>
             <div class="stat-content">
                 <p class="stat-label">Mikro Skill</p>
-                <p class="stat-value">{{ $microSkillApproved }}<span style="font-size:1rem;color:#94a3b8;">/{{ $microSkillTotal }}</span></p>
+                <p class="stat-value">{{ $microSkillApproved }}<span style="font-size:1rem;color:#94a3b8;">/{{ \App\Models\MicroSkill::count() }}</span></p>
             </div>
         </div>
     </div>
