@@ -167,7 +167,7 @@ class AdminPengajuanMagang extends Controller
         $tpl = $pdf->importPage(1);
         $pdf->useTemplate($tpl, 0, 0, 210);
 
-        $pdf->SetFont('Times', '', 12);
+        $pdf->SetFont('Helvetica', '', 12);
 
         // Nomor surat
          $pdf->SetXY(43.8, 57.8);
@@ -179,11 +179,11 @@ class AdminPengajuanMagang extends Controller
         $pdf->Write(0, "Makassar, " . $tanggalSurat->translatedFormat('d'). ' ' . bulanSingkat($tanggalSurat) . ' ' . $tanggalSurat->translatedFormat('Y')) ;
 
         // Tujuan surat
-        $pdf->SetXY(18, 85.7); 
+        $pdf->SetXY(18, 87.5); 
         $pdf->Write(0, $pengajuan->tujuan_surat);
 
         // Institusi
-         $pdf->SetXY(18, 91.2); 
+         $pdf->SetXY(18, 94.7); 
         if ($pengajuan->institusi->jenis_institusi === 'sekolah') {
             $pdf->Write(0, $pengajuan->institusi->nama_institusi );
         } else {
@@ -191,7 +191,7 @@ class AdminPengajuanMagang extends Controller
         }
 
         // isi
-        $tanggal = $pengajuan->created_at;
+       $tanggal = $pengajuan->created_at;
 
         $teks = "Sehubungan dengan Surat Permohonan Izin Magang No. {$pengajuan->no_surat} "
             . "tanggal "
@@ -199,45 +199,20 @@ class AdminPengajuanMagang extends Controller
             . " yang diajukan oleh mahasiswa/siswa dari instansi Bapak/Ibu kepada kami, "
             . "dengan ini kami menyampaikan bahwa permohonan tersebut dapat kami setujui.";
 
-        $x = 18;
-        $y = 108.2;
-        $indent = 10;
-        $width = 174;
+        $pdf->SetFont('Helvetica', '', 12);
+        $pdf->setCellHeightRatio(1.8);
 
-        $pdf->SetFont('Times', '', 12);
-        $pdf->setCellHeightRatio(1.5);
-
-        // pecah teks berdasarkan lebar baris pertama
-        $words = explode(' ', $teks);
-        $barisPertama = '';
-        $sisa = '';
-
-        foreach ($words as $i => $word) {
-            $coba = trim($barisPertama . ' ' . $word);
-
-            if ($pdf->GetStringWidth($coba) <= ($width - $indent)) {
-                $barisPertama = $coba;
-            } else {
-                $sisa = implode(' ', array_slice($words, $i));
-                break;
-            }
-        }
-
-        // baris pertama (indent)
-        $pdf->SetXY($x + $indent, $y);
-        $pdf->Cell($width - $indent, 0, $barisPertama, 0, 1, 'J');
-
-        // lanjut paragraf normal
-        $pdf->SetXY($x, $pdf->GetY());
-        $pdf->MultiCell($width, 0, $sisa, 0, 'J');
+        // paragraf
+        $pdf->SetXY(18, 114);
+        $pdf->MultiCell(173.3, 0, $teks, 0, 'J');
 
         // ttd
         $pdf->Image(
-            storage_path('app/public/images/ttd_balasan_surat.png'),
-            137.7,
-            208.2,
-            20,
-            20
+            storage_path('app/public/images/ttd_baru5.png'),
+            117.5,
+            226.2,
+            80,
+            50
         );
             
         // halaman 2
@@ -246,11 +221,11 @@ class AdminPengajuanMagang extends Controller
         $pdf->useTemplate($tpl2, 0, 0, 210);
 
         // TABEL
-        $pdf->SetFont('Times', '', 12);
+        $pdf->SetFont('Helvetica', '', 12);
 
         // posisi awal tabel
-        $startY = 72;
-        $pdf->SetXY(22, $startY);
+        $startY = 77;
+        $pdf->SetXY(24, $startY);
 
         // lebar kolom 
         $wNo = 12;
@@ -258,19 +233,19 @@ class AdminPengajuanMagang extends Controller
         $wJurusan = 65;
 
         // ================= HEADER =================
-        $pdf->SetFont('Times', 'B', 12);
-        $pdf->SetX(22); 
+        $pdf->SetFont('Helvetica', 12);
+        $pdf->SetX(24); 
         $pdf->Cell($wNo, 8, 'No', 1, 0, 'C');
         $pdf->Cell($wNama, 8, 'Nama', 1, 0, 'C');
         $pdf->Cell($wJurusan, 8, 'Jurusan', 1, 1, 'C');
 
         // ================= ISI =================
-        $pdf->SetFont('Times', '', 12);
+        $pdf->SetFont('Helvetica', '', 12);
 
         $no = 1;
         foreach ($pengajuan->details as $detail) {
 
-            $pdf->SetX(22); 
+            $pdf->SetX(24); 
 
             $pdf->Cell($wNo, 7, $no++, 1, 0, 'C');
             $pdf->Cell($wNama, 7, ' ' . $detail->nama, 1);
