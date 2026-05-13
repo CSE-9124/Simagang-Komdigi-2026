@@ -151,11 +151,11 @@
                             <p class="text-blue-200 text-xs font-semibold uppercase tracking-widest mb-1">Total Admin</p>
                             <p class="font-extrabold text-white text-center text-4xl leading-none">{{ $accounts->total() }}</p>
                         </div>
-                        <a href="{{ route('admin.accounts.create') }}"
+                        {{-- <a href="{{ route('admin.accounts.create') }}"
                             class="inline-flex items-center gap-2 bg-white text-blue-700 font-bold text-sm px-5 py-2.5 rounded-xl shadow hover:shadow-md hover:bg-blue-50 transition-all duration-200">
                             <i class="fas fa-plus text-xs"></i>
                             Tambah Admin
-                        </a>
+                        </a> --}}
                     </div>
                 </div>
             </div>

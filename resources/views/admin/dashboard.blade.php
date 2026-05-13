@@ -402,9 +402,8 @@
 
                     {{-- Summary right --}}
                     <div class="flex-shrink-0 text-center sm:text-right">
-                        <p class="text-blue-200 text-xs font-semibold uppercase tracking-widest mb-1">Magang Aktif</p>
-                        <p class="text-5xl font-extrabold text-white mono">{{ $activeInterns }}</p>
-                        <p class="text-blue-300 text-xs mt-1">dari {{ $totalInterns }} total peserta</p>
+                        <p class="text-blue-200 text-xs font-semibold uppercase tracking-widest mb-1">Peserta Magang</p>
+                        <p class="text-5xl font-extrabold text-white mono">{{ $totalInterns }}</p>
                     </div>
                 </div>
             </div>
@@ -414,7 +413,7 @@
                 <div class="stat-tile" style="--stat-color:#3b82f6;">
                     <div class="flex items-start justify-between">
                         <div>
-                            <p class="stat-label">Magang Aktif</p>
+                            <p class="stat-label">Peserta Aktif</p>
                             <p class="stat-value">{{ $activeInterns }}</p>
                         </div>
                         <div class="stat-icon" style="background:linear-gradient(135deg,#3b82f6,#2563eb);">
@@ -425,7 +424,7 @@
                 <div class="stat-tile" style="--stat-color:#22c55e;">
                     <div class="flex items-start justify-between">
                         <div>
-                            <p class="stat-label">Total Hadir</p>
+                            <p class="stat-label">Peserta Hadir</p>
                             <p class="stat-value">{{ $totalHadir }}</p>
                         </div>
                         <div class="stat-icon" style="background:linear-gradient(135deg,#22c55e,#16a34a);">
@@ -436,7 +435,7 @@
                 <div class="stat-tile" style="--stat-color:#f59e0b;">
                     <div class="flex items-start justify-between">
                         <div>
-                            <p class="stat-label">Total Izin</p>
+                            <p class="stat-label">Peserta Izin</p>
                             <p class="stat-value">{{ $totalIzin }}</p>
                         </div>
                         <div class="stat-icon" style="background:linear-gradient(135deg,#f59e0b,#d97706);">
@@ -447,7 +446,7 @@
                 <div class="stat-tile" style="--stat-color:#ef5350;">
                     <div class="flex items-start justify-between">
                         <div>
-                            <p class="stat-label">Total Sakit</p>
+                            <p class="stat-label">Peserta Sakit</p>
                             <p class="stat-value">{{ $totalSakit }}</p>
                         </div>
                         <div class="stat-icon" style="background:linear-gradient(135deg,#ef5350,#e53935);">
@@ -458,7 +457,7 @@
                 <div class="stat-tile" style="--stat-color:#6b7280;">
                     <div class="flex items-start justify-between">
                         <div>
-                            <p class="stat-label">Tidak Hadir</p>
+                            <p class="stat-label">Peserta Absen</p>
                             <p class="stat-value">{{ $totalAlfa }}</p>
                         </div>
                         <div class="stat-icon" style="background:linear-gradient(135deg,#6b7280,#4b5563);">
@@ -675,7 +674,7 @@
                             </a>
                             <a href="{{ route('admin.pengajuan.index') }}" class="action-btn">
                                 <i class="fas fa-file-alt"></i>
-                                Pengajuan Masuk
+                                Pengajuan Peserta
                             </a>
                             <a href="{{ route('admin.microskill.leaderboard') }}" class="action-btn">
                                 <i class="fas fa-trophy"></i>
