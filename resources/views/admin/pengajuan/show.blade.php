@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Detail Pengajuan Magang')
+@section('title', 'Detail Pengajuan Peserta Magang')
 
 @push('styles')
     <style>
@@ -97,9 +97,9 @@
             <div class="hero-strip mt-6 mb-6">
                 <div class="relative z-10 p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div>
-                        <h1 class="hero-title text-3xl font-bold text-white mb-1">Detail Pengajuan Magang</h1>
+                        <h1 class="hero-title text-3xl font-bold text-white mb-1">Detail Pengajuan Peserta Magang</h1>
                         <p class="text-blue-100 text-sm">
-                            Informasi pengajuan dan calon anak magang
+                            Informasi pengajuan dan calon peserta magang
                         </p>
                     </div>
                 </div>
@@ -118,7 +118,7 @@
                                 <i class="fas fa-briefcase text-blue-600"></i>
                             </div>
                             <h2 class="text-lg font-bold text-blue-900">
-                                Informasi Surat Pengajuan Magang
+                                Informasi Surat Pengajuan Peserta Magang
                             </h2>
                         </div>
 
@@ -183,7 +183,7 @@
                             <i class="fas fa-user text-blue-600"></i>
                         </div>
                         <div>
-                            <h2 class="text-lg font-bold text-blue-900">Daftar Calon Anak Magang</h2>
+                            <h2 class="text-lg font-bold text-blue-900">Daftar Calon Peserta Magang</h2>
                         </div>
                     </div>
 
@@ -191,7 +191,7 @@
                         <div class="peserta-card mb-6 bg-white p-6 rounded-xl border">
 
                             <h3 class="text-md font-semibold text-blue-700 mb-4">
-                                Calon Anak Magang {{ $i + 1 }}
+                                Calon Peserta Magang {{ $i + 1 }}
                             </h3>
 
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-gray-700">
@@ -256,7 +256,7 @@
 
                             <div class="mb-6">
                                 <label for="status" class="block text-sm font-semibold text-gray-700 mb-2">
-                                    Status Pengajuan Calon Anak Magang
+                                    Status Pengajuan Calon Peserta Magang
                                 </label>
                                 <select name="status" id="status" required
                                     class="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
@@ -298,7 +298,7 @@
                                 <textarea name="admin_note" id="admin_note" rows="4"
                                     class="w-full px-4 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">{{ old('admin_note', $pengajuan->admin_note) }}</textarea>
                                 <p class="mt-2 text-sm text-gray-500">
-                                    Tuliskan apa saja yang perlu direvisi oleh institusi/anak magang.
+                                    Tuliskan apa saja yang perlu direvisi oleh institusi/peserta magang.
                                 </p>
                             </div>
 
