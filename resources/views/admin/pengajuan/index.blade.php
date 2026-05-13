@@ -106,9 +106,9 @@
                 <div class="relative z-10 px-6 py-7">
                     <div>
                         <h1 class="hero-title text-3xl sm:text-4xl font-bold leading-tight mb-2">
-                            Pengajuan Magang
+                            Pengajuan Peserta Magang
                         </h1>
-                        <p class="text-blue-100">Catat dan kelola pengajuan magang Anda</p>
+                        <p class="text-blue-100">Catat dan kelola pengajuan peserta magang Anda</p>
                     </div>
                 </div>
             </div>

@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Sistem Manajemen Anak Magang')</title>
+    <title>@yield('title', 'Sistem Manajemen Peserta Magang')</title>
     <link rel="icon" type="image/png" href="{{ url('storage/vendor/icon-komdigi.png') }}">
     <link rel="shortcut icon" href="{{ url('storage/vendor/icon-komdigi.png') }}">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -231,7 +231,7 @@
 
                                 <a href="{{ route('admin.intern.index') }}" class="{{ request()->routeIs('admin.intern.*') ? 'text-blue-700 bg-blue-50' : 'text-gray-500 hover:bg-gray-100' }} flex items-center px-4 py-2.5 text-sm font-medium">
                                     <i class="fas fa-user-graduate w-4 mr-3 text-xs"></i>
-                                    Anak Magang
+                                    Peserta Magang
                                 </a>
 
                                 @can('manage_teams')
@@ -354,7 +354,7 @@
                                 <a href="{{ route('institusi.intern.index') }}"
                                     class="{{ request()->routeIs('institusi.intern.index') ? 'text-blue-700 bg-blue-50' : 'text-gray-500 hover:bg-gray-100' }} flex items-center px-4 py-2.5 text-sm font-medium">
                                     <i class="fas fa-users w-4 mr-3 text-xs"></i>
-                                    Anak Magang
+                                    Peserta Magang
                                 </a>
                                 <a href="{{ route('institusi.attendance.index') }}"
                                     class="{{ request()->routeIs('institusi.attendance.*') ? 'text-blue-700 bg-blue-50' : 'text-gray-500 hover:bg-gray-100' }} flex items-center px-4 py-2.5 text-sm font-medium">
@@ -546,7 +546,7 @@
                                         @endcan
                                         <a href="{{ route('admin.intern.index') }}" class="{{ request()->routeIs('admin.intern.*') ? 'text-blue-700 bg-blue-50' : 'text-gray-500 hover:bg-gray-100' }} flex items-center px-4 py-2.5 text-sm font-medium">
                                             <i class="fas fa-user-graduate w-4 mr-3 text-xs"></i>
-                                            Anak Magang
+                                            Peserta Magang
                                         </a>
                                         @can('manage_teams')
                                         <a href="{{ route('admin.team.index') }}" class="{{ request()->routeIs('admin.team.*') ? 'text-blue-700 bg-blue-50' : 'text-gray-500 hover:bg-gray-100' }} flex items-center px-4 py-2.5 text-sm font-medium">
@@ -665,7 +665,7 @@
                                         <a href="{{ route('institusi.intern.index') }}"
                                             class="{{ request()->routeIs('institusi.intern.index') ? 'text-blue-700 bg-blue-50' : 'text-gray-500 hover:bg-gray-100' }} flex items-center px-4 py-2.5 text-sm font-medium">
                                             <i class="fas fa-users w-4 mr-3 text-xs"></i>
-                                            Anak Magang
+                                            Peserta Magang
                                         </a>
                                         <a href="{{ route('institusi.attendance.index') }}"
                                             class="{{ request()->routeIs('institusi.attendance.*') ? 'text-blue-700 bg-blue-50' : 'text-gray-500 hover:bg-gray-100' }} flex items-center px-4 py-2.5 text-sm font-medium">
