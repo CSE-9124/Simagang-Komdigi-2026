@@ -83,12 +83,17 @@
         position: relative;
         overflow: hidden;
         transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-direction: row-reverse;
     }
     .stat-tile:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(59,79,216,0.16); }
     .stat-tile::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: var(--stat-color, #3b82f6); }
-    .stat-tile .stat-value { font-size: 1.75rem; font-weight: 700; color: #1f2937; margin: 0.4rem 0 0; font-family: 'DM Mono', monospace; }
-    .stat-tile .stat-label { font-size: 10px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.08em; }
-    .stat-icon { width: 2.75rem; height: 2.75rem; border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: white; }
+    .stat-content { flex: 1; }
+    .stat-label { font-size: 10px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.08em; }
+    .stat-value { font-size: 1.75rem; font-weight: 700; color: #1f2937; margin: 0.25rem 0 0; font-family: 'DM Mono', monospace; }
+    .stat-icon { width: 56px; height: 56px; border-radius: 0.75rem; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: white; flex-shrink: 0; }
 
     /* ── Section label ── */
     .section-label { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #94a3b8; margin-bottom: 14px; }
@@ -133,7 +138,15 @@
     @keyframes fadeSlideUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
     .anim-1{animation:fadeSlideUp .5s ease both}.anim-2{animation:fadeSlideUp .5s ease .1s both}.anim-3{animation:fadeSlideUp .5s ease .2s both}.anim-4{animation:fadeSlideUp .5s ease .3s both}
 
-    @media (max-width:640px){ .avatar-inner{width:60px;height:60px} .panel{padding:16px} .stat-tile{padding:1rem} .stat-tile .stat-value{font-size:1.4rem} }
+    @media (max-width:640px){ 
+        .avatar-inner{width:60px;height:60px} 
+        .panel{padding:16px} 
+        .stat-grid > :last-child:nth-child(odd) { grid-column: span 2 / span 2; }
+        .stat-tile { padding: 1rem; flex-direction: row; } 
+        .stat-icon { width: 44px; height: 44px; border-radius: 10px; font-size: 1rem; flex: 0 0 44px; }
+        .stat-value { font-size: 1.25rem; }
+        .stat-label { font-size: 9px; }
+    }
 </style>
 @endpush
 
@@ -159,56 +172,48 @@
             </div>
             <!-- Statistics Cards (Optional - untuk informasi tambahan) -->
             @if ($attendances->count() > 0 || $todayVirtualAbsent)
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
+                <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mt-6 stat-grid">
                     <!-- Total Hadir -->
                     <div class="stat-tile" style="--stat-color:#22c55e;">
-                        <div class="flex items-start justify-between">
-                            <div>
-                                <p class="text-xs font-bold text-gray-500 uppercase">Kehadiran</p>
-                                <p class="text-2xl font-extrabold mt-2">{{ $totalHadir }}</p>
-                            </div>
-                            <div class="stat-icon" style="background:linear-gradient(135deg,#22c55e,#16a34a);">
-                                <i class="fas fa-calendar-check"></i>
-                            </div>
+                        <div class="stat-icon" style="background:linear-gradient(135deg,#22c55e,#16a34a);">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <div class="stat-content">
+                            <p class="stat-label">Kehadiran</p>
+                            <p class="stat-value">{{ $totalHadir }}</p>
                         </div>
                     </div>
 
                     <!-- Total Izin -->
                     <div class="stat-tile" style="--stat-color:#f59e0b;">
-                        <div class="flex items-start justify-between">
-                            <div>
-                                <p class="text-xs font-bold text-gray-500 uppercase">Izin</p>
-                                <p class="text-2xl font-extrabold mt-2">{{ $totalIzin }}</p>
-                            </div>
-                            <div class="stat-icon" style="background:linear-gradient(135deg,#f59e0b,#d97706);">
-                                <i class="fas fa-calendar-times"></i>
-                            </div>
+                        <div class="stat-icon" style="background:linear-gradient(135deg,#f59e0b,#d97706);">
+                            <i class="fas fa-calendar-times"></i>
+                        </div>
+                        <div class="stat-content">
+                            <p class="stat-label">Izin</p>
+                            <p class="stat-value">{{ $totalIzin }}</p>
                         </div>
                     </div>
 
                     <!-- Total Sakit -->
                     <div class="stat-tile" style="--stat-color:#ef5350;">
-                        <div class="flex items-start justify-between">
-                            <div>
-                                <p class="text-xs font-bold text-gray-500 uppercase">Sakit</p>
-                                <p class="text-2xl font-extrabold mt-2">{{ $totalSakit }}</p>
-                            </div>
-                            <div class="stat-icon" style="background:linear-gradient(135deg,#ef5350,#e53935);">
-                                <i class="fas fa-calendar-minus"></i>
-                            </div>
+                        <div class="stat-icon" style="background:linear-gradient(135deg,#ef5350,#e53935);">
+                            <i class="fas fa-calendar-minus"></i>
+                        </div>
+                        <div class="stat-content">
+                            <p class="stat-label">Sakit</p>
+                            <p class="stat-value">{{ $totalSakit }}</p>
                         </div>
                     </div>
 
                     <!-- Total Tidak Hadir -->
                     <div class="stat-tile" style="--stat-color:#f97316;">
-                        <div class="flex items-start justify-between">
-                            <div>
-                                <p class="text-xs font-bold text-gray-500 uppercase">Tidak Hadir</p>
-                                <p class="text-2xl font-extrabold mt-2">{{ $totalTidakHadir + ($todayVirtualAbsent ? 1 : 0) }}</p>
-                            </div>
-                            <div class="stat-icon" style="background:linear-gradient(135deg,#f97316,#ea580c);">
-                                <i class="fas fa-user-times"></i>
-                            </div>
+                        <div class="stat-icon" style="background:linear-gradient(135deg,#f97316,#ea580c);">
+                            <i class="fas fa-user-times"></i>
+                        </div>
+                        <div class="stat-content">
+                            <p class="stat-label">Tidak Hadir</p>
+                            <p class="stat-value">{{ $totalTidakHadir + ($todayVirtualAbsent ? 1 : 0) }}</p>
                         </div>
                     </div>
 

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Leaderboard Mikro Skill - Sistem Magang')
+@section('title', 'Papan Peringkat Mikro Skill - Sistem Magang')
 
 @push('styles')
 <style>
@@ -39,8 +39,8 @@
             <div class="relative z-10 px-6 py-8">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div>
-                        <h1 class="text-3xl font-bold leading-tight text-white mb-1">Leaderboard Mikro Skill</h1>
-                        <p class="text-blue-200">Lihat peringkat peserta berdasarkan jumlah course yang telah diselesaikan.</p>
+                        <h1 class="text-3xl font-bold leading-tight text-white mb-1">Papan Peringkat Mikro Skill</h1>
+                        <p class="text-blue-200">Lihat peringkat peserta berdasarkan jumlah pelatihan yang telah diselesaikan.</p>
                     </div>
                     <a href="{{ route('intern.dashboard') }}" class="cta-btn">
                         <i class="fas fa-arrow-left"></i>
@@ -110,7 +110,7 @@
             <div class="bg-blue-600 px-6 py-4">
                 <h2 class="text-lg font-bold text-white flex items-center">
                     <i class="fas fa-trophy mr-3"></i>
-                    Leaderboard Mikro Skill
+                    Papan Peringkat Mikro Skill
                 </h2>
             </div>
 
@@ -171,7 +171,7 @@
                             <!-- Score -->
                             <div class="ml-4 flex-shrink-0">
                                 <span class="inline-flex items-center px-4 py-2 bg-indigo-50 text-indigo-700 rounded-full text-sm font-semibold">
-                                    {{ $row->total }} course
+                                    {{ $row->total }} pelatihan
                                 </span>
                             </div>
                         </div>
@@ -179,7 +179,7 @@
                     @empty
                         <div class="py-12 text-center text-gray-500">
                             <i class="fas fa-chart-line text-4xl text-gray-300 mb-3"></i>
-                            <p>Belum ada data leaderboard.</p>
+                            <p>Belum ada data papan peringkat.</p>
                         </div>
                     @endforelse
                 </div>
