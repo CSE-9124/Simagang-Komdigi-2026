@@ -335,6 +335,20 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <div class="stat-tile" style="--stat-color:#8b5cf6;">
+                        <div class="flex items-start justify-between">
+                            <div>
+                                <p class="text-xs font-bold text-gray-500 uppercase">LogBook Bulan Ini</p>
+                                <p class="text-2xl font-extrabold mt-2">
+                                    {{ $thisMonthCount ?? $logbooks->where('date', '>=', now()->startOfMonth())->count() }}
+                                </p>
+                            </div>
+                            <div class="stat-icon" style="background:linear-gradient(135deg,#7c3aed,#8b5cf6);">
+                                <i class="fas fa-calendar-alt"></i>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="stat-tile" style="--stat-color:#ef4444;">
                         <div class="flex items-start justify-between">
@@ -345,20 +359,6 @@
                             </div>
                             <div class="stat-icon" style="background:linear-gradient(135deg,#dc2626,#ef4444);">
                                 <i class="fas fa-hourglass-end"></i>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="stat-tile" style="--stat-color:#8b5cf6;">
-                        <div class="flex items-start justify-between">
-                            <div>
-                                <p class="text-xs font-bold text-gray-500 uppercase">Bulan Ini</p>
-                                <p class="text-2xl font-extrabold mt-2">
-                                    {{ $thisMonthCount ?? $logbooks->where('date', '>=', now()->startOfMonth())->count() }}
-                                </p>
-                            </div>
-                            <div class="stat-icon" style="background:linear-gradient(135deg,#7c3aed,#8b5cf6);">
-                                <i class="fas fa-calendar-alt"></i>
                             </div>
                         </div>
                     </div>

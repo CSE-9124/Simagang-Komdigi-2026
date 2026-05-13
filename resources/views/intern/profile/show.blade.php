@@ -54,7 +54,7 @@
             <div class="relative z-10 px-6 py-6 flex items-center justify-between">
                 <div>
                     <h1 class="text-2xl font-bold text-white mb-1">Profile</h1>
-                    <p class="text-blue-200 text-sm">Informasi profil Anda</p>
+                    {{-- <p class="text-blue-200 text-sm">Informasi profil Anda</p> --}}
                 </div>
                 <div style="display: flex; gap: 8px;">
                     <a href="{{ route('intern.dashboard') }}" class="btn-nav btn-back">
@@ -117,7 +117,7 @@
                     </div>
 
                     <div class="info-item">
-                        <label class="info-label"><i class="fas fa-flag"></i> Status</label>
+                        <label class="info-label"><i class="fas fa-flag"></i> Status Magang</label>
                         <div class="info-value">
                             <span class="status-badge {{ $intern->is_active ? 'status-active' : 'status-inactive' }}">
                                 <i class="fas {{ $intern->is_active ? 'fa-check-circle' : 'fa-times-circle' }}"></i>

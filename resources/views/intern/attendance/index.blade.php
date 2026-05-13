@@ -220,7 +220,7 @@
                 <div class="bg-blue-600 px-6 py-4">
                     <h2 class="text-xl font-bold text-white flex items-center">
                         <i class="fas fa-clipboard-list mr-3"></i>
-                        Data Absensi
+                        Riwayat Absensi
                     </h2>
                 </div>
                 <div class="p-6">

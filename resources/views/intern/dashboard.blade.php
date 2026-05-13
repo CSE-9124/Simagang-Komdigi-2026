@@ -374,7 +374,7 @@
                 <i class="fas fa-calendar-check"></i>
             </div>
             <div class="stat-content">
-                <p class="stat-label">Hadir</p>
+                <p class="stat-label">Kehadiran</p>
                 <p class="stat-value">{{ $totalHadir }}</p>
             </div>
         </div>

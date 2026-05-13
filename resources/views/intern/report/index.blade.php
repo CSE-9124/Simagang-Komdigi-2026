@@ -30,7 +30,7 @@
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div>
                         <h1 class="text-3xl font-bold leading-tight text-white mb-1">Laporan Akhir</h1>
-                        <p class="text-blue-200">Kelola dan submit laporan akhir magang Anda</p>
+                        <p class="text-blue-200">Selesaikan dan submit laporan akhir magangmu</p>
                     </div>
                 </div>
             </div>
@@ -280,15 +280,15 @@
                         @csrf
                         <div class="mb-4">
                             <label for="testimony" class="block text-sm font-semibold text-gray-700 mb-2">
-                                <i class="fas fa-pen-fancy text-purple-500 mr-2"></i>Testimoni Anda (20-1000 karakter)
+                                <i class="fas fa-pen-fancy text-purple-500 mr-2"></i>Testimoni Anda
                             </label>
                             <textarea name="testimony" id="testimony" rows="5"
                                 class="w-full px-4 py-3 border-2 border-purple-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all" 
-                                placeholder="Bagikan pengalaman Anda selama magang di Komdigi. Apa yang Anda pelajari? Bagaimana pengalaman menggunakan aplikasi Simagang?"
+                                placeholder="Bagikan pengalamanmu atau berikan saran konstruktif selama magang."
                                 required minlength="20" maxlength="1000">{{ old('testimony', $testimonial?->testimony ?? '') }}</textarea>
                             <div class="flex justify-between items-center mt-2">
                                 <p class="text-xs text-gray-500">
-                                    <i class="fas fa-info-circle mr-1"></i>Mininal 20 karakter, maksimal 1000 karakter
+                                    <i class="fas fa-info-circle mr-1"></i>Minimal 20 karakter, maksimal 1000 karakter
                                 </p>
                                 <span id="charCount" class="text-sm font-semibold text-purple-600">0/1000</span>
                             </div>

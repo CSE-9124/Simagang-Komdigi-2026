@@ -464,7 +464,6 @@
 
             <div class="p-6">
                 <div class="flex items-center justify-between mb-4">
-                    <div class="text-sm font-semibold text-gray-700">Daftar Pengumpulan</div>
                     {{-- search & upload moved to hero header to avoid duplication --}}
                 </div>
                 <div class="overflow-x-auto overflow-y-auto max-h-[500px] scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-blue-100">

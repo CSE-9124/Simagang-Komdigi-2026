@@ -440,7 +440,7 @@
                             @endif
                             <div class="flex-1 min-w-0">
                                 <p class="text-sm font-medium text-gray-700 truncate">{{ auth()->user()->name }}</p>
-                                <p class="text-xs text-gray-500">{{ auth()->user()->isMentor() ? 'Mentor' : 'Anak Magang' }}</p>
+                                <p class="text-xs text-gray-500">{{ auth()->user()->isMentor() ? 'Mentor' : 'Peserta Magang' }}</p>
                             </div>
                         </a>
                     @endif
@@ -744,7 +744,7 @@
                                     </div>
                                     <div class="flex-1 min-w-0">
                                         <p class="text-sm font-medium text-gray-700 truncate">{{ auth()->user()->name }}</p>
-                                        <p class="text-xs text-gray-500">{{ auth()->user()->isMentor() ? 'Mentor' : 'Anak Magang' }}</p>
+                                        <p class="text-xs text-gray-500">{{ auth()->user()->isMentor() ? 'Mentor' : 'Peserta Magang' }}</p>
                                     </div>
                                 </a>
                             @endif

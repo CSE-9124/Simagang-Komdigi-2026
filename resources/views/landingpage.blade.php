@@ -953,20 +953,20 @@
             <div class="process-card reveal">
                 <div class="process-num">01</div>
                 <div class="process-icon"><i class="fas fa-user-plus"></i></div>
-                <h3 class="process-title">Daftar & Profil</h3>
-                <p class="process-desc">Isi data peserta dan pilih institusi asal dengan cepat. Sistem akan memandu proses onboarding secara otomatis.</p>
+                <h3 class="process-title">Pendaftaran & Profil Peserta</h3>
+                <p class="process-desc">Daftarkan diri Anda, lengkapi profil. Selanjutnya, biarkan sistem yang mengurus onboarding Anda secara cepat dan praktis.</p>
             </div>
             <div class="process-card reveal">
                 <div class="process-num">02</div>
                 <div class="process-icon"><i class="fas fa-calendar-check"></i></div>
-                <h3 class="process-title">Absensi & Logbook</h3>
-                <p class="process-desc">Catat kehadiran dan aktivitas magang setiap hari secara digital. Mentor dapat memantau perkembangan secara real time.</p>
+                <h3 class="process-title">Manajemen Aktivitas</h3>
+                <p class="process-desc">Sistem ini menyediakan fitur yang menarik untuk monitoring kehadiran, logbook harian, evaluasi, serta rekomendasi pengembangan kompetensi yang relevan.</p>
             </div>
             <div class="process-card reveal">
                 <div class="process-num">03</div>
                 <div class="process-icon"><i class="fas fa-award"></i></div>
                 <h3 class="process-title">Laporan & Sertifikat</h3>
-                <p class="process-desc">Upload laporan akhir, terima feedback mentor, dan dapatkan sertifikat digital resmi secara otomatis.</p>
+                <p class="process-desc">Nikmati pengalaman baru, upload laporan, terima feedback mentor, dan dapatkan sertifikat digital resmi secara otomatis.</p>
             </div>
         </div>
 
@@ -1015,10 +1015,10 @@
 <section id="usage" class="section-usage">
     <div class="container">
         <div class="section-header reveal">
-            <span class="section-eyebrow-alt">Tutorial</span>
+            <span class="section-eyebrow-alt">Fitur</span>
             <h2 class="section-title">
-                Cara Menggunakan
-                <span class="font-etna" style="color:#9d272a">SI</span><span class="font-etna" style="color:#086bb0">MA</span><span class="font-etna" style="color:#2dabe2">GA</span><span class="font-etna" style="color:#efc400">NG</span>
+                Fitur Aplikasi
+                {{-- <span class="font-etna" style="color:#9d272a">SI</span><span class="font-etna" style="color:#086bb0">MA</span><span class="font-etna" style="color:#2dabe2">GA</span><span class="font-etna" style="color:#efc400">NG</span> --}}
             </h2>
             <p class="section-desc">Ikuti langkah-langkah berikut untuk memahami alur penggunaan aplikasi secara cepat dan mudah.</p>
         </div>
@@ -1029,9 +1029,9 @@
                 <img src="{{ asset('storage/tutorial/dashboardLP.png') }}" alt="Dashboard" class="step-image" style="width:50%">
             </div>
             <div>
-                <div class="step-badge"><i class="fas fa-flag" style="font-size:10px"></i> Langkah 1</div>
+                <div class="step-badge"><i class="fas fa-flag" style="font-size:10px"></i> Fitur 1</div>
                 <div class="step-icon-wrap"><i class="fas fa-home"></i></div>
-                <h3 class="step-title">Lihat Ringkasan Dashboard</h3>
+                <h3 class="step-title">Pilih Layanan Dashboard</h3>
                 <p class="step-desc">Setelah login, Anda akan melihat ringkasan aktivitas magang, status absensi, dan akses cepat untuk laporan serta mikro skill.</p>
                 <ul class="step-list">
                     <li>Informasi hadir, izin, dan sakit secara real time</li>
@@ -1044,7 +1044,7 @@
         <!-- Step 2 -->
         <div class="step-block reveal">
             <div class="order-swap">
-                <div class="step-badge"><i class="fas fa-flag" style="font-size:10px"></i> Langkah 2</div>
+                <div class="step-badge"><i class="fas fa-flag" style="font-size:10px"></i> Fitur 2</div>
                 <div class="step-icon-wrap"><i class="fas fa-calendar-check"></i></div>
                 <h3 class="step-title">Kelola Absensi</h3>
                 <p class="step-desc">Lakukan absensi harian sebagai bukti kehadiran selama kegiatan magang berlangsung secara akurat dan real-time.</p>
@@ -1065,7 +1065,7 @@
                 <img src="{{ asset('storage/tutorial/logbook.png') }}" alt="Logbook" class="step-image">
             </div>
             <div>
-                <div class="step-badge"><i class="fas fa-flag" style="font-size:10px"></i> Langkah 3</div>
+                <div class="step-badge"><i class="fas fa-flag" style="font-size:10px"></i> Fitur 3</div>
                 <div class="step-icon-wrap"><i class="fas fa-book"></i></div>
                 <h3 class="step-title">Kelola Logbook</h3>
                 <p class="step-desc">Catat aktivitas pekerjaan harian untuk mendokumentasikan progres dan hasil kerja selama magang.</p>
@@ -1080,7 +1080,7 @@
         <!-- Step 4 -->
         <div class="step-block reveal">
             <div class="order-swap">
-                <div class="step-badge"><i class="fas fa-flag" style="font-size:10px"></i> Langkah 4</div>
+                <div class="step-badge"><i class="fas fa-flag" style="font-size:10px"></i> Fitur 4</div>
                 <div class="step-icon-wrap"><i class="fas fa-file-upload"></i></div>
                 <h3 class="step-title">Upload Laporan</h3>
                 <p class="step-desc">Kirim laporan akhir magang sebagai bentuk hasil evaluasi dan dokumentasi kegiatan yang telah dilakukan.</p>
@@ -1101,7 +1101,7 @@
                 <img src="{{ asset('storage/tutorial/mikroskill.png') }}" alt="Mikroskill" class="step-image" style="width:50%">
             </div>
             <div>
-                <div class="step-badge"><i class="fas fa-flag" style="font-size:10px"></i> Langkah 5</div>
+                <div class="step-badge"><i class="fas fa-flag" style="font-size:10px"></i> Fitur 5</div>
                 <div class="step-icon-wrap"><i class="fas fa-award"></i></div>
                 <h3 class="step-title">Mikroskill & Sertifikat</h3>
                 <p class="step-desc">Lengkapi penilaian mikroskill untuk mengukur kompetensi yang diperoleh selama magang dan dapatkan sertifikat resmi.</p>
@@ -1120,8 +1120,8 @@
     <div class="container">
         <div class="section-header reveal">
             <span class="section-eyebrow">Testimoni</span>
-            <h2 class="section-title">Dipercaya oleh Banyak Institusi</h2>
-            <p class="section-desc">Berbagai kampus dan sekolah sudah menggunakan Simagang untuk mengelola program magang mereka.</p>
+            <h2 class="section-title">Apa Kata Mereka?</h2>
+            <p class="section-desc">Berikut tanggapan positif dan saran konstruktif dari mereka yang telah merasakan serunya pengalaman magang bersama kami.</p>
         </div>
 
         <!-- Desktop Grid -->
