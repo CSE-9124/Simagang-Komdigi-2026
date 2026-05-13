@@ -158,6 +158,87 @@
     </style>
 @endpush
 
+@php
+    $permissionLabels = [
+        'view_users' => 'Melihat daftar user (Intern dan Mentor)',
+        'create_users' => 'Membuat user baru (Intern dan Mentor)',
+        'edit_users' => 'Mengedit user (Intern dan Mentor)',
+        'delete_users' => 'Menghapus user (Intern dan Mentor)',
+        'view_admins' => 'Melihat daftar Admin',
+        'create_admin' => 'Membuat Admin baru (dengan assign aksesibilitas)',
+        'edit_admin' => 'Mengedit Admin (update akses)',
+        'delete_admin' => 'Menghapus Admin (hanya Super Admin)',
+        'view_mentors' => 'Melihat daftar Mentor',
+        'manage_mentors' => 'Kelola data Mentor (CRUD)',
+        'view_attendance' => 'Melihat data Absensi',
+        'manage_attendance' => 'Kelola Absensi (Approve/Reject)',
+        'view_logbook' => 'Melihat data Logbook',
+        'manage_logbook' => 'Kelola Logbook (Approve/Reject)',
+        'view_reports' => 'Melihat Laporan Akhir',
+        'manage_reports' => 'Kelola Laporan Akhir (Approve/Reject/Score)',
+        'manage_pengajuan' => 'Kelola Pengajuan Calon Anak Magang (Approve/Reject/Revision)',
+        'view_interns' => 'Melihat daftar Intern',
+        'manage_interns' => 'Kelola data Intern (CRUD)',
+        'view_teams' => 'Melihat daftar Tim',
+        'manage_teams' => 'Kelola data Tim (CRUD)',
+        'access_admin_dashboard' => 'Akses Admin Dashboard',
+    ];
+
+    $roleAccessInfo = [
+        'admin_full' => [
+            'description' => 'Akses paling lengkap untuk mengelola user, mentor, peserta magang, absensi, logbook, laporan akhir, pengajuan, tim, dan dashboard admin.',
+            'permissions' => [
+                'view_users',
+                'create_users',
+                'edit_users',
+                'delete_users',
+                'view_mentors',
+                'manage_mentors',
+                'view_interns',
+                'manage_interns',
+                'view_attendance',
+                'manage_attendance',
+                'view_logbook',
+                'manage_logbook',
+                'view_reports',
+                'manage_reports',
+                'manage_pengajuan',
+                'view_teams',
+                'manage_teams',
+                'access_admin_dashboard',
+            ],
+        ],
+        'admin_user_manager' => [
+            'description' => 'Fokus pada pengelolaan user dan data pendukung, dengan akses lihat ke beberapa data operasional.',
+            'permissions' => [
+                'view_users',
+                'view_interns',
+                'manage_interns',
+                'view_mentors',
+                'manage_mentors',
+                'view_attendance',
+                'view_logbook',
+                'view_reports',
+                'access_admin_dashboard',
+            ],
+        ],
+        'admin_data_manager' => [
+            'description' => 'Berfokus pada pengelolaan data peserta magang dan operasional pendukung seperti absensi, logbook, dan laporan.',
+            'permissions' => [
+                'view_interns',
+                'manage_interns',
+                'view_attendance',
+                'manage_attendance',
+                'view_logbook',
+                'manage_logbook',
+                'view_reports',
+                'manage_reports',
+                'access_admin_dashboard',
+            ],
+        ],
+    ];
+@endphp
+
 @section('content')
     <div class="dash-bg py-8 px-4 sm:px-6 lg:px-8">
         <div class="max-w-2xl mx-auto">
@@ -223,6 +304,20 @@
                                 </option>
                             @endforeach
                         </select>
+                        <div class="mt-3 rounded-2xl border border-blue-100 bg-blue-50/70 p-4" id="role-access-info" aria-live="polite">
+                            <div class="flex items-start gap-3">
+                                <div class="min-w-0 flex-1">
+                                    <p class="text-sm font-semibold text-slate-800">Informasi akses role</p>
+                                    <p class="mt-1 text-sm leading-6 text-slate-600" id="role-access-description">
+                                        Pilih Akses Admin untuk melihat permission yang tersedia.
+                                    </p>
+                                    <div class="mt-3 hidden" id="role-access-permissions-wrapper">
+                                        <p class="text-xs font-bold uppercase tracking-[0.08em] text-slate-500">Permission yang diberikan</p>
+                                        <ul class="mt-2 grid gap-2 sm:grid-cols-2" id="role-access-permissions"></ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         @error('role')
                             <p class="text-xs text-red-500 flex items-center gap-1 mt-1">
                                 <i class="fas fa-exclamation-circle"></i> {{ $message }}
@@ -282,4 +377,47 @@
 
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const roleSelect = document.querySelector('select[name="role"]');
+            const description = document.getElementById('role-access-description');
+            const permissionsWrapper = document.getElementById('role-access-permissions-wrapper');
+            const permissionsList = document.getElementById('role-access-permissions');
+            const permissionLabels = @json($permissionLabels);
+            const roleAccessInfo = @json($roleAccessInfo);
+
+            if (!roleSelect || !description || !permissionsWrapper || !permissionsList) {
+                return;
+            }
+
+            const renderRoleInfo = (role) => {
+                const info = roleAccessInfo[role];
+
+                if (!info) {
+                    description.textContent = 'Pilih Akses Admin untuk melihat permission yang tersedia.';
+                    permissionsWrapper.classList.add('hidden');
+                    permissionsList.innerHTML = '';
+                    return;
+                }
+
+                description.textContent = info.description;
+                permissionsList.innerHTML = info.permissions
+                    .map((permission) => `
+                        <li class="flex items-start gap-2 rounded-lg bg-white px-3 py-2 text-sm text-slate-700 shadow-sm ring-1 ring-blue-100">
+                            <i class="fas fa-circle-check mt-1 text-[11px] text-blue-600"></i>
+                            <span>${permissionLabels[permission] ?? permission}</span>
+                        </li>
+                    `)
+                    .join('');
+                permissionsWrapper.classList.remove('hidden');
+            };
+
+            roleSelect.addEventListener('change', function () {
+                renderRoleInfo(this.value);
+            });
+
+            renderRoleInfo(roleSelect.value);
+        });
+    </script>
 @endsection
