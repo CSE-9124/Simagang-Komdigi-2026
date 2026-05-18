@@ -293,13 +293,13 @@
                         <table class="w-full divide-y divide-gray-200">
                             <thead>
                                 <tr class="bg-gradient-to-r from-blue-600 to-indigo-600">
-                                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-white uppercase tracking-wider">Foto</th>
-                                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-white uppercase tracking-wider">Nama</th>
-                                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-white uppercase tracking-wider">Status</th>
-                                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-white uppercase tracking-wider hidden sm:table-cell">Prodi</th>
-                                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-white uppercase tracking-wider">Logbook</th>
-                                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-white uppercase tracking-wider">Absensi</th>
-                                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-white uppercase tracking-wider">Mikroskill</th>
+                                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-center text-xs font-bold text-white uppercase tracking-wider">Foto</th>
+                                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-center text-xs font-bold text-white uppercase tracking-wider">Nama</th>
+                                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-center text-xs font-bold text-white uppercase tracking-wider">Status</th>
+                                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-center text-xs font-bold text-white uppercase tracking-wider hidden sm:table-cell">Prodi</th>
+                                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-center text-xs font-bold text-white uppercase tracking-wider">Logbook</th>
+                                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-center text-xs font-bold text-white uppercase tracking-wider">Absensi</th>
+                                    <th class="px-3 sm:px-6 py-3 sm:py-4 text-center text-xs font-bold text-white uppercase tracking-wider">Mikroskill</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-100">
@@ -329,17 +329,17 @@
                                         <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap hidden sm:table-cell">
                                             <div class="text-xs sm:text-sm text-slate-700 font-medium">{{ $intern->major }}</div>
                                         </td>
-                                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
+                                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-center">
                                             <span class="status-pill bg-gradient-to-r from-purple-100 to-purple-200 text-purple-800">
                                                 <i class="fas fa-book mr-1.5"></i>{{ $intern->logbooks_count }}
                                             </span>
                                         </td>
-                                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
+                                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-center">
                                             <span class="status-pill bg-gradient-to-r from-green-100 to-green-200 text-green-800">
                                                 <i class="fas fa-check-circle mr-1.5"></i>{{ $intern->attendances_count }}
                                             </span>
                                         </td>
-                                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
+                                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-center">
                                             <span class="status-pill bg-gradient-to-r from-blue-100 to-blue-200 text-blue-800">
                                                 <i class="fas fa-graduation-cap mr-1.5"></i>{{ $intern->micro_skills_count }}
                                             </span>

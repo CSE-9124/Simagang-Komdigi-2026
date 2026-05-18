@@ -12,16 +12,56 @@ use App\Services\PengajuanWhatsappService;
 
 class PengajuanController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $pengajuans = Pengajuan::where('institusi_id', Auth::user()->institusi->id)->get()->sortByDesc('created_at');
-        $totalPengajuan = $pengajuans->count();
-        $pengajuanPending = $pengajuans->where('status', 'pending')->count();
-        $pengajuanApproved = $pengajuans->where('status', 'approved')->count();
-        $pengajuanRejected = $pengajuans->where('status', 'rejected')->count();
-        $pengajuanRevised = $pengajuans->where('status', 'revised')->count();
+        $query = Pengajuan::where(
+            'institusi_id',
+            Auth::user()->institusi->id
+        );
 
-        return view('institusi.pengajuan.index', compact('pengajuans', 'totalPengajuan', 'pengajuanPending', 'pengajuanApproved', 'pengajuanRejected', 'pengajuanRevised'));
+        // filter nomor pengajuan
+        if ($request->filled('search')) {
+            $query->where('no_surat', 'like', '%' . $request->search . '%');
+        }
+
+        // filter status
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        // filter tanggal
+        if ($request->filled('date')) {
+            $query->whereDate('created_at', $request->date);
+        }
+
+        // ambil data
+        $pengajuans = $query
+            ->orderByRaw("status = 'pending' DESC")
+            ->orderByDesc('created_at')
+            ->get();
+
+        // statistik
+        $allPengajuans = Pengajuan::where(
+            'institusi_id',
+            Auth::user()->institusi->id
+        )->get();
+
+        $totalPengajuan = $allPengajuans->count();
+        $totalPengajuanFilter = $pengajuans->count();
+        $pengajuanPending = $allPengajuans->where('status', 'pending')->count();
+        $pengajuanApproved = $allPengajuans->where('status', 'approved')->count();
+        $pengajuanRejected = $allPengajuans->where('status', 'rejected')->count();
+        $pengajuanRevised = $allPengajuans->where('status', 'revised')->count();
+
+        return view('institusi.pengajuan.index', compact(
+            'pengajuans',
+            'totalPengajuan',
+            'pengajuanPending',
+            'pengajuanApproved',
+            'pengajuanRejected',
+            'pengajuanRevised',
+            'totalPengajuanFilter'
+        ));
     }
     
     public function create()

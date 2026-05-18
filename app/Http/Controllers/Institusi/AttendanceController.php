@@ -32,41 +32,81 @@ class AttendanceController extends Controller
 
     public function index(Request $request)
     {
-        $institusi  = Auth::user()->institusi;
-        $nowWita    = TimeService::nowWita();
-        $todayWita  = $nowWita->toDateString();
+        $institusi = Auth::user()->institusi;
+        $nowWita   = TimeService::nowWita();
+        $todayWita = $nowWita->toDateString();
 
         $internIds = $this->getInstitusiInternIds();
 
+        // query absensi
         $query = Attendance::query()
             ->with('intern')
             ->whereIn('intern_id', $internIds);
 
+        // FILTER PESERTA
         if ($request->filled('intern_id')) {
             $query->where('intern_id', $request->integer('intern_id'));
         }
-        if ($request->filled('date_from')) {
-            $query->whereDate('date', '>=', $request->date('date_from'));
+
+        // DEFAULT = HARI INI
+        if (!$request->filled('date_from') && !$request->filled('date_to')) {
+            $query->whereDate('date', $todayWita);
+        } else {
+
+            if ($request->filled('date_from')) {
+                $query->whereDate('date', '>=', $request->date('date_from'));
+            }
+
+            if ($request->filled('date_to')) {
+                $query->whereDate('date', '<=', $request->date('date_to'));
+            }
         }
-        if ($request->filled('date_to')) {
-            $query->whereDate('date', '<=', $request->date('date_to'));
-        }
+
+        // FILTER STATUS
         if ($request->filled('status')) {
-            $query->where('status', $request->input('status'));
+            $query->where('status', $request->status);
         }
 
-        $attendances = $query->orderByDesc('date')->paginate(20)->withQueryString();
+        $attendances = $query
+            ->latest('date')
+            ->paginate(20)
+            ->withQueryString();
 
-        // Dropdown filter: hanya intern dari institusi ini
-        $interns = Intern::whereIn('id', $internIds)->orderBy('name')->get();
+        
+        // data intern
+        $interns = Intern::whereIn('id', $internIds)
+            ->orderBy('name')
+            ->get();
 
-        // Deteksi intern belum absen hari ini
+        // persentase kehadiran
+        $internStatistics = $interns->map(function ($intern) {
+
+            $totalAttendance = Attendance::where('intern_id', $intern->id)->count();
+
+            $totalPresent = Attendance::where('intern_id', $intern->id)
+                ->where('status', 'hadir')
+                ->count();
+
+            $percentage = $totalAttendance > 0
+                ? round(($totalPresent / $totalAttendance) * 100)
+                : 0;
+
+            $intern->attendance_percentage = $percentage;
+
+            return $intern;
+        })->sortBy('attendance_percentage');
+
+        // absen hari ini
         $todayAbsentInterns = collect();
-        $isWorkday    = !HolidayService::isHoliday($nowWita);
-        $noDateFilter = !$request->filled('date_from') && !$request->filled('date_to');
-        $noStatusFilter = !$request->filled('status') || $request->input('status') === 'alfa';
 
-        if ($isWorkday && $noDateFilter && $noStatusFilter && $internIds->isNotEmpty()) {
+        $isWorkday = !HolidayService::isHoliday($nowWita);
+
+        $showAbsentToday =
+            !$request->filled('date_from')
+            && !$request->filled('date_to');
+
+        if ($isWorkday && $showAbsentToday) {
+
             $presentIds = Attendance::whereIn('intern_id', $internIds)
                 ->whereDate('date', $todayWita)
                 ->pluck('intern_id');
@@ -74,12 +114,66 @@ class AttendanceController extends Controller
             $todayAbsentInterns = $interns->whereNotIn('id', $presentIds->toArray());
 
             if ($request->filled('intern_id')) {
-                $todayAbsentInterns = $todayAbsentInterns->where('id', $request->integer('intern_id'));
+                $todayAbsentInterns = $todayAbsentInterns
+                    ->where('id', $request->integer('intern_id'));
             }
         }
 
         return view('institusi.attendance.index', compact(
-            'institusi', 'attendances', 'interns', 'todayAbsentInterns', 'todayWita'
+            'institusi',
+            'attendances',
+            'interns',
+            'todayAbsentInterns',
+            'todayWita',
+            'internStatistics'
+        ));
+    }
+
+    public function show(Request $request, Intern $intern)
+    {
+        $internIds = $this->getInstitusiInternIds();
+
+        // Pastikan intern milik institusi ini
+        abort_unless($internIds->contains($intern->id), 403);
+
+        $query = Attendance::where('intern_id', $intern->id);
+
+        // FILTER TANGGAL
+        if ($request->filled('date_from')) {
+            $query->whereDate('date', '>=', $request->input('date_from'));
+        }
+
+        if ($request->filled('date_to')) {
+            $query->whereDate('date', '<=', $request->input('date_to'));
+        }
+
+        // FILTER STATUS
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $attendances = $query
+            ->latest('date')
+            ->paginate(20)
+            ->withQueryString();
+
+        // Statistik
+        $totalAttendance = Attendance::where('intern_id', $intern->id)->count();
+
+        $totalPresent = Attendance::where('intern_id', $intern->id)
+            ->where('status', 'hadir')
+            ->count();
+
+        $attendancePercentage = $totalAttendance > 0
+            ? round(($totalPresent / $totalAttendance) * 100)
+            : 0;
+
+        return view('institusi.attendance.show', compact(
+            'intern',
+            'attendances',
+            'attendancePercentage',
+            'totalAttendance',
+            'totalPresent'
         ));
     }
 

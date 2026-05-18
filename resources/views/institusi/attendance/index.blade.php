@@ -193,7 +193,7 @@
                             </div>
                             <div>
                                 <p class="text-xs uppercase tracking-[0.25em] text-blue-100/80">Data</p>
-                                <p class="text-base font-bold">{{ $attendances->total() }} Absensi</p>
+                                <p class="text-base font-bold">{{ $todayAbsentInterns->count() }} Absensi</p>
                             </div>
                         </div>
                     </div>
@@ -207,13 +207,21 @@
                 </div>
                 <div class="panel-body">
                     <form method="GET" action="{{ route('institusi.attendance.index') }}">
-                        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4">
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4 items-end">
+
                             <div>
                                 <label class="field-label">Peserta Magang</label>
+
                                 <select name="intern_id" class="field-select">
                                     <option value="">Semua</option>
+
                                     @foreach ($interns as $intern)
-                                        <option value="{{ $intern->id }}" @selected(request('intern_id') == $intern->id)>{{ $intern->name }}
+                                        <option value="{{ $intern->id }}"
+                                            @selected(request('intern_id') == $intern->id)>
+
+                                            {{ $intern->name }}
+
                                         </option>
                                     @endforeach
                                 </select>
@@ -221,39 +229,78 @@
 
                             <div>
                                 <label class="field-label">Dari Tanggal</label>
-                                <input type="date" name="date_from" value="{{ request('date_from') }}"
+
+                                <input
+                                    type="date"
+                                    name="date_from"
+                                    value="{{ request('date_from') }}"
                                     class="field-input" />
                             </div>
 
                             <div>
                                 <label class="field-label">Hingga Tanggal</label>
-                                <input type="date" name="date_to" value="{{ request('date_to') }}" class="field-input" />
+
+                                <input
+                                    type="date"
+                                    name="date_to"
+                                    value="{{ request('date_to') }}"
+                                    class="field-input" />
                             </div>
 
                             <div>
                                 <label class="field-label">Status</label>
+
                                 <select name="status" class="field-select">
+
                                     <option value="">Semua</option>
-                                    <option value="hadir" @selected(request('status') === 'hadir')>Hadir</option>
-                                    <option value="izin" @selected(request('status') === 'izin')>Izin</option>
-                                    <option value="sakit" @selected(request('status') === 'sakit')>Sakit</option>
-                                    <option value="alfa" @selected(request('status') === 'alfa')>Tidak Hadir</option>
+
+                                    <option value="hadir" @selected(request('status') === 'hadir')>
+                                        Hadir
+                                    </option>
+
+                                    <option value="izin" @selected(request('status') === 'izin')>
+                                        Izin
+                                    </option>
+
+                                    <option value="sakit" @selected(request('status') === 'sakit')>
+                                        Sakit
+                                    </option>
+
+                                    <option value="alfa" @selected(request('status') === 'alfa')>
+                                        Tidak Hadir
+                                    </option>
+
                                 </select>
                             </div>
 
-                            <div class="flex items-end gap-2">
-                                <button type="submit"
-                                    class="inline-flex flex-1 items-center justify-center rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-lg transition hover:shadow-xl">
-                                    <i class="fas fa-search mr-2"></i>Filter
+                            {{-- TOMBOL --}}
+                            <div class="flex items-end gap-2 h-full">
+
+                                <button
+                                    type="submit"
+                                    class="inline-flex h-[54px] flex-1 items-center justify-center rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 px-5 text-sm font-semibold text-white shadow-lg transition hover:shadow-xl">
+
+                                    <i class="fas fa-search mr-2"></i>
+                                    Filter
+
                                 </button>
+
                                 @if (request()->anyFilled(['intern_id', 'date_from', 'date_to', 'status']))
-                                    <a href="{{ route('institusi.attendance.index') }}"
-                                        class="inline-flex items-center justify-center rounded-2xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm font-semibold text-blue-700 transition hover:bg-blue-100">
+
+                                    <a
+                                        href="{{ route('institusi.attendance.index') }}"
+                                        class="inline-flex h-[54px] w-[54px] items-center justify-center rounded-2xl border border-blue-200 bg-blue-50 text-sm font-semibold text-blue-700 transition hover:bg-blue-100">
+
                                         <i class="fas fa-times"></i>
+
                                     </a>
+
                                 @endif
+
                             </div>
+
                         </div>
+
                     </form>
                 </div>
             </div>
@@ -269,25 +316,25 @@
                             <thead>
                                 <tr class="bg-gradient-to-r from-blue-600 to-indigo-600">
                                     <th
-                                        class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-white uppercase tracking-wider whitespace-nowrap">
+                                        class="px-3 sm:px-6 py-3 sm:py-4 text-center text-xs font-bold text-white uppercase tracking-wider whitespace-nowrap">
                                         Tanggal</th>
                                     <th
-                                        class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-white uppercase tracking-wider whitespace-nowrap">
+                                        class="px-3 sm:px-6 py-3 sm:py-4 text-center text-xs font-bold text-white uppercase tracking-wider whitespace-nowrap">
                                         Nama</th>
                                     <th
-                                        class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-white uppercase tracking-wider whitespace-nowrap">
+                                        class="px-3 sm:px-6 py-3 sm:py-4 text-center text-xs font-bold text-white uppercase tracking-wider whitespace-nowrap">
                                         Status</th>
                                     <th
-                                        class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-white uppercase tracking-wider whitespace-nowrap">
+                                        class="px-3 sm:px-6 py-3 sm:py-4 text-center text-xs font-bold text-white uppercase tracking-wider whitespace-nowrap">
                                         Check In</th>
                                     <th
-                                        class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-white uppercase tracking-wider whitespace-nowrap">
+                                        class="px-3 sm:px-6 py-3 sm:py-4 text-center text-xs font-bold text-white uppercase tracking-wider whitespace-nowrap">
                                         Check Out</th>
                                     <th
-                                        class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-white uppercase tracking-wider whitespace-nowrap">
+                                        class="px-3 sm:px-6 py-3 sm:py-4 text-center text-xs font-bold text-white uppercase tracking-wider whitespace-nowrap">
                                         Foto In</th>
                                     <th
-                                        class="px-3 sm:px-6 py-3 sm:py-4 text-left text-xs font-bold text-white uppercase tracking-wider whitespace-nowrap">
+                                        class="px-3 sm:px-6 py-3 sm:py-4 text-center text-xs font-bold text-white uppercase tracking-wider whitespace-nowrap">
                                         Foto Out</th>
                                 </tr>
                             </thead>
@@ -430,6 +477,124 @@
 
                     <div class="mt-6">
                         {{ $attendances->links() }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">
+                    <i class="fas fa-users text-blue-200 text-base"></i>
+                    <h2>Riwayat Absensi</h2>
+                </div>
+
+                <div class="panel-body">
+                    <div class="table-wrap">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead>
+                                <tr class="bg-gradient-to-r from-blue-600 to-indigo-600">
+                                    <th class="px-6 py-4 text-center text-xs font-bold text-white uppercase">
+                                        Nama
+                                    </th>
+
+                                    <th class="px-6 py-4 text-center text-xs font-bold text-white uppercase">
+                                        Persentase Kehadiran
+                                    </th>
+
+                                    <th class="px-6 py-4 text-center text-xs font-bold text-white uppercase">
+                                        Status
+                                    </th>
+
+                                    <th class="px-6 py-4 text-center text-xs font-bold text-white uppercase">
+                                        Aksi
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody class="bg-white divide-y divide-gray-100">
+                                @forelse($internStatistics as $intern)
+
+                                    <tr class="hover:bg-blue-50 transition">
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex items-center">
+
+                                                @if ($intern->photo_path)
+                                                    <img
+                                                        src="{{ url('storage/' . $intern->photo_path) }}"
+                                                        class="w-10 h-10 rounded-full object-cover border-2 border-blue-200 mr-3">
+                                                @else
+                                                    <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white mr-3">
+                                                        <i class="fas fa-user"></i>
+                                                    </div>
+                                                @endif
+
+                                                <span class="font-medium text-slate-800">
+                                                    {{ $intern->name }}
+                                                </span>
+                                            </div>
+                                        </td>
+
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <div class="flex justify-center items-center gap-3">
+
+                                                <div class="w-40 bg-gray-200 rounded-full h-3">
+                                                    <div
+                                                        class="h-3 rounded-full
+                                                        @if ($intern->attendance_percentage >= 70)
+                                                            bg-green-500
+                                                        @elseif($intern->attendance_percentage >= 50)
+                                                            bg-yellow-500
+                                                        @else
+                                                            bg-red-500
+                                                        @endif"
+                                                        style="width: {{ $intern->attendance_percentage }}%">
+                                                    </div>
+                                                </div>
+
+                                                <span class="text-sm font-semibold">
+                                                    {{ $intern->attendance_percentage }}%
+                                                </span>
+                                            </div>
+                                        </td>
+
+                                        <td class="px-6 py-4 whitespace-nowrap flex justify-center">
+
+                                            @if ($intern->attendance_percentage >= 70)
+                                                <span class="status-pill bg-green-100 text-green-800">
+                                                    Baik
+                                                </span>
+                                            @elseif($intern->attendance_percentage >= 50)
+                                                <span class="status-pill bg-yellow-100 text-yellow-800">
+                                                    Perlu Perhatian
+                                                </span>
+                                            @else
+                                                <span class="status-pill bg-red-100 text-red-800">
+                                                    Rendah
+                                                </span>
+                                            @endif
+
+                                        </td>
+
+                                        <td class="px-6 py-4 whitespace-nowrap text-center">
+
+                                            <a href="{{ route('institusi.attendance.show', ['intern' => $intern->id]) }}"
+                                                class="inline-flex items-center rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 transition">
+
+                                                <i class="fas fa-eye mr-2"></i>
+                                                Lihat Riwayat
+                                            </a>
+
+                                        </td>
+                                    </tr>
+
+                                @empty
+                                    <tr>
+                                        <td colspan="4" class="px-6 py-8 text-center text-gray-500">
+                                            Tidak ada data anak magang
+                                        </td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

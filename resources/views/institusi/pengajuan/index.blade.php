@@ -171,6 +171,60 @@
             font-weight: 600;
             letter-spacing: 0.03em;
         }
+
+        .field-label {
+            display: block;
+            margin-bottom: 0.55rem;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+
+        .field-input,
+        .field-select {
+            width: 100%;
+            height: 52px;
+            border-radius: 16px;
+            border: 1px solid #dbe4ff;
+            background: #ffffff;
+            padding: 0 1rem;
+            font-size: 0.95rem;
+            color: #1e293b;
+            transition: all .2s ease;
+            box-shadow: 0 1px 2px rgba(30, 58, 138, 0.04);
+        }
+
+        .field-input:focus,
+        .field-select:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12);
+        }
+
+        .filter-box {
+            background: linear-gradient(180deg, #f8faff 0%, #f2f6ff 100%);
+            border: 1px solid #e2e8ff;
+            border-radius: 22px;
+            padding: 1.2rem;
+        }
+
+        .filter-search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 14px;
+        }
+
+        .filter-input-icon {
+            padding-left: 44px;
+        }
+
+        .filter-btn {
+            height: 52px;
+            border-radius: 16px;
+        }
     </style>
 @endpush
 
@@ -178,11 +232,11 @@
     <div class="dash-bg py-6 sm:py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
             <div class="hero-strip px-5 sm:px-8 py-6 sm:py-8">
-                <div class="relative z-10 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+                <div class="relative z-10 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
                     <div class="max-w-3xl text-white">
-                        <p class="text-xs sm:text-sm uppercase tracking-[0.3em] text-blue-100/80">Institusi Dashboard</p>
+                        {{-- <p class="text-xs sm:text-sm uppercase tracking-[0.3em] text-blue-100/80">Institusi Dashboard</p> --}}
                         <h1 class="mt-2 text-3xl sm:text-4xl font-extrabold leading-tight">Pengajuan Magang</h1>
-                        <p class="mt-3 text-sm sm:text-base text-blue-100/90">Catat dan kelola pengajuan magangmu.</p>
+                        <p class="mt-3 text-sm sm:text-base text-blue-100/90">Semua pengajuan magang bisa dipantau dan dikelola dengan lebih mudah.</p>
                     </div>
 
                     <a href="{{ route('institusi.pengajuan.create') }}"
@@ -209,10 +263,10 @@
                         'icon' => 'fa-circle-check',
                     ],
                     [
-                        'label' => 'Menunggu Approval',
+                        'label' => 'Diproses',
                         'value' => $pengajuanPending,
                         'tile' => 'tile-yellow',
-                        'iconBg' => 'linear-gradient(135deg,#f59e0b,#f97316)',
+                        'iconBg' => 'linear-gradient(135deg,#fef3c7,#facc15)',
                         'icon' => 'fa-hourglass-half',
                     ],
                     [
@@ -247,11 +301,94 @@
             </div>
 
             <div class="panel">
+                <div class="panel-body">
+                    <form method="GET" action="{{ route('institusi.pengajuan.index') }}">
+                        <div class="filter-box">
+                            <div class="grid grid-cols-1 xl:grid-cols-12 gap-4">
+
+                                <div class="xl:col-span-5">
+                                    <label for="search" class="field-label">
+                                        Nomor Pengajuan
+                                    </label>
+
+                                    <div class="relative">
+                                        <i class="fas fa-search filter-search-icon"></i>
+
+                                        <input
+                                            type="text"
+                                            name="search"
+                                            id="search"
+                                            value="{{ request('search') }}"
+                                            placeholder="Cari nomor pengajuan..."
+                                            class="field-input filter-input-icon">
+                                    </div>
+                                </div>
+
+                                <div class="xl:col-span-3">
+                                    <label for="status" class="field-label">
+                                        Status
+                                    </label>
+
+                                    <select name="status" id="status" class="field-select">
+                                        <option value="">Semua Status</option>
+                                        <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>
+                                            pending
+                                        </option>
+                                        <option value="approved" {{ request('status') == 'approved' ? 'selected' : '' }}>
+                                            Disetujui
+                                        </option>
+                                        <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>
+                                            Ditolak
+                                        </option>
+                                        <option value="revised" {{ request('status') == 'revised' ? 'selected' : '' }}>
+                                            Revisi
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="xl:col-span-2">
+                                    <label for="date" class="field-label">
+                                        Tanggal
+                                    </label>
+
+                                    <input
+                                        type="date"
+                                        name="date"
+                                        id="date"
+                                        value="{{ request('date') }}"
+                                        class="field-input">
+                                </div>
+
+                                <div class="xl:col-span-2 flex items-end gap-2">
+                                    <button
+                                        type="submit"
+                                        class="filter-btn flex-1 inline-flex items-center justify-center bg-gradient-to-r from-blue-600 to-indigo-600 px-5 text-sm font-semibold text-white shadow-lg transition hover:-translate-y-0.5 hover:shadow-xl">
+                                        <i class="fas fa-search mr-2"></i>
+                                        Cari
+                                    </button>
+
+                                    @if (request()->filled('search') || request()->filled('status') || request()->filled('date'))
+                                        <a
+                                            href="{{ route('institusi.pengajuan.index') }}"
+                                            class="filter-btn inline-flex w-[52px] items-center justify-center border border-slate-200 bg-white text-slate-600 transition hover:bg-slate-50">
+                                            <i class="fas fa-rotate-left"></i>
+                                        </a>
+                                    @endif
+                                </div>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+            <div class="panel">
                 <div class="panel-header">
                     <i class="fas fa-list text-blue-200 text-base"></i>
                     <h2>Data Pengajuan Magang</h2>
                     <span
-                        class="ml-auto rounded-full bg-white/15 px-3 py-1 text-xs font-semibold text-white">{{ $totalPengajuan }}
+                        class="ml-auto rounded-full bg-white/15 px-3 py-1 text-xs font-semibold text-white">{{ $totalPengajuanFilter }}
                         data</span>
                 </div>
 
@@ -283,6 +420,12 @@
                                             'revised' => 'bg-orange-100 text-orange-800',
                                             default => 'bg-yellow-100 text-yellow-800',
                                         };
+                                        // $statusLabel = match ($pengajuan->status) {
+                                        //     'approved' => 'Disetujui',
+                                        //     'rejected' => 'Ditolak',
+                                        //     'revised' => 'Revisi',
+                                        //     default => 'Diproses',
+                                        // };
                                     @endphp
                                     <tr class="hover:bg-blue-50 transition-colors duration-150">
                                         <td class="px-6 py-4 whitespace-nowrap">

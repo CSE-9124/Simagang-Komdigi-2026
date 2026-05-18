@@ -113,10 +113,9 @@
             <div class="hero-strip px-5 sm:px-8 py-6 sm:py-8">
                 <div class="relative z-10 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
                     <div class="max-w-3xl text-white">
-                        <p class="text-xs sm:text-sm uppercase tracking-[0.3em] text-blue-100/80">Institusi Dashboard</p>
+                        {{-- <p class="text-xs sm:text-sm uppercase tracking-[0.3em] text-blue-100/80">Institusi Dashboard</p> --}}
                         <h1 class="mt-2 text-3xl sm:text-4xl font-extrabold leading-tight">Detail Pengajuan Magang</h1>
-                        <p class="mt-3 text-sm sm:text-base text-blue-100/90">Informasi pengajuan dan daftar calon anak
-                            magang dalam tampilan yang selaras dengan dashboard.</p>
+                        <p class="mt-3 text-sm sm:text-base text-blue-100/90">Lihat informasi pengajuan dan daftar calon peserta magang dalam satu tampilan yang rapi, nyaman, dan mudah dipantau.</p>
                     </div>
 
                     <div class="flex flex-col gap-3 sm:flex-row">

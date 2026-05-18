@@ -142,6 +142,8 @@ Route::middleware(['auth', 'institusi'])->prefix('institusi')->name('institusi.'
     Route::put('/profile', [InstitusiProfileController::class, 'update'])->name('profile.update');
     // Attendance monitoring for institusi
     Route::get('/attendance', [InstitusiAttendanceController::class, 'index'])->name('attendance.index');
+    Route::get('/attendance/detail/{intern}', [InstitusiAttendanceController::class, 'show'])
+        ->name('attendance.show');
     Route::get('/attendance/photo/{filename}', [InstitusiAttendanceController::class, 'servePhoto'])
         ->where('filename', '[^/\\\\]+')
         ->name('attendance.photo');

@@ -131,12 +131,12 @@
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
 
             <div class="hero-strip px-5 sm:px-8 py-6 sm:py-8">
-                <div class="relative z-10 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+                <div class="relative z-10 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
                     <div class="max-w-3xl text-white">
-                        <p class="text-xs sm:text-sm uppercase tracking-[0.3em] text-blue-100/80">Institusi Dashboard</p>
-                        <h1 class="mt-2 text-3xl sm:text-4xl font-extrabold leading-tight">Tambah Pengajuan Magang</h1>
+                        <h1 class="text-3xl sm:text-4xl font-extrabold leading-tight">
+                            Tambah Pengajuan Magang
+                        </h1>
                     </div>
-
                     <div class="soft-badge rounded-2xl px-4 py-4 text-sm font-semibold text-slate-700 shadow-sm">
                         <div class="flex items-center gap-3">
                             <div
@@ -159,8 +159,8 @@
                             <i class="fas fa-edit text-lg"></i>
                         </div>
                         <div>
-                            <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Pengajuan</p>
-                            <h2 class="text-base sm:text-lg font-bold text-slate-900">Form Pengajuan Magang</h2>
+                            <p class="text-xs uppercase tracking-[0.3em] text-slate-400">Lengkapi Data</p>
+                            <h2 class="text-base sm:text-lg font-bold text-slate-900">Informasi Pengajuan</h2>
                         </div>
                     </div>
                 </div>
