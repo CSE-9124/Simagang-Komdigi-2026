@@ -1366,89 +1366,559 @@
 </section>
 
 <!-- ===== ABOUT US / TIM KAMI ===== -->
-<section id="about" class="py-24 bg-white">
-    <div class="container">
-        <div class="section-header reveal">
-            <span class="section-eyebrow">Tim Kami</span>
-            <h2 class="section-title">Tim Pengembang Simagang</h2>
-            <p class="section-desc">Mengenal lebih dekat profil orang-orang luar biasa yang berdedikasi membangun dan mengembangkan project Simagang.</p>
+<style>
+.team-card {
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+    border: 1.5px solid #e8edf5;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+.team-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px_40px rgba(14,99,201,0.13);
+}
+.team-card-img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+}
+.team-card-body {
+    padding: 1.1rem 1.2rem 1.2rem;
+    text-align: left;
+}
+.team-card-name {
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: #0f2d4a;
+    margin-bottom: 2px;
+}
+.team-card-role {
+    font-size: 0.82rem;
+    color: #6b7d93;
+    margin-bottom: 0.75rem;
+}
+.team-card-socials {
+    display: flex;
+    gap: 8px;
+}
+.team-card-social-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #e8f4fd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1d6fca;
+    font-size: 13px;
+    transition: background 0.25s, color 0.25s;
+    text-decoration: none;
+}
+.team-card-social-btn:hover {
+    background: #1d6fca;
+    color: #fff;
+}
+.team-join-card {
+    background: linear-gradient(145deg, #0f2d4a 0%, #1a4a72 100%);
+    border-radius: 20px;
+    padding: 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 340px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+.team-join-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 1.5rem;
+}
+.team-join-logo-icon {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, #22d3ee, #0ea5e9);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+}
+.team-join-logo-text {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+}
+.team-join-title {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.35;
+    margin-bottom: 0.75rem;
+}
+.team-join-desc {
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+.team-join-btn {
+    display: inline-block;
+    background: linear-gradient(90deg, #22d3ee, #0ea5e9);
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    padding: 0.6rem 1.4rem;
+    border-radius: 999px;
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.2s;
+    text-transform: uppercase;
+}
+.team-join-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+    color: #fff;
+}
+
+/* ══════════════════════════════════════════
+   TIM PENGEMBANG — REDESIGN eye-catching
+   ══════════════════════════════════════════ */
+.team-tabs-section {
+    background: linear-gradient(160deg, #060d1f 0%, #0c1d45 40%, #0a2d5e 70%, #071830 100%);
+    padding: 6rem 0 5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+/* ── Animated mesh background ── */
+.team-tabs-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse 700px 500px at 10% 20%, rgba(34,211,238,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 500px 400px at 90% 80%, rgba(29,111,202,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 400px 300px at 60% 10%, rgba(251,191,36,0.05) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+/* ── Grid dot pattern ── */
+.team-tabs-section::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(34,211,238,0.12) 1px, transparent 1px);
+    background-size: 36px 36px;
+    pointer-events: none;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 0%, transparent 100%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 0%, transparent 100%);
+}
+
+/* ── Section header ── */
+.team-tabs-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    position: relative;
+    z-index: 2;
+}
+.team-tabs-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: #22d3ee;
+    background: rgba(34,211,238,0.1);
+    border: 1px solid rgba(34,211,238,0.25);
+    padding: 6px 18px;
+    border-radius: 999px;
+    margin-bottom: 1.25rem;
+}
+.team-tabs-eyebrow::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #22d3ee;
+    box-shadow: 0 0 8px #22d3ee;
+    animation: blinkDot 2s ease-in-out infinite;
+}
+@keyframes blinkDot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+.team-tabs-title {
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+    font-weight: 800;
+    color: #fff;
+    margin: 0 0 0.5rem;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+}
+.team-tabs-title span {
+    background: linear-gradient(90deg, #22d3ee, #38bdf8, #818cf8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+.team-tabs-subtitle {
+    font-size: 0.97rem;
+    color: rgba(255,255,255,0.5);
+    margin: 0;
+}
+
+.team-tabs-nav {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 2;
+}
+.team-tab-btn {
+    padding: 0.6rem 1.75rem;
+    border-radius: 999px;
+    border: 1.5px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.05);
+    color: rgba(255,255,255,0.6);
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    backdrop-filter: blur(8px);
+}
+.team-tab-btn:hover {
+    border-color: rgba(34,211,238,0.5);
+    color: #22d3ee;
+    background: rgba(34,211,238,0.07);
+    transform: translateY(-2px);
+}
+.team-tab-btn.active {
+    background: linear-gradient(135deg, #1d6fca, #22d3ee);
+    color: #fff;
+    border-color: transparent;
+    font-weight: 700;
+    box-shadow: 0 6px 24px rgba(34,211,238,0.35), 0 0 0 1px rgba(34,211,238,0.2);
+    transform: translateY(-2px);
+}
+
+.team-tab-panel { display: none; }
+.team-tab-panel.active {
+    display: block;
+    animation: fadeInPanel 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes fadeInPanel {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.team-members-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+    position: relative;
+    z-index: 2;
+}
+#tab-angkatan1 .team-members-grid {
+    grid-template-columns: repeat(6, 1fr);
+    gap: 1rem;
+}
+@media (max-width: 1280px) { #tab-angkatan1 .team-members-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 768px)  { #tab-angkatan1 .team-members-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px)  { #tab-angkatan1 .team-members-grid { grid-template-columns: 1fr; } }
+@media (max-width: 1024px) { .team-members-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 768px)  { .team-members-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px)  { .team-members-grid { grid-template-columns: 1fr; } }
+
+.tmember-card {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    cursor: default;
+    aspect-ratio: 3 / 4;
+    box-shadow:
+        0 8px 32px rgba(0,0,0,0.45),
+        0 0 0 1px rgba(255,255,255,0.06);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease;
+}
+.tmember-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    border: 1.5px solid transparent;
+    background: linear-gradient(135deg, rgba(34,211,238,0.4), rgba(29,111,202,0.2), transparent 60%) border-box;
+    -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: destination-out;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    z-index: 3;
+    pointer-events: none;
+}
+.tmember-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow:
+        0 24px 60px rgba(0,0,0,0.55),
+        0 0 0 1px rgba(34,211,238,0.2),
+        0 0 40px rgba(34,211,238,0.08);
+}
+.tmember-card:hover::before {
+    opacity: 1;
+}
+
+.tmember-card {
+    animation: cardEntrance 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.tmember-card:nth-child(1) { animation-delay: 0.05s; }
+.tmember-card:nth-child(2) { animation-delay: 0.10s; }
+.tmember-card:nth-child(3) { animation-delay: 0.15s; }
+.tmember-card:nth-child(4) { animation-delay: 0.20s; }
+.tmember-card:nth-child(5) { animation-delay: 0.25s; }
+.tmember-card:nth-child(6) { animation-delay: 0.30s; }
+@keyframes cardEntrance {
+    from { opacity: 0; transform: translateY(30px) scale(0.95); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.tmember-photo-wrap {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+.tmember-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+    background: linear-gradient(135deg, #0c2d5e, #1d6fca);
+    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.tmember-card:hover .tmember-photo {
+    transform: scale(1.08);
+}
+.tmember-online { display: none; }
+
+.tmember-photo-wrap::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(6,13,31,0.05) 0%,
+        transparent 35%,
+        rgba(6,13,31,0.6) 65%,
+        rgba(6,13,31,0.96) 100%
+    );
+    transition: background 0.35s ease;
+}
+.tmember-card:hover .tmember-photo-wrap::after {
+    background: linear-gradient(
+        to bottom,
+        rgba(6,13,31,0.05) 0%,
+        transparent 25%,
+        rgba(6,13,31,0.5) 58%,
+        rgba(6,13,31,0.94) 100%
+    );
+}
+
+.tmember-photo-wrap::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #1d6fca, #22d3ee, #38bdf8);
+    z-index: 4;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.tmember-card:hover .tmember-photo-wrap::before {
+    transform: scaleX(1);
+}
+
+.tmember-info {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 1rem 1rem 1.1rem;
+    z-index: 5;
+    transform: translateY(4px);
+    transition: transform 0.35s ease;
+}
+.tmember-card:hover .tmember-info {
+    transform: translateY(0);
+}
+.tmember-name {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.3;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+    letter-spacing: 0.01em;
+}
+.tmember-meta {
+    font-size: 0.68rem;
+    color: rgba(34,211,238,0.85);
+    margin-top: 3px;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.tmember-meta::before {
+    content: '';
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: #22d3ee;
+    flex-shrink: 0;
+    box-shadow: 0 0 6px #22d3ee;
+}
+
+.tmember-badge {
+    position: absolute;
+    top: 10px; right: 10px;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: rgba(6,13,31,0.7);
+    border: 1.5px solid rgba(34,211,238,0.4);
+    backdrop-filter: blur(8px);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.65rem;
+    font-weight: 800;
+    color: #22d3ee;
+    z-index: 5;
+    letter-spacing: 0;
+    opacity: 0;
+    transform: scale(0.7);
+    transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.tmember-card:hover .tmember-badge {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.team-wavy-deco {
+    position: absolute;
+    opacity: 0.35;
+    pointer-events: none;
+}
+</style>
+
+<!-- ===== TIM PENGEMBANG SIMAGANG ===== -->
+<section id="about" class="team-tabs-section">
+    <svg class="team-wavy-deco" style="top:90px;left:12px;width:80px;" viewBox="0 0 80 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M2 9 Q12 2 22 9 Q32 16 42 9 Q52 2 62 9 Q72 16 78 9" stroke="#22d3ee" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+    </svg>
+    <svg class="team-wavy-deco" style="bottom:70px;right:20px;width:80px;" viewBox="0 0 80 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M2 9 Q12 2 22 9 Q32 16 42 9 Q52 2 62 9 Q72 16 78 9" stroke="#22d3ee" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+    </svg>
+    <svg class="team-wavy-deco" style="top:30px;right:30px;width:36px;opacity:0.5;" viewBox="0 0 36 40"><polygon points="0,40 18,0 36,40" fill="none" stroke="#fbbf24" stroke-width="2.5"/></svg>
+
+    <div class="container" style="position:relative;z-index:2;">
+        <div class="container" style="position:relative; z-index:2; text-align:center;margin-bottom:30px">
+            <h2 class="team-tabs-title">
+                Tim Pengembang Simagang
+            </h2>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <!-- Profil 1 -->
-            <div class="bg-[#f0f7ff] rounded-[24px] p-6 text-center border-[1.5px] border-[#bfdbfe] hover:shadow-[0_20px_50px_rgba(14,99,201,0.12)] hover:-translate-y-2 hover:border-[#93c5fd] transition-all duration-300 reveal relative overflow-hidden group">
-                <div class="absolute inset-0 bg-gradient-to-br from-[#eff6ff] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div class="w-32 h-32 mx-auto rounded-full overflow-hidden mb-5 border-4 border-white shadow-[0_8px_24px_rgba(29,111,202,0.2)] relative z-10">
-                    <img src="https://ui-avatars.com/api/?name=Developer+1&background=1d6fca&color=fff&size=128" alt="Profil 1" class="w-full h-full object-cover">
-                </div>
-                <div class="relative z-10">
-                    <h3 class="font-bold text-[#0f2d4a] text-[1.2rem] mb-1">Nama Lengkap 1</h3>
-                    <p class="text-[#1d6fca] text-[0.95rem] font-bold mb-3">Project Manager</p>
-                    <p class="text-[#4b6580] text-[0.9rem] leading-relaxed mb-5">Mengatur berjalannya project dan memastikan semuanya selesai tepat waktu.</p>
-                    <div class="flex justify-center gap-3">
-                        <a href="#" class="w-9 h-9 rounded-full bg-white flex items-center justify-center text-[#1d6fca] border border-[#bfdbfe] hover:bg-[#1d6fca] hover:text-white transition-colors duration-300 shadow-sm"><i class="fab fa-github"></i></a>
-                        <a href="#" class="w-9 h-9 rounded-full bg-white flex items-center justify-center text-[#1d6fca] border border-[#bfdbfe] hover:bg-[#1d6fca] hover:text-white transition-colors duration-300 shadow-sm"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#" class="w-9 h-9 rounded-full bg-white flex items-center justify-center text-[#1d6fca] border border-[#bfdbfe] hover:bg-[#1d6fca] hover:text-white transition-colors duration-300 shadow-sm"><i class="fab fa-instagram"></i></a>
-                    </div>
-                </div>
-            </div>
+        <!-- Filter Tabs -->
+        <div class="team-tabs-nav">
+            <button class="team-tab-btn active" data-tab="angkatan1">Developer Pengembangan</button>
+            <button class="team-tab-btn" data-tab="angkatan2">Developer Awal</button>
+        </div>
 
-            <!-- Profil 2 -->
-            <div class="bg-[#f0f7ff] rounded-[24px] p-6 text-center border-[1.5px] border-[#bfdbfe] hover:shadow-[0_20px_50px_rgba(14,99,201,0.12)] hover:-translate-y-2 hover:border-[#93c5fd] transition-all duration-300 reveal relative overflow-hidden group">
-                <div class="absolute inset-0 bg-gradient-to-br from-[#eff6ff] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div class="w-32 h-32 mx-auto rounded-full overflow-hidden mb-5 border-4 border-white shadow-[0_8px_24px_rgba(29,111,202,0.2)] relative z-10">
-                    <img src="https://ui-avatars.com/api/?name=Developer+2&background=0ea5e9&color=fff&size=128" alt="Profil 2" class="w-full h-full object-cover">
-                </div>
-                <div class="relative z-10">
-                    <h3 class="font-bold text-[#0f2d4a] text-[1.2rem] mb-1">Nama Lengkap 2</h3>
-                    <p class="text-[#1d6fca] text-[0.95rem] font-bold mb-3">Lead Backend</p>
-                    <p class="text-[#4b6580] text-[0.9rem] leading-relaxed mb-5">Bertanggung jawab pada arsitektur sistem dan pengelolaan database aplikasi.</p>
-                    <div class="flex justify-center gap-3">
-                        <a href="#" class="w-9 h-9 rounded-full bg-white flex items-center justify-center text-[#1d6fca] border border-[#bfdbfe] hover:bg-[#1d6fca] hover:text-white transition-colors duration-300 shadow-sm"><i class="fab fa-github"></i></a>
-                        <a href="#" class="w-9 h-9 rounded-full bg-white flex items-center justify-center text-[#1d6fca] border border-[#bfdbfe] hover:bg-[#1d6fca] hover:text-white transition-colors duration-300 shadow-sm"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#" class="w-9 h-9 rounded-full bg-white flex items-center justify-center text-[#1d6fca] border border-[#bfdbfe] hover:bg-[#1d6fca] hover:text-white transition-colors duration-300 shadow-sm"><i class="fab fa-instagram"></i></a>
-                    </div>
-                </div>
+        <div class="team-tab-panel active" id="tab-angkatan1">
+            <div class="team-members-grid">
+                <div class="tmember-card">
+                    <div class="tmember-photo-wrap">
+                        <img src="{{ asset('storage/profiles/user1.jpeg') }}" alt="Diza Sazkia" class="tmember-photo">
+                        <span class="tmember-online"></span><div class="tmember-info"><div class="tmember-name">Diza Sazkia</div><div class="tmember-meta">Universitas Hasanuddin | Sistem Informasi</div></div></div></div>
+                <div class="tmember-card">
+                    <div class="tmember-photo-wrap">
+                        <img src="{{ asset('storage/profiles/user2.jpg') }}" alt="Ahmad Rizky" class="tmember-photo">
+                        <span class="tmember-online"></span><div class="tmember-info"><div class="tmember-name">Nur Fadillah</div><div class="tmember-meta">Universitas Hasanuddin | Sistem Informasi</div></div></div></div>
+                <div class="tmember-card">
+                    <div class="tmember-photo-wrap">
+                        <img src="{{ asset('storage/profiles/user3.jpg') }}" alt="Siti Rahma" class="tmember-photo">
+                        <span class="tmember-online"></span><div class="tmember-info"><div class="tmember-name">Resky Auliyah Kartini A</div><div class="tmember-meta">Universitas Hasanuddin | Sistem Informasi</div></div></div></div>
+                <div class="tmember-card">
+                    <div class="tmember-photo-wrap">
+                        <img src="{{ asset('storage/profiles/user4.jpeg') }}" alt="Budi Santoso" class="tmember-photo">
+                        <span class="tmember-online"></span><div class="tmember-info"><div class="tmember-name">Novi Rezkiyah Azzahrah R</div><div class="tmember-meta">Universitas Hasanuddin | Sistem Informasi</div></div></div></div>
+                <div class="tmember-card">
+                    <div class="tmember-photo-wrap">
+                        <img src="{{ asset('storage/profiles/user5.png') }}" alt="Reza Pratama" class="tmember-photo">
+                        <span class="tmember-online"></span><div class="tmember-info"><div class="tmember-name">An Naura Erwana Dwi P</div><div class="tmember-meta">Universitas Hasanuddin | Sistem Informasi</div></div></div></div>
+                <div class="tmember-card">
+                    <div class="tmember-photo-wrap">
+                        <img src="{{ asset('storage/profiles/user6.png') }}" alt="Nurul Hidayah" class="tmember-photo">
+                        <span class="tmember-online"></span><div class="tmember-info"><div class="tmember-name">Cholyn Sharon Enos</div><div class="tmember-meta">Universitas Hasanuddin | Sistem Informasi</div></div></div></div>
+        
             </div>
+        </div>
 
-            <!-- Profil 3 -->
-            <div class="bg-[#f0f7ff] rounded-[24px] p-6 text-center border-[1.5px] border-[#bfdbfe] hover:shadow-[0_20px_50px_rgba(14,99,201,0.12)] hover:-translate-y-2 hover:border-[#93c5fd] transition-all duration-300 reveal relative overflow-hidden group">
-                <div class="absolute inset-0 bg-gradient-to-br from-[#eff6ff] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div class="w-32 h-32 mx-auto rounded-full overflow-hidden mb-5 border-4 border-white shadow-[0_8px_24px_rgba(29,111,202,0.2)] relative z-10">
-                    <img src="https://ui-avatars.com/api/?name=Developer+3&background=1d6fca&color=fff&size=128" alt="Profil 3" class="w-full h-full object-cover">
-                </div>
-                <div class="relative z-10">
-                    <h3 class="font-bold text-[#0f2d4a] text-[1.2rem] mb-1">Nama Lengkap 3</h3>
-                    <p class="text-[#1d6fca] text-[0.95rem] font-bold mb-3">Frontend Developer</p>
-                    <p class="text-[#4b6580] text-[0.9rem] leading-relaxed mb-5">Merancang antarmuka pengguna yang interaktif, menarik, dan responsif.</p>
-                    <div class="flex justify-center gap-3">
-                        <a href="#" class="w-9 h-9 rounded-full bg-white flex items-center justify-center text-[#1d6fca] border border-[#bfdbfe] hover:bg-[#1d6fca] hover:text-white transition-colors duration-300 shadow-sm"><i class="fab fa-github"></i></a>
-                        <a href="#" class="w-9 h-9 rounded-full bg-white flex items-center justify-center text-[#1d6fca] border border-[#bfdbfe] hover:bg-[#1d6fca] hover:text-white transition-colors duration-300 shadow-sm"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#" class="w-9 h-9 rounded-full bg-white flex items-center justify-center text-[#1d6fca] border border-[#bfdbfe] hover:bg-[#1d6fca] hover:text-white transition-colors duration-300 shadow-sm"><i class="fab fa-instagram"></i></a>
-                    </div>
-                </div>
+        <div class="team-tab-panel" id="tab-angkatan2">
+            <div class="team-members-grid">
+                <div class="tmember-card">
+                    <div class="tmember-photo-wrap">
+                        <img src="https://ui-avatars.com/api/?name=Hendra+Kusuma&background=2563eb&color=fff&size=400" alt="Hendra Kusuma" class="tmember-photo">
+                        <span class="tmember-online"></span><div class="tmember-info"><div class="tmember-name">Hendra Kusuma</div><div class="tmember-meta">Lead Developer</div></div></div></div>
+                <div class="tmember-card">
+                    <div class="tmember-photo-wrap">
+                        <img src="https://ui-avatars.com/api/?name=Putri+Amalia&background=7c3aed&color=fff&size=400" alt="Putri Amalia" class="tmember-photo">
+                        <span class="tmember-online"></span><div class="tmember-info"><div class="tmember-name">Putri Amalia</div><div class="tmember-meta">Frontend Developer</div></div></div></div>
+                <div class="tmember-card">
+                    <div class="tmember-photo-wrap">
+                        <img src="https://ui-avatars.com/api/?name=Yoga+Pratama&background=059669&color=fff&size=400" alt="Yoga Pratama" class="tmember-photo">
+                        <span class="tmember-online"></span><div class="tmember-info"><div class="tmember-name">Yoga Pratama</div><div class="tmember-meta">Backend Developer</div></div></div></div>
+                <div class="tmember-card">
+                    <div class="tmember-photo-wrap">
+                        <img src="https://ui-avatars.com/api/?name=Laila+Fitri&background=dc2626&color=fff&size=400" alt="Laila Fitri" class="tmember-photo">
+                        <span class="tmember-online"></span><div class="tmember-info"><div class="tmember-name">Laila Fitri</div><div class="tmember-meta">UI/UX Designer</div></div></div></div>
+                <div class="tmember-card">
+                    <div class="tmember-photo-wrap">
+                        <img src="https://ui-avatars.com/api/?name=Andi+Setiawan&background=d97706&color=fff&size=400" alt="Andi Setiawan" class="tmember-photo">
+                        <span class="tmember-online"></span><div class="tmember-info"><div class="tmember-name">Andi Setiawan</div><div class="tmember-meta">Mobile Developer</div></div></div></div>
+                <div class="tmember-card">
+                    <div class="tmember-photo-wrap">
+                        <img src="https://ui-avatars.com/api/?name=Mega+Sari&background=0891b2&color=fff&size=400" alt="Mega Sari" class="tmember-photo">
+                        <span class="tmember-online"></span><div class="tmember-info"><div class="tmember-name">Mega Sari</div><div class="tmember-meta">System Analyst</div></div></div></div>
             </div>
+        </div>
 
-            <!-- Profil 4 -->
-            <div class="bg-[#f0f7ff] rounded-[24px] p-6 text-center border-[1.5px] border-[#bfdbfe] hover:shadow-[0_20px_50px_rgba(14,99,201,0.12)] hover:-translate-y-2 hover:border-[#93c5fd] transition-all duration-300 reveal relative overflow-hidden group">
-                <div class="absolute inset-0 bg-gradient-to-br from-[#eff6ff] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div class="w-32 h-32 mx-auto rounded-full overflow-hidden mb-5 border-4 border-white shadow-[0_8px_24px_rgba(29,111,202,0.2)] relative z-10">
-                    <img src="https://ui-avatars.com/api/?name=Developer+4&background=0ea5e9&color=fff&size=128" alt="Profil 4" class="w-full h-full object-cover">
-                </div>
-                <div class="relative z-10">
-                    <h3 class="font-bold text-[#0f2d4a] text-[1.2rem] mb-1">Nama Lengkap 4</h3>
-                    <p class="text-[#1d6fca] text-[0.95rem] font-bold mb-3">UI/UX Designer</p>
-                    <p class="text-[#4b6580] text-[0.9rem] leading-relaxed mb-5">Menghasilkan desain visual dan pengalaman pengguna yang luar biasa.</p>
-                    <div class="flex justify-center gap-3">
-                        <a href="#" class="w-9 h-9 rounded-full bg-white flex items-center justify-center text-[#1d6fca] border border-[#bfdbfe] hover:bg-[#1d6fca] hover:text-white transition-colors duration-300 shadow-sm"><i class="fab fa-github"></i></a>
-                        <a href="#" class="w-9 h-9 rounded-full bg-white flex items-center justify-center text-[#1d6fca] border border-[#bfdbfe] hover:bg-[#1d6fca] hover:text-white transition-colors duration-300 shadow-sm"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#" class="w-9 h-9 rounded-full bg-white flex items-center justify-center text-[#1d6fca] border border-[#bfdbfe] hover:bg-[#1d6fca] hover:text-white transition-colors duration-300 shadow-sm"><i class="fab fa-instagram"></i></a>
-                    </div>
-                </div>
-            </div>
+        
         </div>
     </div>
 </section>
+
+<script>
+/* ── Team Tabs ── */
+document.querySelectorAll('.team-tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.team-tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.team-tab-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    });
+});
+</script>
 
 <!-- ===== CTA / PENDAFTARAN ===== -->
 <section class="section-cta">
