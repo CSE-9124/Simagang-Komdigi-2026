@@ -501,10 +501,8 @@ class AttendanceController extends Controller
                 abort(404, 'File not found');
             }
 
-            // Token is valid, don't consume it - keep it in cache for the TTL duration
         } else {
-            // No token provided, fall back to ownership check
-            // Policy check below will enforce ownership after the record is found.
+
         }
 
         $attendance = Attendance::where(function ($query) use ($filename) {

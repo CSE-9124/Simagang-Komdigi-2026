@@ -328,6 +328,8 @@ Route::middleware(['auth', 'mentor'])->prefix('mentor')->name('mentor.')->group(
         ->where('filename', '[^/]+');
     Route::get('/logbook', [MentorLogbookController::class, 'index'])->name('logbook.index');
     Route::get('/logbook/{logbook}', [MentorLogbookController::class, 'show'])->name('logbook.show');
+    Route::post('/logbook/{logbook}/comment', [MentorLogbookController::class, 'comment'])->name('logbook.comment');
+    Route::put('/logbook/{logbook}/approve', [MentorLogbookController::class, 'approve'])->name('logbook.approve');
     Route::get('/logbook/photo/{filename}', [MentorLogbookController::class, 'servePhoto'])
         ->name('logbook.photo')
         ->middleware('signed')

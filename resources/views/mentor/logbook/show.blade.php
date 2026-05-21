@@ -24,30 +24,6 @@
             box-shadow: 0 10px 30px rgba(20, 40, 120, 0.16);
         }
 
-        .logbook-hero::before {
-            content: '';
-            position: absolute;
-            top: -70px;
-            right: -50px;
-            width: 220px;
-            height: 220px;
-            background: rgba(255, 255, 255, 0.06);
-            border-radius: 50%;
-            pointer-events: none;
-        }
-
-        .logbook-hero::after {
-            content: '';
-            position: absolute;
-            bottom: -100px;
-            left: 18%;
-            width: 300px;
-            height: 300px;
-            background: rgba(255, 255, 255, 0.04);
-            border-radius: 50%;
-            pointer-events: none;
-        }
-
         .panel-shell {
             background: #fff;
             border-radius: 20px;
@@ -65,6 +41,43 @@
             background: linear-gradient(135deg, #eff6ff, #f5f3ff);
             border: 1px solid #dbeafe;
         }
+
+        .status-pill {
+            display: inline-flex;
+            gap: 8px;
+            padding: 10px 14px;
+            border-radius: 999px;
+            font-weight: 700;
+        }
+
+        .status-pill.pending {
+            background: #fff7ed;
+            color: #c2410c;
+            border: 1px solid #fed7aa;
+        }
+
+        .status-pill.approved {
+            background: #ecfdf5;
+            color: #047857;
+            border: 1px solid #a7f3d0;
+        }
+
+        .approval-textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1.5px solid #dbeafe;
+        }
+
+        .action-button.success {
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: #fff;
+            padding: 10px 14px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 700;
+        }
     </style>
 @endpush
 
@@ -77,7 +90,6 @@
                         <div class="max-w-2xl text-white">
                             <p class="text-xs sm:text-sm uppercase tracking-[0.3em] text-blue-100/80">Mentor Dashboard</p>
                             <h1 class="mt-2 text-3xl sm:text-4xl font-extrabold leading-tight">Detail Logbook</h1>
-
                         </div>
 
                         <div
@@ -160,8 +172,7 @@
                         </div>
                         <div class="rounded-2xl bg-white border border-slate-100 p-4 sm:p-5 shadow-sm">
                             <p class="whitespace-pre-line text-sm sm:text-[15px] leading-7 text-slate-700">
-                                {{ $logbook->activity }}
-                            </p>
+                                {{ $logbook->activity }}</p>
                         </div>
                     </div>
 
@@ -188,9 +199,6 @@
                                     <img src="{{ $photoUrl }}"
                                         class="h-72 w-full object-cover transition duration-300 group-hover:scale-[1.02]"
                                         alt="Foto Logbook" onclick="window.open('{{ $photoUrl }}', '_blank')" />
-                                    <div
-                                        class="absolute inset-0 bg-gradient-to-t from-slate-950/35 via-transparent to-transparent opacity-0 transition group-hover:opacity-100">
-                                    </div>
                                     <button type="button"
                                         class="absolute bottom-4 right-4 inline-flex items-center gap-2 rounded-full bg-white/95 px-4 py-2 text-sm font-semibold text-blue-700 shadow-lg transition hover:bg-white"
                                         onclick="window.open('{{ $photoUrl }}', '_blank')">
@@ -198,10 +206,8 @@
                                         Lihat penuh
                                     </button>
                                 </div>
-                                <p class="mt-3 text-xs text-slate-500">
-                                    <i class="fas fa-circle-info mr-1 text-blue-500"></i>
-                                    Klik gambar atau tombol untuk membuka ukuran penuh.
-                                </p>
+                                <p class="mt-3 text-xs text-slate-500"><i class="fas fa-circle-info mr-1 text-blue-500"></i>
+                                    Klik gambar atau tombol untuk membuka ukuran penuh.</p>
                             @else
                                 <div
                                     class="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 px-6 py-12 text-center">
@@ -217,23 +223,91 @@
                         @endif
                     </div>
 
+                    <div class="section-card p-5 sm:p-6 lg:col-span-2">
+                        @php
+                            $status = $logbook->approval_status ?? 'pending';
+                            $statusLabel = $status === 'approved' ? 'Disetujui' : 'Menunggu review';
+                        @endphp
+
+                        <div class="flex items-center gap-3 mb-4">
+                            <div
+                                class="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600">
+                                <i class="fas fa-clipboard-check"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs uppercase tracking-[0.25em] text-emerald-500">Tinjauan</p>
+                                <h3 class="text-lg font-bold text-slate-900">Approval dan catatan</h3>
+                            </div>
+                        </div>
+
+                        <div class="mt-3 grid gap-4 lg:grid-cols-3">
+                            <div class="rounded-2xl bg-white px-4 py-4 shadow-sm border border-slate-100">
+                                <p class="text-xs uppercase tracking-wide text-slate-400">Status</p>
+                                <p class="mt-1 text-sm font-semibold text-slate-900"><span
+                                        class="status-pill {{ $status }}">{{ $statusLabel }}</span></p>
+                            </div>
+                            <div class="rounded-2xl bg-white px-4 py-4 shadow-sm border border-slate-100">
+                                <p class="text-xs uppercase tracking-wide text-slate-400">Disetujui oleh</p>
+                                <p class="mt-1 text-sm font-semibold text-slate-900">{{ $logbook->approver?->name ?? '-' }}
+                                </p>
+                            </div>
+                            <div class="rounded-2xl bg-white px-4 py-4 shadow-sm border border-slate-100">
+                                <p class="text-xs uppercase tracking-wide text-slate-400">Waktu approval</p>
+                                <p class="mt-1 text-sm font-semibold text-slate-900">
+                                    {{ $logbook->approved_at ? \Carbon\Carbon::parse($logbook->approved_at)->format('d M Y H:i') : '-' }}
+                                </p>
+                            </div>
+                        </div>
+
+                        @if ($status === 'approved')
+                            <div class="rounded-2xl bg-white p-4 shadow-sm border border-slate-100 mt-4">
+                                <p class="text-xs uppercase tracking-wide text-slate-400">Catatan approval</p>
+                                <p class="mt-2 text-sm font-semibold text-slate-900 whitespace-pre-line">
+                                    {{ $logbook->approval_note ?: '-' }}</p>
+
+                                <p class="mt-3 text-xs text-slate-500">Disetujui oleh
+                                    <strong>{{ $logbook->approver?->name ?? '-' }}</strong>
+                                    pada
+                                    {{ $logbook->approved_at ? \Carbon\Carbon::parse($logbook->approved_at)->format('d M Y H:i') : '-' }}
+                                </p>
+                            </div>
+                        @else
+                            <div class="mt-4">
+                                <form action="{{ route('mentor.logbook.approve', $logbook) }}" method="POST">
+                                    @csrf
+                                    @method('PUT')
+                                    <label class="mb-2 block text-sm font-semibold text-slate-700">Catatan approval
+                                        (opsional)</label>
+                                    <textarea name="note" rows="4" class="approval-textarea"
+                                        placeholder="Tulis alasan atau arahan lanjutan jika perlu.">{{ old('note', $logbook->approval_note) }}</textarea>
+                                    @error('note')
+                                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                                    @enderror
+
+                                    <div class="mt-4">
+                                        <button type="submit" name="status" value="approved"
+                                            class="action-button success">
+                                            <i class="fas fa-circle-check mr-2"></i> Approve</button>
+                                    </div>
+                                </form>
+                            </div>
+                        @endif
+                    </div>
+
                     <div
                         class="lg:col-span-2 flex flex-col gap-3 border-t border-slate-100 pt-5 sm:flex-row sm:items-center sm:justify-between">
                         <a href="{{ url()->previous() }}"
                             class="inline-flex items-center justify-center rounded-2xl bg-slate-600 px-5 py-3 text-sm sm:text-base font-semibold text-white shadow-sm transition hover:bg-slate-700">
-                            <i class="fas fa-arrow-left mr-2"></i>
-                            Kembali
+                            <i class="fas fa-arrow-left mr-2"></i> Kembali
                         </a>
 
                         <a href="{{ route('mentor.logbook.index') }}"
                             class="inline-flex items-center justify-center rounded-2xl bg-blue-600 px-5 py-3 text-sm sm:text-base font-semibold text-white shadow-sm transition hover:bg-blue-700">
-                            <i class="fas fa-list mr-2"></i>
-                            Lihat Semua Logbook
+                            <i class="fas fa-list mr-2"></i> Lihat Semua Logbook
                         </a>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 @endsection

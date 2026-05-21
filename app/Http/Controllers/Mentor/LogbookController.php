@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Mentor;
 
 use App\Http\Controllers\Controller;
 use App\Models\Logbook;
+use App\Models\MentorComment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class LogbookController extends Controller
 {
@@ -40,7 +42,7 @@ class LogbookController extends Controller
     {
         $this->authorize('view', $logbook);
 
-        $logbook->load('intern');
+        $logbook->load(['intern', 'comments.mentor', 'approver']);
         return view('mentor.logbook.show', compact('logbook'));
     }
 
@@ -73,6 +75,63 @@ class LogbookController extends Controller
             'Pragma' => 'no-cache',
             'Expires' => '0',
         ]);
+    }
+
+    public function comment(Request $request, Logbook $logbook)
+    {
+        $this->authorize('view', $logbook);
+
+        $mentor = Auth::user()->mentor;
+
+        $data = $request->validate([
+            'comment' => 'required|string|max:2000',
+        ]);
+
+        DB::transaction(function () use ($mentor, $logbook, $data) {
+            MentorComment::create([
+                'mentor_id' => $mentor->id,
+                'logbook_id' => $logbook->id,
+                'comment' => $data['comment'],
+            ]);
+
+            // optional: mark that mentor has acted (could be used for activity metrics)
+            $logbook->touch();
+        });
+
+        return redirect()->back()->with('success', 'Komentar berhasil ditambahkan.');
+    }
+
+    public function approve(Request $request, Logbook $logbook)
+    {
+        $this->authorize('view', $logbook);
+
+        $mentor = Auth::user()->mentor;
+
+        $data = $request->validate([
+            'status' => 'required|in:approved',
+            'note' => 'nullable|string|max:2000',
+        ]);
+
+        DB::transaction(function () use ($mentor, $logbook, $data) {
+            $logbook->update([
+                'approval_status' => $data['status'],
+                'approved_by' => $mentor->id,
+                'approved_at' => now(),
+                'approval_note' => $data['note'] ?? null,
+            ]);
+
+            if (!empty($data['note'])) {
+                MentorComment::create([
+                    'mentor_id' => $mentor->id,
+                    'logbook_id' => $logbook->id,
+                    'comment' => $data['note'],
+                ]);
+            }
+
+            $logbook->touch();
+        });
+
+        return redirect()->back()->with('success', 'Status logbook diperbarui.');
     }
 }
 

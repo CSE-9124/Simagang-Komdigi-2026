@@ -14,6 +14,10 @@ class Logbook extends Model
         'date',
         'activity',
         'photo_path',
+        'approval_status',
+        'approved_by',
+        'approved_at',
+        'approval_note',
     ];
 
     protected $casts = [
@@ -23,5 +27,15 @@ class Logbook extends Model
     public function intern()
     {
         return $this->belongsTo(Intern::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(MentorComment::class);
+    }
+
+    public function approver()
+    {
+        return $this->belongsTo(Mentor::class, 'approved_by');
     }
 }
