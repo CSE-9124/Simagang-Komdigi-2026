@@ -45,14 +45,23 @@ class AdminReportController extends Controller
     {
         $this->authorize('grade', $report);
 
-        $status = $request->input('status');
-        
         $rules = [
             'status' => ['required', 'in:approved,rejected,revised'],
             'admin_note' => ['nullable', 'string'],
         ];
 
         $validated = $request->validate($rules);
+
+        // VALIDASI WAJIB
+        if (
+            $validated['status'] === 'approved' &&
+            is_null($report->mentor_score)
+        ) {
+            return back()->with(
+                'error',
+                'Laporan tidak dapat disetujui sebelum mentor memberikan nilai.'
+            );
+        }
 
         $data = [
             'admin_note' => $validated['admin_note'] ?? null,
@@ -64,20 +73,13 @@ class AdminReportController extends Controller
         } elseif ($validated['status'] === 'revised') {
             $data['status'] = 'pending';
             $data['needs_revision'] = true;
-        } else { // rejected
+        } else {
             $data['status'] = 'rejected';
             $data['needs_revision'] = false;
         }
 
         $report->update($data);
 
-        $message = match($validated['status']) {
-            'approved' => 'Laporan telah disetujui.',
-            'revised' => 'Laporan memerlukan revisi. Catatan telah dikirim ke anak magang.',
-            'rejected' => 'Status laporan berhasil diperbarui.',
-            default => 'Status laporan berhasil diperbarui.',
-        };
-
-        return back()->with('success', $message);
+        return back()->with('success', 'Status laporan berhasil diperbarui.');
     }
 }

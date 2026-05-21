@@ -193,7 +193,7 @@
                             </div>
                             <div>
                                 <p class="text-xs uppercase tracking-[0.25em] text-blue-100/80">Data</p>
-                                <p class="text-base font-bold">{{ $todayAbsentInterns->count() }} Absensi</p>
+                                <p class="text-base font-bold">{{ $todayAbsentInterns->count() }} Absen</p>
                             </div>
                         </div>
                     </div>
