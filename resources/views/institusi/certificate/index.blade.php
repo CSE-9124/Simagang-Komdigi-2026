@@ -199,7 +199,7 @@
                             <div class="flex-1">
                                 <label for="search" class="field-label">Pencarian</label>
                                 <input type="text" name="search" id="search" value="{{ request('search') }}"
-                                    placeholder="Cari nama intern atau nomor sertifikat..." class="field-input" />
+                                    placeholder="Cari nama intern" class="field-input" />
                             </div>
                             <div class="flex items-center gap-2">
                                 <button type="submit"
@@ -229,41 +229,38 @@
                             <thead>
                                 <tr
                                     class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-left text-xs uppercase tracking-wider">
-                                    <th class="px-4 py-3">No</th>
-                                    <th class="px-4 py-3">Nama Peserta Magang</th>
-                                    <th class="px-4 py-3">No. Sertifikat</th>
-                                    <th class="px-4 py-3">Terbit</th>
-                                    <th class="px-4 py-3">Nilai Sertifikat</th>
-                                    <th class="px-4 py-3">Grade Sertifikat</th>
-                                    <th class="px-4 py-3">Nilai Laporan</th>
-                                    <th class="px-4 py-3">Grade Laporan</th>
-                                    <th class="px-4 py-3">Aksi</th>
+                                    <th class="px-4 py-3 text-center">No</th>
+                                    <th class="px-4 py-3 text-center">Nama Peserta Magang</th>
+                                    <th class="px-4 py-3 text-center">Terbit</th>
+                                    <th class="px-4 py-3 text-center">Nilai Sertifikat</th>
+                                    <th class="px-4 py-3 text-center">Grade Sertifikat</th>
+                                    <th class="px-4 py-3 text-center">Nilai Laporan</th>
+                                    <th class="px-4 py-3 text-center">Grade Laporan</th>
+                                    <th class="px-4 py-3 text-center">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-100">
                                 @forelse($certificates as $certificate)
                                     <tr class="hover:bg-blue-50 transition-colors duration-200">
-                                        <td class="px-4 py-4 text-sm font-semibold text-slate-700">
+                                        <td class="px-4 py-4 text-sm font-semibold text-slate-700 text-center">
                                             {{ $loop->iteration + ($certificates->currentPage() - 1) * $certificates->perPage() }}
                                         </td>
                                         <td class="px-4 py-4 text-sm font-semibold text-slate-900">
                                             {{ $certificate->intern->name }}</td>
-                                        <td class="px-4 py-4 text-sm text-slate-700">{{ $certificate->certificate_number }}
-                                        </td>
-                                        <td class="px-4 py-4 text-sm text-slate-700">
-                                            {{ optional($certificate->issue_date)->translatedFormat('d F Y') ?? '-' }}</td>
-                                        <td class="px-4 py-4 text-sm text-slate-700">
+                                        <td class="px-4 py-4 text-sm text-slate-700 text-center">
+                                            {{ optional($certificate->issue_date)->translatedFormat('d/m/y') ?? '-' }}</td>
+                                        <td class="px-4 py-4 text-sm text-slate-700 text-center">
                                             {{ $certificate->score ? $certificate->score->average : '-' }}</td>
-                                        <td class="px-4 py-4 text-sm text-slate-700">
+                                        <td class="px-4 py-4 text-sm text-slate-700 text-center">
                                             {{ $certificate->score ? scoreToGrade($certificate->score->average) : '-' }}
                                         </td>
-                                        <td class="px-4 py-4 text-sm text-slate-700">
+                                        <td class="px-4 py-4 text-sm text-slate-700 text-center">
                                             {{ $certificate->intern->finalReport ? $certificate->intern->finalReport->score ?? '-' : '-' }}
                                         </td>
-                                        <td class="px-4 py-4 text-sm text-slate-700">
+                                        <td class="px-4 py-4 text-sm text-slate-700 text-center">
                                             {{ $certificate->intern->finalReport ? $certificate->intern->finalReport->grade ?? '-' : '-' }}
                                         </td>
-                                        <td class="px-4 py-4 text-sm text-slate-700">
+                                        <td class="px-4 py-4 text-sm text-slate-700 text-center">
                                             <a href="{{ route('institusi.certificate.show', $certificate) }}"
                                                 class="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-indigo-600 to-blue-600 px-4 py-2 text-white shadow-sm transition hover:shadow-md">
                                                 <i class="fas fa-eye"></i>

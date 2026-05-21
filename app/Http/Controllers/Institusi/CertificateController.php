@@ -47,8 +47,8 @@ class CertificateController extends Controller
             $query->where(function ($builder) use ($search) {
                 $builder->whereHas('intern', function ($inner) use ($search) {
                     $inner->where('name', 'like', $search);
-                })
-                ->orWhere('certificate_number', 'like', $search);
+                });
+                // ->orWhere('certificate_number', 'like', $search);
             });
         }
 
