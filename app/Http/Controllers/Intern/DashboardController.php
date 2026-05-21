@@ -10,6 +10,7 @@ use App\Models\Certificate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Models\Logbook;
 
 class DashboardController extends Controller
 {
@@ -72,6 +73,12 @@ class DashboardController extends Controller
         // Latest certificate for this intern (if any)
         $certificate = Certificate::where('intern_id', $intern->id)->latest()->first();
 
+        // Latest approved logbook (most recent approved by mentor)
+        $latestApprovedLogbook = Logbook::where('intern_id', $intern->id)
+            ->where('approval_status', 'approved')
+            ->orderBy('approved_at', 'desc')
+            ->first();
+
         // Leaderboard (Top 10 global, termasuk yang 0)
         $topMicroSkills = Intern::leftJoin('micro_skill_submissions', 'interns.id', '=', 'micro_skill_submissions.intern_id')
             ->select('interns.id as intern_id', 'interns.name', 'interns.institution', 'interns.photo_path', DB::raw('COUNT(micro_skill_submissions.id) as total'))
@@ -105,7 +112,8 @@ class DashboardController extends Controller
             'microSkillTotal',
             'microSkillApproved',
             'topMicroSkills',
-            'cekaktif'
+            'cekaktif',
+            'latestApprovedLogbook'
         ));
     }
 }

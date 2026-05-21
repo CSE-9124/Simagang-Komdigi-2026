@@ -569,6 +569,30 @@
                 </div>
             </div>
 
+            {{-- Notifikasi: Logbook Terbaru Disetujui oleh Mentor --}}
+            @if(!empty($latestApprovedLogbook))
+                <div class="panel anim-4">
+                    <p class="section-label">Notifikasi: Logbook Disetujui</p>
+                    <div class="rounded-2xl bg-white px-4 py-3 shadow-sm border border-slate-100">
+                        <div class="flex items-start gap-3">
+                            <div class="flex-shrink-0 mt-1 text-emerald-600">
+                                <i class="fas fa-circle-check"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between">
+                                    <div class="text-sm font-semibold text-slate-900">{{ \Illuminate\Support\Str::limit($latestApprovedLogbook->activity, 120) }}</div>
+                                    <a href="{{ route('intern.logbook.show', $latestApprovedLogbook) }}" class="text-xs text-blue-600 ml-2">Detail</a>
+                                </div>
+                                <div class="text-xs text-slate-500 mt-1">{{ $latestApprovedLogbook->approved_at ? \Carbon\Carbon::parse($latestApprovedLogbook->approved_at)->locale('id')->isoFormat('D MMMM Y') : '' }}</div>
+                                @if($latestApprovedLogbook->approval_note)
+                                    <div class="mt-2 text-sm text-slate-700 whitespace-pre-line"><strong>Catatan:</strong> {{ $latestApprovedLogbook->approval_note }}</div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
+
         </div>
 
         {{-- RIGHT: Donut + Info + Leaderboard ── --}}

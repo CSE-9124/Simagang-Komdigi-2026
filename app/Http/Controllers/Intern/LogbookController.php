@@ -43,7 +43,7 @@ class LogbookController extends Controller
     {
         $intern = Auth::user()->intern;
         $logbooks = Logbook::where('intern_id', $intern->id)
-            ->orderBy('date', 'desc')
+            ->orderBy('created_at', 'desc')
             ->paginate(15);
 
         // Aggregate counts across all logbook records for this intern
@@ -151,6 +151,15 @@ class LogbookController extends Controller
         $logbook->photo_url = $this->makeOneTimeLogbookPhotoUrl($logbook->photo_path);
 
         return view('intern.logbook.edit', compact('logbook'));
+    }
+
+    public function show(Logbook $logbook)
+    {
+        $this->authorize('view', $logbook);
+
+        $logbook->photo_url = $this->makeOneTimeLogbookPhotoUrl($logbook->photo_path);
+
+        return view('intern.logbook.show', compact('logbook'));
     }
 
     public function update(Request $request, Logbook $logbook)

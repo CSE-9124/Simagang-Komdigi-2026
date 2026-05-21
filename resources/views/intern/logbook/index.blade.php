@@ -395,7 +395,7 @@
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-100">
                                 @forelse($logbooks as $logbook)
-                                    <tr class="hover:bg-blue-50 transition-colors duration-150">
+                                    <tr class="{{ ($logbook->approval_status ?? '') === 'approved' ? 'bg-emerald-50' : 'hover:bg-blue-50' }} transition-colors duration-150">
                                         <td class="px-6 py-4 whitespace-nowrap text-center">
                                             <div class="flex items-center justify-center">
                                                 <span
@@ -404,7 +404,13 @@
                                         </td>
                                         <td class="px-6 py-4 text-left">
                                             <div class="text-sm text-gray-900 max-w-md">
-                                                {{ Str::limit($logbook->activity, 150) }}</div>
+                                                <div class="flex items-center gap-2">
+                                                    <div class="flex-1">{{ Str::limit($logbook->activity, 150) }}</div>
+                                                    @if (($logbook->approval_status ?? '') === 'approved')
+                                                        <span class="ml-2 inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">Disetujui</span>
+                                                    @endif
+                                                </div>
+                                            </div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-center">
                                             @if ($logbook->photo_path)
@@ -424,6 +430,14 @@
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-center">
                                             <div class="flex gap-2 justify-center">
+                                                <a href="{{ route('intern.logbook.show', $logbook) }}"
+                                                    class="inline-flex items-center justify-center w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-lg transition-all duration-200 group"
+                                                    title="Detail">
+                                                    <svg class="w-5 h-5 text-gray-700 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
+                                                        <path d="M12 5c-7 0-11 7-11 7s4 7 11 7 11-7 11-7-4-7-11-7zm0 11a4 4 0 1 1 0-8 4 4 0 0 1 0 8z" />
+                                                        <circle cx="12" cy="12" r="2.5" />
+                                                    </svg>
+                                                </a>
                                                 <a href="{{ route('intern.logbook.edit', $logbook) }}"
                                                     class="inline-flex items-center justify-center w-10 h-10 bg-blue-100 hover:bg-blue-200 rounded-lg transition-all duration-200 group"
                                                     title="Edit">

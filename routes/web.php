@@ -200,6 +200,7 @@ Route::middleware(['auth', 'intern'])->prefix('intern')->name('intern.')->group(
     Route::put('/logbook/{logbook}', [LogbookController::class, 'update'])->name('logbook.update');
     Route::delete('/logbook/{logbook}', [LogbookController::class, 'destroy'])->name('logbook.destroy');
     Route::get('/logbook/photo/{filename}', [LogbookController::class, 'servePhoto'])->name('logbook.photo');
+    Route::get('/logbook/{logbook}', [LogbookController::class, 'show'])->name('logbook.show');
 
     // Micro Skill Routes
     Route::get('/microskill', [InternMicroSkillController::class, 'index'])->name('microskill.index');
