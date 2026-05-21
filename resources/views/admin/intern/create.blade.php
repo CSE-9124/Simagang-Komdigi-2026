@@ -393,6 +393,8 @@
                             data-email="{{ $c->email }}"
                             data-gender="{{ $c->jenis_kelamin == 'L' ? 'Laki-laki' : 'Perempuan' }}"
                             data-phone="{{ $c->no_telp }}"
+                            data-soft-skill="{{ $c->soft_skill }}"
+                            data-hard-skill="{{ $c->hard_skill }}"
                             @if ($c->pengajuan->institusi->jenis_institusi == 'sekolah')
                                 data-education="SMA/SMK"
                             @elseif ($c->pengajuan->institusi->jenis_institusi == 'kampus')
@@ -627,16 +629,31 @@
             </div>
         </div>
 
+        {{-- SECTION: Hard Skill dan Soft Skill --}}
+        <div class="panel anim-2 mb-5">
+            <p class="section-label">Hard Skill dan Soft Skill</p>
+            <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:18px;" class="md-grid-2">
+                <div>
+                    <label class="form-label">Hard Skill</label>
+                    <textarea id="hardSkillDisplay" name="hard_skill" readonly class="form-control readonly" placeholder="Pilih calon untuk melihat hard skill" rows="3"></textarea>
+                </div>
+                <div>
+                    <label class="form-label">Soft Skill</label>
+                    <textarea id="softSkillDisplay" name="soft_skill" readonly class="form-control readonly" placeholder="Pilih calon untuk melihat soft skill" rows="3"></textarea>
+                </div>
+            </div>
+        </div>
+
         {{-- ─ FOOTER ACTIONS ─ --}}
         <div class="panel anim-5" style="padding:20px 28px;">
             <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;">
                 <a href="{{ route('admin.intern.index') }}" class="btn-back">
-                    <i class="fas fa-arrow-left text-xs"></i>
-                    Batal & Kembali
+                     <i class="fas fa-arrow-left text-xs"></i>
+                     Batal & Kembali
                 </a>
                 <button type="submit" class="btn-submit">
-                    <i class="fas fa-save"></i>
-                    Simpan Data Peserta
+                     <i class="fas fa-save"></i>
+                     Simpan Data Peserta
                 </button>
             </div>
         </div>
@@ -727,6 +744,20 @@ document.addEventListener('DOMContentLoaded', () => {
         pwdInput.type = isText ? 'password' : 'text';
         eyeIcon.className = isText ? 'fas fa-eye' : 'fas fa-eye-slash';
     });
+
+    {{-- JavaScript untuk menampilkan soft_skill dan hard_skill dari intern yang dipilih --}}
+    calonSelect.addEventListener('change', function () {
+        const selectedOption = calonSelect.options[calonSelect.selectedIndex];
+        const softSkill = selectedOption.getAttribute('data-soft-skill');
+        const hardSkill = selectedOption.getAttribute('data-hard-skill');
+
+        // Update the display fields
+        softSkillDisplay.value = softSkill || '';
+        hardSkillDisplay.value = hardSkill || '';
+    });
+
+    // Trigger change event on page load to populate fields if a default is selected
+    calonSelect.dispatchEvent(new Event('change'));
 
 });
 </script>

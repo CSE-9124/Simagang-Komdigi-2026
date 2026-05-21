@@ -230,6 +230,16 @@
                                     <p class="font-semibold">{{ $peserta->no_telp }}</p>
                                 </div>
 
+                                <div>
+                                    <p class="text-sm text-gray-500">Soft Skill</p>
+                                    <p class="font-semibold">{{ $peserta->soft_skill }}</p>
+                                </div>
+
+                                <div>
+                                    <p class="text-sm text-gray-500">Hard Skill</p>
+                                    <p class="font-semibold">{{ $peserta->hard_skill }}</p>
+                                </div>
+
                             </div>
                         </div>
                     @endforeach

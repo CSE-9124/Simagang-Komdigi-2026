@@ -325,6 +325,18 @@
                                             </label>
                                             <input type="text" name="no_telp[]" required class="field-input">
                                         </div>
+
+                                        <div>
+                                            <label for="soft_skill" class="field-label">Soft Skill</label>
+                                            <input type="text" name="soft_skill[]" id="soft_skill"
+                                                placeholder="contoh: Komunikasi" class="field-input">
+                                        </div>
+
+                                        <div>
+                                            <label for="hard_skill" class="field-label">Hard Skill</label>
+                                            <input type="text" name="hard_skill[]" id="hard_skill"
+                                                placeholder="contoh: Pemrograman" class="field-input">
+                                        </div>
                                     </div>
                                 </div>
                             </div>

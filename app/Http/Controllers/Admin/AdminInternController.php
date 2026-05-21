@@ -60,7 +60,6 @@ class AdminInternController extends Controller
 
     public function create()
     {
-        
         $calonMagang = PengajuanDetail::with([
                 'pengajuan.institusi'
             ])
@@ -105,12 +104,15 @@ class AdminInternController extends Controller
             'institution' => ['required', 'string', 'max:255'],
             'purpose' => ['nullable', 'string', 'in:Magang,KKN Profesi,PKL,Praktek Industri,Magang Industri,Guru Magang Industri,Job on Training'],
             'mentor_id' => ['required', 'exists:mentors,id'],
+            
             // 'team' => ['nullable', 'string', Rule::in($validTeams)],
             'pengajuan_detail_id' => ['nullable', 'exists:pengajuan_details,id'],
             'start_date' => ['required', 'date'],
             'end_date' => ['required', 'date', 'after:start_date'],
             'photo' => ['required', 'image', 'max:2048'],
             'password' => ['required', Password::defaults()],
+            'hard_skill' => ['nullable', 'string'],
+            'soft_skill' => ['nullable', 'string'],
         ]);
 
         $user = User::create([
@@ -174,6 +176,8 @@ class AdminInternController extends Controller
             'photo_path' => $photoPath,
             'is_active' => $request->has('is_active') ? $request->boolean('is_active') : false,
             'pengajuan_detail_id' => $request->pengajuan_detail_id,
+            'hard_skill' => $validated['hard_skill'] ?? null,
+            'soft_skill' => $validated['soft_skill'] ?? null,
         ]);
 
         return redirect()->route('admin.intern.index')
@@ -242,6 +246,8 @@ class AdminInternController extends Controller
             'photo' => ['nullable', 'image', 'max:2048'],
             'password' => ['nullable', Password::defaults()],
             'is_active' => ['boolean'],
+            'hard_skill' => ['nullable', 'string'],
+            'soft_skill' => ['nullable', 'string'],
         ]);
 
         $intern->user->update([
@@ -276,6 +282,8 @@ class AdminInternController extends Controller
             'start_date' => $validated['start_date'],
             'end_date' => $validated['end_date'],
             'is_active' => $request->has('is_active') ? $request->boolean('is_active') : false,
+            'hard_skill' => $validated['hard_skill'] ?? null,
+            'soft_skill' => $validated['soft_skill'] ?? null,
         ];
 
         if ($request->hasFile('photo')) {

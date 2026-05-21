@@ -26,6 +26,8 @@ class Intern extends Model
         'is_active',
         'team_id',
         'pengajuan_detail_id',
+        'soft_skill',
+        'hard_skill',
     ];
 
     protected $casts = [

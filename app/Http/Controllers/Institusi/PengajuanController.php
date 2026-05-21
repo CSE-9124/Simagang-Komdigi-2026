@@ -85,6 +85,8 @@ class PengajuanController extends Controller
             'jurusan.*' => 'required|string',
             'jenis_kelamin.*' => 'required|in:L,P',
             'no_telp.*' => 'required|string',
+            'soft_skill.*' => 'nullable|string',
+            'hard_skill.*' => 'nullable|string',
         ], [
             'no_surat.unique' => 'Nomor surat ini sudah pernah digunakan oleh institusi Anda. Silakan gunakan nomor surat yang berbeda.',
         ]);
@@ -127,6 +129,8 @@ class PengajuanController extends Controller
                 'jurusan' => $request->jurusan[$i],
                 'jenis_kelamin' => $request->jenis_kelamin[$i],
                 'no_telp' => $request->no_telp[$i],
+                'soft_skill' => $request->soft_skill[$i] ?? null,
+                'hard_skill' => $request->hard_skill[$i] ?? null,
             ]);
         }
 
@@ -174,6 +178,8 @@ class PengajuanController extends Controller
             'jurusan.*' => 'required|string',
             'jenis_kelamin.*' => 'required|in:L,P',
             'no_telp.*' => 'required|string',
+            'soft_skill.*' => 'nullable|string',
+            'hard_skill.*' => 'nullable|string',
         ], [
             'no_surat.unique' => 'Nomor surat ini sudah pernah digunakan oleh institusi Anda. Silakan gunakan nomor surat yang berbeda.',
         ]);
@@ -220,6 +226,8 @@ class PengajuanController extends Controller
                 'jurusan' => $request->jurusan[$i],
                 'jenis_kelamin' => $request->jenis_kelamin[$i],
                 'no_telp' => $request->no_telp[$i],
+                'soft_skill' => $request->soft_skill[$i] ?? null,
+                'hard_skill' => $request->hard_skill[$i] ?? null,
             ]);
         }
 

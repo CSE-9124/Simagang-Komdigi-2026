@@ -19,6 +19,8 @@ class Pengajuan extends Model
         'keperluan',
         'no_surat',
         'tujuan_surat',
+        'soft_skill',
+        'hard_skill',
     ];
 
     public function details()

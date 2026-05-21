@@ -365,6 +365,20 @@
                                                     value="{{ old('no_telp.' . $loop->index, $detail->no_telp) }}" required
                                                     class="field-input">
                                             </div>
+
+                                            <div>
+                                                <label for="soft_skill" class="field-label">Soft Skill</label>
+                                                <input type="text" name="soft_skill[]" id="soft_skill"
+                                                    value="{{ old('soft_skill', $detail->soft_skill) }}"
+                                                    placeholder="contoh: Komunikasi" class="field-input">
+                                            </div>
+
+                                            <div>
+                                                <label for="hard_skill" class="field-label">Hard Skill</label>
+                                                <input type="text" name="hard_skill[]" id="hard_skill"
+                                                    value="{{ old('hard_skill', $detail->hard_skill) }}"
+                                                    placeholder="contoh: Pemrograman" class="field-input">
+                                            </div>
                                         </div>
                                     </div>
                                 @empty

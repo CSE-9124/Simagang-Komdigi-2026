@@ -653,6 +653,18 @@
                         </label>
                     </div>
                 </div>
+        {{-- SECTION: Hard Skill dan Soft Skill --}}
+        <div class="panel anim-4 mb-5">
+            <p class="section-label">Hard Skill dan Soft Skill</p>
+            <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:18px;" class="md-grid-2">
+                <div>
+                    <label class="form-label">Hard Skill</label>
+                    <textarea name="hard_skill" class="form-control" placeholder="Masukkan hard skill" rows="3">{{ old('hard_skill', $intern->hard_skill) }}</textarea>
+                </div>
+                <div>
+                    <label class="form-label">Soft Skill</label>
+                    <textarea name="soft_skill" class="form-control" placeholder="Masukkan soft skill" rows="3">{{ old('soft_skill', $intern->soft_skill) }}</textarea>
+                </div>
             </div>
         </div>
 

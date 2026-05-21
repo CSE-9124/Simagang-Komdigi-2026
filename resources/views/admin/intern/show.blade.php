@@ -546,6 +546,38 @@
                 </div>
             </div>
 
+            {{-- Soft Skill ── --}}
+            <div class="panel anim-3">
+                <div class="section-header">
+                    <div class="section-icon violet"><i class="fas fa-user-friends"></i></div>
+                    <div class="section-header-text">
+                        <h3>Soft Skill</h3>
+                        <p>Keterampilan sosial</p>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <p class="info-label">Soft Skill</p>
+                    <p class="info-value">{{ $intern->soft_skill ?? '—' }}</p>
+                </div>
+            </div>
+
+            {{-- Hard Skill ── --}}
+            <div class="panel anim-3">
+                <div class="section-header">
+                    <div class="section-icon amber"><i class="fas fa-user-tie"></i></div>
+                    <div class="section-header-text">
+                        <h3>Hard Skill</h3>
+                        <p>Keterampilan teknis</p>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <p class="info-label">Hard Skill</p>
+                    <p class="info-value">{{ $intern->hard_skill ?? '—' }}</p>
+                </div>
+            </div>
+
         </div>
 
         {{-- RIGHT: Absensi + Logbook ── --}}

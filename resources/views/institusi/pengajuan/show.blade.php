@@ -268,41 +268,37 @@
                         </div>
 
                         <div class="space-y-4">
-                            @foreach ($pengajuan->details as $i => $peserta)
-                                <div class="info-card p-5 sm:p-6">
-                                    <div class="flex items-center justify-between gap-4 mb-4">
-                                        <h3 class="text-md font-semibold text-blue-700">Calon Peserta Magang
-                                            {{ $i + 1 }}</h3>
-                                    </div>
-
-                                    <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+                            @foreach ($pengajuan->details as $detail)
+                                <div class="info-card p-6 sm:p-8 rounded-lg shadow-md border border-gray-200">
+                                    <h3 class="text-lg font-bold text-blue-600 mb-4">Calon Peserta Magang {{ $loop->iteration }}</h3>
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                         <div>
-                                            <p class="text-xs uppercase tracking-wide text-slate-400">Nama</p>
-                                            <p class="mt-1 font-semibold text-slate-900">{{ $peserta->nama }}</p>
+                                            <p class="field-label">Nama</p>
+                                            <p>{{ $detail->nama }}</p>
                                         </div>
                                         <div>
-                                            <p class="text-xs uppercase tracking-wide text-slate-400">Jurusan</p>
-                                            <p class="mt-1 font-semibold text-slate-900">{{ $peserta->jurusan }}</p>
+                                            <p class="field-label">Jurusan</p>
+                                            <p>{{ $detail->jurusan }}</p>
                                         </div>
                                         <div>
-                                            <p class="text-xs uppercase tracking-wide text-slate-400">Jenis Kelamin</p>
-                                            <p class="mt-1 font-semibold text-slate-900">
-                                                @if ($peserta->jenis_kelamin == 'L')
-                                                    Laki-laki
-                                                @elseif($peserta->jenis_kelamin == 'P')
-                                                    Perempuan
-                                                @else
-                                                    -
-                                                @endif
-                                            </p>
+                                            <p class="field-label">Email</p>
+                                            <p>{{ $detail->email }}</p>
                                         </div>
                                         <div>
-                                            <p class="text-xs uppercase tracking-wide text-slate-400">Email</p>
-                                            <p class="mt-1 font-semibold text-slate-900">{{ $peserta->email }}</p>
+                                            <p class="field-label">No Telepon</p>
+                                            <p>{{ $detail->no_telp }}</p>
                                         </div>
                                         <div>
-                                            <p class="text-xs uppercase tracking-wide text-slate-400">No Telepon</p>
-                                            <p class="mt-1 font-semibold text-slate-900">{{ $peserta->no_telp }}</p>
+                                            <p class="field-label">Jenis Kelamin</p>
+                                            <p>{{ $detail->jenis_kelamin === 'P' ? 'Perempuan' : 'Lelaki' }}</p>
+                                        </div>
+                                        <div>
+                                            <p class="field-label">Soft Skill</p>
+                                            <p>{{ $detail->soft_skill ?? '-' }}</p>
+                                        </div>
+                                        <div>
+                                            <p class="field-label">Hard Skill</p>
+                                            <p>{{ $detail->hard_skill ?? '-' }}</p>
                                         </div>
                                     </div>
                                 </div>

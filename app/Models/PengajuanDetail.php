@@ -15,6 +15,8 @@ class PengajuanDetail extends Model
         'email',
         'no_telp',
         'jenis_kelamin',
+        'soft_skill',
+        'hard_skill',
     ];
 
     public function pengajuan()
