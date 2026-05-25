@@ -49,9 +49,19 @@ class DashboardController extends Controller
             ->whereDate('submitted_at', $today)
             ->count();
 
-        // Get logbooks submitted today by interns
+        // Get logbooks submitted today by interns (all)
         $todayLogbooks = Logbook::whereIn('intern_id', $internIds ?: [0])
             ->whereDate('date', $today)
+            ->with('intern')
+            ->orderByDesc('created_at')
+            ->get();
+
+        // Pending logbooks (not approved) — used to trigger alerts / review list
+        $todayLogbooksPending = Logbook::whereIn('intern_id', $internIds ?: [0])
+            ->whereDate('date', $today)
+            ->where(function ($q) {
+                $q->whereNull('approval_status')->orWhere('approval_status', '!=', 'approved');
+            })
             ->with('intern')
             ->orderByDesc('created_at')
             ->get();
@@ -74,7 +84,7 @@ class DashboardController extends Controller
                 ];
             });
 
-        return view('mentor.dashboard', compact('mentor', 'interns', 'alumni', 'todayAttendances', 'todayAbsentInterns', 'today', 'microPending', 'microTodayTotal', 'topMicroSkills', 'todayLogbooks'));
+        return view('mentor.dashboard', compact('mentor', 'interns', 'alumni', 'todayAttendances', 'todayAbsentInterns', 'today', 'microPending', 'microTodayTotal', 'topMicroSkills', 'todayLogbooks', 'todayLogbooksPending'));
     }
 }
 
