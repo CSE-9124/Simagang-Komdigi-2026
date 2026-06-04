@@ -546,35 +546,50 @@
                 </div>
             </div>
 
-            {{-- Soft Skill ── --}}
-            <div class="panel anim-3">
-                <div class="section-header">
-                    <div class="section-icon violet"><i class="fas fa-user-friends"></i></div>
-                    <div class="section-header-text">
-                        <h3>Soft Skill</h3>
-                        <p>Keterampilan sosial</p>
+            {{-- Soft Skill & Hard Skill ── side by side --}}
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                <div class="panel anim-3">
+                    <div class="section-header">
+                        <div class="section-icon violet"><i class="fas fa-comments"></i></div>
+                        <div class="section-header-text">
+                            <h3>Soft Skill</h3>
+                            <p>Keterampilan sosial</p>
+                        </div>
                     </div>
+                    @if($intern->soft_skill)
+                        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+                            @foreach(explode(',', $intern->soft_skill) as $skill)
+                                <span style="display:inline-flex;align-items:center;gap:4px;padding:4px 12px;border-radius:999px;font-size:12px;font-weight:600;background:#f3f0ff;color:#6d28d9;border:1px solid #e9d5ff;">
+                                    <i class="fas fa-star" style="font-size:7px;color:#a78bfa;"></i>
+                                    {{ trim($skill) }}
+                                </span>
+                            @endforeach
+                        </div>
+                    @else
+                        <p class="info-value" style="color:#94a3b8;">—</p>
+                    @endif
                 </div>
 
-                <div class="info-item">
-                    <p class="info-label">Soft Skill</p>
-                    <p class="info-value">{{ $intern->soft_skill ?? '—' }}</p>
-                </div>
-            </div>
-
-            {{-- Hard Skill ── --}}
-            <div class="panel anim-3">
-                <div class="section-header">
-                    <div class="section-icon amber"><i class="fas fa-user-tie"></i></div>
-                    <div class="section-header-text">
-                        <h3>Hard Skill</h3>
-                        <p>Keterampilan teknis</p>
+                <div class="panel anim-3">
+                    <div class="section-header">
+                        <div class="section-icon amber"><i class="fas fa-code"></i></div>
+                        <div class="section-header-text">
+                            <h3>Hard Skill</h3>
+                            <p>Keterampilan teknis</p>
+                        </div>
                     </div>
-                </div>
-
-                <div class="info-item">
-                    <p class="info-label">Hard Skill</p>
-                    <p class="info-value">{{ $intern->hard_skill ?? '—' }}</p>
+                    @if($intern->hard_skill)
+                        <div style="display:flex;flex-wrap:wrap;gap:6px;">
+                            @foreach(explode(',', $intern->hard_skill) as $skill)
+                                <span style="display:inline-flex;align-items:center;gap:4px;padding:4px 12px;border-radius:999px;font-size:12px;font-weight:600;background:#fffbeb;color:#b45309;border:1px solid #fde68a;">
+                                    <i class="fas fa-cog" style="font-size:7px;color:#fbbf24;"></i>
+                                    {{ trim($skill) }}
+                                </span>
+                            @endforeach
+                        </div>
+                    @else
+                        <p class="info-value" style="color:#94a3b8;">—</p>
+                    @endif
                 </div>
             </div>
 

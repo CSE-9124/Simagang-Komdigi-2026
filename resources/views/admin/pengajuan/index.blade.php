@@ -95,6 +95,43 @@
                 font-size: 0.75rem;
             }
         }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.55);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            backdrop-filter: blur(3px);
+        }
+
+        .modal-box {
+            background: #fff;
+            border-radius: 20px;
+            padding: 28px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 20px 60px rgba(30, 58, 138, 0.18);
+            position: relative
+        }
+
+        @keyframes fadeSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(16px)
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0)
+            }
+        }
+
+        .anim-1 {
+            animation: fadeSlideUp .5s ease both
+        }
     </style>
 @endpush
 
@@ -113,7 +150,9 @@
                 </div>
             </div>
 
-            <!-- Statistics Cards -->
+            <!-- Statistics Cards (Optional - untuk informasi tambahan) -->
+            {{-- @if ($pengajuans->count() > 0) --}}
+            {{-- Stats Cards --}}
             <div class="stats-shell mb-8">
 
                 @php
@@ -282,6 +321,11 @@
                                                 @else bg-yellow-100 text-yellow-800 @endif">
                                                     {{ ucfirst($pengajuan->status) }}
                                                 </span>
+                                                {{-- @if ($pengajuan->needs_revision)
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-orange-100 text-orange-800">
+                                                    Revisi
+                                                </span>
+                                            @endif --}}
                                             </div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-center">
@@ -316,6 +360,13 @@
                             </tbody>
                         </table>
                     </div>
+
+                    {{-- <!-- Pagination -->
+                @if ($logbooks->count() > 0)
+                    <div class="mt-6">
+                        {{ $logbooks->links() }}
+                    </div>
+                @endif --}}
                 </div>
             </div>
         </div>
