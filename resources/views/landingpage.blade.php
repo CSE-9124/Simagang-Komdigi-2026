@@ -1050,108 +1050,277 @@
     </div>
 </section>
 
-<!-- ===== Daftar Lowongan Terbaru ===== -->
-<section id="daftar-lowongan" class="section-jobs">
-    <div class="container">
-        <div class="section-header reveal">
-            <span class="section-eyebrow">Lowongan Terbaru</span>
-            <h2 class="section-title">Temukan Peluang Magang Terbaik</h2>
-            <p class="section-desc">Jelajahi daftar lowongan magang terbaru dari berbagai mitra pendidikan dan industri kami. Temukan peluang yang sesuai dengan minat dan keahlianmu untuk memulai perjalanan magang yang sukses.</p>
+{{-- ===== Daftar Lowongan Terbaru ===== --}}
+<section id="daftar-lowongan" class="section-jobs py-20 bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/40">
+    <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        {{-- ── Section Header ── --}}
+        <div class="text-center mb-12 reveal">
+            <span class="inline-flex items-center gap-2 text-xs font-bold tracking-[.16em] uppercase
+                         text-blue-700 bg-blue-50 border border-blue-200 px-4 py-1.5 rounded-full mb-4">
+                <i class="fas fa-briefcase text-[11px]"></i>
+                Lowongan Terbaru
+            </span>
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-800 mb-4 leading-tight">
+                Temukan Peluang Magang Terbaik
+            </h2>
+            <p class="text-slate-500 text-base max-w-2xl mx-auto leading-relaxed">
+                Jelajahi daftar lowongan magang terbaru dari berbagai mitra pendidikan dan industri kami.
+                Temukan peluang yang sesuai dengan minat dan keahlianmu.
+            </p>
         </div>
 
-        <div class="lowongan-scroll-wrapper">
+        {{-- ── Toolbar: Search + Filter ── --}}
+        <div class="flex flex-wrap items-center gap-3 mb-5 reveal">
+
+            {{-- Search --}}
+            <div class="relative flex-1 min-w-[200px] max-w-sm">
+                <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm pointer-events-none"></i>
+                <input type="text" id="lowonganSearch"
+                    placeholder="Cari posisi, divisi..."
+                    class="w-full pl-10 pr-4 py-2.5 text-sm rounded-xl border border-slate-200
+                           bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-300
+                           focus:border-blue-400 transition"
+                    oninput="filterLowongan()">
+            </div>
+
+            {{-- Filter Pills --}}
+            <div class="flex items-center gap-2 flex-wrap">
+                <button onclick="setStatusFilter(this,'semua')"
+                    data-status="semua"
+                    class="filter-pill active px-4 py-2 rounded-full text-xs font-bold border transition">
+                    Semua
+                </button>
+                <button onclick="setStatusFilter(this,'dibuka')"
+                    data-status="dibuka"
+                    class="filter-pill px-4 py-2 rounded-full text-xs font-bold border transition">
+                    <i class="fas fa-circle-check mr-1"></i>Dibuka
+                </button>
+                <button onclick="setStatusFilter(this,'ditutup')"
+                    data-status="ditutup"
+                    class="filter-pill px-4 py-2 rounded-full text-xs font-bold border transition">
+                    <i class="fas fa-circle-xmark mr-1"></i>Ditutup
+                </button>
+            </div>
+
+            {{-- Stats (right side) --}}
+            <div class="ml-auto hidden sm:flex items-center gap-2 text-xs text-slate-500">
+                <span id="statTotal" class="font-semibold text-slate-700"></span> lowongan •
+                <span id="statDibuka" class="text-green-600 font-semibold"></span> dibuka
+            </div>
+        </div>
+
+        {{-- ── Cards Grid ── --}}
+        <div id="lowonganGrid"
+             class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+
             @foreach($lowongans as $lowongan)
                 @php
-                    $status = $lowongan->status ?? 'dibuka';
-                    $badgeClass = match($status){
-                        'dibuka'  => 'bg-green-100 text-green-700',
-                        'ditutup' => 'bg-red-100 text-red-700',
-                        default   => 'bg-yellow-100 text-yellow-700'
+                    $status     = $lowongan->status ?? 'dibuka';
+                    $badgeClass = match($status) {
+                        'dibuka'  => 'bg-green-50 text-green-700 border-green-200',
+                        'ditutup' => 'bg-red-50 text-red-700 border-red-200',
+                        default   => 'bg-amber-50 text-amber-700 border-amber-200',
                     };
-                    $badgeIcon = match($status){
-                        'dibuka'  => 'fa-check-circle',
-                        'ditutup' => 'fa-times-circle',
-                        default   => 'fa-clock'
+                    $badgeIcon = match($status) {
+                        'dibuka'  => 'fa-circle-check',
+                        'ditutup' => 'fa-circle-xmark',
+                        default   => 'fa-clock',
                     };
                 @endphp
 
-                <div class="lowongan-card">
+                <div class="lowongan-card group bg-white rounded-2xl border border-slate-100
+                            shadow-sm hover:shadow-md hover:-translate-y-0.5
+                            transition-all duration-200 flex flex-col overflow-hidden"
+                     data-status="{{ $status }}"
+                     data-search="{{ strtolower($lowongan->judul_lowongan . ' ' . $lowongan->posisi_magang . ' ' . $lowongan->divisi) }}">
 
-                    {{-- HEADER --}}
-                    <div class="flex items-start gap-4">
-                        <div class="logo-wrapper">
-                            <img src="{{ asset('storage/vendor/logo_komdigi.jpeg') }}" alt="Logo">
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <div class="flex flex-col gap-2">
-                                <h2 class="text-xl font-extrabold text-slate-800 line-clamp-2">
+                    {{-- Card top accent bar --}}
+                    <div class="h-1 w-full {{ $status === 'dibuka' ? 'bg-gradient-to-r from-blue-400 to-indigo-400' : 'bg-slate-200' }}"></div>
+
+                    <div class="p-5 flex flex-col flex-1 gap-4">
+
+                        {{-- HEADER --}}
+                        <div class="flex items-start gap-3">
+                            <div class="w-11 h-11 rounded-xl bg-blue-50 border border-blue-100
+                                        flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-building text-blue-500 text-lg"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <h3 class="text-[15px] font-bold text-slate-800 leading-snug line-clamp-2 mb-1">
                                     {{ $lowongan->judul_lowongan ?? '-' }}
-                                </h2>
-                                <p class="text-sm text-slate-500 font-medium">
-                                    <i class="fas fa-building mr-1"></i>
+                                </h3>
+                                <p class="text-xs text-slate-400 flex items-center gap-1">
+                                    <i class="fas fa-map-pin"></i>
                                     BBLSDM Komdigi Makassar
                                 </p>
-                                <span class="status-badge {{ $badgeClass }} w-fit">
-                                    <i class="fas {{ $badgeIcon }}"></i>
-                                    {{ $lowongan->status }}
-                                </span>
+                            </div>
+                            <span class="inline-flex items-center gap-1.5 text-[11px] font-bold
+                                         px-2.5 py-1 rounded-full border {{ $badgeClass }} flex-shrink-0">
+                                <i class="fas {{ $badgeIcon }} text-[10px]"></i>
+                                {{ ucfirst($status) }}
+                            </span>
+                        </div>
+
+                        {{-- DETAIL GRID --}}
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="bg-slate-50 rounded-xl p-3">
+                                <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-0.5">Posisi</p>
+                                <p class="text-sm font-semibold text-slate-700 leading-snug">{{ $lowongan->posisi_magang ?? '-' }}</p>
+                            </div>
+                            <div class="bg-slate-50 rounded-xl p-3">
+                                <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-0.5">Divisi</p>
+                                <p class="text-sm font-semibold text-slate-700 leading-snug">{{ $lowongan->divisi ?? '-' }}</p>
+                            </div>
+                            <div class="col-span-2 bg-blue-50 border border-blue-100 rounded-xl p-3 flex items-center gap-2">
+                                <i class="fas fa-users text-blue-400 text-sm"></i>
+                                <div>
+                                    <p class="text-[10px] font-bold uppercase tracking-wider text-blue-400 mb-0.5">Kuota Peserta</p>
+                                    <p class="text-sm font-bold text-blue-700">{{ $lowongan->kuota_peserta ?? 0 }} Peserta</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    {{-- DETAIL --}}
-                    <div class="grid grid-cols-2 gap-3 mt-5">
-                        <div class="detail-box">
-                            <p class="detail-label">Posisi</p>
-                            <p class="detail-value">{{ $lowongan->posisi_magang ?? '-' }}</p>
+                        {{-- DESKRIPSI --}}
+                        <div class="flex-1">
+                            <h4 class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">
+                                Deskripsi Pekerjaan
+                            </h4>
+                            <div class="bg-slate-50 rounded-xl p-3.5 border border-slate-100">
+                                <p class="text-xs leading-relaxed text-slate-500 line-clamp-3">
+                                    {{ $lowongan->deskripsi_pekerjaan ?? '-' }}
+                                </p>
+                            </div>
                         </div>
-                        <div class="detail-box">
-                            <p class="detail-label">Divisi</p>
-                            <p class="detail-value">{{ $lowongan->divisi ?? '-' }}</p>
-                        </div>
-                        <div class="detail-box col-span-2">
-                            <p class="detail-label">Kuota Peserta</p>
-                            <p class="detail-value">{{ $lowongan->kuota_peserta ?? 0 }} Peserta</p>
-                        </div>
-                    </div>
 
-                    {{-- DESKRIPSI --}}
-                    <div class="mt-5 flex-1">
-                        <h3 class="text-sm font-bold text-slate-700 mb-2">Deskripsi Pekerjaan</h3>
-                        <div class="rounded-2xl bg-slate-50 border border-slate-100 p-4">
-                            <p class="text-sm leading-relaxed text-slate-500 line-clamp-4">
-                                {{ $lowongan->deskripsi_pekerjaan ?? '-' }}
-                            </p>
-                        </div>
-                    </div>
-
-                    {{-- FOOTER --}}
-                    <div class="mt-5 flex flex-wrap items-center gap-3">
-                        <a href="{{ route('login') }}" class="btn-action btn-soft">
-                            <i class="fas fa-eye mr-2"></i>Detail
-                        </a>
-                        @if ($lowongan->status === 'dibuka')
+                        {{-- FOOTER ACTIONS --}}
+                        <div class="flex flex-wrap items-center gap-2 pt-1">
                             <a href="{{ route('login') }}"
-                            class="btn-action bg-green-100 hover:bg-green-200 text-green-700">
-                                <i class="fas fa-paper-plane mr-2"></i>
-                                Ajukan Permohonan
+                               class="inline-flex items-center gap-1.5 text-xs font-bold
+                                      px-3.5 py-2 rounded-xl
+                                      border border-slate-200 bg-white hover:bg-slate-50
+                                      text-slate-600 transition">
+                                <i class="fas fa-eye text-[11px]"></i>
+                                Detail
                             </a>
-                        @endif
-                    </div>
 
+                            @if ($lowongan->status === 'dibuka')
+                                <a href="{{ route('login') }}"
+                                   class="inline-flex items-center gap-1.5 text-xs font-bold
+                                          px-3.5 py-2 rounded-xl
+                                          bg-blue-600 hover:bg-blue-700 text-white
+                                          shadow-sm shadow-blue-200 transition">
+                                    <i class="fas fa-paper-plane text-[11px]"></i>
+                                    Ajukan Permohonan
+                                </a>
+                            @else
+                                <span class="inline-flex items-center gap-1.5 text-xs font-bold
+                                             px-3.5 py-2 rounded-xl
+                                             bg-slate-100 text-slate-400 cursor-not-allowed">
+                                    <i class="fas fa-lock text-[11px]"></i>
+                                    Ditutup
+                                </span>
+                            @endif
+                        </div>
+
+                    </div>
                 </div>
+
             @endforeach
         </div>
 
-        <div class="jobs-footer reveal">
-            <a href="{{ route('daftar_lowongan') }}" class="btn-outline bg-blue-50 hover:bg-blue-100 text-blue-700">
+        {{-- ── Empty state ── --}}
+        <div id="emptyState" class="hidden text-center py-16 text-slate-400">
+            <i class="fas fa-search text-4xl mb-3 block"></i>
+            <p class="font-semibold text-slate-500 text-base">Tidak ada lowongan ditemukan</p>
+            <p class="text-sm mt-1">Coba ubah kata kunci atau filter yang digunakan</p>
+        </div>
+
+        {{-- ── Footer CTA ── --}}
+        <div class="mt-10 text-center reveal">
+            <a href="{{ route('daftar_lowongan') }}"
+               class="inline-flex items-center gap-2 text-sm font-bold
+                      px-6 py-3 rounded-xl
+                      bg-blue-50 hover:bg-blue-100 border border-blue-200
+                      text-blue-700 transition">
                 Lihat Semua Lowongan
-                <i class="fas fa-arrow-right" style="font-size:13px"></i>
+                <i class="fas fa-arrow-right text-xs"></i>
             </a>
         </div>
-    </div>
 
+    </div>
 </section>
+
+{{-- ── Styles ── --}}
+<style>
+    .filter-pill {
+        background: #fff;
+        border-color: #e2e8f0;
+        color: #64748b;
+    }
+    .filter-pill:hover {
+        border-color: #93c5fd;
+        color: #1d4ed8;
+        background: #eff6ff;
+    }
+    .filter-pill.active {
+        background: #1e3a8a;
+        border-color: #1e3a8a;
+        color: #fff;
+    }
+
+    .lowongan-card {
+        animation: fadeUp .35s ease both;
+    }
+    .lowongan-card.hidden-card {
+        display: none !important;
+    }
+
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(12px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+</style>
+
+{{-- ── Script: Search + Filter ── --}}
+<script>
+    let activeStatus = 'semua';
+
+    function setStatusFilter(btn, status) {
+        activeStatus = status;
+        document.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        filterLowongan();
+    }
+
+    function filterLowongan() {
+        const q = (document.getElementById('lowonganSearch')?.value || '').toLowerCase();
+        const cards = document.querySelectorAll('.lowongan-card');
+        let visible = 0, dibuka = 0;
+
+        cards.forEach(card => {
+            const statusMatch = activeStatus === 'semua' || card.dataset.status === activeStatus;
+            const searchMatch = !q || card.dataset.search.includes(q);
+            const show = statusMatch && searchMatch;
+            card.classList.toggle('hidden-card', !show);
+            if (show) {
+                visible++;
+                if (card.dataset.status === 'dibuka') dibuka++;
+            }
+        });
+
+        const emptyEl = document.getElementById('emptyState');
+        if (emptyEl) emptyEl.classList.toggle('hidden', visible > 0);
+
+        const statTotal  = document.getElementById('statTotal');
+        const statDibuka = document.getElementById('statDibuka');
+        if (statTotal)  statTotal.textContent  = visible;
+        if (statDibuka) statDibuka.textContent = dibuka;
+    }
+
+    // Init stats on load
+    document.addEventListener('DOMContentLoaded', filterLowongan);
+</script>
 
 
 <!-- ===== PROSES ===== -->
