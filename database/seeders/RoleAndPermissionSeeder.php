@@ -49,6 +49,10 @@ class RoleAndPermissionSeeder extends Seeder
             'view_reports' => 'Melihat Laporan Akhir',
             'manage_reports' => 'Kelola Laporan Akhir (Approve/Reject/Score)',
 
+            // Lowongan Management
+            'view_lowongan' => 'Melihat daftar Lowongan Magang',
+            'manage_lowongan' => 'Kelola data Lowongan Magang (CRUD)',
+
             // Pengajuan Management
             'manage_pengajuan' => 'Kelola Pengajuan Calon Anak Magang (Approve/Reject/Revision)',
 
@@ -100,6 +104,8 @@ class RoleAndPermissionSeeder extends Seeder
             'view_teams',
             'manage_teams',
             'access_admin_dashboard',
+            'view_lowongan',
+            'manage_lowongan',
         ]);
 
         // ADMIN USER MANAGER - Khusus kelola user

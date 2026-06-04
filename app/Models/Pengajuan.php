@@ -21,6 +21,7 @@ class Pengajuan extends Model
         'tujuan_surat',
         'soft_skill',
         'hard_skill',
+        'lowongan_id',
     ];
 
     public function details()
@@ -31,5 +32,10 @@ class Pengajuan extends Model
     public function institusi()
     {
         return $this->belongsTo(Institusi::class);
+    }
+
+    public function lowongans()
+    {
+        return $this->belongsTo(Lowongan::class);
     }
 }

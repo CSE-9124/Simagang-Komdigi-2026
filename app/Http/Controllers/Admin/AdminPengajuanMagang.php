@@ -8,6 +8,8 @@ use App\Models\Pengajuan;
 use App\Models\PengajuanDetail;
 use Illuminate\Support\Facades\Auth;
 use App\Services\PengajuanWhatsappService;
+use Illuminate\Support\Facades\DB;
+use App\Models\Lowongan;
 
 class AdminPengajuanMagang extends Controller
 {
@@ -90,45 +92,119 @@ class AdminPengajuanMagang extends Controller
             ->with('success', 'Pengajuan berhasil dihapus.');
     }
 
-    public function updateStatus(Request $request, Pengajuan $pengajuan, PengajuanWhatsappService $whatsappService)
-    {
-        // Prevent any status change if already final
+
+    public function updateStatus(
+        Request $request,
+        Pengajuan $pengajuan,
+        PengajuanWhatsappService $whatsappService
+    ) {
+        // Status final tidak boleh diubah lagi
         if (in_array($pengajuan->status, ['approved', 'rejected'], true)) {
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Status sudah final dan tidak dapat diubah.',
+                ], 422);
+            }
+
             return redirect()
                 ->back()
                 ->with('error', 'Status sudah final dan tidak dapat diubah.');
         }
 
-        // Check if status is approved from request
         $statusFromRequest = $request->input('status');
-        
+
         $validated = $request->validate([
             'status' => ['required', 'in:approved,rejected,pending,revised'],
             'admin_note' => ['nullable', 'string', 'max:2000'],
             'nomor_surat_balasan' => [
                 $statusFromRequest === 'approved' ? 'required' : 'nullable',
                 'string',
-                'max:100'
+                'max:100',
             ],
             'notify_whatsapp' => ['nullable', 'boolean'],
         ]);
 
-        // Only keep admin_note when status is revised, otherwise clear it
-        $pengajuan->update([
-            'status' => $validated['status'],
-            'admin_note' => $validated['status'] === 'revised' ? ($validated['admin_note'] ?? null) : null,
-            'nomor_surat_balasan' => $validated['nomor_surat_balasan'] ?? null,
-        ]);
+        try {
 
-        $message = match($validated['status']) {
-            'approved' => 'Laporan telah disetujui.',
-            'rejected' => 'Status laporan ditolak.',
+            DB::transaction(function () use ($pengajuan, $validated) {
+
+                // Jika approve dan berasal dari lowongan
+                if (
+                    $validated['status'] === 'approved' &&
+                    !empty($pengajuan->lowongan_id)
+                ) {
+
+                    $lowongan = Lowongan::lockForUpdate()
+                        ->find($pengajuan->lowongan_id);
+
+                    if ($lowongan) {
+
+                        $jumlahPeserta = $pengajuan->details()->count();
+
+                        // Cek kuota
+                        if ($jumlahPeserta > $lowongan->kuota_peserta) {
+                            throw new \Exception(
+                                "Kuota tidak mencukupi. Sisa kuota hanya {$lowongan->kuota_peserta} peserta."
+                            );
+                        }
+
+                        // Kurangi kuota
+                        $lowongan->decrement(
+                            'kuota_peserta',
+                            $jumlahPeserta
+                        );
+
+                        // Refresh data lowongan setelah decrement
+                        $lowongan->refresh();
+
+                        // Jika kuota habis, tutup lowongan
+                        if ($lowongan->kuota_peserta <= 0) {
+                            $lowongan->update([
+                                'status' => 'ditutup',
+                            ]);
+                        }
+
+                    }
+                }
+
+                $pengajuan->update([
+                    'status' => $validated['status'],
+                    'admin_note' => $validated['status'] === 'revised'
+                        ? ($validated['admin_note'] ?? null)
+                        : null,
+                    'nomor_surat_balasan' => $validated['nomor_surat_balasan'] ?? null,
+                ]);
+            });
+
+        } catch (\Throwable $e) {
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $e->getMessage(),
+                ], 422);
+            }
+
+            return redirect()
+                ->back()
+                ->with('error', $e->getMessage());
+        }
+
+        $message = match ($validated['status']) {
+            'approved' => 'Pengajuan berhasil disetujui.',
+            'rejected' => 'Pengajuan berhasil ditolak.',
             'revised' => 'Pengajuan ditandai perlu revisi.',
-            'pending' => 'Status dikembalikan ke pending.',
+            'pending' => 'Status pengajuan dikembalikan ke pending.',
             default => 'Status berhasil diperbarui.',
         };
 
-        $whatsapp = $whatsappService->payloadFor($pengajuan->fresh(['institusi']));
+        $pengajuan->refresh();
+
+        $whatsapp = $whatsappService->payloadFor(
+            $pengajuan->load('institusi')
+        );
 
         if ($request->expectsJson()) {
             return response()->json([
@@ -139,14 +215,15 @@ class AdminPengajuanMagang extends Controller
             ]);
         }
 
-        if ($request->boolean('notify_whatsapp')) {
-            if (! empty($whatsapp['url'])) {
-                return redirect()->away($whatsapp['url']);
-            }
+        if (
+            $request->boolean('notify_whatsapp') &&
+            !empty($whatsapp['url'])
+        ) {
+            return redirect()->away($whatsapp['url']);
         }
 
         return redirect()
-            ->route('admin.pengajuan.show', ['id' => $pengajuan->id])
+            ->route('admin.pengajuan.show', $pengajuan->id)
             ->with('success', $message);
     }
 

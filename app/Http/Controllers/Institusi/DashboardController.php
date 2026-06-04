@@ -13,6 +13,11 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
         $institusi = $user->institusi;
+        $lowongan = DB::table('lowongans')
+            ->join('pengajuans', 'lowongans.id', '=', 'pengajuans.lowongan_id')
+            ->where('pengajuans.institusi_id', $institusi->id)
+            ->select('lowongans.*')
+            ->first();
 
         $totalPengajuan = $institusi->pengajuans()->count();
         $pengajuanPending = $institusi->pengajuans()->where('status', 'pending')->count();

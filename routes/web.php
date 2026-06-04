@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\AdminMentorController;
 use App\Http\Controllers\Admin\AdminMonitoringController;
 use App\Http\Controllers\Admin\AdminReportController;
 use App\Http\Controllers\Admin\AdminLogbookController;
+use App\Http\Controllers\Admin\AdminLowonganController;
 use App\Http\Controllers\Api\HolidayController;
 use App\Http\Controllers\Api\InstitutionController;
 use App\Http\Controllers\Intern\MicroSkillController as InternMicroSkillController;
@@ -34,6 +35,7 @@ use App\Http\Controllers\Admin\TeamController;
 use App\Http\Controllers\Institusi\DaftarInstitusiController;
 use App\Http\Controllers\Institusi\DashboardController as InstitusiDashboardController;
 use App\Http\Controllers\Institusi\PengajuanController;
+use App\Http\Controllers\Institusi\LowonganController;
 use App\Http\Controllers\Admin\AdminPengajuanMagang;
 use App\Http\Controllers\Institusi\AttendanceController as InstitusiAttendanceController;
 use App\Http\Controllers\Institusi\InternController as InstitusiInternController;
@@ -41,6 +43,10 @@ use App\Http\Controllers\Institusi\LogbookController as InstitusiLogbookControll
 use App\Http\Controllers\Institusi\MicroSkillController as InstitusiMicroSkillController;
 use App\Http\Controllers\Institusi\ProfileController as InstitusiProfileController;
 use App\Http\Controllers\Institusi\CertificateController as InstitusiCertificateController;
+use App\Http\Controllers\Industri\DaftarAkunController;
+use App\Http\Controllers\Industri\IndustriDashboardController as IndustriDashboardController;
+use App\Http\Controllers\Industri\IndustriProfileController as IndustriProfileController;
+use App\Http\Controllers\Industri\IndustriLowonganController;
 use App\Http\Controllers\PengajuanFileController;
 use App\Http\Controllers\SecureDownloadController;
 use App\Models\Testimonial;
@@ -128,7 +134,10 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->n
 Route::middleware(['auth', 'institusi'])->prefix('institusi')->name('institusi.')->group(function () {
     Route::get('/dashboard', [InstitusiDashboardController::class, 'index'])->name('dashboard');
     Route::get('/pengajuan', [PengajuanController::class, 'index'])->name('pengajuan.index');
-    Route::get('/pengajuan/create', [PengajuanController::class, 'create'])->name('pengajuan.create');
+    Route::get(
+        '/pengajuan/create/{lowongan}',
+        [PengajuanController::class, 'create']
+    )->name('pengajuan.create');
     Route::post('/pengajuan', [PengajuanController::class, 'store'])->name('pengajuan.store');
     Route::get('/pengajuan/{id}', [PengajuanController::class, 'show'])->name('pengajuan.show');
     Route::get('/pengajuan/{id}/edit', [PengajuanController::class, 'edit'])->name('pengajuan.edit');
@@ -164,8 +173,30 @@ Route::middleware(['auth', 'institusi'])->prefix('institusi')->name('institusi.'
         ->where('filename', '[^/\\\\]+')
         ->name('microskill.photo');
 
+    // Lowongan management for institusi
+    Route::get('/lowongan', [LowonganController::class, 'index'])->name('lowongan.index');
+    Route::get('/lowongan/{id}', [LowonganController::class, 'show'])->name('lowongan.show');
 }); 
 Route::resource('institusi', DaftarInstitusiController::class);
+
+// Routes untuk pendaftaran akun industri
+Route::get('/register-industri', [DaftarAkunController::class, 'create'])
+    ->name('industri.create');
+
+Route::post('/register-industri', [DaftarAkunController::class, 'store'])
+    ->name('industri.store');
+
+// Routes Role Industri
+Route::middleware(['auth', 'industri'])->prefix('industri')->name('industri.')->group(function () {
+    Route::get('/dashboard', [IndustriDashboardController::class, 'index'])->name('dashboard');     
+    Route::get('/profile/create', [IndustriProfileController::class, 'create'])->name('profile.create');  
+    Route::post('/profile', [IndustriProfileController::class, 'store'])->name('profile.store');  
+    
+    // Lowongan Routes
+    Route::get('/lowongan', [IndustriLowonganController::class, 'index'])->name('lowongan.index');
+    Route::get('/lowongan/create', [IndustriLowonganController::class, 'create'])->name('lowongan.create');
+    Route::post('/lowongan', [IndustriLowonganController::class, 'store'])->name('lowongan.store');
+});
 
 // File Download Route with access validation per user
 Route::get('/download/{path}', SecureDownloadController::class)
@@ -316,6 +347,16 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/team/{team}/edit', [TeamController::class, 'edit'])->name('team.edit');
     Route::put('/team/{team}', [TeamController::class, 'update'])->name('team.update');
     Route::delete('/team/{team}', [TeamController::class, 'destroy'])->name('team.destroy');  
+
+    // Lowongan Management Routes
+    Route::get('/Lowongan', [AdminLowonganController::class, 'index'])->name('lowongan.index');
+    Route::get('/lowongan/create', [AdminLowonganController::class, 'create'])->name('lowongan.create');
+    Route::post('/lowongan', [AdminLowonganController::class, 'store'])->name('lowongan.store');
+    Route::get('/lowongan/{id}', [AdminLowonganController::class, 'show'])->name('lowongan.show');
+    Route::patch('/lowongan/{id}/approve', [AdminLowonganController::class, 'approve'])->name('lowongan.approve');
+    Route::patch('/lowongan/{id}/reject', [AdminLowonganController::class, 'reject'])->name('lowongan.reject');
+    Route::delete('/lowongan/{id}', [AdminLowonganController::class, 'destroy'])->name('lowongan.destroy');
+
 });
 
 // Mentor Routes

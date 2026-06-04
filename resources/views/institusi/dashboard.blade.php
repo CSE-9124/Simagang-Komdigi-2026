@@ -384,9 +384,9 @@
             <div class="panel anim-3">
                 <p class="section-label">Aksi Cepat</p>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <a href="{{ route('institusi.pengajuan.create') }}" class="action-btn">
-                        <i class="fas fa-plus-circle"></i>
-                        Buat Pengajuan Baru
+                    <a href="{{ route('institusi.lowongan.index') }}" class="action-btn">
+                        <i class="fas fa-briefcase"></i>
+                        Lihat Semua Lowongan Magang
                     </a>
                     <a href="{{ route('institusi.pengajuan.index') }}" class="action-btn">
                         <i class="fas fa-list-ul"></i>

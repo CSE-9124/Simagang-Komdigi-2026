@@ -5,10 +5,14 @@ namespace App\Http\Controllers\Institusi;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Pengajuan;
+use App\Models\Lowongan;
 use App\Models\PengajuanDetail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 use App\Services\PengajuanWhatsappService;
+use Illuminate\Support\Facades\DB;
+
+
 
 class PengajuanController extends Controller
 {
@@ -64,9 +68,9 @@ class PengajuanController extends Controller
         ));
     }
     
-    public function create()
+    public function create(Lowongan $lowongan)
     {
-        return view('institusi.pengajuan.create');
+        return view('institusi.pengajuan.create', compact('lowongan'));
     }
 
     public function store(Request $request)
@@ -76,67 +80,135 @@ class PengajuanController extends Controller
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
             'keperluan' => 'required|string',
-            'no_surat' => ['required', 'string', Rule::unique('pengajuans', 'no_surat')->where('institusi_id', Auth::user()->institusi->id)],
             'tujuan_surat' => 'required|string',
+            'lowongan_id' => 'nullable|exists:lowongans,id',
 
-            // validasi array peserta
-            'name.*' => 'required|string',
+            'no_surat' => [
+                'required',
+                'string',
+                Rule::unique('pengajuans', 'no_surat')
+                    ->where('institusi_id', Auth::user()->institusi->id),
+            ],
+
+            'name' => 'required|array|min:1',
+            'name.*' => 'required|string|max:255',
+
+            'email' => 'required|array',
             'email.*' => 'required|email',
-            'jurusan.*' => 'required|string',
+
+            'jurusan' => 'required|array',
+            'jurusan.*' => 'required|string|max:255',
+
+            'jenis_kelamin' => 'required|array',
             'jenis_kelamin.*' => 'required|in:L,P',
-            'no_telp.*' => 'required|string',
+
+            'no_telp' => 'required|array',
+            'no_telp.*' => 'required|string|max:30',
+
             'soft_skill.*' => 'nullable|string',
             'hard_skill.*' => 'nullable|string',
         ], [
-            'no_surat.unique' => 'Nomor surat ini sudah pernah digunakan oleh institusi Anda. Silakan gunakan nomor surat yang berbeda.',
+            'no_surat.unique' =>
+                'Nomor surat ini sudah pernah digunakan oleh institusi Anda. Silakan gunakan nomor surat yang berbeda.',
         ]);
 
-        // Simpan dokumen pengajuan di storage privat agar tidak bisa dibuka langsung lewat URL publik
-        $file = $request->file('surat_magang');
-        $fileName = $file->getClientOriginalName();
-        $extension = $file->getClientOriginalExtension() ?: ($file->guessExtension() ?: 'pdf');
-        $storedFileName = 'surat_' . time() . '_' . uniqid() . '.' . $extension;
-        $destinationPath = storage_path('app/private/surat_magang');
+        try {
 
-        if (!file_exists($destinationPath)) {
-            mkdir($destinationPath, 0755, true);
-        }
+            DB::beginTransaction();
 
-        if (!$file->move($destinationPath, $storedFileName)) {
-            return back()->withErrors(['surat_magang' => 'Gagal menyimpan file.'])->withInput();
-        }
+            // ==================================================
+            // VALIDASI KUOTA LOWONGAN
+            // ==================================================
+            if ($request->filled('lowongan_id')) {
 
-        $path = 'surat_magang/' . $storedFileName;
+                $lowongan = Lowongan::find($request->lowongan_id);
 
-        // simpan pengajuan utama
-        $pengajuan = Pengajuan::create([
-            'institusi_id' => Auth::user()->institusi->id,
-            'surat_path' => $path,
-            'status' => 'pending',
-            'start_date' => $request->start_date,
-            'end_date' => $request->end_date,
-            'keperluan' => $request->keperluan,
-            'no_surat' => $request->no_surat,
-            'tujuan_surat' => $request->tujuan_surat,
-        ]);
+                if (!$lowongan) {
+                    throw new \Exception('Lowongan tidak ditemukan.');
+                }
 
-        // simpan banyak peserta
-        foreach ($request->name as $i => $nama) {
-            PengajuanDetail::create([
-                'pengajuan_id' => $pengajuan->id,
-                'nama' => $nama,
-                'email' => $request->email[$i],
-                'jurusan' => $request->jurusan[$i],
-                'jenis_kelamin' => $request->jenis_kelamin[$i],
-                'no_telp' => $request->no_telp[$i],
-                'soft_skill' => $request->soft_skill[$i] ?? null,
-                'hard_skill' => $request->hard_skill[$i] ?? null,
+                if ($lowongan->status !== 'dibuka') {
+                    throw new \Exception('Lowongan sudah ditutup.');
+                }
+
+                $jumlahPeserta = count($request->name);
+
+                if ($jumlahPeserta > $lowongan->kuota_peserta) {
+                    throw new \Exception(
+                        "Jumlah peserta yang diajukan ({$jumlahPeserta} orang) melebihi kuota yang tersedia ({$lowongan->kuota_peserta} orang)."
+                    );
+                }
+            }
+
+            // ==================================================
+            // UPLOAD FILE
+            // ==================================================
+            $file = $request->file('surat_magang');
+
+            $extension = $file->getClientOriginalExtension()
+                ?: ($file->guessExtension() ?: 'pdf');
+
+            $storedFileName =
+                'surat_' . time() . '_' . uniqid() . '.' . $extension;
+
+            $destinationPath = storage_path('app/private/surat_magang');
+
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0755, true);
+            }
+
+            if (!$file->move($destinationPath, $storedFileName)) {
+                throw new \Exception('Gagal menyimpan file surat magang.');
+            }
+
+            $path = 'surat_magang/' . $storedFileName;
+
+            // ==================================================
+            // SIMPAN PENGAJUAN
+            // ==================================================
+            $pengajuan = Pengajuan::create([
+                'institusi_id' => Auth::user()->institusi->id,
+                'surat_path' => $path,
+                'status' => 'pending',
+                'start_date' => $request->start_date,
+                'end_date' => $request->end_date,
+                'keperluan' => $request->keperluan,
+                'no_surat' => $request->no_surat,
+                'tujuan_surat' => $request->tujuan_surat,
+                'lowongan_id' => $request->lowongan_id,
             ]);
-        }
 
-        return redirect()
-            ->route('institusi.pengajuan.index')
-            ->with('success', 'Pengajuan berhasil dikirim');
+            // ==================================================
+            // SIMPAN DETAIL PESERTA
+            // ==================================================
+            foreach ($request->name as $i => $nama) {
+
+                PengajuanDetail::create([
+                    'pengajuan_id' => $pengajuan->id,
+                    'nama' => $nama,
+                    'email' => $request->email[$i],
+                    'jurusan' => $request->jurusan[$i],
+                    'jenis_kelamin' => $request->jenis_kelamin[$i],
+                    'no_telp' => $request->no_telp[$i],
+                    'soft_skill' => $request->soft_skill[$i] ?? null,
+                    'hard_skill' => $request->hard_skill[$i] ?? null,
+                ]);
+            }
+
+            DB::commit();
+
+            return redirect()
+                ->route('institusi.pengajuan.index')
+                ->with('success', 'Pengajuan berhasil dikirim.');
+
+        } catch (\Throwable $e) {
+
+            DB::rollBack();
+
+            return back()
+                ->withInput()
+                ->with('error', $e->getMessage());
+        }
     }
 
     public function edit(int $id)

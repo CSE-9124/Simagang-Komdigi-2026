@@ -243,8 +243,8 @@
                             </div>
                         </div>
 
-                        <div x-data="{ open: {{ request()->routeIs('admin.pengajuan.*', 'admin.attendance.*', 'admin.logbook.*', 'admin.microskill.*') ? 'true' : 'false' }} }" class="mt-1">
-                            <button type="button" @click="open = !open" class="{{ request()->routeIs('admin.pengajuan.*', 'admin.attendance.*', 'admin.logbook.*', 'admin.microskill.*') ? 'bg-blue-50 border-r-4 border-blue-500 text-blue-700' : 'text-gray-600 hover:bg-gray-50' }} w-full flex items-center justify-between px-4 py-3 text-sm font-medium">
+                        <div x-data="{ open: {{ request()->routeIs('admin.lowongan.*','admin.pengajuan.*', 'admin.attendance.*', 'admin.logbook.*', 'admin.microskill.*') ? 'true' : 'false' }} }" class="mt-1">
+                            <button type="button" @click="open = !open" class="{{ request()->routeIs('admin.lowongan.*','admin.pengajuan.*', 'admin.attendance.*', 'admin.logbook.*', 'admin.microskill.*') ? 'bg-blue-50 border-r-4 border-blue-500 text-blue-700' : 'text-gray-600 hover:bg-gray-50' }} w-full flex items-center justify-between px-4 py-3 text-sm font-medium">
                                 <span class="flex items-center">
                                     <i class="fas fa-briefcase w-5 mr-3"></i>
                                     Operasional Magang
@@ -253,6 +253,14 @@
                             </button>
 
                             <div x-show="open" x-transition class="bg-gray-50 border-l-4 border-blue-200 ml-4">
+                                
+                                @can('manage_lowongan')
+                                <a href="{{ route('admin.lowongan.index') }}" class="{{ request()->routeIs('admin.lowongan.*') ? 'text-blue-700 bg-blue-50' : 'text-gray-500 hover:bg-gray-100' }} flex items-center px-4 py-2.5 text-sm font-medium">
+                                    <i class="fas fa-briefcase w-4 mr-3 text-xs"></i>
+                                    Lowongan
+                                </a>
+                                @endcan
+
                                 @can('manage_pengajuan')
                                 <a href="{{ route('admin.pengajuan.index') }}" class="{{ request()->routeIs('admin.pengajuan.*') ? 'text-blue-700 bg-blue-50' : 'text-gray-500 hover:bg-gray-100' }} flex items-center px-4 py-2.5 text-sm font-medium">
                                     <i class="fas fa-file-contract w-4 mr-3 text-xs"></i>
@@ -333,6 +341,10 @@
                             <i class="fas fa-home w-5 mr-3"></i>
                             Dashboard
                         </a>
+                        <a href="{{ route('institusi.lowongan.index') }}" class="{{ request()->routeIs('institusi.lowongan.index') ? 'bg-blue-50 border-r-4 border-blue-500 text-blue-700' : 'text-gray-600' }} flex items-center px-4 py-3 text-sm font-medium">
+                            <i class="fas fa-briefcase w-5 mr-3"></i>
+                            Lowongan Magang
+                        </a>
                         <a href="{{ route('institusi.pengajuan.index') }}" class="{{ request()->routeIs('institusi.pengajuan.index') ? 'bg-blue-50 border-r-4 border-blue-500 text-blue-700' : 'text-gray-600' }} flex items-center px-4 py-3 text-sm font-medium">
                             <i class="fas fa-paper-plane w-5 mr-3"></i>
                             Pengajuan Magang
@@ -378,6 +390,15 @@
                                 </a>
                             </div>
                         </div>
+                    @elseif(auth()->user()->isIndustri())
+                        <a href="{{ route('industri.dashboard') }}" class="{{ request()->routeIs('industri.dashboard') ? 'bg-blue-50 border-r-4 border-blue-500 text-blue-700' : 'text-gray-600 hover:bg-gray-50' }} flex items-center px-4 py-3 text-sm font-medium">
+                            <i class="fas fa-home w-5 mr-3"></i>
+                            Dashboard Industri
+                        </a>
+                        <a href="{{ route('industri.lowongan.index') }}" class="{{ request()->routeIs('industri.lowongan.index') ? 'bg-blue-50 border-r-4 border-blue-500 text-blue-700' : 'text-gray-600 hover:bg-gray-50' }} flex items-center px-4 py-3 text-sm font-medium">
+                            <i class="fas fa-briefcase w-5 mr-3"></i>
+                            Lowongan Magang
+                        </a>
                     @else
                         <a href="{{ route('intern.dashboard') }}" class="{{ request()->routeIs('intern.dashboard') ? 'bg-blue-50 border-r-4 border-blue-500 text-blue-700' : 'text-gray-600 hover:bg-gray-50' }} flex items-center px-4 py-3 text-sm font-medium">
                             <i class="fas fa-home w-5 mr-3"></i>
@@ -425,10 +446,20 @@
                                 <p class="text-xs text-gray-500">Institusi</p>
                             </div>
                         </a>
+                    @elseif(auth()->user()->isIndustri())
+                        <a href="{{ route('industri.dashboard') }}" class="flex items-center space-x-3 mb-3 hover:bg-gray-50 rounded-lg p-2 transition-colors duration-200">
+                            <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                                <i class="fas fa-building text-blue-600"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-medium text-gray-700 truncate">{{ auth()->user()->name }}</p>
+                                <p class="text-xs text-gray-500">Industri</p>
+                            </div>
+                        </a>
                     @else
                         @php
                             $profileRoute = auth()->user()->isMentor() ? route('mentor.profile.show') : route('intern.profile.show');
-                            $profilePhoto = auth()->user()->isMentor() ? auth()->user()->mentor->photo_path : auth()->user()->intern->photo_path;
+                            $profilePhoto = auth()->user()->isMentor() ? auth()->user()->mentor?->photo_path : auth()->user()->intern?->photo_path;
                         @endphp
                         <a href="{{ $profileRoute }}" class="flex items-center space-x-3 mb-3 hover:bg-gray-50 rounded-lg p-2 transition-colors duration-200">
                             @if($profilePhoto)
@@ -567,6 +598,12 @@
                                     </button>
 
                                     <div x-show="open" x-transition class="bg-gray-50 border-l-4 border-blue-200 ml-4">
+                                        @can('manage_lowongan')
+                                        <a href="{{ route('admin.lowongan.index') }}" class="{{ request()->routeIs('admin.lowongan.*') ? 'text-blue-700 bg-blue-50' : 'text-gray-500 hover:bg-gray-100' }} flex items-center px-4 py-2.5 text-sm font-medium">
+                                            <i class="fas fa-briefcase w-4 mr-3 text-xs"></i>
+                                            Lowongan
+                                        </a>
+                                        @endcan
                                         @can('manage_pengajuan')
                                         <a href="{{ route('admin.pengajuan.index') }}" class="{{ request()->routeIs('admin.pengajuan.*') ? 'text-blue-700 bg-blue-50' : 'text-gray-500 hover:bg-gray-100' }} flex items-center px-4 py-2.5 text-sm font-medium">
                                             <i class="fas fa-file-contract w-4 mr-3 text-xs"></i>
@@ -644,6 +681,10 @@
                                     <i class="fas fa-home w-5 mr-3"></i>
                                     Dashboard
                                 </a>
+                                <a href="{{ route('institusi.lowongan.index') }}" class="{{ request()->routeIs('institusi.lowongan.index') ? 'bg-blue-50 border-r-4 border-blue-500 text-blue-700' : 'text-gray-600' }} flex items-center px-4 py-3 text-sm font-medium">
+                                    <i class="fas fa-briefcase w-5 mr-3"></i>
+                                    Lowongan Magang
+                                </a>
                                 <a href="{{ route('institusi.pengajuan.index') }}" class="{{ request()->routeIs('institusi.pengajuan.index') ? 'bg-blue-50 border-r-4 border-blue-500 text-blue-700' : 'text-gray-600' }} flex items-center px-4 py-3 text-sm font-medium">
                                     <i class="fas fa-paper-plane w-5 mr-3"></i>
                                     Pengajuan Magang
@@ -689,6 +730,15 @@
                                         </a>
                                     </div>
                                 </div>
+                            @elseif(auth()->user()->isIndustri())
+                                <a href="{{ route('industri.dashboard') }}" class="{{ request()->routeIs('industri.dashboard') ? 'bg-blue-50 border-r-4 border-blue-500 text-blue-700' : 'text-gray-600' }} flex items-center px-4 py-3 text-sm font-medium">
+                                    <i class="fas fa-home w-5 mr-3"></i>
+                                    Dashboard Industri
+                                </a>
+                                <a href="{{ route('industri.lowongan.index') }}" class="{{ request()->routeIs('industri.lowongan.index') ? 'bg-blue-50 border-r-4 border-blue-500 text-blue-700' : 'text-gray-600' }} flex items-center px-4 py-3 text-sm font-medium">
+                                    <i class="fas fa-briefcase w-5 mr-3"></i>
+                                    Lowongan Magang
+                                </a>
                             @else
                                 <a href="{{ route('intern.dashboard') }}" class="{{ request()->routeIs('intern.dashboard') ? 'bg-blue-50 border-r-4 border-blue-500 text-blue-700' : 'text-gray-600' }} flex items-center px-4 py-3 text-sm font-medium">
                                     <i class="fas fa-home w-5 mr-3"></i>

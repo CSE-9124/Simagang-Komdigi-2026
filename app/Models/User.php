@@ -96,6 +96,11 @@ class User extends Authenticatable
         return $this->hasRole('institusi') || $this->role === 'institusi';
     }
 
+    public function isIndustri()
+    {
+        return $this->hasRole('industri') || $this->role === 'industri';
+    }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
     public function mentor()
     {
         return $this->hasOne(Mentor::class);
@@ -104,5 +109,10 @@ class User extends Authenticatable
     public function institusi()
     {
         return $this->hasOne(Institusi::class);
+    }
+
+    public function industri()
+    {
+        return $this->hasOne(Industri::class);
     }
 }

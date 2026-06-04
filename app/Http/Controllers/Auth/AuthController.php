@@ -140,6 +140,8 @@ class AuthController extends Controller
                 return redirect()->route('intern.dashboard');
             } elseif ($user instanceof User && $user->isInstitusi()) {
                 return redirect()->route('institusi.dashboard');
+            } elseif ($user instanceof User && $user->isIndustri()) {
+                return redirect()->route('industri.dashboard');
             }
 
             // Fallback safe redirect
