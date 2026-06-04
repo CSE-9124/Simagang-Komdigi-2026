@@ -95,43 +95,6 @@
                 font-size: 0.75rem;
             }
         }
-
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(15, 23, 42, 0.55);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 50;
-            backdrop-filter: blur(3px);
-        }
-
-        .modal-box {
-            background: #fff;
-            border-radius: 20px;
-            padding: 28px;
-            width: 100%;
-            max-width: 420px;
-            box-shadow: 0 20px 60px rgba(30, 58, 138, 0.18);
-            position: relative
-        }
-
-        @keyframes fadeSlideUp {
-            from {
-                opacity: 0;
-                transform: translateY(16px)
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0)
-            }
-        }
-
-        .anim-1 {
-            animation: fadeSlideUp .5s ease both
-        }
     </style>
 @endpush
 
@@ -150,9 +113,7 @@
                 </div>
             </div>
 
-            <!-- Statistics Cards (Optional - untuk informasi tambahan) -->
-            {{-- @if ($pengajuans->count() > 0) --}}
-            {{-- Stats Cards --}}
+            <!-- Statistics Cards -->
             <div class="stats-shell mb-8">
 
                 @php
@@ -160,28 +121,33 @@
                         [
                             'label' => 'Total Pengajuan',
                             'value' => $totalPengajuan,
-                            'color' => 'blue',
-                            'icon' => 'fa-calendar-check',
+                            'bg' => 'bg-blue-500',
+                            'icon' => 'fa-folder-open',
                         ],
                         [
                             'label' => 'Disetujui',
                             'value' => $totalDiterima,
-                            'color' => 'green',
-                            'icon' => 'fa-calendar-times',
+                            'bg' => 'bg-emerald-500',
+                            'icon' => 'fa-check-circle',
                         ],
                         [
                             'label' => 'Menunggu Approval',
                             'value' => $totalMenunggu,
-                            'color' => 'yellow',
-                            'icon' => 'fa-calendar-minus',
+                            'bg' => 'bg-amber-500',
+                            'icon' => 'fa-clock',
                         ],
                         [
                             'label' => 'Revisi',
                             'value' => $totalRevisi,
-                            'color' => 'orange',
+                            'bg' => 'bg-orange-500',
                             'icon' => 'fa-exclamation-circle',
                         ],
-                        ['label' => 'Ditolak', 'value' => $totalDitolak, 'color' => 'red', 'icon' => 'fa-file-alt'],
+                        [
+                            'label' => 'Ditolak', 
+                            'value' => $totalDitolak, 
+                            'bg' => 'bg-red-500', 
+                            'icon' => 'fa-times-circle'
+                        ],
                     ];
                 @endphp
 
@@ -190,15 +156,15 @@
                         class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden group">
                         <div class="p-4 sm:p-6 flex items-center justify-between gap-3">
                             <div class="flex-1 min-w-0">
-                                <p class="text-sm font-medium text-gray-700 truncate">{{ $stat['label'] }}</p>
-                                <p class="text-xl font-semibold text-gray-900 truncate">{{ $stat['value'] }}</p>
+                                <p class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-1 truncate">{{ $stat['label'] }}</p>
+                                <p class="text-2xl font-black text-gray-800 truncate">{{ $stat['value'] }}</p>
                             </div>
                             <div
-                                class="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 bg-{{ $stat['color'] }}-500 rounded-2xl flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300">
+                                class="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 {{ $stat['bg'] }} rounded-2xl flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300 shadow-sm">
                                 <i class="fas {{ $stat['icon'] }} text-white text-xl sm:text-2xl"></i>
                             </div>
                         </div>
-                        <div class="h-1 bg-{{ $stat['color'] }}-500"></div>
+                        <div class="h-1 {{ $stat['bg'] }}"></div>
                     </div>
                 @endforeach
 
@@ -283,26 +249,27 @@
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-100">
                                 @forelse($pengajuanTabel as $pengajuan)
-                                    <tr class="hover:bg-blue-50 transition-colors duration-150">
+                                    <tr class="hover:bg-blue-50/50 transition-colors duration-150">
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <p class="text-sm text-gray-500 font-medium">
+                                            <p class="text-sm text-gray-800 font-bold">
                                                 {{ $pengajuan->no_surat }}
                                             </p>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
-                                            <div>
-                                                <p class="text-sm text-gray-500 font-medium">
+                                            <div class="flex items-center gap-3">
+                                                <div class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-500 flex items-center justify-center flex-shrink-0">
+                                                    <i class="fas fa-building text-sm"></i>
+                                                </div>
+                                                <p class="text-sm text-gray-700 font-semibold">
                                                     {{ $pengajuan->institusi->nama_institusi }}
                                                 </p>
-
                                             </div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div>
-                                                <p class="text-sm text-gray-500 font-medium text-center">
-                                                    {{ $pengajuan->created_at->format('d/m/y') }}
+                                                <p class="text-sm text-gray-600 font-medium text-center">
+                                                    {{ $pengajuan->created_at->format('d/m/Y') }}
                                                 </p>
-
                                             </div>
                                         </td>
                                         <td class="px-6 py-4 text-left">
@@ -315,11 +282,6 @@
                                                 @else bg-yellow-100 text-yellow-800 @endif">
                                                     {{ ucfirst($pengajuan->status) }}
                                                 </span>
-                                                {{-- @if ($pengajuan->needs_revision)
-                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-orange-100 text-orange-800">
-                                                    Revisi
-                                                </span>
-                                            @endif --}}
                                             </div>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-center">
@@ -354,13 +316,6 @@
                             </tbody>
                         </table>
                     </div>
-
-                    {{-- <!-- Pagination -->
-                @if ($logbooks->count() > 0)
-                    <div class="mt-6">
-                        {{ $logbooks->links() }}
-                    </div>
-                @endif --}}
                 </div>
             </div>
         </div>

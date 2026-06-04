@@ -132,19 +132,39 @@
 
                     </div>
 
-                    <div class="text-gray-700">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        
+                        <!-- Nomor Surat -->
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] hover:shadow-[0_8px_20px_-6px_rgba(6,81,237,0.15)] transition-all duration-300 flex items-start gap-4 group">
+                            <div class="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300 group-hover:bg-blue-100">
+                                <i class="fas fa-file-signature text-blue-600 text-xl"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1 truncate">Nomor Surat Pengajuan</p>
+                                <p class="font-bold text-gray-800 break-all sm:break-words">{{ $pengajuan->no_surat }}</p>
+                            </div>
+                        </div>
 
-                        <div>
-                            <p class="text-sm text-gray-500">Nomor Surat Pengajuan</p>
-                            <p class="font-semibold">{{ $pengajuan->no_surat }}</p>
+                        <!-- Penanggung Jawab -->
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] hover:shadow-[0_8px_20px_-6px_rgba(6,81,237,0.15)] transition-all duration-300 flex items-start gap-4 group">
+                            <div class="w-12 h-12 rounded-xl bg-purple-50 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300 group-hover:bg-purple-100">
+                                <i class="fas fa-user-tie text-purple-600 text-xl"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1 truncate">Penanggung Jawab</p>
+                                <p class="font-bold text-gray-800 break-words">{{ $pengajuan->tujuan_surat }}</p>
+                            </div>
                         </div>
-                        <div class="mt-6">
-                            <p class="text-sm text-gray-500">Penanggung Jawab</p>
-                            <p class="font-semibold">{{ $pengajuan->tujuan_surat }}</p>
-                        </div>
-                        <div class="mt-6">
-                            <p class="text-sm text-gray-500">Tanggal Pengajuan</p>
-                            <p class="font-semibold">{{ $pengajuan->created_at->format('d F Y') }}</p>
+
+                        <!-- Tanggal Pengajuan -->
+                        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.1)] hover:shadow-[0_8px_20px_-6px_rgba(6,81,237,0.15)] transition-all duration-300 flex items-start gap-4 group">
+                            <div class="w-12 h-12 rounded-xl bg-cyan-50 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300 group-hover:bg-cyan-100">
+                                <i class="fas fa-calendar-alt text-cyan-600 text-xl"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1 truncate">Tanggal Pengajuan</p>
+                                <p class="font-bold text-gray-800 truncate">{{ $pengajuan->created_at->format('d F Y') }}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -159,20 +179,55 @@
                         </div>
 
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-gray-700">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
 
-                        <div>
-                            <p class="text-sm text-gray-500">Keperluan</p>
-                            <p class="font-semibold">{{ $pengajuan->keperluan }}</p>
+                        <!-- Keperluan -->
+                        <div class="bg-gray-50 p-5 rounded-2xl border border-gray-100 hover:bg-white hover:shadow-[0_8px_20px_-6px_rgba(0,0,0,0.1)] transition-all duration-300 flex items-start gap-4 group">
+                            <div class="w-12 h-12 rounded-xl bg-indigo-100 flex items-center justify-center flex-shrink-0 group-hover:scale-110 group-hover:bg-indigo-500 transition-all duration-300">
+                                <i class="fas fa-bullseye text-indigo-600 group-hover:text-white text-xl transition-colors"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1 truncate">Keperluan</p>
+                                <p class="font-bold text-gray-800 break-words">{{ $pengajuan->keperluan }}</p>
+                            </div>
                         </div>
-                        <div>
-                            <p class="text-sm text-gray-500">Tanggal Masuk</p>
-                            <p class="font-semibold">{{ $pengajuan->start_date }}</p>
+
+                        <!-- Tanggal Masuk -->
+                        <div class="bg-gray-50 p-5 rounded-2xl border border-gray-100 hover:bg-white hover:shadow-[0_8px_20px_-6px_rgba(0,0,0,0.1)] transition-all duration-300 flex items-start gap-4 group">
+                            <div class="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center flex-shrink-0 group-hover:scale-110 group-hover:bg-emerald-500 transition-all duration-300">
+                                <i class="fas fa-sign-in-alt text-emerald-600 group-hover:text-white text-xl transition-colors"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1 truncate">Tanggal Masuk</p>
+                                <p class="font-bold text-gray-800 truncate">{{ $pengajuan->start_date }}</p>
+                            </div>
                         </div>
-                        <div>
-                            <p class="text-sm text-gray-500">Tanggal Keluar</p>
-                            <p class="font-semibold">{{ $pengajuan->end_date }}</p>
+
+                        <!-- Tanggal Keluar -->
+                        <div class="bg-gray-50 p-5 rounded-2xl border border-gray-100 hover:bg-white hover:shadow-[0_8px_20px_-6px_rgba(0,0,0,0.1)] transition-all duration-300 flex items-start gap-4 group">
+                            <div class="w-12 h-12 rounded-xl bg-rose-100 flex items-center justify-center flex-shrink-0 group-hover:scale-110 group-hover:bg-rose-500 transition-all duration-300">
+                                <i class="fas fa-sign-out-alt text-rose-600 group-hover:text-white text-xl transition-colors"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1 truncate">Tanggal Keluar</p>
+                                <p class="font-bold text-gray-800 truncate">{{ $pengajuan->end_date }}</p>
+                            </div>
                         </div>
+
+                        <!-- Jumlah Peserta -->
+                        <div class="bg-amber-50 p-5 rounded-2xl border border-amber-100 hover:bg-amber-400 hover:shadow-[0_8px_20px_-6px_rgba(245,158,11,0.4)] transition-all duration-300 flex items-start gap-4 group">
+                            <div class="w-12 h-12 rounded-xl bg-white flex items-center justify-center flex-shrink-0 group-hover:scale-110 shadow-sm transition-transform duration-300">
+                                <i class="fas fa-users text-amber-500 text-xl group-hover:text-amber-600"></i>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-xs font-bold text-amber-600/80 uppercase tracking-wider mb-1 group-hover:text-amber-100 truncate">Jumlah Peserta</p>
+                                <p class="font-bold text-amber-900 group-hover:text-white flex items-baseline gap-1 truncate">
+                                    <span class="text-2xl leading-none">{{ $pengajuan->details->count() }}</span>
+                                    <span class="text-sm font-medium">Orang</span>
+                                </p>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
 
