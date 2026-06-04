@@ -2092,7 +2092,7 @@ window.addEventListener('resize', () => {
 });
 </script>
 
-<!-- ===== CTA / PENDAFTARAN ===== -->
+{{-- <!-- ===== CTA / PENDAFTARAN ===== -->
 <section class="section-cta">
     <div id="daftar" class="container">
         <div class="cta-inner">
@@ -2140,6 +2140,89 @@ window.addEventListener('resize', () => {
                     </div>
                     <i class="fas fa-arrow-right cta-arrow"></i>
                 </a>
+            </div>
+        </div>
+    </div>
+</section> --}}
+<!-- ===== CTA / PENDAFTARAN ===== -->
+<section class="section-cta">
+    <div id="daftar" class="container">
+        <div class="cta-inner">
+            <div class="reveal">
+                <div class="cta-tag">Pendaftaran Mitra</div>
+
+                <h2 class="cta-title">
+                    Bergabung Sebagai Mitra Simagang
+                </h2>
+
+                <p class="cta-desc">
+                    Simagang mendukung kerja sama antara institusi pendidikan dan industri dalam pengelolaan program magang yang lebih modern, terstruktur, dan efisien.
+                </p>
+
+                <div style="margin-top:2rem;display:flex;gap:1rem;flex-wrap:wrap">
+                    <div style="display:flex;align-items:center;gap:8px;color:rgba(255,255,255,0.65);font-size:14px">
+                        <i class="fas fa-check-circle" style="color:#22d3ee;font-size:16px"></i>
+                        Gratis pendaftaran mitra
+                    </div>
+
+                    <div style="display:flex;align-items:center;gap:8px;color:rgba(255,255,255,0.65);font-size:14px">
+                        <i class="fas fa-check-circle" style="color:#22d3ee;font-size:16px"></i>
+                        Verifikasi dan dukungan admin
+                    </div>
+
+                    <div style="display:flex;align-items:center;gap:8px;color:rgba(255,255,255,0.65);font-size:14px">
+                        <i class="fas fa-check-circle" style="color:#22d3ee;font-size:16px"></i>
+                        Kolaborasi pendidikan dan industri
+                    </div>
+                </div>
+            </div>
+
+            <div class="cta-cards reveal">
+
+                <!-- Mitra Pendidikan -->
+                <a href="{{ route('institusi.create') }}" class="cta-card">
+                    <div class="cta-card-left">
+                        <div class="cta-card-icon"
+                            style="background:linear-gradient(135deg,#0ea5e9,#22d3ee)">
+                            <i class="fas fa-school"></i>
+                        </div>
+
+                        <div>
+                            <div class="cta-card-name">
+                                Mitra Pendidikan
+                            </div>
+
+                            <div class="cta-card-sub">
+                                Untuk sekolah, SMK, universitas, dan institusi pendidikan lainnya.
+                            </div>
+                        </div>
+                    </div>
+
+                    <i class="fas fa-arrow-right cta-arrow"></i>
+                </a>
+
+                <!-- Mitra Industri -->
+                <a href="{{ route('industri.create') }}" class="cta-card">
+                    <div class="cta-card-left">
+                        <div class="cta-card-icon"
+                            style="background:linear-gradient(135deg,#f59e0b,#fbbf24)">
+                            <i class="fas fa-building"></i>
+                        </div>
+
+                        <div>
+                            <div class="cta-card-name">
+                                Mitra Industri
+                            </div>
+
+                            <div class="cta-card-sub">
+                                Untuk perusahaan, startup, UMKM, dan instansi yang membuka lowongan magang.
+                            </div>
+                        </div>
+                    </div>
+
+                    <i class="fas fa-arrow-right cta-arrow"></i>
+                </a>
+
             </div>
         </div>
     </div>
