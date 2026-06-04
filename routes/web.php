@@ -78,8 +78,34 @@ Route::get('/', function () {
         $totalPesertaAktif = ($totalPesertaAktif -  10) . '+';
     } 
 
-    return view('landingpage', compact('partners', 'testimonials', 'totalPesertaAktif'));
+    $lowongans = \App\Models\Lowongan::with('industri')
+        ->latest()
+        ->limit(6)
+        ->get();
+
+    return view('landingpage', compact('partners', 'testimonials', 'totalPesertaAktif', 'lowongans'));
 })->name('landing');
+
+Route::get('/daftar-lowongan', function () {
+
+    $lowongans = \App\Models\Lowongan::with('industri')
+        ->latest()
+        ->paginate(10);
+
+    $totalLowongan = \App\Models\Lowongan::count();
+
+    $perusahaans = \App\Models\Industri::orderBy('nama_industri')->get();
+
+    $divisis = \App\Models\Lowongan::select('divisi')
+        ->distinct()
+        ->whereNotNull('divisi')
+        ->pluck('divisi');
+
+    return view('daftarlowongan', compact('lowongans', 'totalLowongan', 'perusahaans', 'divisis'));
+
+})->name('daftar_lowongan');
+
+
 
 Route::get('/convert-font', function () {
     $fontPath = storage_path('app/fonts/Poppins-Reguler.ttf');

@@ -412,7 +412,7 @@
                     };
                 @endphp
 
-                <div class="lowongan-card">
+                <div class="lowongan-card bg-blue-50 relative z-10">
 
                     {{-- HEADER --}}
                     <div class="flex items-start gap-4">

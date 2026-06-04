@@ -827,6 +827,115 @@
             .testi-grid { display: none; }
             .testi-carousel { display: block; }
         }
+
+        /* ── LOWONGAN SECTION ── */
+        .section-jobs { background: #f0f7ff; padding: 5rem 0; }
+
+        .lowongan-scroll-wrapper {
+            display: flex;
+            gap: 1.25rem;
+            overflow-x: auto;
+            padding-bottom: 1.25rem;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+            scrollbar-color: #c7d2fe #eef2ff;
+        }
+        .lowongan-scroll-wrapper::-webkit-scrollbar { height: 6px; }
+        .lowongan-scroll-wrapper::-webkit-scrollbar-track { background: #eef2ff; border-radius: 99px; }
+        .lowongan-scroll-wrapper::-webkit-scrollbar-thumb { background: #c7d2fe; border-radius: 99px; }
+
+        .lowongan-card {
+            position: relative;
+            flex: 0 0 380px;
+            min-width: 380px;
+            scroll-snap-align: start;
+            background: #fff;
+            border-radius: 30px;
+            padding: 1.6rem;
+            border: 1px solid #edf2ff;
+            box-shadow: 0 12px 35px rgba(15,23,42,.05);
+            transition: .25s ease;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .lowongan-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 45px rgba(15,23,42,.10);
+        }
+        .lowongan-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(99,102,241,.03), transparent);
+            pointer-events: none;
+        }
+
+        .logo-wrapper {
+            width: 78px;
+            height: 78px;
+            border-radius: 24px;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+            background: #fff;
+            flex-shrink: 0;
+        }
+        .logo-wrapper img { width: 100%; height: 100%; object-fit: cover; }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: .45rem;
+            padding: .5rem 1rem;
+            border-radius: 999px;
+            font-size: .75rem;
+            font-weight: 800;
+            letter-spacing: .3px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .detail-box {
+            border-radius: 20px;
+            background: #f8faff;
+            border: 1px solid #eef2ff;
+            padding: 1rem;
+        }
+        .detail-label {
+            font-size: .72rem;
+            font-weight: 800;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: .6px;
+        }
+        .detail-value {
+            margin-top: .35rem;
+            font-size: .95rem;
+            font-weight: 700;
+            color: #334155;
+        }
+
+        .btn-action {
+            height: 46px;
+            border-radius: 16px;
+            padding: 0 1rem;
+            font-size: .88rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: .2s;
+            text-decoration: none;
+        }
+        .btn-soft { background: #eef2ff; color: #4f46e5; }
+        .btn-soft:hover { background: #4f46e5; color: #fff; }
+
+        .jobs-footer { text-align: center; margin-top: 2.5rem; }
+
+        @media (max-width: 640px) {
+            .lowongan-card { flex: 0 0 310px; min-width: 310px; }
+        }
     </style>
 </head>
 <body>
@@ -940,6 +1049,110 @@
 
     </div>
 </section>
+
+<!-- ===== Daftar Lowongan Terbaru ===== -->
+<section id="daftar-lowongan" class="section-jobs">
+    <div class="container">
+        <div class="section-header reveal">
+            <span class="section-eyebrow">Lowongan Terbaru</span>
+            <h2 class="section-title">Temukan Peluang Magang Terbaik</h2>
+            <p class="section-desc">Jelajahi daftar lowongan magang terbaru dari berbagai mitra pendidikan dan industri kami. Temukan peluang yang sesuai dengan minat dan keahlianmu untuk memulai perjalanan magang yang sukses.</p>
+        </div>
+
+        <div class="lowongan-scroll-wrapper">
+            @foreach($lowongans as $lowongan)
+                @php
+                    $status = $lowongan->status ?? 'dibuka';
+                    $badgeClass = match($status){
+                        'dibuka'  => 'bg-green-100 text-green-700',
+                        'ditutup' => 'bg-red-100 text-red-700',
+                        default   => 'bg-yellow-100 text-yellow-700'
+                    };
+                    $badgeIcon = match($status){
+                        'dibuka'  => 'fa-check-circle',
+                        'ditutup' => 'fa-times-circle',
+                        default   => 'fa-clock'
+                    };
+                @endphp
+
+                <div class="lowongan-card">
+
+                    {{-- HEADER --}}
+                    <div class="flex items-start gap-4">
+                        <div class="logo-wrapper">
+                            <img src="{{ asset('storage/vendor/logo_komdigi.jpeg') }}" alt="Logo">
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex flex-col gap-2">
+                                <h2 class="text-xl font-extrabold text-slate-800 line-clamp-2">
+                                    {{ $lowongan->judul_lowongan ?? '-' }}
+                                </h2>
+                                <p class="text-sm text-slate-500 font-medium">
+                                    <i class="fas fa-building mr-1"></i>
+                                    BBLSDM Komdigi Makassar
+                                </p>
+                                <span class="status-badge {{ $badgeClass }} w-fit">
+                                    <i class="fas {{ $badgeIcon }}"></i>
+                                    {{ $lowongan->status }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- DETAIL --}}
+                    <div class="grid grid-cols-2 gap-3 mt-5">
+                        <div class="detail-box">
+                            <p class="detail-label">Posisi</p>
+                            <p class="detail-value">{{ $lowongan->posisi_magang ?? '-' }}</p>
+                        </div>
+                        <div class="detail-box">
+                            <p class="detail-label">Divisi</p>
+                            <p class="detail-value">{{ $lowongan->divisi ?? '-' }}</p>
+                        </div>
+                        <div class="detail-box col-span-2">
+                            <p class="detail-label">Kuota Peserta</p>
+                            <p class="detail-value">{{ $lowongan->kuota_peserta ?? 0 }} Peserta</p>
+                        </div>
+                    </div>
+
+                    {{-- DESKRIPSI --}}
+                    <div class="mt-5 flex-1">
+                        <h3 class="text-sm font-bold text-slate-700 mb-2">Deskripsi Pekerjaan</h3>
+                        <div class="rounded-2xl bg-slate-50 border border-slate-100 p-4">
+                            <p class="text-sm leading-relaxed text-slate-500 line-clamp-4">
+                                {{ $lowongan->deskripsi_pekerjaan ?? '-' }}
+                            </p>
+                        </div>
+                    </div>
+
+                    {{-- FOOTER --}}
+                    <div class="mt-5 flex flex-wrap items-center gap-3">
+                        <a href="{{ route('login') }}" class="btn-action btn-soft">
+                            <i class="fas fa-eye mr-2"></i>Detail
+                        </a>
+                        @if ($lowongan->status === 'dibuka')
+                            <a href="{{ route('login') }}"
+                            class="btn-action bg-green-100 hover:bg-green-200 text-green-700">
+                                <i class="fas fa-paper-plane mr-2"></i>
+                                Ajukan Permohonan
+                            </a>
+                        @endif
+                    </div>
+
+                </div>
+            @endforeach
+        </div>
+
+        <div class="jobs-footer reveal">
+            <a href="{{ route('daftar_lowongan') }}" class="btn-outline bg-blue-50 hover:bg-blue-100 text-blue-700">
+                Lihat Semua Lowongan
+                <i class="fas fa-arrow-right" style="font-size:13px"></i>
+            </a>
+        </div>
+    </div>
+
+</section>
+
 
 <!-- ===== PROSES ===== -->
 <section id="process" class="section-process">
