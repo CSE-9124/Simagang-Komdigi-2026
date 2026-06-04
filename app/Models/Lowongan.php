@@ -13,6 +13,7 @@ class Lowongan extends Model
         'divisi',
         'deskripsi_pekerjaan',
         'requirements',
+        'fasilitas',
         'kuota_peserta',
         'durasi_magang',
         'status',

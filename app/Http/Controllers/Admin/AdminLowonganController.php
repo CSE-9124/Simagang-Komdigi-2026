@@ -33,6 +33,7 @@ class AdminLowonganController extends Controller
                 $q->where('judul_lowongan', 'like', '%' . $search . '%')
                     ->orWhere('posisi_magang', 'like', '%' . $search . '%')
                     ->orWhere('divisi', 'like', '%' . $search . '%')
+                    ->orWhere('fasilitas', 'like', '%' . $search . '%')
                     ->orWhereHas('industri', function ($industri) use ($search) {
                         $industri->where('nama_industri', 'like', '%' . $search . '%');
                     });
@@ -110,6 +111,7 @@ class AdminLowonganController extends Controller
             'divisi'              => 'required|string|max:255',
             'deskripsi_pekerjaan' => 'required|string',
             'requirements'        => 'required|string',
+            'fasilitas'           => 'required|string',
             'kuota_peserta'       => 'required|integer|min:1',
             'status'              => 'required|in:aktif,nonaktif',
         ], [
@@ -123,6 +125,7 @@ class AdminLowonganController extends Controller
             'divisi'              => $request->divisi,
             'deskripsi_pekerjaan' => $request->deskripsi_pekerjaan,
             'requirements'        => $request->requirements,
+            'fasilitas'           => $request->fasilitas,
             'kuota_peserta'       => $request->kuota_peserta,
 
             // Mapping status

@@ -35,7 +35,8 @@ class IndustriLowonganController extends Controller
                 $query->where(function ($q) use ($request) {
                     $q->where('judul_lowongan', 'like', '%' . $request->search . '%')
                         ->orWhere('posisi_magang', 'like', '%' . $request->search . '%')
-                        ->orWhere('divisi', 'like', '%' . $request->search . '%');
+                        ->orWhere('divisi', 'like', '%' . $request->search . '%')
+                        ->orWhere('fasilitas', 'like', '%' . $request->search . '%');
                 });
             }
 
@@ -122,6 +123,7 @@ class IndustriLowonganController extends Controller
             'divisi'              => 'required|string|max:255',
             'deskripsi_pekerjaan' => 'required|string',
             'requirements'        => 'required|string',
+            'fasilitas'           => 'required|string',
             'kuota_peserta'       => 'required|integer|min:1',
             'durasi_magang'       => 'required|string|max:100',
             'status'              => 'required|in:aktif,nonaktif',
@@ -137,6 +139,7 @@ class IndustriLowonganController extends Controller
             'divisi'              => $request->divisi,
             'deskripsi_pekerjaan' => $request->deskripsi_pekerjaan,
             'requirements'        => $request->requirements,
+            'fasilitas'           => $request->fasilitas,
             'kuota_peserta'       => $request->kuota_peserta,
             'durasi_magang'       => $request->durasi_magang,
 
