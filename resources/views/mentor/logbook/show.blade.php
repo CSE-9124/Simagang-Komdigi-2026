@@ -84,6 +84,34 @@
 @section('content')
     <div class="mentor-logbook-page py-6 sm:py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            @if (!$logbook->approval_status || $logbook->approval_status === 'pending')
+                <div
+                    class="mb-6 sm:mb-8 px-5 sm:px-6 py-4 sm:py-5 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-2xl shadow-sm">
+                    <div class="flex flex-col gap-4 sm:gap-0 sm:flex-row sm:items-start sm:justify-between">
+                        <div class="flex gap-4">
+                            <div
+                                class="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-100 text-amber-600 flex-shrink-0">
+                                <i class="fas fa-circle-exclamation text-lg"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <h3 class="text-base sm:text-lg font-bold text-amber-900">Persetujuan Logbook</h3>
+                                <p class="mt-2 text-sm text-amber-800">
+                                    <strong>Aktivitas:</strong> {{ Str::limit($logbook->activity, 150, '...') }}
+                                </p>
+                                <p class="mt-1 text-xs text-amber-700">
+                                    <i class="fas fa-info-circle mr-1"></i> Silakan scroll ke bawah untuk review dan approve
+                                    logbook ini.
+                                </p>
+                            </div>
+                        </div>
+                        <a href="#approval-section"
+                            class="inline-flex items-center justify-center rounded-lg bg-amber-600 px-4 py-2 text-sm font-semibold text-white shadow transition hover:bg-amber-700 flex-shrink-0 mt-2 sm:mt-0">
+                            <i class="fas fa-check-double mr-2"></i> Setujui
+                        </a>
+                    </div>
+                </div>
+            @endif
+
             <div class="mb-6 sm:mb-8">
                 <div class="logbook-hero px-5 sm:px-8 py-6 sm:py-8">
                     <div class="relative z-10 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
@@ -223,7 +251,7 @@
                         @endif
                     </div>
 
-                    <div class="section-card p-5 sm:p-6 lg:col-span-2">
+                    <div class="section-card p-5 sm:p-6 lg:col-span-2" id="approval-section">
                         @php
                             $status = $logbook->approval_status ?? 'pending';
                             $statusLabel = $status === 'approved' ? 'Disetujui' : 'Menunggu review';

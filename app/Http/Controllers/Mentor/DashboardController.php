@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Mentor;
 
 use App\Http\Controllers\Controller;
 use App\Models\Attendance;
+use App\Models\Logbook;
 use App\Models\MicroSkillSubmission;
 use App\Services\HolidayService;
 use App\Services\TimeService;
@@ -48,6 +49,23 @@ class DashboardController extends Controller
             ->whereDate('submitted_at', $today)
             ->count();
 
+        // Get logbooks submitted today by interns (all)
+        $todayLogbooks = Logbook::whereIn('intern_id', $internIds ?: [0])
+            ->whereDate('date', $today)
+            ->with('intern')
+            ->orderByDesc('created_at')
+            ->get();
+
+        // Pending logbooks (not approved) — used to trigger alerts / review list
+        $todayLogbooksPending = Logbook::whereIn('intern_id', $internIds ?: [0])
+            ->whereDate('date', $today)
+            ->where(function ($q) {
+                $q->whereNull('approval_status')->orWhere('approval_status', '!=', 'approved');
+            })
+            ->with('intern')
+            ->orderByDesc('created_at')
+            ->get();
+
         $topMicroSkills = \App\Models\Intern::leftJoin('micro_skill_submissions', 'interns.id', '=', 'micro_skill_submissions.intern_id')
             ->whereIn('interns.id', $internIds)
             ->select('interns.id as intern_id', 'interns.name', 'interns.institution', 'interns.photo_path', DB::raw('COUNT(micro_skill_submissions.id) as total'))
@@ -66,7 +84,7 @@ class DashboardController extends Controller
                 ];
             });
 
-        return view('mentor.dashboard', compact('mentor', 'interns', 'alumni', 'todayAttendances', 'todayAbsentInterns', 'today', 'microPending', 'microTodayTotal', 'topMicroSkills'));
+        return view('mentor.dashboard', compact('mentor', 'interns', 'alumni', 'todayAttendances', 'todayAbsentInterns', 'today', 'microPending', 'microTodayTotal', 'topMicroSkills', 'todayLogbooks', 'todayLogbooksPending'));
     }
 }
 

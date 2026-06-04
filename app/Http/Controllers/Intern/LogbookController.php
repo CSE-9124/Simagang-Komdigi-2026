@@ -138,7 +138,8 @@ class LogbookController extends Controller
             }
         }
 
-        Logbook::create($data);
+        $logbook = Logbook::create($data);
+        
 
         return redirect()->route('intern.logbook.index')
             ->with('success', 'Logbook berhasil disimpan.');
