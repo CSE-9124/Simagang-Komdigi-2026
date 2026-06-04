@@ -104,24 +104,6 @@
             overflow: hidden;
         }
 
-        .section-label {
-            font-size: 11px;
-            font-weight: 800;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            color: #94a3b8;
-            margin-bottom: 18px;
-        }
-
-        /* ── Section header inside form ───────────────── */
-        .form-section {
-            padding: 28px 28px 24px;
-        }
-
-        .form-section+.form-section {
-            border-top: 1px solid #f1f5f9;
-        }
-
         .form-section.gray {
             background: #f8fbff;
         }
@@ -386,7 +368,33 @@
             animation: fadeSlideUp .5s ease both;
         }
 
-        .anim-2 {
+        /* ── Small UI improvements */
+        .panel form {
+            padding: 22px;
+        }
+
+        .form-section {
+            padding: 20px 22px;
+        }
+
+        .section-label {
+            font-weight: 700;
+            color: #64748b;
+            font-size: .75rem;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .counter {
+            display: inline-block;
+            margin-top: 6px;
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+    </style>
             animation: fadeSlideUp .5s ease .1s both;
         }
 
@@ -491,7 +499,6 @@
                                         <input type="text" name="judul_lowongan" id="judul_lowongan" maxlength="255"
                                             value="{{ old('judul_lowongan') }}"
                                             placeholder="Contoh: Lowongan Magang UI/UX Designer" class="form-input">
-                                        <span class="counter mono" id="judul_counter">0/255</span>
                                     </div>
 
                                     <div>
@@ -503,9 +510,16 @@
 
                                     <div>
                                         <label class="form-label">Tim / Bagian</label>
-                                        <input type="text" name="divisi" id="divisi" maxlength="255"
-                                            value="{{ old('divisi') }}" placeholder="Contoh: Tim PUSDATING"
-                                            class="form-input">
+                                        <select name="divisi" id="divisi" class="form-input">
+                                            <option value="" {{ old('divisi') == '' ? 'selected' : '' }}>Pilih Tim / Bagian</option>
+                                            @if(isset($teams) && $teams->count())
+                                                @foreach($teams as $team)
+                                                    <option value="{{ $team->name }}" {{ old('divisi') == $team->name ? 'selected' : '' }}>{{ $team->name }}</option>
+                                                @endforeach
+                                            @else
+                                                <option disabled>Tidak ada tim terdaftar</option>
+                                            @endif
+                                        </select>
                                     </div>
                                 </div>
                             </div>
