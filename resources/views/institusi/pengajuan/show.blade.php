@@ -86,6 +86,8 @@
             border: 1px solid #e8eeff;
             border-radius: 18px;
             box-shadow: 0 1px 3px rgba(20, 40, 120, 0.05);
+            overflow: hidden;
+            min-width: 0; 
         }
 
         .soft-badge {
@@ -145,6 +147,9 @@
             font-weight: 600;
             color: #1e293b;
             line-height: 1.6;
+            word-break: break-word;      
+            overflow-wrap: break-word;   
+            white-space: normal; 
         }
 
         .section-title {
@@ -268,7 +273,7 @@
                                     </div>
                                     <div class="info-card p-4">
                                         <span class="field-label">Tanggal Pengajuan</span>
-                                        <p class="field-value">{{ $pengajuan->created_at->format('d F Y') }}</p>
+                                        <p class="field-value">{{ \Carbon\Carbon::parse($pengajuan->created_at)->locale('id')->translatedFormat('d F Y') }}</p>
                                     </div>
                                 </div>
                             </div>
