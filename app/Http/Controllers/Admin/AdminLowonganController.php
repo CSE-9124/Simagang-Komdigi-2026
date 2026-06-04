@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Lowongan;
 use App\Models\Industri;
+use App\Models\Team;
 
 class AdminLowonganController extends Controller
 {
@@ -96,7 +97,8 @@ class AdminLowonganController extends Controller
      */
     public function create()
     {
-        return view('admin.lowongan.create');
+        $teams = Team::orderBy('name')->get();
+        return view('admin.lowongan.create', compact('teams'));
     }
 
     /**
@@ -108,7 +110,7 @@ class AdminLowonganController extends Controller
         $request->validate([
             'judul_lowongan'      => 'required|string|max:255',
             'posisi_magang'       => 'required|string|max:255',
-            'divisi'              => 'required|string|max:255',
+            'divisi'              => 'required|string|max:255|exists:teams,name',
             'deskripsi_pekerjaan' => 'required|string',
             'requirements'        => 'required|string',
             'fasilitas'           => 'required|string',

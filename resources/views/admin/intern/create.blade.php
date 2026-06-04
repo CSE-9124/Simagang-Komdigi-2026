@@ -403,6 +403,7 @@
                             data-major="{{ $c->jurusan }}"
                             data-institution="{{ $c->pengajuan->institusi->nama_institusi }}"
                             data-purpose="{{ $c->pengajuan->keperluan }}"
+                            data-team="{{ $c->pengajuan->lowongan->divisi ?? '' }}"
                             data-startdate="{{ $c->pengajuan->start_date }}"
                             data-enddate="{{ $c->pengajuan->end_date }}"
                         >{{ $c->nama }}</option>
@@ -525,6 +526,7 @@
                         <option value="">— Pilih Mentor —</option>
                         @foreach($mentors as $mentor)
                             <option value="{{ $mentor->id }}"
+                                    data-team-id="{{ $mentor->team_id }}"
                                     data-team="{{ $mentor->team?->name ?? 'Belum masuk dalam tim' }}"
                                     {{ old('mentor_id') == $mentor->id ? 'selected' : '' }}>
                                 {{ $mentor->name }}{{ $mentor->position ? ' – '.$mentor->position : '' }}
@@ -672,6 +674,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const teamDisplay   = document.getElementById('teamDisplay');
     const teamPill      = document.getElementById('teamPill');
     const teamPillText  = document.getElementById('teamPillText');
+    const mentorOptions  = [...mentorSelect.options].filter(option => option.value !== '');
 
     function updateTeam() {
         const opt = mentorSelect.options[mentorSelect.selectedIndex];
@@ -684,6 +687,32 @@ document.addEventListener('DOMContentLoaded', () => {
         teamDisplay.value = teamName;
         teamPillText.textContent = teamName;
         teamPill.style.display = 'inline-flex';
+    }
+
+    function filterMentorsByTeam(teamName) {
+        let firstMatch = '';
+
+        mentorOptions.forEach(option => {
+            const optionTeam = (option.getAttribute('data-team') || '').trim();
+            const shouldShow = !teamName || optionTeam === teamName;
+
+            option.hidden = !shouldShow;
+            option.disabled = !shouldShow;
+
+            if (shouldShow && !firstMatch) {
+                firstMatch = option.value;
+            }
+        });
+
+        if (mentorSelect.value && mentorSelect.selectedOptions[0] && mentorSelect.selectedOptions[0].hidden) {
+            mentorSelect.value = firstMatch;
+        }
+
+        if (!mentorSelect.value && firstMatch) {
+            mentorSelect.value = firstMatch;
+        }
+
+        updateTeam();
     }
 
     mentorSelect.addEventListener('change', updateTeam);
@@ -716,6 +745,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         document.getElementById('educationInput').value = sel.dataset.education || '';
+
+        filterMentorsByTeam((sel.dataset.team || '').trim());
 
         autofillNotice.style.display = 'block';
     });
@@ -750,6 +781,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const selectedOption = calonSelect.options[calonSelect.selectedIndex];
         const softSkill = selectedOption.getAttribute('data-soft-skill');
         const hardSkill = selectedOption.getAttribute('data-hard-skill');
+
+        filterMentorsByTeam((selectedOption.getAttribute('data-team') || '').trim());
 
         // Update the display fields
         softSkillDisplay.value = softSkill || '';

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Lowongan;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
+use App\Models\Team;
 
 class IndustriLowonganController extends Controller
 {
@@ -99,7 +100,8 @@ class IndustriLowonganController extends Controller
                 );
         }
 
-        return view('industri.lowongan.create', compact('industri'));
+        $teams = Team::orderBy('name')->get();
+        return view('industri.lowongan.create', compact('industri', 'teams'));
     }
 
     /**
@@ -120,7 +122,7 @@ class IndustriLowonganController extends Controller
         $request->validate([
             'judul_lowongan'      => 'required|string|max:255',
             'posisi_magang'       => 'required|string|max:255',
-            'divisi'              => 'required|string|max:255',
+            'divisi'              => 'required|string|max:255|exists:teams,name',
             'deskripsi_pekerjaan' => 'required|string',
             'requirements'        => 'required|string',
             'fasilitas'           => 'required|string',

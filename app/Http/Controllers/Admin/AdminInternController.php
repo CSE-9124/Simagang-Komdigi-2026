@@ -61,7 +61,8 @@ class AdminInternController extends Controller
     public function create()
     {
         $calonMagang = PengajuanDetail::with([
-                'pengajuan.institusi'
+                'pengajuan.institusi',
+                'pengajuan.lowongan'
             ])
             ->whereHas('pengajuan', function ($q) {
                 $q->where('status', 'approved');
@@ -158,6 +159,21 @@ class AdminInternController extends Controller
 
         if (!$mentor) {
             return back()->withErrors(['mentor_id' => 'Mentor tidak ditemukan.']);
+        }
+
+        if (!empty($validated['pengajuan_detail_id'])) {
+            $calon = PengajuanDetail::with(['pengajuan.lowongan'])->find($validated['pengajuan_detail_id']);
+            $targetTeam = $calon?->pengajuan?->lowongan?->divisi;
+
+            if ($targetTeam && !$mentor->team) {
+                return back()->withErrors(['mentor_id' => 'Mentor ini belum memiliki tim.'])->withInput();
+            }
+
+            if ($targetTeam && $mentor->team?->name !== $targetTeam) {
+                return back()->withErrors([
+                    'mentor_id' => 'Mentor harus sesuai dengan tim penempatan calon peserta magang.'
+                ])->withInput();
+            }
         }
 
         Intern::create([
@@ -268,6 +284,25 @@ class AdminInternController extends Controller
         }
 
         $mentor = Mentor::with('team')->find($validated['mentor_id']);
+
+        if (!$mentor) {
+            return back()->withErrors(['mentor_id' => 'Mentor tidak ditemukan.'])->withInput();
+        }
+
+        if ($intern->pengajuan_detail_id) {
+            $calon = PengajuanDetail::with(['pengajuan.lowongan'])->find($intern->pengajuan_detail_id);
+            $targetTeam = $calon?->pengajuan?->lowongan?->divisi;
+
+            if ($targetTeam && !$mentor->team) {
+                return back()->withErrors(['mentor_id' => 'Mentor ini belum memiliki tim.'])->withInput();
+            }
+
+            if ($targetTeam && $mentor->team?->name !== $targetTeam) {
+                return back()->withErrors([
+                    'mentor_id' => 'Mentor harus sesuai dengan tim penempatan calon peserta magang.'
+                ])->withInput();
+            }
+        }
 
         $data = [
             'name' => $validated['name'],

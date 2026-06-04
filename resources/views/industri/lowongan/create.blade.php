@@ -368,8 +368,19 @@
                                             Divisi
                                         </label>
 
-                                        <input type="text" name="divisi" value="{{ old('divisi') }}"
-                                            placeholder="Contoh: IT Development" class="form-input">
+                                        <select name="divisi" class="form-input">
+                                            <option value="" {{ old('divisi') == '' ? 'selected' : '' }}>Pilih Divisi
+                                            </option>
+                                            @if (isset($teams) && $teams->count())
+                                                @foreach ($teams as $team)
+                                                    <option value="{{ $team->name }}"
+                                                        {{ old('divisi') == $team->name ? 'selected' : '' }}>
+                                                        {{ $team->name }}</option>
+                                                @endforeach
+                                            @else
+                                                <option disabled>Tidak ada tim terdaftar</option>
+                                            @endif
+                                        </select>
                                     </div>
 
                                 </div>
