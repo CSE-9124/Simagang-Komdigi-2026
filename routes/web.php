@@ -289,6 +289,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         Route::get('/accounts', [AdminAccountController::class, 'index'])->name('accounts.index');
         Route::get('/accounts/create', [AdminAccountController::class, 'create'])->name('accounts.create');
         Route::post('/accounts', [AdminAccountController::class, 'store'])->name('accounts.store');
+        Route::get('/lowongan/{id}/edit', [AdminLowonganController::class, 'edit'])->name('lowongan.edit');
+        Route::put('/lowongan/{id}', [AdminLowonganController::class, 'update'])->name('lowongan.update');
         Route::get('/accounts/{user}/edit', [AdminAccountController::class, 'edit'])->name('accounts.edit');
         Route::put('/accounts/{user}', [AdminAccountController::class, 'update'])->name('accounts.update');
         Route::delete('/accounts/{user}', [AdminAccountController::class, 'destroy'])->name('accounts.destroy');

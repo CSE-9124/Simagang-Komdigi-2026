@@ -154,6 +154,73 @@ class AdminLowonganController extends Controller
 
         return view('admin.lowongan.show', compact('lowongan'));
     }
+    
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        $lowongan = Lowongan::findOrFail($id);
+        if (!$this->canEditLowongan($lowongan)) {
+            abort(403, 'Anda tidak memiliki akses untuk mengedit lowongan ini.');
+        }
+        $teams = Team::orderBy('name')->get();
+        return view('admin.lowongan.edit', compact('lowongan', 'teams'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+        $lowongan = Lowongan::findOrFail($id);
+        if (!$this->canEditLowongan($lowongan)) {
+            abort(403, 'Anda tidak memiliki akses untuk mengedit lowongan ini.');
+        }
+        $request->validate([
+            'judul_lowongan'      => 'required|string|max:255',
+            'posisi_magang'       => 'required|string|max:255',
+            'divisi'              => 'required|string|max:255|exists:teams,name',
+            'deskripsi_pekerjaan' => 'required|string',
+            'requirements'        => 'required|string',
+            'fasilitas'           => 'required|string',
+            'kuota_peserta'       => 'required|integer|min:1',
+            'status'              => 'required|in:aktif,nonaktif',
+        ], [
+            'required' => ':attribute wajib diisi.',
+        ]);
+        $lowongan->update([
+            'judul_lowongan'      => $request->judul_lowongan,
+            'posisi_magang'       => $request->posisi_magang,
+            'divisi'              => $request->divisi,
+            'deskripsi_pekerjaan' => $request->deskripsi_pekerjaan,
+            'requirements'        => $request->requirements,
+            'fasilitas'           => $request->fasilitas,
+            'kuota_peserta'       => $request->kuota_peserta,
+            'status'              => $request->status === 'aktif' ? 'dibuka' : 'ditutup',
+        ]);
+        return redirect()
+            ->route('admin.lowongan.show', $lowongan->id)
+            ->with('success', 'Lowongan magang berhasil diperbarui.');
+    }
+
+
+     /**
+
+     * Determine whether the current admin may edit the lowongan.
+
+     */
+
+    private function canEditLowongan(Lowongan $lowongan): bool
+    {
+        $user = auth()->user();
+        $industri = $user->industri;
+
+        if ($industri) {
+            return $lowongan->industri_id === $industri->id;
+        }
+        return $lowongan->industri_id === null;
+    }
     /**
      * Remove the specified resource from storage.
      */
