@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Attendance;
+use App\Models\Industri;
 use App\Models\Intern;
 use App\Services\HolidayService;
 use App\Services\TimeService;
@@ -17,12 +18,30 @@ class AdminAttendanceController extends Controller
         $this->middleware('permission:manage_attendance')->only(['updateDocumentStatus']);
     }
 
+    private function adminInternIds(): \Illuminate\Support\Collection
+    {
+        $komdigi = Industri::where('nama_industri', 'BBLSDM Komdigi Makassar')->first();
+
+        return Intern::where(function ($q) use ($komdigi) {
+            $q->whereNull('pengajuan_detail_id');
+
+            if ($komdigi) {
+                $q->orWhereHas('pengajuanDetail.pengajuan.lowongan', function ($lq) use ($komdigi) {
+                    $lq->where('industri_id', $komdigi->id);
+                });
+            }
+        })->pluck('id');
+    }
+
     public function index(Request $request)
     {
         $nowWita   = TimeService::nowWita();
         $todayWita = $nowWita->toDateString();
 
-        $query = Attendance::with('intern');
+        $internIds = $this->adminInternIds();
+
+        $query = Attendance::with('intern')
+            ->whereIn('intern_id', $internIds);
 
         if ($request->filled('intern_id')) {
             $query->where('intern_id', $request->intern_id);
@@ -51,16 +70,24 @@ class AdminAttendanceController extends Controller
             ->paginate(20)
             ->withQueryString();
 
-        $interns = Intern::orderBy('name')->get();
+        // Dropdown filter hanya menampilkan intern milik admin
+        $interns = Intern::whereIn('id', $internIds)->orderBy('name')->get();
 
         $todayAbsentInterns = collect();
-        $isWorkday    = !HolidayService::isHoliday($nowWita);
-        $noDateFilter = !$request->filled('date_from') && !$request->filled('date_to');
+        $isWorkday      = !HolidayService::isHoliday($nowWita);
+        $noDateFilter   = !$request->filled('date_from') && !$request->filled('date_to');
         $noStatusFilter = !$request->filled('status') || $request->input('status') === 'alfa';
 
         if ($isWorkday && $noDateFilter && $noStatusFilter) {
-            $presentIds = Attendance::whereDate('date', $todayWita)->pluck('intern_id')->toArray();
-            $absentQuery = Intern::where('is_active', true)->whereNotIn('id', $presentIds)->orderBy('name');
+            $presentIds = Attendance::whereDate('date', $todayWita)
+                ->whereIn('intern_id', $internIds)
+                ->pluck('intern_id')
+                ->toArray();
+
+            $absentQuery = Intern::whereIn('id', $internIds)
+                ->where('is_active', true)
+                ->whereNotIn('id', $presentIds)
+                ->orderBy('name');
 
             if ($request->filled('intern_id')) {
                 $absentQuery->where('id', $request->integer('intern_id'));
@@ -69,14 +96,26 @@ class AdminAttendanceController extends Controller
             $todayAbsentInterns = $absentQuery->get();
         }
 
-        return view('admin.attendance.index', compact('attendances', 'interns', 'todayAbsentInterns', 'todayWita'));
+        return view('admin.attendance.index', compact(
+            'attendances',
+            'interns',
+            'todayAbsentInterns',
+            'todayWita'
+        ));
     }
 
     public function show(Attendance $attendance)
     {
+        // Pastikan attendance ini milik intern admin
+        abort_unless(
+            $this->adminInternIds()->contains($attendance->intern_id),
+            403
+        );
+
         $this->authorize('view', $attendance);
 
         $attendance->load('intern');
+
         return view('admin.attendance.show', compact('attendance'));
     }
 
@@ -85,12 +124,16 @@ class AdminAttendanceController extends Controller
         $photoPath = 'private/attendance-photos/' . $filename;
 
         $attendance = Attendance::where(function ($query) use ($photoPath) {
-                $query->where('photo_path', $photoPath)
-                    ->orWhere('photo_checkout', $photoPath);
-            })
-            ->firstOrFail();
+            $query->where('photo_path', $photoPath)
+                ->orWhere('photo_checkout', $photoPath);
+        })->firstOrFail();
 
-        // Authorize dengan policy
+        // Pastikan attendance ini milik intern admin
+        abort_unless(
+            $this->adminInternIds()->contains($attendance->intern_id),
+            403
+        );
+
         $this->authorize('view', $attendance);
 
         $fullPath = storage_path('app/' . $photoPath);
@@ -98,30 +141,34 @@ class AdminAttendanceController extends Controller
         if (!file_exists($fullPath)) {
             abort(404, 'File not found');
         }
-        
 
         return response()->file($fullPath, [
-            'Cache-Control' => 'no-store, no-cache, must-revalidate',
-            'Pragma'        => 'no-cache',
-            'Expires'       => '0',
+            'Cache-Control'          => 'no-store, no-cache, must-revalidate',
+            'Pragma'                 => 'no-cache',
+            'Expires'                => '0',
             'X-Content-Type-Options' => 'nosniff',
         ]);
     }
 
     public function updateDocumentStatus(Request $request, Attendance $attendance)
     {
+        abort_unless(
+            $this->adminInternIds()->contains($attendance->intern_id),
+            403
+        );
+
         if (!in_array($attendance->status, ['izin', 'sakit'])) {
             return back()->withErrors(['error' => 'Status absensi ini tidak memiliki dokumen.']);
         }
 
         $validated = $request->validate([
             'document_status' => ['required', 'in:approved,rejected'],
-            'admin_note' => ['nullable', 'string'],
+            'admin_note'      => ['nullable', 'string'],
         ]);
 
         $attendance->update([
             'document_status' => $validated['document_status'],
-            'admin_note' => $validated['admin_note'] ?? null,
+            'admin_note'      => $validated['admin_note'] ?? null,
         ]);
 
         return back()->with('success', 'Status dokumen berhasil diperbarui.');

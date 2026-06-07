@@ -61,17 +61,17 @@ class AttendanceController extends Controller
         $nowWita = TimeService::nowWita();
         $todayWita = $nowWita->toDateString();
 
-        // if (HolidayService::isWeekend($nowWita)) {
-        //     $dayName = $nowWita->isSaturday() ? 'Sabtu' : 'Minggu';
-        //     return redirect()->route('intern.attendance.index')
-        //         ->with('info', "Hari ini {$dayName} — hari libur, tidak ada absensi.");
-        // }
+        if (HolidayService::isWeekend($nowWita)) {
+            $dayName = $nowWita->isSaturday() ? 'Sabtu' : 'Minggu';
+            return redirect()->route('intern.attendance.index')
+                ->with('info', "Hari ini {$dayName} — hari libur, tidak ada absensi.");
+        }
 
-        // if (HolidayService::isNationalHoliday($nowWita)) {
-        //     $holidayName = HolidayService::getHolidayName($nowWita) ?? 'Hari Libur Nasional';
-        //     return redirect()->route('intern.attendance.index')
-        //         ->with('info', "Hari ini libur nasional ({$holidayName}), tidak ada absensi.");
-        // }
+        if (HolidayService::isNationalHoliday($nowWita)) {
+            $holidayName = HolidayService::getHolidayName($nowWita) ?? 'Hari Libur Nasional';
+            return redirect()->route('intern.attendance.index')
+                ->with('info', "Hari ini libur nasional ({$holidayName}), tidak ada absensi.");
+        }
 
         $checkInStart = env('ATTENDANCE_CHECKIN_START', '08:00');
         $checkInEnd = env('ATTENDANCE_CHECKIN_END', '12:00');
@@ -101,15 +101,15 @@ class AttendanceController extends Controller
         $nowWita = TimeService::nowWita();
         $todayWita = $nowWita->toDateString();
 
-        // if (HolidayService::isWeekend($nowWita)) {
-        //     $dayName = $nowWita->isSaturday() ? 'Sabtu' : 'Minggu';
-        //     return back()->withErrors(['error' => "Hari ini {$dayName} — hari libur, tidak bisa melakukan absensi."]);
-        // }
+        if (HolidayService::isWeekend($nowWita)) {
+            $dayName = $nowWita->isSaturday() ? 'Sabtu' : 'Minggu';
+            return back()->withErrors(['error' => "Hari ini {$dayName} — hari libur, tidak bisa melakukan absensi."]);
+        }
 
-        // if (HolidayService::isNationalHoliday($nowWita)) {
-        //     $holidayName = HolidayService::getHolidayName($nowWita) ?? 'Hari Libur Nasional';
-        //     return back()->withErrors(['error' => "Hari ini libur nasional ({$holidayName}), tidak bisa melakukan absensi."]);
-        // }
+        if (HolidayService::isNationalHoliday($nowWita)) {
+            $holidayName = HolidayService::getHolidayName($nowWita) ?? 'Hari Libur Nasional';
+            return back()->withErrors(['error' => "Hari ini libur nasional ({$holidayName}), tidak bisa melakukan absensi."]);
+        }
 
         $todayAttendance = Attendance::where('intern_id', $intern->id)
             ->whereDate('date', $todayWita)
