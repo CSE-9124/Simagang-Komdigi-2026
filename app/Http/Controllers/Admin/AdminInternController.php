@@ -25,8 +25,21 @@ class AdminInternController extends Controller
 
     public function index(Request $request)
     {
-        // Build base query and apply common filters (except is_active)
-        $baseQuery = Intern::with(['user', 'mentor', 'team']);
+        // Ambil ID industri BBLSDM Komdigi Makassar (milik admin)
+        $komdigi = Industri::where('nama_industri', 'BBLSDM Komdigi Makassar')->first();
+
+        $baseQuery = Intern::with(['user', 'mentor', 'team'])
+            ->where(function ($q) use ($komdigi) {
+                // Peserta yang tidak punya pengajuan (didaftarkan manual oleh admin)
+                $q->whereNull('pengajuan_detail_id');
+
+                // ATAU peserta yang pengajuannya lewat lowongan BBLSDM Komdigi
+                if ($komdigi) {
+                    $q->orWhereHas('pengajuanDetail.pengajuan.lowongan', function ($query) use ($komdigi) {
+                        $query->where('industri_id', $komdigi->id);
+                    });
+                }
+            });
 
         if ($request->filled('search')) {
             $baseQuery->where('name', 'like', '%' . $request->search . '%');
@@ -53,9 +66,10 @@ class AdminInternController extends Controller
             ->orderByDesc('created_at')
             ->paginate(15, ['*'], 'alumni_page')
             ->withQueryString();
+
         $mentors = Mentor::orderByDesc('created_at')->get();
         $teams = Team::orderBy('name')->get();
-        
+
         return view('admin.intern.index', compact('activeInterns', 'alumniInterns', 'mentors', 'teams'));
     }
 
@@ -92,21 +106,6 @@ class AdminInternController extends Controller
 
     public function store(Request $request)
     {
-        // $validTeams = [
-        //     'TIM DEA',
-        //     'TIM GTA',
-        //     'TIM VSGA',
-        //     'TIM TA',
-        //     'TIM Microskill',
-        //     'TIM Media (DiaPus)',
-        //     'TIM Tata Usaha (Umum)',
-        //     'FGA',
-        //     'Keuangan',
-        //     'Tim PUSDATIN',
-        //     'Tim Perencanaan, Anggaran, Dan Kerja Sama',
-        //     'Tim Kepegawaian, Persuratan dan Kearsipan'
-        // ];
-
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
@@ -117,8 +116,6 @@ class AdminInternController extends Controller
             'institution' => ['required', 'string', 'max:255'],
             'purpose' => ['nullable', 'string', 'in:Magang,KKN Profesi,PKL,Praktek Industri,Magang Industri,Guru Magang Industri,Job on Training'],
             'mentor_id' => ['required', 'exists:mentors,id'],
-            
-            // 'team' => ['nullable', 'string', Rule::in($validTeams)],
             'pengajuan_detail_id' => ['nullable', 'exists:pengajuan_details,id'],
             'start_date' => ['required', 'date'],
             'end_date' => ['required', 'date', 'after:start_date'],
@@ -143,11 +140,11 @@ class AdminInternController extends Controller
                 $extension = $photo->getClientOriginalExtension() ?: ($photo->guessExtension() ?: 'jpg');
                 $filename = 'photo_' . time() . '_' . uniqid() . '.' . $extension;
                 $destinationPath = storage_path('app/public/photos');
-                
+
                 if (!file_exists($destinationPath)) {
                     mkdir($destinationPath, 0755, true);
                 }
-                
+
                 $fullPath = $destinationPath . DIRECTORY_SEPARATOR . $filename;
                 if ($photo->move($destinationPath, $filename) && file_exists($fullPath)) {
                     $photoPath = 'photos/' . $filename;
@@ -243,21 +240,6 @@ class AdminInternController extends Controller
 
     public function update(Request $request, Intern $intern)
     {
-        $validTeams = [
-            'TIM DEA',
-            'TIM GTA',
-            'TIM VSGA',
-            'TIM TA',
-            'TIM Microskill',
-            'TIM Media (DiaPus)',
-            'TIM Tata Usaha (Umum)',
-            'FGA',
-            'Keuangan',
-            'Tim PUSDATIN',
-            'Tim Perencanaan, Anggaran, Dan Kerja Sama',
-            'Tim Kepegawaian, Persuratan dan Kearsipan'
-        ];
-
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $intern->user_id],
@@ -268,7 +250,6 @@ class AdminInternController extends Controller
             'institution' => ['required', 'string', 'max:255'],
             'purpose' => ['nullable', 'string', 'in:Magang,KKN Profesi,PKL,Praktek Industri,Magang Industri,Guru Magang Industri,Job on Training'],
             'mentor_id' => ['required', 'exists:mentors,id'],
-            // 'team' => ['nullable', 'string', Rule::in($validTeams)],
             'start_date' => ['required', 'date'],
             'end_date' => ['required', 'date', 'after:start_date'],
             'photo' => ['nullable', 'image', 'max:2048'],
@@ -337,22 +318,21 @@ class AdminInternController extends Controller
             $photo = $request->file('photo');
             if ($photo->isValid() && $photo->getError() === UPLOAD_ERR_OK) {
                 try {
-                    // Delete old photo
                     if ($intern->photo_path) {
                         $oldPath = storage_path('app/public/' . $intern->photo_path);
                         if (file_exists($oldPath)) {
                             @unlink($oldPath);
                         }
                     }
-                    
+
                     $extension = $photo->getClientOriginalExtension() ?: ($photo->guessExtension() ?: 'jpg');
                     $filename = 'photo_' . time() . '_' . uniqid() . '.' . $extension;
                     $destinationPath = storage_path('app/public/photos');
-                    
+
                     if (!file_exists($destinationPath)) {
                         mkdir($destinationPath, 0755, true);
                     }
-                    
+
                     $fullPath = $destinationPath . DIRECTORY_SEPARATOR . $filename;
                     if ($photo->move($destinationPath, $filename) && file_exists($fullPath)) {
                         $data['photo_path'] = 'photos/' . $filename;

@@ -4,28 +4,34 @@ namespace App\Http\Controllers\Industri;
 
 use App\Http\Controllers\Controller;
 use App\Models\Intern;
-use App\Models\Mentor;
 use App\Models\User;
-use App\Models\Team;
-use App\Models\Institusi;
-use App\Models\Industri;
-use App\Models\Pengajuan;
 use App\Models\PengajuanDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
-
 
 class IndustriInternController extends Controller
 {
+    /**
+     * Pastikan intern yang diakses memang milik industri yang sedang login.
+     */
+    private function authorizeIntern(Intern $intern): void
+    {
+        $industriId = auth()->user()->industri->id;
+
+        $owns = $intern->pengajuan_detail_id &&
+            $intern->pengajuanDetail?->pengajuan?->lowongan?->industri_id == $industriId;
+
+        abort_if(!$owns, 403, 'Anda tidak memiliki akses ke data ini.');
+    }
 
     public function index(Request $request)
     {
         $industriId = auth()->user()->industri->id;
 
         $baseQuery = Intern::with(['user'])
+            ->whereNotNull('pengajuan_detail_id')
             ->whereHas('pengajuanDetail.pengajuan.lowongan', function ($query) use ($industriId) {
                 $query->where('industri_id', $industriId);
             });
@@ -37,12 +43,14 @@ class IndustriInternController extends Controller
         $activeInterns = (clone $baseQuery)
             ->where('is_active', true)
             ->latest()
-            ->paginate(15, ['*'], 'active_page');
+            ->paginate(15, ['*'], 'active_page')
+            ->withQueryString();
 
         $alumniInterns = (clone $baseQuery)
             ->where('is_active', false)
             ->latest()
-            ->paginate(15, ['*'], 'alumni_page');
+            ->paginate(15, ['*'], 'alumni_page')
+            ->withQueryString();
 
         return view('industri.intern.index', compact(
             'activeInterns',
@@ -54,9 +62,7 @@ class IndustriInternController extends Controller
     {
         $industri = auth()->user()->industri;
 
-        $calonMagang = PengajuanDetail::with([
-                'pengajuan.institusi'
-            ])
+        $calonMagang = PengajuanDetail::with(['pengajuan.institusi'])
             ->whereHas('pengajuan', function ($query) use ($industri) {
                 $query->where('status', 'approved')
                     ->whereHas('lowongan', function ($lowongan) use ($industri) {
@@ -66,59 +72,41 @@ class IndustriInternController extends Controller
             ->doesntHave('intern')
             ->get();
 
-        // $mentors = Mentor::with('team')
-        //     ->where('is_active', true)
-        //     ->orderBy('name')
-        //     ->get();
-
-        return view('industri.intern.create', compact(
-            'calonMagang'
-        ));
+        return view('industri.intern.create', compact('calonMagang'));
     }
 
     public function store(Request $request)
     {
-        // $validTeams = [
-        //     'TIM DEA',
-        //     'TIM GTA',
-        //     'TIM VSGA',
-        //     'TIM TA',
-        //     'TIM Microskill',
-        //     'TIM Media (DiaPus)',
-        //     'TIM Tata Usaha (Umum)',
-        //     'FGA',
-        //     'Keuangan',
-        //     'Tim PUSDATIN',
-        //     'Tim Perencanaan, Anggaran, Dan Kerja Sama',
-        //     'Tim Kepegawaian, Persuratan dan Kearsipan'
-        // ];
+        $industri = auth()->user()->industri;
 
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'gender' => ['required', 'in:Laki-laki,Perempuan'],
-            'education_level' => ['required', 'in:SMA/SMK,S1/D4'],
-            'major' => ['nullable', 'string', 'max:255'],
-            'phone' => ['nullable', 'string', 'max:255'],
-            'institution' => ['required', 'string', 'max:255'],
-            'purpose' => ['nullable', 'string', 'in:Magang,KKN Profesi,PKL,Praktek Industri,Magang Industri,Guru Magang Industri,Job on Training'],
-            // 'mentor_id' => ['required', 'exists:mentors,id'],
-            
-            // 'team' => ['nullable', 'string', Rule::in($validTeams)],
-            'pengajuan_detail_id' => ['nullable', 'exists:pengajuan_details,id'],
-            'start_date' => ['required', 'date'],
-            'end_date' => ['required', 'date', 'after:start_date'],
-            'photo' => ['required', 'image', 'max:2048'],
-            'password' => ['required', Password::defaults()],
-            'hard_skill' => ['nullable', 'string'],
-            'soft_skill' => ['nullable', 'string'],
+            'name'                => ['required', 'string', 'max:255'],
+            'email'               => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'gender'              => ['required', 'in:Laki-laki,Perempuan'],
+            'education_level'     => ['required', 'in:SMA/SMK,S1/D4'],
+            'major'               => ['nullable', 'string', 'max:255'],
+            'phone'               => ['nullable', 'string', 'max:255'],
+            'institution'         => ['required', 'string', 'max:255'],
+            'purpose'             => ['nullable', 'string', 'in:Magang,KKN Profesi,PKL,Praktek Industri,Magang Industri,Guru Magang Industri,Job on Training'],
+            'pengajuan_detail_id' => ['required', 'exists:pengajuan_details,id'],
+            'start_date'          => ['required', 'date'],
+            'end_date'            => ['required', 'date', 'after:start_date'],
+            'photo'               => ['required', 'image', 'max:2048'],
+            'password'            => ['required', Password::defaults()],
+            'hard_skill'          => ['nullable', 'string'],
+            'soft_skill'          => ['nullable', 'string'],
         ]);
 
+        // Pastikan pengajuan_detail_id memang milik industri ini
+        $detail = PengajuanDetail::whereHas('pengajuan.lowongan', function ($q) use ($industri) {
+            $q->where('industri_id', $industri->id);
+        })->findOrFail($validated['pengajuan_detail_id']);
+
         $user = User::create([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
+            'name'     => $validated['name'],
+            'email'    => $validated['email'],
             'password' => Hash::make($validated['password']),
-            'role' => 'intern',
+            'role'     => 'intern',
         ]);
         $user->assignRole('intern');
 
@@ -126,92 +114,73 @@ class IndustriInternController extends Controller
         $photo = $request->file('photo');
         if ($photo->isValid() && $photo->getError() === UPLOAD_ERR_OK) {
             try {
-                $extension = $photo->getClientOriginalExtension() ?: ($photo->guessExtension() ?: 'jpg');
-                $filename = 'photo_' . time() . '_' . uniqid() . '.' . $extension;
+                $extension       = $photo->getClientOriginalExtension() ?: ($photo->guessExtension() ?: 'jpg');
+                $filename        = 'photo_' . time() . '_' . uniqid() . '.' . $extension;
                 $destinationPath = storage_path('app/public/photos');
-                
+
                 if (!file_exists($destinationPath)) {
                     mkdir($destinationPath, 0755, true);
                 }
-                
+
                 $fullPath = $destinationPath . DIRECTORY_SEPARATOR . $filename;
                 if ($photo->move($destinationPath, $filename) && file_exists($fullPath)) {
                     $photoPath = 'photos/' . $filename;
                 } else {
+                    $user->delete();
                     return back()->withErrors(['photo' => 'Gagal menyimpan foto.'])->withInput();
                 }
             } catch (\Exception $e) {
+                $user->delete();
                 return back()->withErrors(['photo' => 'Terjadi kesalahan: ' . $e->getMessage()])->withInput();
             }
         } else {
+            $user->delete();
             return back()->withErrors(['photo' => 'File foto tidak valid.'])->withInput();
         }
 
-        // Use custom institution if provided
         $institution = $validated['institution'];
-        if ($institution === '__custom__' && !empty($validated['custom_institution'])) {
-            $institution = $validated['custom_institution'];
+        if ($institution === '__custom__' && !empty($request->custom_institution)) {
+            $institution = $request->custom_institution;
         }
 
-        // $mentor = Mentor::with('team')->find($validated['mentor_id']);
-
-        // if (!$mentor) {
-        //     return back()->withErrors(['mentor_id' => 'Mentor tidak ditemukan.']);
-        // }
-
-        // if (!empty($validated['pengajuan_detail_id'])) {
-        //     $calon = PengajuanDetail::with(['pengajuan.lowongan.team'])->find($validated['pengajuan_detail_id']);
-        //     $targetTeamId = $calon?->pengajuan?->lowongan?->team_id;
-
-        //     if ($targetTeamId && !$mentor->team) {
-        //         return back()->withErrors(['mentor_id' => 'Mentor ini belum memiliki tim.'])->withInput();
-        //     }
-
-        //     if ($targetTeamId && (int) $mentor->team_id !== (int) $targetTeamId) {
-        //         return back()->withErrors([
-        //             'mentor_id' => 'Mentor harus sesuai dengan tim penempatan calon peserta magang.'
-        //         ])->withInput();
-        //     }
-        // }
-
         Intern::create([
-            'user_id' => $user->id,
-            'name' => $validated['name'],
-            'gender' => $validated['gender'],
-            'education_level' => $validated['education_level'],
-            'major' => $validated['major'],
-            'phone' => $validated['phone'],
-            'institution' => $institution,
-            'purpose' => $validated['purpose'] ?? null,
-            // 'mentor_id' => $mentor->id,
-            // 'team_id' => $mentor->team_id,
-            'start_date' => $validated['start_date'],
-            'end_date' => $validated['end_date'],
-            'photo_path' => $photoPath,
-            'is_active' => $request->has('is_active') ? $request->boolean('is_active') : false,
-            'pengajuan_detail_id' => $request->pengajuan_detail_id,
-            'hard_skill' => $validated['hard_skill'] ?? null,
-            'soft_skill' => $validated['soft_skill'] ?? null,
+            'user_id'             => $user->id,
+            'name'                => $validated['name'],
+            'gender'              => $validated['gender'],
+            'education_level'     => $validated['education_level'],
+            'major'               => $validated['major'],
+            'phone'               => $validated['phone'],
+            'institution'         => $institution,
+            'purpose'             => $validated['purpose'] ?? null,
+            'start_date'          => $validated['start_date'],
+            'end_date'            => $validated['end_date'],
+            'photo_path'          => $photoPath,
+            'is_active'           => $request->boolean('is_active', false),
+            'pengajuan_detail_id' => $validated['pengajuan_detail_id'],
+            'hard_skill'          => $validated['hard_skill'] ?? null,
+            'soft_skill'          => $validated['soft_skill'] ?? null,
         ]);
 
         return redirect()->route('industri.intern.index')
-            ->with('success', 'Data anak magang berhasil ditambahkan.');
+            ->with('success', 'Data peserta magang berhasil ditambahkan.');
     }
 
     public function show(Intern $intern)
     {
-        $intern->load(['attendances' => function ($query) {
-            $query->orderBy('date', 'desc')->take(30);
-        }, 'logbooks' => function ($query) {
-            $query->orderBy('date', 'desc')->take(10);
-        }, 'finalReport', 'mentor']);
+        $this->authorizeIntern($intern);
+
+        $intern->load([
+            'attendances' => fn($q) => $q->orderBy('date', 'desc')->take(30),
+            'logbooks'    => fn($q) => $q->orderBy('date', 'desc')->take(10),
+            'finalReport',
+        ]);
 
         $stats = [
-            'total_hadir' => $intern->attendances()->where('status', 'hadir')->count(),
-            'total_izin' => $intern->attendances()->where('status', 'izin')->count(),
-            'total_sakit' => $intern->attendances()->where('status', 'sakit')->count(),
-            'total_logbooks' => $intern->logbooks()->count(),
-            'has_report' => $intern->finalReport !== null,
+            'total_hadir'   => $intern->attendances()->where('status', 'hadir')->count(),
+            'total_izin'    => $intern->attendances()->where('status', 'izin')->count(),
+            'total_sakit'   => $intern->attendances()->where('status', 'sakit')->count(),
+            'total_logbooks'=> $intern->logbooks()->count(),
+            'has_report'    => $intern->finalReport !== null,
         ];
 
         return view('industri.intern.show', compact('intern', 'stats'));
@@ -219,126 +188,83 @@ class IndustriInternController extends Controller
 
     public function edit(Intern $intern)
     {
-        $mentors = Mentor::with('team')
-            ->where('is_active', true)
-            ->orderBy('name')
-            ->get();
+        $this->authorizeIntern($intern);
 
-        return view('industri.intern.edit', compact('intern', 'mentors'));
+        return view('industri.intern.edit', compact('intern'));
     }
 
     public function update(Request $request, Intern $intern)
     {
-        // $validTeams = [
-        //     'TIM DEA',
-        //     'TIM GTA',
-        //     'TIM VSGA',
-        //     'TIM TA',
-        //     'TIM Microskill',
-        //     'TIM Media (DiaPus)',
-        //     'TIM Tata Usaha (Umum)',
-        //     'FGA',
-        //     'Keuangan',
-        //     'Tim PUSDATIN',
-        //     'Tim Perencanaan, Anggaran, Dan Kerja Sama',
-        //     'Tim Kepegawaian, Persuratan dan Kearsipan'
-        // ];
+        $this->authorizeIntern($intern);
 
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $intern->user_id],
-            'gender' => ['required', 'in:Laki-laki,Perempuan'],
+            'name'            => ['required', 'string', 'max:255'],
+            'email'           => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $intern->user_id],
+            'gender'          => ['required', 'in:Laki-laki,Perempuan'],
             'education_level' => ['required', 'in:SMA/SMK,S1/D4'],
-            'major' => ['nullable', 'string', 'max:255'],
-            'phone' => ['nullable', 'string', 'max:255'],
-            'institution' => ['required', 'string', 'max:255'],
-            'purpose' => ['nullable', 'string', 'in:Magang,KKN Profesi,PKL,Praktek Industri,Magang Industri,Guru Magang Industri,Job on Training'],
-            // 'mentor_id' => ['required', 'exists:mentors,id'],
-            // 'team' => ['nullable', 'string', Rule::in($validTeams)],
-            'start_date' => ['required', 'date'],
-            'end_date' => ['required', 'date', 'after:start_date'],
-            'photo' => ['nullable', 'image', 'max:2048'],
-            'password' => ['nullable', Password::defaults()],
-            'is_active' => ['boolean'],
-            'hard_skill' => ['nullable', 'string'],
-            'soft_skill' => ['nullable', 'string'],
+            'major'           => ['nullable', 'string', 'max:255'],
+            'phone'           => ['nullable', 'string', 'max:255'],
+            'institution'     => ['required', 'string', 'max:255'],
+            'purpose'         => ['nullable', 'string', 'in:Magang,KKN Profesi,PKL,Praktek Industri,Magang Industri,Guru Magang Industri,Job on Training'],
+            'start_date'      => ['required', 'date'],
+            'end_date'        => ['required', 'date', 'after:start_date'],
+            'photo'           => ['nullable', 'image', 'max:2048'],
+            'password'        => ['nullable', Password::defaults()],
+            'is_active'       => ['boolean'],
+            'hard_skill'      => ['nullable', 'string'],
+            'soft_skill'      => ['nullable', 'string'],
         ]);
 
         $intern->user->update([
-            'name' => $validated['name'],
+            'name'  => $validated['name'],
             'email' => $validated['email'],
         ]);
 
-        if (isset($validated['password'])) {
+        if (!empty($validated['password'])) {
             $intern->user->update([
                 'password' => Hash::make($validated['password']),
             ]);
         }
 
-        // Use custom institution if provided
         $institution = $validated['institution'];
-        if ($institution === '__custom__' && !empty($validated['custom_institution'])) {
-            $institution = $validated['custom_institution'];
+        if ($institution === '__custom__' && !empty($request->custom_institution)) {
+            $institution = $request->custom_institution;
         }
 
-        // $mentor = Mentor::with('team')->find($validated['mentor_id']);
-
-        // if (!$mentor) {
-        //     return back()->withErrors(['mentor_id' => 'Mentor tidak ditemukan.'])->withInput();
-        // }
-
-        // if ($intern->pengajuan_detail_id) {
-        //     $calon = PengajuanDetail::with(['pengajuan.lowongan.team'])->find($intern->pengajuan_detail_id);
-        //     $targetTeamId = $calon?->pengajuan?->lowongan?->team_id;
-
-        //     if ($targetTeamId && !$mentor->team) {
-        //         return back()->withErrors(['mentor_id' => 'Mentor ini belum memiliki tim.'])->withInput();
-        //     }
-
-        //     if ($targetTeamId && (int) $mentor->team_id !== (int) $targetTeamId) {
-        //         return back()->withErrors([
-        //             'mentor_id' => 'Mentor harus sesuai dengan tim penempatan calon peserta magang.'
-        //         ])->withInput();
-        //     }
-        // }
-
         $data = [
-            'name' => $validated['name'],
-            'gender' => $validated['gender'],
+            'name'            => $validated['name'],
+            'gender'          => $validated['gender'],
             'education_level' => $validated['education_level'],
-            'major' => $validated['major'],
-            'phone' => $validated['phone'],
-            'institution' => $institution,
-            'purpose' => $validated['purpose'] ?? null,
-            // 'mentor_id' => $mentor->id,
-            // 'team_id' => $mentor->team_id,
-            'start_date' => $validated['start_date'],
-            'end_date' => $validated['end_date'],
-            'is_active' => $request->has('is_active') ? $request->boolean('is_active') : false,
-            'hard_skill' => $validated['hard_skill'] ?? null,
-            'soft_skill' => $validated['soft_skill'] ?? null,
+            'major'           => $validated['major'],
+            'phone'           => $validated['phone'],
+            'institution'     => $institution,
+            'purpose'         => $validated['purpose'] ?? null,
+            'start_date'      => $validated['start_date'],
+            'end_date'        => $validated['end_date'],
+            'is_active'       => $request->boolean('is_active', false),
+            'hard_skill'      => $validated['hard_skill'] ?? null,
+            'soft_skill'      => $validated['soft_skill'] ?? null,
         ];
 
         if ($request->hasFile('photo')) {
             $photo = $request->file('photo');
             if ($photo->isValid() && $photo->getError() === UPLOAD_ERR_OK) {
                 try {
-                    // Delete old photo
                     if ($intern->photo_path) {
                         $oldPath = storage_path('app/public/' . $intern->photo_path);
                         if (file_exists($oldPath)) {
                             @unlink($oldPath);
                         }
                     }
-                    
-                    $extension = $photo->getClientOriginalExtension() ?: ($photo->guessExtension() ?: 'jpg');
-                    $filename = 'photo_' . time() . '_' . uniqid() . '.' . $extension;
+
+                    $extension       = $photo->getClientOriginalExtension() ?: ($photo->guessExtension() ?: 'jpg');
+                    $filename        = 'photo_' . time() . '_' . uniqid() . '.' . $extension;
                     $destinationPath = storage_path('app/public/photos');
-                    
+
                     if (!file_exists($destinationPath)) {
                         mkdir($destinationPath, 0755, true);
                     }
-                    
+
                     $fullPath = $destinationPath . DIRECTORY_SEPARATOR . $filename;
                     if ($photo->move($destinationPath, $filename) && file_exists($fullPath)) {
                         $data['photo_path'] = 'photos/' . $filename;
@@ -352,20 +278,22 @@ class IndustriInternController extends Controller
         $intern->update($data);
 
         return redirect()->route('industri.intern.index')
-            ->with('success', 'Data anak magang berhasil diperbarui.');
+            ->with('success', 'Data peserta magang berhasil diperbarui.');
     }
 
     public function destroy(Intern $intern)
     {
+        $this->authorizeIntern($intern);
+
         if ($intern->photo_path) {
             Storage::disk('public')->delete($intern->photo_path);
         }
 
         $userId = $intern->user_id;
         $intern->delete();
-        User::find($userId)->delete();
+        User::find($userId)?->delete();
 
         return redirect()->route('industri.intern.index')
-            ->with('success', 'Data anak magang berhasil dihapus.');
+            ->with('success', 'Data peserta magang berhasil dihapus.');
     }
 }
