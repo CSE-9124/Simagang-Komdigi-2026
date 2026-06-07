@@ -415,15 +415,15 @@
 
                     <div>
                         <p class="text-sm font-semibold text-green-700">
-                            Lowongan Aktif
+                            Lowongan Terverifikasi
                         </p>
 
                         <h2 class="text-3xl font-extrabold text-slate-800 mt-2 mono">
-                            {{ $totalLowonganAktif ?? '0' }}
+                            {{ $totalLowonganVerifikasi ?? '0' }}
                         </h2>
 
                         <p class="text-xs text-slate-500 mt-1">
-                            Sedang dibuka
+                            Semua lowongan yang sudah disetujui admin
                         </p>
                     </div>
 

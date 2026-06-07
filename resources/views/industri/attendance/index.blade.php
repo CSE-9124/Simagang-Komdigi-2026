@@ -336,6 +336,9 @@
                                     <th
                                         class="px-3 sm:px-6 py-3 sm:py-4 text-center text-xs font-bold text-white uppercase tracking-wider whitespace-nowrap">
                                         Foto Out</th>
+                                    <th
+                                        class="px-3 sm:px-6 py-3 sm:py-4 text-center text-xs font-bold text-white uppercase tracking-wider whitespace-nowrap">
+                                        Aksi</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-100">
@@ -454,10 +457,22 @@
                                                 <span class="text-slate-400 text-xs sm:text-sm">-</span>
                                             @endif
                                         </td>
+                                        <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-center">
+                                            @if (in_array($a->status, ['izin', 'sakit'], true))
+                                                <a href="{{ route('industri.attendance.detail', $a) }}"
+                                                    class="inline-flex items-center rounded-xl bg-blue-600 px-3 py-2 text-xs font-semibold text-white hover:bg-blue-700 transition"
+                                                    title="Lihat detail dan ubah status izin/sakit">
+                                                    <i class="fas fa-eye mr-1"></i>
+                                                    Detail
+                                                </a>
+                                            @else
+                                                <span class="text-slate-400 text-xs sm:text-sm">-</span>
+                                            @endif
+                                        </td>
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="7" class="px-3 sm:px-6 py-6 sm:py-8 text-center">
+                                        <td colspan="8" class="px-3 sm:px-6 py-6 sm:py-8 text-center">
                                             <div class="flex flex-col items-center justify-center">
                                                 <div
                                                     class="w-16 h-16 sm:w-24 sm:h-24 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mb-3 sm:mb-5 shadow-md">

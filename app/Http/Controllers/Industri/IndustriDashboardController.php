@@ -13,7 +13,7 @@ class IndustriDashboardController extends Controller
         $industri = Industri::where('user_id', auth()->id())->first();
 
         $totalLowongan = 0;
-        $totalLowonganAktif = 0;
+        $totalLowonganVerifikasi = 0;
         $progress = 0;
         $totalPelamar = 0;
         $totalPengajuan = 0;
@@ -23,8 +23,8 @@ class IndustriDashboardController extends Controller
             // Statistik lowongan
             $totalLowongan = $industri->lowongans()->count();
 
-            $totalLowonganAktif = $industri->lowongans()
-                ->where('status', 'dibuka')
+            $totalLowonganVerifikasi = $industri->lowongans()
+                ->where('status_verifikasi', 'disetujui')
                 ->count();
 
             $totalPelamar = PengajuanDetail::whereHas('pengajuan.lowongan', function ($query) use ($industri) {
@@ -69,7 +69,7 @@ class IndustriDashboardController extends Controller
         return view('industri.dashboard', compact(
             'industri',
             'totalLowongan',
-            'totalLowonganAktif',
+            'totalLowonganVerifikasi',
             'progress',
             'totalPelamar',
             'totalPengajuan'

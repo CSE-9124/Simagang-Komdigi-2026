@@ -388,21 +388,21 @@
 
                                     <div class="flex items-center justify-center gap-2">
 
-                                        <a href="#"
+                                        <a href="{{ route('industri.lowongan.show', $lowongan->id) }}"
                                            class="w-10 h-10 rounded-xl bg-green-100 text-green-600 flex items-center justify-center hover:bg-green-600 hover:text-white transition">
 
                                             <i class="fas fa-eye"></i>
 
                                         </a>
 
-                                        <a href="#"
+                                        <a href="{{ route('industri.lowongan.edit', $lowongan->id) }}"
                                            class="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center hover:bg-blue-600 hover:text-white transition">
 
                                             <i class="fas fa-pen"></i>
 
                                         </a>
 
-                                        <form action="#"
+                                        <form action="{{ route('industri.lowongan.destroy', $lowongan->id) }}"
                                               method="POST"
                                               onsubmit="return confirm('Yakin ingin menghapus lowongan ini?')">
 

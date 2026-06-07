@@ -398,10 +398,10 @@
                                                 <i class="fas fa-book text-5xl mb-3 text-gray-300"></i>
                                                 <p class="text-lg font-medium">Belum ada pengajuan.</p>
                                                 <p class="text-sm mt-2">Mulai dengan membuat pengajuan pertama Anda.</p>
-                                                <a href="#"
+                                                {{-- <a href="#"
                                                     class="mt-4 inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all duration-300">
                                                     <i class="fas fa-plus mr-2"></i>Tambah Pengajuan
-                                                </a>
+                                                </a> --}}
                                             </div>
                                         </td>
                                     </tr>

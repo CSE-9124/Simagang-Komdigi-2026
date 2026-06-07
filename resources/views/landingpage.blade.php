@@ -1154,67 +1154,76 @@
             </p>
         </div>
 
-        {{-- ── Toolbar: Search + Filter + Stats + Nav ── --}}
-        <div class="flex flex-wrap items-center gap-3 mb-5 reveal">
-
-            {{-- Search --}}
-            <div class="relative flex-1 min-w-[200px] max-w-sm">
-                <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm pointer-events-none"></i>
-                <input type="text" id="lowonganSearch"
-                    placeholder="Cari posisi, divisi..."
-                    class="w-full pl-10 pr-4 py-2.5 text-sm rounded-xl border border-slate-200
-                           bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-300
-                           focus:border-blue-400 transition"
-                    oninput="filterLowongan()">
+        @if($lowongans->isEmpty())
+            <div class="rounded-3xl border border-dashed border-slate-300 bg-white/80 p-10 text-center shadow-sm reveal">
+                <i class="fas fa-briefcase text-4xl text-blue-500 mb-4"></i>
+                <h3 class="text-xl font-extrabold text-slate-800 mb-2">Belum ada lowongan magang tersedia</h3>
+                <p class="text-slate-500 max-w-xl mx-auto leading-relaxed">
+                    Saat ini belum ada lowongan magang yang dipublikasikan. Lowongan akan muncul di sini setelah mitra atau industri mengunggahnya.
+                </p>
             </div>
+        @else
+            {{-- ── Toolbar: Search + Filter + Stats + Nav ── --}}
+            <div class="flex flex-wrap items-center gap-3 mb-5 reveal">
 
-            {{-- Filter Pills --}}
-            <div class="flex items-center gap-2 flex-wrap">
-                <button onclick="setStatusFilter(this,'semua')"
-                    data-status="semua"
-                    class="filter-pill active px-4 py-2 rounded-full text-xs font-bold border transition">
-                    Semua
-                </button>
-                <button onclick="setStatusFilter(this,'dibuka')"
-                    data-status="dibuka"
-                    class="filter-pill px-4 py-2 rounded-full text-xs font-bold border transition">
-                    <i class="fas fa-circle-check mr-1"></i>Dibuka
-                </button>
-                <button onclick="setStatusFilter(this,'ditutup')"
-                    data-status="ditutup"
-                    class="filter-pill px-4 py-2 rounded-full text-xs font-bold border transition">
-                    <i class="fas fa-circle-xmark mr-1"></i>Ditutup
-                </button>
-            </div>
-
-            {{-- Stats + Nav Buttons (right side) --}}
-            <div class="ml-auto flex items-center gap-3">
-                <div class="hidden sm:flex items-center gap-1.5 text-xs text-slate-500">
-                    <span id="statTotal" class="font-semibold text-slate-700"></span> lowongan •
-                    <span id="statDibuka" class="text-green-600 font-semibold"></span> dibuka
+                {{-- Search --}}
+                <div class="relative flex-1 min-w-[200px] max-w-sm">
+                    <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm pointer-events-none"></i>
+                    <input type="text" id="lowonganSearch"
+                        placeholder="Cari posisi, divisi..."
+                        class="w-full pl-10 pr-4 py-2.5 text-sm rounded-xl border border-slate-200
+                               bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-300
+                               focus:border-blue-400 transition"
+                        oninput="filterLowongan()">
                 </div>
-                {{-- Scroll Nav Buttons --}}
-                <button id="btnPrev" onclick="scrollCards(-1)"
-                    class="w-8 h-8 rounded-xl border border-slate-200 bg-white hover:bg-slate-50
-                           flex items-center justify-center text-slate-500 shadow-sm transition
-                           disabled:opacity-40 disabled:cursor-not-allowed">
-                    <i class="fas fa-arrow-left text-xs"></i>
-                </button>
-                <button id="btnNext" onclick="scrollCards(1)"
-                    class="w-8 h-8 rounded-xl border border-slate-200 bg-white hover:bg-slate-50
-                           flex items-center justify-center text-slate-500 shadow-sm transition
-                           disabled:opacity-40 disabled:cursor-not-allowed">
-                    <i class="fas fa-arrow-right text-xs"></i>
-                </button>
+
+                {{-- Filter Pills --}}
+                <div class="flex items-center gap-2 flex-wrap">
+                    <button onclick="setStatusFilter(this,'semua')"
+                        data-status="semua"
+                        class="filter-pill active px-4 py-2 rounded-full text-xs font-bold border transition">
+                        Semua
+                    </button>
+                    <button onclick="setStatusFilter(this,'dibuka')"
+                        data-status="dibuka"
+                        class="filter-pill px-4 py-2 rounded-full text-xs font-bold border transition">
+                        <i class="fas fa-circle-check mr-1"></i>Dibuka
+                    </button>
+                    <button onclick="setStatusFilter(this,'ditutup')"
+                        data-status="ditutup"
+                        class="filter-pill px-4 py-2 rounded-full text-xs font-bold border transition">
+                        <i class="fas fa-circle-xmark mr-1"></i>Ditutup
+                    </button>
+                </div>
+
+                {{-- Stats + Nav Buttons (right side) --}}
+                <div class="ml-auto flex items-center gap-3">
+                    <div class="hidden sm:flex items-center gap-1.5 text-xs text-slate-500">
+                        <span id="statTotal" class="font-semibold text-slate-700"></span> lowongan •
+                        <span id="statDibuka" class="text-green-600 font-semibold"></span> dibuka
+                    </div>
+                    {{-- Scroll Nav Buttons --}}
+                    <button id="btnPrev" onclick="scrollCards(-1)"
+                        class="w-8 h-8 rounded-xl border border-slate-200 bg-white hover:bg-slate-50
+                               flex items-center justify-center text-slate-500 shadow-sm transition
+                               disabled:opacity-40 disabled:cursor-not-allowed">
+                        <i class="fas fa-arrow-left text-xs"></i>
+                    </button>
+                    <button id="btnNext" onclick="scrollCards(1)"
+                        class="w-8 h-8 rounded-xl border border-slate-200 bg-white hover:bg-slate-50
+                               flex items-center justify-center text-slate-500 shadow-sm transition
+                               disabled:opacity-40 disabled:cursor-not-allowed">
+                        <i class="fas fa-arrow-right text-xs"></i>
+                    </button>
+                </div>
             </div>
-        </div>
 
-        {{-- ── Cards Horizontal Scroll ── --}}
-        <div id="lowonganGrid"
-             class="flex gap-5 overflow-x-auto scroll-smooth pb-3"
-             style="scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;">
+            {{-- ── Cards Horizontal Scroll ── --}}
+            <div id="lowonganGrid"
+                 class="flex gap-5 overflow-x-auto scroll-smooth pb-3"
+                 style="scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;">
 
-            @foreach($lowongans as $lowongan)
+                @foreach($lowongans as $lowongan)
                 @php
                     $logo = optional($lowongan->industri)->logo_industri
                         ? asset('storage/' . $lowongan->industri->logo_industri)
@@ -1274,27 +1283,30 @@
                     </div>
                 </div>
 
-            @endforeach
-        </div>
+                @endforeach
+            </div>
 
-        {{-- ── Empty state ── --}}
-        <div id="emptyState" class="hidden text-center py-16 text-slate-400">
-            <i class="fas fa-search text-4xl mb-3 block"></i>
-            <p class="font-semibold text-slate-500 text-base">Tidak ada lowongan ditemukan</p>
-            <p class="text-sm mt-1">Coba ubah kata kunci atau filter yang digunakan</p>
-        </div>
+            {{-- ── Empty state ── --}}
+            <div id="emptyState" class="hidden text-center py-16 text-slate-400">
+                <i class="fas fa-search text-4xl mb-3 block"></i>
+                <p class="font-semibold text-slate-500 text-base">Tidak ada lowongan ditemukan</p>
+                <p class="text-sm mt-1">Coba ubah kata kunci atau filter yang digunakan</p>
+            </div>
+        @endif
 
         {{-- ── Footer CTA ── --}}
-        <div class="mt-10 text-center reveal">
-            <a href="{{ route('daftar_lowongan') }}"
-               class="inline-flex items-center gap-2 text-sm font-bold
-                      px-6 py-3 rounded-xl
-                      bg-blue-50 hover:bg-blue-100 border border-blue-200
-                      text-blue-700 transition">
-                Lihat Semua Lowongan
-                <i class="fas fa-arrow-right text-xs"></i>
-            </a>
-        </div>
+        @if(!$lowongans->isEmpty())
+            <div class="mt-10 text-center reveal">
+                <a href="{{ route('daftar_lowongan') }}"
+                   class="inline-flex items-center gap-2 text-sm font-bold
+                          px-6 py-3 rounded-xl
+                          bg-blue-50 hover:bg-blue-100 border border-blue-200
+                          text-blue-700 transition">
+                    Lihat Semua Lowongan
+                    <i class="fas fa-arrow-right text-xs"></i>
+                </a>
+            </div>
+        @endif
 
     </div>
 </section>

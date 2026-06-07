@@ -168,7 +168,13 @@ class IndustriLowonganController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $lowongan = Lowongan::with('industri')->findOrFail($id);
+
+        if (!$this->canManageLowongan($lowongan)) {
+            abort(403, 'Anda tidak memiliki akses ke lowongan ini.');
+        }
+
+        return view('industri.lowongan.show', compact('lowongan'));
     }
 
     /**
@@ -176,7 +182,15 @@ class IndustriLowonganController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $lowongan = Lowongan::findOrFail($id);
+
+        if (!$this->canManageLowongan($lowongan)) {
+            abort(403, 'Anda tidak memiliki akses ke lowongan ini.');
+        }
+
+        $teams = Team::orderBy('name')->get();
+
+        return view('industri.lowongan.edit', compact('lowongan', 'teams'));
     }
 
     /**
@@ -184,7 +198,39 @@ class IndustriLowonganController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $lowongan = Lowongan::findOrFail($id);
+
+        if (!$this->canManageLowongan($lowongan)) {
+            abort(403, 'Anda tidak memiliki akses ke lowongan ini.');
+        }
+
+        $request->validate([
+            'judul_lowongan'      => 'required|string|max:255',
+            'posisi_magang'       => 'required|string|max:255',
+            'divisi'              => 'required|string|max:255',
+            'deskripsi_pekerjaan' => 'required|string',
+            'requirements'        => 'required|string',
+            'fasilitas'           => 'required|string',
+            'kuota_peserta'       => 'required|integer|min:1',
+            'status'              => 'required|in:aktif,nonaktif',
+        ], [
+            'required' => ':attribute wajib diisi.',
+        ]);
+
+        $lowongan->update([
+            'judul_lowongan'      => $request->judul_lowongan,
+            'posisi_magang'       => $request->posisi_magang,
+            'divisi'              => $request->divisi,
+            'deskripsi_pekerjaan' => $request->deskripsi_pekerjaan,
+            'requirements'        => $request->requirements,
+            'fasilitas'           => $request->fasilitas,
+            'kuota_peserta'       => $request->kuota_peserta,
+            'status'              => $request->status === 'aktif' ? 'dibuka' : 'ditutup',
+        ]);
+
+        return redirect()
+            ->route('industri.lowongan.show', $lowongan->id)
+            ->with('success', 'Lowongan magang berhasil diperbarui.');
     }
 
     /**
@@ -192,12 +238,29 @@ class IndustriLowonganController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $lowongan = Lowongan::findOrFail($id);
+
+        if (!$this->canManageLowongan($lowongan)) {
+            abort(403, 'Anda tidak memiliki akses ke lowongan ini.');
+        }
+
+        $lowongan->delete();
+
+        return redirect()
+            ->route('industri.lowongan.index')
+            ->with('success', 'Lowongan magang berhasil dihapus.');
     }
 
     /**
      * Cek apakah profil industri lengkap
      */
+    private function canManageLowongan(Lowongan $lowongan): bool
+    {
+        $industri = auth()->user()?->industri;
+
+        return $industri && $lowongan->industri_id === $industri->id;
+    }
+
     private function profilLengkap($industri): bool
     {
         if (!$industri) {

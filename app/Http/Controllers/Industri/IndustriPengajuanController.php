@@ -156,12 +156,7 @@ class IndustriPengajuanController extends Controller
         $validated = $request->validate([
             'status' => ['required', 'in:approved,rejected,pending,revised'],
             'admin_note' => ['nullable', 'string', 'max:2000'],
-            'nomor_surat_balasan' => [
-                $statusFromRequest === 'approved' ? 'required' : 'nullable',
-                'string',
-                'max:100',
-            ],
-            'notify_whatsapp' => ['nullable', 'boolean'],
+            // 'notify_whatsapp' => ['nullable', 'boolean'],
         ]);
 
         try {
@@ -212,7 +207,7 @@ class IndustriPengajuanController extends Controller
                     'admin_note' => $validated['status'] === 'revised'
                         ? ($validated['admin_note'] ?? null)
                         : null,
-                    'nomor_surat_balasan' => $validated['nomor_surat_balasan'] ?? null,
+                    // 'nomor_surat_balasan' => $validated['nomor_surat_balasan'] ?? null,
                 ]);
             });
 
@@ -249,7 +244,7 @@ class IndustriPengajuanController extends Controller
                 'success' => true,
                 'message' => $message,
                 'status' => $pengajuan->status,
-                'whatsapp' => $whatsapp,
+                // 'whatsapp' => $whatsapp,
             ]);
         }
 

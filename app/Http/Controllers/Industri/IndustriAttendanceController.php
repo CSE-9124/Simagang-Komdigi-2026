@@ -169,6 +169,41 @@ class IndustriAttendanceController extends Controller
         ));
     }
 
+    public function showDetail(Attendance $attendance)
+    {
+        $internIds = $this->getInternIds();
+
+        abort_unless($internIds->contains($attendance->intern_id), 403);
+        abort_unless(in_array($attendance->status, ['izin', 'sakit'], true), 404);
+
+        $attendance->load('intern');
+
+        return view('industri.attendance.detail', compact('attendance'));
+    }
+
+    public function updateDocumentStatus(Request $request, Attendance $attendance)
+    {
+        $internIds = $this->getInternIds();
+
+        abort_unless($internIds->contains($attendance->intern_id), 403);
+
+        if (!in_array($attendance->status, ['izin', 'sakit'], true)) {
+            return back()->withErrors(['error' => 'Status absensi ini tidak memiliki dokumen.']);
+        }
+
+        $validated = $request->validate([
+            'document_status' => ['required', 'in:approved,rejected'],
+            'admin_note' => ['nullable', 'string'],
+        ]);
+
+        $attendance->update([
+            'document_status' => $validated['document_status'],
+            'admin_note' => $validated['admin_note'] ?? $attendance->admin_note,
+        ]);
+
+        return back()->with('success', 'Status dokumen berhasil diperbarui.');
+    }
+
     public function servePhoto(string $filename)
     {
         if ($filename !== basename($filename)) {

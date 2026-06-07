@@ -233,6 +233,10 @@ Route::middleware(['auth', 'industri'])->prefix('industri')->name('industri.')->
     Route::get('/lowongan', [IndustriLowonganController::class, 'index'])->name('lowongan.index');
     Route::get('/lowongan/create', [IndustriLowonganController::class, 'create'])->name('lowongan.create');
     Route::post('/lowongan', [IndustriLowonganController::class, 'store'])->name('lowongan.store');
+    Route::get('/lowongan/{id}', [IndustriLowonganController::class, 'show'])->name('lowongan.show');
+    Route::get('/lowongan/{id}/edit', [IndustriLowonganController::class, 'edit'])->name('lowongan.edit');
+    Route::put('/lowongan/{id}', [IndustriLowonganController::class, 'update'])->name('lowongan.update');
+    Route::delete('/lowongan/{id}', [IndustriLowonganController::class, 'destroy'])->name('lowongan.destroy');
 
     // Pengajuan Routes
     Route::get('/pengajuan', [IndustriPengajuanController::class, 'index'])->name('pengajuan.index');
@@ -256,6 +260,10 @@ Route::middleware(['auth', 'industri'])->prefix('industri')->name('industri.')->
     Route::get('/attendance', [IndustriAttendanceController::class, 'index'])->name('attendance.index');
     Route::get('/attendance/detail/{intern}', [IndustriAttendanceController::class, 'show'])
         ->name('attendance.show');
+    Route::get('/attendance/{attendance}/detail', [IndustriAttendanceController::class, 'showDetail'])
+        ->name('attendance.detail');
+    Route::put('/attendance/{attendance}/document-status', [IndustriAttendanceController::class, 'updateDocumentStatus'])
+        ->name('attendance.update-document-status');
     Route::get('/attendance/photo/{filename}', [IndustriAttendanceController::class, 'servePhoto'])
         ->where('filename', '[^/\\\\]+')
         ->name('attendance.photo');

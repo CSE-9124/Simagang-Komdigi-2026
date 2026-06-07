@@ -478,7 +478,7 @@
                             @method('PUT')
                             <input type="hidden" name="notify_whatsapp" id="notify_whatsapp" value="0">
 
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div class="grid grid-cols-1 gap-6 mb-6">
                                 <div>
                                     <label for="status" class="block text-sm font-semibold text-gray-700 mb-2">
                                         Status Pengajuan
@@ -498,7 +498,7 @@
                                     </select>
                                 </div>
 
-                                <div id="no_surat_block">
+                                {{-- <div id="no_surat_block">
                                     <label class="block text-sm font-semibold text-gray-700 mb-2">
                                         Nomor Surat Balasan
                                     </label>
@@ -506,7 +506,7 @@
                                         placeholder="contoh: B-747/BBPSDMP.73/UM.01.01/12/2025"
                                         value="{{ old('nomor_surat_balasan', $pengajuan->nomor_surat_balasan ?? '') }}"
                                         class="w-full px-4 py-3 border border-gray-300 rounded-xl">
-                                </div>
+                                </div> --}}
                             </div>
 
                             <div class="mb-6" id="admin-note-block"
@@ -574,49 +574,13 @@
                                 </div>
                             </div>
 
-                            <!-- Modal WhatsApp -->
-                            <div id="whatsapp-confirm-modal"
-                                class="hidden fixed inset-0 z-50 flex items-center justify-center px-4">
-                                <div class="absolute inset-0 bg-black bg-opacity-40"></div>
-                                <div class="relative max-w-md w-full bg-white rounded-xl shadow-lg overflow-hidden">
-                                    <div class="p-6 text-center">
-                                        <div class="mx-auto w-14 h-14 rounded-full bg-green-50 flex items-center justify-center mb-3">
-                                            <i class="fab fa-whatsapp text-green-600 text-2xl"></i>
-                                        </div>
-                                        <h3 class="text-lg font-bold text-gray-800" id="whatsapp-modal-title">Kirim Notifikasi WhatsApp?</h3>
-                                        <p class="mt-2 text-sm text-gray-500" id="whatsapp-modal-message">
-                                            Status sudah tersimpan. Apakah Anda ingin langsung membuka WhatsApp dengan template pesan yang sudah siap?
-                                        </p>
-                                    </div>
-                                    <div class="px-4 pb-4 pt-2 bg-gray-50 flex gap-3 justify-center">
-                                        <button id="whatsapp-confirm-cancel" type="button"
-                                            class="px-4 py-2 bg-white border border-gray-200 rounded-lg text-gray-700 font-semibold hover:bg-gray-100">
-                                            Tidak
-                                        </button>
-                                        <button id="whatsapp-confirm-accept" type="button"
-                                            class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-semibold">
-                                            Ya, Kirim WhatsApp
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-
                             <script>
                                 (function() {
                                     const form = document.getElementById('update-status-form');
                                     const statusEl = document.getElementById('status');
                                     const saveModal = document.getElementById('save-confirm-modal');
-                                    const whatsappModal = document.getElementById('whatsapp-confirm-modal');
                                     const saveCancelButton = document.getElementById('save-confirm-cancel');
                                     const saveAcceptButton = document.getElementById('save-confirm-accept');
-                                    const whatsappCancelButton = document.getElementById('whatsapp-confirm-cancel');
-                                    const whatsappAcceptButton = document.getElementById('whatsapp-confirm-accept');
-                                    const whatsappModalTitle = document.getElementById('whatsapp-modal-title');
-                                    const whatsappModalMessage = document.getElementById('whatsapp-modal-message');
-                                    const whatsappSection = document.getElementById('whatsapp-resend-section');
-                                    const whatsappLink = document.getElementById('whatsapp-resend-link');
-
-                                    let latestWhatsappUrl = @json($whatsapp['url'] ?? null);
                                     let isSaving = false;
 
                                     function openModal(modal) {
@@ -625,33 +589,6 @@
 
                                     function closeModal(modal) {
                                         modal.classList.add('hidden');
-                                    }
-
-                                    function updateWhatsappButton(url) {
-                                        latestWhatsappUrl = url || null;
-                                        if (whatsappLink) {
-                                            whatsappLink.href = url || '#';
-                                        }
-                                        if (whatsappSection) {
-                                            if (url) {
-                                                whatsappSection.classList.remove('hidden');
-                                            } else {
-                                                whatsappSection.classList.add('hidden');
-                                            }
-                                        }
-                                    }
-
-                                    function buildWhatsappMessageLabel(status) {
-                                        if (status === 'approved') {
-                                            return 'Pengajuan sudah disetujui. Apakah Anda ingin langsung membuka WhatsApp untuk mengirim notifikasi ke institusi?';
-                                        }
-                                        if (status === 'rejected') {
-                                            return 'Pengajuan sudah ditolak. Apakah Anda ingin langsung membuka WhatsApp untuk mengirim notifikasi ke institusi?';
-                                        }
-                                        if (status === 'revised') {
-                                            return 'Pengajuan perlu revisi. Apakah Anda ingin langsung membuka WhatsApp untuk mengirim catatan revisi ke institusi?';
-                                        }
-                                        return 'Status sudah tersimpan. Apakah Anda ingin langsung membuka WhatsApp untuk mengirim notifikasi ke institusi?';
                                     }
 
                                     async function saveStatus() {
@@ -677,12 +614,9 @@
                                                 throw new Error(errorData.message || 'Gagal menyimpan status');
                                             }
 
-                                            const data = await response.json();
+                                            await response.json();
                                             closeModal(saveModal);
-
-                                            whatsappModalMessage.textContent = buildWhatsappMessageLabel(statusEl.value);
-                                            updateWhatsappButton(data.whatsapp_url || null);
-                                            openModal(whatsappModal);
+                                            window.location.reload();
                                         } catch (error) {
                                             alert(error.message || 'Gagal menyimpan status.');
                                         } finally {
@@ -707,19 +641,6 @@
                                         saveStatus();
                                     });
 
-                                    whatsappCancelButton.addEventListener('click', function() {
-                                        closeModal(whatsappModal);
-                                        window.location.reload();
-                                    });
-
-                                    whatsappAcceptButton.addEventListener('click', function() {
-                                        if (!latestWhatsappUrl) {
-                                            alert('URL WhatsApp tidak tersedia');
-                                            return;
-                                        }
-                                        window.open(latestWhatsappUrl, '_blank', 'noopener');
-                                        closeModal(whatsappModal);
-                                    });
                                 })();
                             </script>
 
