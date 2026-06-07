@@ -275,9 +275,8 @@
                             <div x-show="open" x-transition class="bg-gray-50 border-l-4 border-blue-200 ml-4">
                                 <a href="{{ route('admin.monitoring.index') }}" class="{{ request()->routeIs('admin.monitoring.index') ? 'text-blue-700 bg-blue-50' : 'text-gray-500 hover:bg-gray-100' }} flex items-center px-4 py-2.5 text-sm font-medium">
                                     <i class="fas fa-chart-line w-4 mr-3 text-xs"></i>
-                                    Monitoring
+                                    Monitoring Peserta Magang
                                 </a>
-                                {{-- ✅ TAMBAHAN: Monitoring Industri --}}
                                 <a href="{{ route('admin.monitoring.industri.index') }}" class="{{ request()->routeIs('admin.monitoring.industri.*') ? 'text-blue-700 bg-blue-50' : 'text-gray-500 hover:bg-gray-100' }} flex items-center px-4 py-2.5 text-sm font-medium">
                                     <i class="fas fa-building w-4 mr-3 text-xs"></i>
                                     Monitoring Industri
@@ -650,9 +649,8 @@
                                     <div x-show="open" x-transition class="bg-gray-50 border-l-4 border-blue-200 ml-4">
                                         <a href="{{ route('admin.monitoring.index') }}" class="{{ request()->routeIs('admin.monitoring.index') ? 'text-blue-700 bg-blue-50' : 'text-gray-500 hover:bg-gray-100' }} flex items-center px-4 py-2.5 text-sm font-medium">
                                             <i class="fas fa-chart-line w-4 mr-3 text-xs"></i>
-                                            Monitoring
+                                            Monitoring Peserta Magang
                                         </a>
-                                        {{-- ✅ TAMBAHAN: Monitoring Industri (Mobile) --}}
                                         <a href="{{ route('admin.monitoring.industri.index') }}" class="{{ request()->routeIs('admin.monitoring.industri.*') ? 'text-blue-700 bg-blue-50' : 'text-gray-500 hover:bg-gray-100' }} flex items-center px-4 py-2.5 text-sm font-medium">
                                             <i class="fas fa-building w-4 mr-3 text-xs"></i>
                                             Monitoring Industri
