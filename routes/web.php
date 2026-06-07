@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\AdminReportController;
 use App\Http\Controllers\Admin\AdminLogbookController;
 use App\Http\Controllers\Admin\AdminLowonganController;
 use App\Http\Controllers\Admin\AdminVerifikasiLowonganController;
+use App\Http\Controllers\Admin\AdminMonitoringIndustriController;
 use App\Http\Controllers\Api\HolidayController;
 use App\Http\Controllers\Api\InstitutionController;
 use App\Http\Controllers\Intern\MicroSkillController as InternMicroSkillController;
@@ -415,6 +416,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('/monitoring/{intern}/mark-released', [AdminMonitoringController::class, 'markAsReleased'])->name('monitoring.mark-released');
     Route::post('/monitoring/{intern}/mark-active', [AdminMonitoringController::class, 'markAsActive'])->name('monitoring.mark-active');
     Route::get('/monitoring/export', [AdminMonitoringController::class, 'export'])->name('monitoring.export');
+
+    // Monitoring Industri (Admin)
+    Route::get('monitoring/industri', [AdminMonitoringIndustriController::class, 'index'])->name('monitoring.industri.index');
+    Route::get('monitoring/industri/{industri}', [AdminMonitoringIndustriController::class, 'show'])->name('monitoring.industri.show');
 
     // Certificate Management Routes
     Route::resource('certificates', AdminCertificateController::class)
