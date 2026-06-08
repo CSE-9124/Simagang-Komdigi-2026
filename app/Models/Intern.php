@@ -19,7 +19,7 @@ class Intern extends Model
         'institution',
         'purpose',
         'mentor_id',
-        'team',
+        // 'team',
         'start_date',
         'end_date',
         'photo_path',
@@ -84,6 +84,11 @@ class Intern extends Model
     public function pengajuanDetail()
     {
         return $this->belongsTo(PengajuanDetail::class);
+    }
+
+    public function teamRelation()
+    {
+        return $this->belongsTo(Team::class, 'team_id');
     }
     
 }

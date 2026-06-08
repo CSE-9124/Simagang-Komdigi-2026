@@ -384,9 +384,10 @@
                     <i class="fas fa-calendar-alt mr-1"></i>
                     {{ $intern->start_date->locale('id')->translatedFormat('d F Y') }} – {{ $intern->end_date->locale('id')->translatedFormat('d F Y') }}
                 </p>
-                @if($intern->team)
+                @if($intern->teamRelation || $intern->team)
                     <p class="text-blue-300 text-xs mt-1">
-                        <i class="fas fa-layer-group mr-1"></i>Tim: {{ $intern->team->name ?? $intern->team }}
+                        <i class="fas fa-layer-group mr-1"></i>
+                        Tim: {{ $intern->teamRelation?->name ?? $intern->team }}
                     </p>
                 @endif
             </div>
@@ -515,10 +516,10 @@
                 </div>
                 <div class="info-item">
                     <p class="info-label">Tim</p>
-                    @if($intern->team)
+                    @if($intern->teamRelation || $intern->team)
                         <span class="badge badge-blue" style="margin-top:2px;">
                             <i class="fas fa-layer-group text-xs"></i>
-                            {{ $intern->team->name ?? $intern->team }}
+                            {{ $intern->teamRelation?->name ?? $intern->team }}
                         </span>
                     @else
                         <p class="info-value" style="color:#94a3b8;">Belum ada tim</p>
