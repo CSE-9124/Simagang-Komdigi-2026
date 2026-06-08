@@ -653,6 +653,9 @@
                         </label>
                     </div>
                 </div>
+            </div>
+        </div>
+        
         {{-- SECTION: Hard Skill dan Soft Skill --}}
         <div class="panel anim-4 mb-5">
             <p class="section-label">Hard Skill dan Soft Skill</p>

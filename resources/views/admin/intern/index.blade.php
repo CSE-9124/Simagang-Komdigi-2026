@@ -436,8 +436,14 @@
                                             {{ $intern->institution }}
                                         </td>
                                         <td>
-                                            @if($intern->team)
-                                                <span class="pill pill-blue">{{ $intern->team->name }}</span>
+                                            @if($intern->teamRelation)
+                                                <span class="pill pill-blue">
+                                                    {{ $intern->teamRelation->name }}
+                                                </span>
+                                            @elseif($intern->team)
+                                                <span class="pill pill-blue">
+                                                    {{ $intern->team }}
+                                                </span>
                                             @else
                                                 <span class="pill pill-gray">—</span>
                                             @endif
@@ -532,10 +538,16 @@
                                             {{ $intern->institution }}
                                         </td>
                                         <td>
-                                            @if($intern->team)
-                                                <span class="pill pill-gray">{{ $intern->team->name }}</span>
+                                            @if($intern->teamRelation)
+                                                <span class="pill pill-gray">
+                                                    {{ $intern->teamRelation->name }}
+                                                </span>
+                                            @elseif($intern->team)
+                                                <span class="pill pill-gray">
+                                                    {{ $intern->team }}
+                                                </span>
                                             @else
-                                                <span class="text-gray-300">—</span>
+                                                <span class="pill pill-gray">—</span>
                                             @endif
                                         </td>
                                         <td class="text-gray-500">{{ $intern->mentor?->name ?? '—' }}</td>
