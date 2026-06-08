@@ -9,6 +9,6 @@ class AttendancePolicy
 {
     public function view(User $user, Attendance $attendance): bool
     {
-        return $user->id === $attendance->intern?->user_id || $user->isAdmin();
+        return $user->id === $attendance->intern?->user_id || $user->isAdmin() || $user->isIndustri();
     }
 }

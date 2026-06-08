@@ -268,6 +268,8 @@ Route::middleware(['auth', 'industri'])->prefix('industri')->name('industri.')->
     Route::get('/attendance/photo/{filename}', [IndustriAttendanceController::class, 'servePhoto'])
         ->where('filename', '[^/\\\\]+')
         ->name('attendance.photo');
+    
+    Route::get('/attendance/document/{filename}', [IndustriAttendanceController::class, 'serveDocument'])->name('attendance.document');
 
     // Logbook monitoring for institusi
     Route::get('/logbook', [IndustriLogbookController::class, 'index'])->name('logbook.index');

@@ -57,13 +57,14 @@
 
                     @if ($attendance->document_path)
                         <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
-                            <p class="text-xs uppercase tracking-[0.25em] text-slate-400">Dokumen Pendukung</p>
-                            <a href="{{ url('storage/' . $attendance->document_path) }}" target="_blank"
-                                class="mt-2 inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 transition">
-                                <i class="fas fa-file-download"></i>
-                                Lihat / Download Dokumen
-                            </a>
-                        </div>
+                                <p class="text-xs uppercase tracking-[0.25em] text-slate-400">Dokumen Pendukung</p>
+                                <a href="{{ route('industri.attendance.document', ['filename' => basename($attendance->document_path)]) }}"
+                                    target="_blank"
+                                    class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 font-semibold">
+                                    <i class="fas fa-file-download"></i>
+                                    Download Dokumen
+                                </a>
+                            </div>
                     @endif
 
                     <div class="rounded-2xl border border-slate-200 bg-white p-5">

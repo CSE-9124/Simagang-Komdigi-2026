@@ -233,4 +233,38 @@ class IndustriAttendanceController extends Controller
             'Expires' => '0',
         ]);
     }
+
+    public function serveDocument($filename)
+    {
+        $intern = Auth::user()->intern;
+        $filePath = storage_path('app/private/attendance-documents/' . $filename);
+
+        if ($filename !== basename($filename)) {
+            abort(404, 'File not found');
+        }
+
+        // Validate the file path to prevent directory traversal
+        if (!str_starts_with(realpath($filePath) ?: '', realpath(storage_path('app/private/attendance-documents')) ?: '')) {
+            abort(403, 'Unauthorized');
+        }
+
+        // Check if file exists
+        if (!file_exists($filePath)) {
+            abort(404, 'File not found');
+        }
+
+        // Check if document belongs to authenticated user
+        $attendance = Attendance::where('document_path', 'private/attendance-documents/' . $filename)
+            ->first();
+
+        if (!$attendance) {
+            abort(403, 'Unauthorized');
+        }
+
+        $this->authorize('view', $attendance);
+
+        return response()->download($filePath, null, [
+            'X-Content-Type-Options' => 'nosniff',
+        ]);
+    }
 }
