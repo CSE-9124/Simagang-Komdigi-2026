@@ -16,6 +16,15 @@ class IndustriInternController extends Controller
     /**
      * Pastikan intern yang diakses memang milik industri yang sedang login.
      */
+    private function requireIndustriProfile(): \Illuminate\Http\RedirectResponse|null
+    {
+        if (! auth()->user()->industri) {
+            return redirect()->route('industri.profile.create')
+                ->with('warning', 'Anda harus melengkapi profil perusahaan terlebih dahulu sebelum dapat mengakses fitur ini.');
+        }
+        return null;
+    }
+
     private function authorizeIntern(Intern $intern): void
     {
         $industriId = auth()->user()->industri->id;
@@ -28,6 +37,10 @@ class IndustriInternController extends Controller
 
     public function index(Request $request)
     {
+        if ($redirect = $this->requireIndustriProfile()) {
+            return $redirect;
+        }
+
         $industriId = auth()->user()->industri->id;
 
         $baseQuery = Intern::with(['user'])
@@ -60,6 +73,10 @@ class IndustriInternController extends Controller
 
     public function create()
     {
+        if ($redirect = $this->requireIndustriProfile()) {
+            return $redirect;
+        }
+
         $industri = auth()->user()->industri;
 
         $calonMagang = PengajuanDetail::with(['pengajuan.institusi'])
@@ -77,6 +94,10 @@ class IndustriInternController extends Controller
 
     public function store(Request $request)
     {
+        if ($redirect = $this->requireIndustriProfile()) {
+            return $redirect;
+        }
+
         $industri = auth()->user()->industri;
 
         $validated = $request->validate([

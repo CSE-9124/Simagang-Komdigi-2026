@@ -14,13 +14,30 @@ use App\Models\Lowongan;
 class IndustriPengajuanController extends Controller
 {
     /**
+     * Redirect ke halaman buat profil jika industri belum melengkapi profil.
+     */
+    private function requireIndustriProfile(): \Illuminate\Http\RedirectResponse|null
+    {
+        if (! auth()->user()->industri) {
+            return redirect()->route('industri.profile.create')
+                ->with('warning', 'Anda harus melengkapi profil perusahaan terlebih dahulu sebelum dapat mengakses fitur ini.');
+        }
+        return null;
+    }
+
+    /**
      * Display a listing of the resource.
      */
     public function index()
-    {   
+    {
+        if ($redirect = $this->requireIndustriProfile()) {
+            return $redirect;
+        }
+
         // KALAU MAU DITAMBAHKAN JUGA UNTUK FULL AKSES:
         // $industri = Industri::where('nama_industri', 'BBLSDM Komdigi Makassar')->firstOrFail();
         $industri = auth()->user()->industri;
+
 
         $baseQuery = Pengajuan::with([
             'institusi',

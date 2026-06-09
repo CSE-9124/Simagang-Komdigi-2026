@@ -882,6 +882,31 @@
                     </div>
                 @endif
 
+                @if(session('warning'))
+                    <div class="px-4 pt-4 sm:px-6 lg:px-8">
+                        <div class="flex items-start gap-4 bg-amber-50 border border-amber-300 text-amber-800 px-5 py-4 rounded-xl shadow-sm" role="alert">
+                            <div class="flex-shrink-0 mt-0.5">
+                                <span class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-amber-100">
+                                    <i class="fas fa-exclamation-triangle text-amber-500 text-base"></i>
+                                </span>
+                            </div>
+                            <div class="flex-1">
+                                <p class="font-semibold text-amber-900 text-sm mb-1">Profil Belum Dilengkapi</p>
+                                <p class="text-amber-700 text-sm">{{ session('warning') }}</p>
+                            </div>
+                            @auth
+                                @if(auth()->user()->isIndustri())
+                                    <a href="{{ route('industri.profile.create') }}"
+                                       class="flex-shrink-0 inline-flex items-center gap-2 px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold rounded-lg transition-colors">
+                                        <i class="fas fa-user-edit"></i>
+                                        Lengkapi Profil
+                                    </a>
+                                @endif
+                            @endauth
+                        </div>
+                    </div>
+                @endif
+
                 @if(session('info'))
                     <div class="mb-4">
                         <div class="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative" role="alert">
