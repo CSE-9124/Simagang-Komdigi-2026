@@ -580,9 +580,13 @@
                                                         'filename' => basename($a->photo_checkout),
                                                     ]);
                                                 @endphp
-                                                <img src="{{ $photoOutUrl }}" alt="Check Out" class="photo-thumbnail"
-                                                    onclick="window.open('{{ $photoOutUrl }}', '_blank')"
-                                                    title="Klik untuk melihat full size">
+                                                @can('view', $a)
+                                                    <img src="{{ $photoOutUrl }}" alt="Check Out" class="photo-thumbnail"
+                                                        onclick="window.open('{{ $photoOutUrl }}', '_blank')"
+                                                        title="Klik untuk melihat full size">
+                                                @else
+                                                    <span class="text-muted" style="font-size:12px;">Tidak ada akses</span>
+                                                @endcan
                                             @else
                                                 <span style="color:#d1d5db; font-size:12px;">—</span>
                                             @endif
